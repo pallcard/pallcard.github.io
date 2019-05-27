@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>My New Hugo Site</title>
-    <link>http://pallcard.github.io/</link>
-    <description>Recent content on My New Hugo Site</description>
+    <title>刘科个人博客</title>
+    <link>https://pallcard.github.io/</link>
+    <description>Recent content on 刘科个人博客</description>
     <generator>Hugo -- gohugo.io</generator>
-    <language>en-us</language>
+    <language>zh-CN</language>
     <lastBuildDate>Mon, 27 May 2019 18:55:29 +0800</lastBuildDate>
     
-	<atom:link href="http://pallcard.github.io/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://pallcard.github.io/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>About</title>
-      <link>http://pallcard.github.io/about/</link>
+      <link>https://pallcard.github.io/about/</link>
       <pubDate>Mon, 27 May 2019 18:55:29 +0800</pubDate>
       
-      <guid>http://pallcard.github.io/about/</guid>
+      <guid>https://pallcard.github.io/about/</guid>
       <description>新建blog hugo new post/my-first-blog.md</description>
     </item>
     
