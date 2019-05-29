@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Posts on 刘科个人博客</title>
+    <link>https://pallcard.github.io/posts/</link>
+    <description>Recent content in Posts on 刘科个人博客</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-CN</language>
+    <copyright>All rights reserved - 2019</copyright>
+    <lastBuildDate>Mon, 27 May 2019 18:56:26 +0800</lastBuildDate>
+    
+	<atom:link href="https://pallcard.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Mysql基础</title>
+      <link>https://pallcard.github.io/2019/mysql%E5%9F%BA%E7%A1%80/</link>
+      <pubDate>Mon, 27 May 2019 18:56:26 +0800</pubDate>
+      
+      <guid>https://pallcard.github.io/2019/mysql%E5%9F%BA%E7%A1%80/</guid>
+      <description>DBMS分类  基于共享文件系统的DBMS，例如：Microsoft Access 基于客户机—服务器的DBMS，例如：MySql，Oracle，SQL Server  连接mysql 格式：
+mysql -h 主机地址 -u 用户名 -p 用户密码 例如：/usr/local/mysql/bin/mysql -u root -p  选择数据库 最初连接mysql时，没有任何数据库可供使用，需要使用use来选择一个数据库
+use 数据库名称 例如：USE mysql  显示数据库一些信息 SHOW DATABASES; //显示所有数据库 SHOW TABLES; //显示当前数据库中所有表 SHOW COLUMNS FROM xxx; //显示xxx表中的列 DESCRIBE xxx；//同上 SHOW STATUS; //用于显示广泛的服务器状态信息 SHOW GRANTS; //显示授权用户权限 SHOW ERRORS和SHOW WARNINGS；//用来显示服务器错误或警告消息  检索数据 许多SQL开发人员喜欢对所有SQL关键字使用大写，而对所有 列和表名使用小写，这样做使代码更易于阅读和调试。
+select SELECT DISTINCT yyy FROM xxx LIMIT 5; //检索xxx表中yyy列(DISTINCT去重，不多于5) SELECT * FROM xxx LIMIT 5, 5; //从第5行开始5行，下标0  注 DITINCT会作用于所有的列，不会部分使用</description>
+    </item>
+    
+  </channel>
+</rss>
