@@ -2,22 +2,22 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Posts on 刘科个人博客</title>
-    <link>https://pallcard.github.io/posts/</link>
+    <link>https://github.com/pallcard/pallcard.github.io/tree/master/posts/</link>
     <description>Recent content in Posts on 刘科个人博客</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
     <copyright>All rights reserved - 2019</copyright>
     <lastBuildDate>Fri, 31 May 2019 16:21:56 +0800</lastBuildDate>
     
-	<atom:link href="https://pallcard.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://github.com/pallcard/pallcard.github.io/tree/master/posts/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>Hugo搭建blog</title>
-      <link>https://pallcard.github.io/2019/hugo%E6%90%AD%E5%BB%BAblog/</link>
+      <link>https://github.com/pallcard/pallcard.github.io/tree/master/2019/hugo%E6%90%AD%E5%BB%BAblog/</link>
       <pubDate>Fri, 31 May 2019 16:21:56 +0800</pubDate>
       
-      <guid>https://pallcard.github.io/2019/hugo%E6%90%AD%E5%BB%BAblog/</guid>
+      <guid>https://github.com/pallcard/pallcard.github.io/tree/master/2019/hugo%E6%90%AD%E5%BB%BAblog/</guid>
       <description>在windows下使用hugo搭建blog
 官方网站 https://www.gohugo.org/
 1.安装hugo 在https://github.com/gohugoio/hugo/releases找到相应版本的hugo镜像，下载后解压，如下： 配置环境变量：将解压后压缩包放在E盘，则添加如下环境变量 输入如下命令判断是否按照成功
@@ -32,10 +32,10 @@ theme = &amp;quot;LeaveIt&amp;quot;  4.运行hugo hugo server -D  5.配置 在co
     
     <item>
       <title>代理模式</title>
-      <link>https://pallcard.github.io/2019/java-proxy/</link>
+      <link>https://github.com/pallcard/pallcard.github.io/tree/master/2019/java-proxy/</link>
       <pubDate>Wed, 29 May 2019 20:06:16 +0800</pubDate>
       
-      <guid>https://pallcard.github.io/2019/java-proxy/</guid>
+      <guid>https://github.com/pallcard/pallcard.github.io/tree/master/2019/java-proxy/</guid>
       <description>代理模式 代理模式是一种设计模式，提供了对目标对象额外的访问方式，即通过代理对象访问目标对象，这样可以在不修改原目标对象的前提下，提供额外的功能操作，扩展目标对象的功能。
 简言之，代理模式就是设置一个中间代理来控制访问原目标对象，以达到增强原对象的功能和简化访问方式。 静态代理 静态代理目录结构 主题接口 IUserDao
 public interface IUserDao { void saveUser(); }  主题接口实现类（被代理类） UserDao
@@ -46,10 +46,10 @@ public class ProxyTest { @Test void testStaticProxy(){ //目标对象 IUserDao t
     
     <item>
       <title>Mysql基础</title>
-      <link>https://pallcard.github.io/2019/mysql%E5%9F%BA%E7%A1%80/</link>
+      <link>https://github.com/pallcard/pallcard.github.io/tree/master/2019/mysql%E5%9F%BA%E7%A1%80/</link>
       <pubDate>Mon, 27 May 2019 18:56:26 +0800</pubDate>
       
-      <guid>https://pallcard.github.io/2019/mysql%E5%9F%BA%E7%A1%80/</guid>
+      <guid>https://github.com/pallcard/pallcard.github.io/tree/master/2019/mysql%E5%9F%BA%E7%A1%80/</guid>
       <description>DBMS分类  基于共享文件系统的DBMS，例如：Microsoft Access 基于客户机—服务器的DBMS，例如：MySql，Oracle，SQL Server  连接mysql 格式：
 mysql -h 主机地址 -u 用户名 -p 用户密码 例如：/usr/local/mysql/bin/mysql -u root -p  选择数据库 最初连接mysql时，没有任何数据库可供使用，需要使用use来选择一个数据库
 use 数据库名称 例如：USE mysql  显示数据库一些信息 SHOW DATABASES; //显示所有数据库 SHOW TABLES; //显示当前数据库中所有表 SHOW COLUMNS FROM xxx; //显示xxx表中的列 DESCRIBE xxx；//同上 SHOW STATUS; //用于显示广泛的服务器状态信息 SHOW GRANTS; //显示授权用户权限 SHOW ERRORS和SHOW WARNINGS；//用来显示服务器错误或警告消息  检索数据 许多SQL开发人员喜欢对所有SQL关键字使用大写，而对所有 列和表名使用小写，这样做使代码更易于阅读和调试。
