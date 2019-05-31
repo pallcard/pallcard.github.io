@@ -7,10 +7,20 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
     <copyright>All rights reserved - 2019</copyright>
-    <lastBuildDate>Wed, 29 May 2019 20:06:16 +0800</lastBuildDate>
+    <lastBuildDate>Fri, 31 May 2019 17:15:52 +0800</lastBuildDate>
     
 	<atom:link href="https://pallcard.github.io/tags/java/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>单例模式</title>
+      <link>https://pallcard.github.io/2019/%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F/</link>
+      <pubDate>Fri, 31 May 2019 17:15:52 +0800</pubDate>
+      
+      <guid>https://pallcard.github.io/2019/%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F/</guid>
+      <description>通过单例模式可以保证系统中，应用该模式的一个类只有一个实例。即一个类只有一个对象实例。
+1.懒汉式 public class Singleton1 { private static Singleton1 singleton1 = null; private Singleton1(){} public static Singleton1 newInstance() { if (singleton1 == null){ singleton1 = new Singleton1(); } return singleton1; } }  2.饿汉式 public class Singleton2 { private static Singleton2 singleton2 = new Singleton2(); private Singleton2(){} public static Singleton2 newSingleton(){ return singleton2; } }  3.懒汉式改 //序列化 public class Singleton3 implements Serializable { // volatile保证变量一致性 private volatile static Singleton3 singleton3 = null; private Singleton3(){ //防止反射调用私有方法 if(singleton3 !</description>
+    </item>
     
     <item>
       <title>代理模式</title>
