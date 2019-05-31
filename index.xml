@@ -26,9 +26,9 @@
 &lt;h5 id=&#34;1-安装hugo&#34;&gt;1.安装hugo&lt;/h5&gt;
 
 &lt;p&gt;在&lt;a href=&#34;https://github.com/gohugoio/hugo/releases找到相应版本的hugo镜像，下载后解压，如下：&#34; rel=&#34;nofollow noreferrer&#34; target=&#34;_blank&#34;&gt;https://github.com/gohugoio/hugo/releases找到相应版本的hugo镜像，下载后解压，如下：&lt;/a&gt;
-&lt;img src=&#34;https://img-blog.csdnimg.cn/20190531144314114.png&#34; alt=&#34;windows&#34; /&gt;
+&lt;img src=&#34;https://pallcard.github.io/images/hugo001.png&#34; alt=&#34;windows&#34; /&gt;
 配置环境变量：将解压后压缩包放在E盘，则添加如下环境变量
-&lt;img src=&#34;https://img-blog.csdnimg.cn/20190531151332417.png&#34; alt=&#34;环境变量&#34; /&gt;
+&lt;img src=&#34;https://pallcard.github.io/images/hugo002.png&#34; alt=&#34;环境变量&#34; /&gt;
 输入如下命令判断是否按照成功&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;hugo version
