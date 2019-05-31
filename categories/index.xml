@@ -7,10 +7,19 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
     <copyright>All rights reserved - 2019</copyright>
-    <lastBuildDate>Wed, 29 May 2019 20:06:16 +0800</lastBuildDate>
+    <lastBuildDate>Fri, 31 May 2019 16:21:56 +0800</lastBuildDate>
     
 	<atom:link href="https://pallcard.github.io/categories/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Hugo</title>
+      <link>https://pallcard.github.io/categories/hugo/</link>
+      <pubDate>Fri, 31 May 2019 16:21:56 +0800</pubDate>
+      
+      <guid>https://pallcard.github.io/categories/hugo/</guid>
+      <description></description>
+    </item>
     
     <item>
       <title>Java</title>

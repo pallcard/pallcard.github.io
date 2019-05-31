@@ -6,8 +6,142 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
     <copyright>All rights reserved - 2019</copyright>
-    <lastBuildDate>Wed, 29 May 2019 20:06:16 +0800</lastBuildDate>
+    <lastBuildDate>Fri, 31 May 2019 16:21:56 +0800</lastBuildDate>
     <atom:link href="/" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Hugo搭建blog</title>
+      <link>https://pallcard.github.io/2019/hugo%E6%90%AD%E5%BB%BAblog/</link>
+      <pubDate>Fri, 31 May 2019 16:21:56 +0800</pubDate>
+      
+      <guid>https://pallcard.github.io/2019/hugo%E6%90%AD%E5%BB%BAblog/</guid>
+      <description>
+
+&lt;p&gt;在windows下使用hugo搭建blog&lt;/p&gt;
+
+&lt;h4 id=&#34;官方网站&#34;&gt;官方网站&lt;/h4&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://www.gohugo.org/&#34; rel=&#34;nofollow noreferrer&#34; target=&#34;_blank&#34;&gt;https://www.gohugo.org/&lt;/a&gt;&lt;/p&gt;
+
+&lt;h5 id=&#34;1-安装hugo&#34;&gt;1.安装hugo&lt;/h5&gt;
+
+&lt;p&gt;在&lt;a href=&#34;https://github.com/gohugoio/hugo/releases找到相应版本的hugo镜像，下载后解压，如下：&#34; rel=&#34;nofollow noreferrer&#34; target=&#34;_blank&#34;&gt;https://github.com/gohugoio/hugo/releases找到相应版本的hugo镜像，下载后解压，如下：&lt;/a&gt;
+&lt;img src=&#34;https://img-blog.csdnimg.cn/20190531144314114.png&#34; alt=&#34;windows&#34; /&gt;
+配置环境变量：将解压后压缩包放在E盘，则添加如下环境变量
+&lt;img src=&#34;https://img-blog.csdnimg.cn/20190531151332417.png&#34; alt=&#34;环境变量&#34; /&gt;
+输入如下命令判断是否按照成功&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;hugo version
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://img-blog.csdnimg.cn/20190531151456987.png&#34; alt=&#34;检查安装&#34; /&gt;&lt;/p&gt;
+
+&lt;h5 id=&#34;2-建立站点&#34;&gt;2.建立站点&lt;/h5&gt;
+
+&lt;p&gt;使用如下命令（blog为路径名）&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;hugo new site blog
+cd blog
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;生成目录如下
+&lt;img src=&#34;https://img-blog.csdnimg.cn/20190531153456977.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3N1cGVyZmljaWFsS25vd2xlZGdl,size_16,color_FFFFFF,t_70&#34; alt=&#34;blog目录&#34; /&gt;&lt;/p&gt;
+
+&lt;h5 id=&#34;3-增加文章&#34;&gt;3.增加文章&lt;/h5&gt;
+
+&lt;p&gt;输入以下命令后会在content里创建一个文件&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;hugo new about.md
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;打开文件，&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;---
+title: &amp;quot;About&amp;quot;
+date: 2019-05-31T15:47:28+08:00
+draft: true
+---
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h5 id=&#34;4-安装主题&#34;&gt;4.安装主题&lt;/h5&gt;
+
+&lt;p&gt;主题选择的是LeaveIt，安装后会在themes中生成对应文件&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;cd themes
+git clone https://github.com/liuzc/LeaveIt.git
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;并在config.toml中配置如下&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;theme = &amp;quot;LeaveIt&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h5 id=&#34;4-运行hugo&#34;&gt;4.运行hugo&lt;/h5&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;hugo server -D
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h5 id=&#34;5-配置&#34;&gt;5.配置&lt;/h5&gt;
+
+&lt;p&gt;在content中新建文件夹posts，并在config.toml中加入配置如下：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;# 菜单的配置
+[menu]
+  [[menu.main]]
+    name = &amp;quot;博客&amp;quot;
+    url = &amp;quot;/posts/&amp;quot;
+    weight = 1
+  [[menu.main]]
+    name = &amp;quot;分类&amp;quot;
+    url = &amp;quot;/categories/&amp;quot;
+    weight = 2
+  [[menu.main]]
+    name = &amp;quot;标签&amp;quot;
+    url = &amp;quot;/tags/&amp;quot;
+    weight = 3
+  [[menu.main]]
+    name = &amp;quot;关于&amp;quot;
+    url = &amp;quot;/about/&amp;quot;
+    weight = 4
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;在建新文章时，categories中为文章分类，tags为标签。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;---
+title: &amp;quot;代理模式&amp;quot;
+date: 2019-05-29T20:06:16+08:00
+draft: false
+categories: [&amp;quot;Java&amp;quot;]
+tags: [&amp;quot;Java&amp;quot;,&amp;quot;设计模式&amp;quot;]
+---
+#### 内容
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h5 id=&#34;5-部署&#34;&gt;5.部署&lt;/h5&gt;
+
+&lt;p&gt;部署到GitHub Pages 上，首先在GitHub上创建一个Repository，命名为：pallcard.github.io （pallcard替换为你的github用户名）。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;hugo --theme=LeaveIt --baseUrl=&amp;quot;http://pallcard.github.io/&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;将pubilc目录里所有文件 push 到刚创建的Repository的 master 分支。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;cd public
+git init
+git remote add origin https://github.com/pallcard/pallcard.github.io.git
+git add -A
+git commit -m &amp;quot;first commit&amp;quot;
+git push -u origin master
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;浏览器里访问:&lt;a href=&#34;http://coderzh.pallcard.io/&#34; rel=&#34;nofollow noreferrer&#34; target=&#34;_blank&#34;&gt;http://coderzh.pallcard.io/&lt;/a&gt;&lt;/p&gt;
+
+&lt;h5 id=&#34;6-注意&#34;&gt;6.注意&lt;/h5&gt;
+
+&lt;p&gt;1.每次使用hugo new posts/xxx.md创建文章后，&lt;strong&gt;&lt;em&gt;记得要将draft 改为false&lt;/em&gt;&lt;/strong&gt;
+2.更新部署时，在根目录执行hugo，然后push到github上即可&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>代理模式</title>
@@ -678,10 +812,10 @@ ALTER TABLE articles DROP score;
     
     <item>
       <title>关于我</title>
-      <link>https://pallcard.github.io/about/me/</link>
+      <link>https://pallcard.github.io/about/</link>
       <pubDate>Mon, 27 May 2019 18:55:29 +0800</pubDate>
       
-      <guid>https://pallcard.github.io/about/me/</guid>
+      <guid>https://pallcard.github.io/about/</guid>
       <description>&lt;p&gt;研一学生&lt;/p&gt;
 </description>
     </item>

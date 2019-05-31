@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>blog on 刘科个人博客</title>
+    <link>https://pallcard.github.io/tags/blog/</link>
+    <description>Recent content in blog on 刘科个人博客</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-CN</language>
+    <copyright>All rights reserved - 2019</copyright>
+    <lastBuildDate>Fri, 31 May 2019 16:21:56 +0800</lastBuildDate>
+    
+	<atom:link href="https://pallcard.github.io/tags/blog/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Hugo搭建blog</title>
+      <link>https://pallcard.github.io/2019/hugo%E6%90%AD%E5%BB%BAblog/</link>
+      <pubDate>Fri, 31 May 2019 16:21:56 +0800</pubDate>
+      
+      <guid>https://pallcard.github.io/2019/hugo%E6%90%AD%E5%BB%BAblog/</guid>
+      <description>在windows下使用hugo搭建blog
+官方网站 https://www.gohugo.org/
+1.安装hugo 在https://github.com/gohugoio/hugo/releases找到相应版本的hugo镜像，下载后解压，如下： 配置环境变量：将解压后压缩包放在E盘，则添加如下环境变量 输入如下命令判断是否按照成功
+hugo version  2.建立站点 使用如下命令（blog为路径名）
+hugo new site blog cd blog  生成目录如下 3.增加文章 输入以下命令后会在content里创建一个文件
+hugo new about.md  打开文件，
+--- title: &amp;quot;About&amp;quot; date: 2019-05-31T15:47:28+08:00 draft: true ---  4.安装主题 主题选择的是LeaveIt，安装后会在themes中生成对应文件
+cd themes git clone https://github.com/liuzc/LeaveIt.git  并在config.toml中配置如下
+theme = &amp;quot;LeaveIt&amp;quot;  4.运行hugo hugo server -D  5.配置 在content中新建文件夹posts，并在config.toml中加入配置如下：
+# 菜单的配置 [menu] [[menu.main]] name = &amp;quot;博客&amp;quot; url = &amp;quot;/posts/&amp;quot; weight = 1 [[menu.</description>
+    </item>
+    
+  </channel>
+</rss>
