@@ -2,22 +2,22 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Hugo on 刘科个人博客</title>
-    <link>https://github.com/pallcard/pallcard.github.io/tree/master/tags/hugo/</link>
+    <link>https://pallcard.github.io/tags/hugo/</link>
     <description>Recent content in Hugo on 刘科个人博客</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
     <copyright>All rights reserved - 2019</copyright>
     <lastBuildDate>Fri, 31 May 2019 16:21:56 +0800</lastBuildDate>
     
-	<atom:link href="https://github.com/pallcard/pallcard.github.io/tree/master/tags/hugo/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://pallcard.github.io/tags/hugo/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>Hugo搭建blog</title>
-      <link>https://github.com/pallcard/pallcard.github.io/tree/master/2019/hugo%E6%90%AD%E5%BB%BAblog/</link>
+      <link>https://pallcard.github.io/2019/hugo%E6%90%AD%E5%BB%BAblog/</link>
       <pubDate>Fri, 31 May 2019 16:21:56 +0800</pubDate>
       
-      <guid>https://github.com/pallcard/pallcard.github.io/tree/master/2019/hugo%E6%90%AD%E5%BB%BAblog/</guid>
+      <guid>https://pallcard.github.io/2019/hugo%E6%90%AD%E5%BB%BAblog/</guid>
       <description>在windows下使用hugo搭建blog
 官方网站 https://www.gohugo.org/
 1.安装hugo 在https://github.com/gohugoio/hugo/releases找到相应版本的hugo镜像，下载后解压，如下： 配置环境变量：将解压后压缩包放在E盘，则添加如下环境变量 输入如下命令判断是否按照成功

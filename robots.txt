@@ -63,4 +63,4 @@ Disallow: /
 User-agent: ZoominfoBot
 Disallow: /
 
-Sitemap: https://github.com/pallcard/pallcard.github.io/tree/master/sitemap.xml
+Sitemap: https://pallcard.github.io/sitemap.xml
