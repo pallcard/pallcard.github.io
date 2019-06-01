@@ -7,10 +7,21 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
     <copyright>All rights reserved - 2019</copyright>
-    <lastBuildDate>Fri, 31 May 2019 17:15:52 +0800</lastBuildDate>
+    <lastBuildDate>Sat, 01 Jun 2019 18:52:16 +0800</lastBuildDate>
     
 	<atom:link href="https://pallcard.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Mysql题</title>
+      <link>https://pallcard.github.io/2019/mysql%E9%A2%98/</link>
+      <pubDate>Sat, 01 Jun 2019 18:52:16 +0800</pubDate>
+      
+      <guid>https://pallcard.github.io/2019/mysql%E9%A2%98/</guid>
+      <description>1.左连接、右连接、内连接 左连接 以左表为基础，根据on后面的条件进行连接，若右表中无对应数据，则右表数据为NULL。
+右连接 以右表为基础，根据on后面的条件进行连接，若左表中无对应数据，则左表数据为NULL。
+内连接 两个表做笛卡尔积后根据on后面的条件进行筛选。</description>
+    </item>
     
     <item>
       <title>单例模式</title>

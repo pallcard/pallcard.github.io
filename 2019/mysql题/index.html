@@ -9,9 +9,9 @@
   <meta name="description" content="hust研一">
   <meta name="keywords" content="Java,博客">
   
-  <link rel="prev" href="https://pallcard.github.io/2019/hugo%E6%90%AD%E5%BB%BAblog/" />
-  <link rel="next" href="https://pallcard.github.io/2019/mysql%E9%A2%98/" />
-  <link rel="canonical" href="https://pallcard.github.io/2019/%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F/" />
+  <link rel="prev" href="https://pallcard.github.io/2019/%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F/" />
+  
+  <link rel="canonical" href="https://pallcard.github.io/2019/mysql%E9%A2%98/" />
   <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
@@ -22,10 +22,10 @@
   <title>
        
        
-           单例模式 | 刘科个人博客
+           Mysql题 | 刘科个人博客
        
   </title>
-  <meta name="title" content="单例模式 | 刘科个人博客">
+  <meta name="title" content="Mysql题 | 刘科个人博客">
     
   
   <link rel="stylesheet" href="/font/iconfont.css">
@@ -44,9 +44,9 @@
          "@id": "https:\/\/pallcard.github.io\/"
     },
     "articleSection" : "posts",
-    "name" : "单例模式",
-    "headline" : "单例模式",
-    "description" : "通过单例模式可以保证系统中，应用该模式的一个类只有一个实例。即一个类只有一个对象实例。\n1.懒汉式 public class Singleton1 { private static Singleton1 singleton1 = null; private Singleton1(){} public static Singleton1 newInstance() { if (singleton1 == null){ singleton1 = new Singleton1(); } return singleton1; } }  2.饿汉式 public class Singleton2 { private static Singleton2 singleton2 = new Singleton2(); private Singleton2(){} public static Singleton2 newSingleton(){ return singleton2; } }  3.懒汉式改 \/\/序列化 public class Singleton3 implements Serializable { \/\/ volatile保证变量一致性 private volatile static Singleton3 singleton3 = null; private Singleton3(){ \/\/防止反射调用私有方法 if(singleton3 !",
+    "name" : "Mysql题",
+    "headline" : "Mysql题",
+    "description" : "1.左连接、右连接、内连接 左连接 以左表为基础，根据on后面的条件进行连接，若右表中无对应数据，则右表数据为NULL。\n右连接 以右表为基础，根据on后面的条件进行连接，若左表中无对应数据，则左表数据为NULL。\n内连接 两个表做笛卡尔积后根据on后面的条件进行筛选。",
     "inLanguage" : "zh-CN",
     "author" : "刘科",
     "creator" : "刘科",
@@ -54,11 +54,11 @@
     "accountablePerson" : "刘科",
     "copyrightHolder" : "刘科",
     "copyrightYear" : "2019",
-    "datePublished": "2019-05-31 17:15:52 \x2b0800 CST",
-    "dateModified" : "2019-05-31 17:15:52 \x2b0800 CST",
-    "url" : "https:\/\/pallcard.github.io\/2019\/%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F\/",
-    "wordCount" : "118",
-    "keywords" : [ "Java","设计模式", "刘科个人博客"]
+    "datePublished": "2019-06-01 18:52:16 \x2b0800 CST",
+    "dateModified" : "2019-06-01 18:52:16 \x2b0800 CST",
+    "url" : "https:\/\/pallcard.github.io\/2019\/mysql%E9%A2%98\/",
+    "wordCount" : "7",
+    "keywords" : [  "刘科个人博客"]
 }
 </script>
 
@@ -116,18 +116,14 @@
       		
 <article class="post-warp" itemscope itemtype="http://schema.org/Article">
     <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">单例模式</h1>
+        <h1 class="post-title" itemprop="name headline">Mysql题</h1>
         <div class="post-meta">
                 Written by <a itemprop="name" href="https://pallcard.github.io/" rel="author">刘科</a> with ♥ 
                 <span class="post-time">
-                on <time datetime=2019-05-31 itemprop="datePublished">May 31, 2019</time>
+                on <time datetime=2019-06-01 itemprop="datePublished">June 1, 2019</time>
                 </span>
                 in
-                <i class="iconfont icon-folder"></i>
-                <span class="post-category">
-                        <a href="https://pallcard.github.io/categories/java/"> Java </a>
-                        
-                </span>
+                
         </div>
     </header>
     <div class="post-content">
@@ -148,64 +144,19 @@
 
           
 
-<p>通过单例模式可以保证系统中，应用该模式的一个类只有一个实例。即一个类只有一个对象实例。</p>
+<h4 id="1-左连接-右连接-内连接">1.左连接、右连接、内连接</h4>
 
-<h4 id="1-懒汉式">1.懒汉式</h4>
+<h5 id="左连接">左连接</h5>
 
-<pre><code class="language-java">public class Singleton1 {
-    private static Singleton1 singleton1 = null;
-    private Singleton1(){}
-    public static Singleton1 newInstance() {
-        if (singleton1 == null){
-            singleton1 = new Singleton1();
-        }
-        return  singleton1;
-    }
-}
-</code></pre>
+<p>以左表为基础，根据on后面的条件进行连接，若右表中无对应数据，则右表数据为NULL。</p>
 
-<h4 id="2-饿汉式">2.饿汉式</h4>
+<h5 id="右连接">右连接</h5>
 
-<pre><code class="language-java">public class Singleton2 {
-    private static Singleton2 singleton2 = new Singleton2();
-    private Singleton2(){}
-    public static Singleton2 newSingleton(){
-        return singleton2;
-    }
-}
-</code></pre>
+<p>以右表为基础，根据on后面的条件进行连接，若左表中无对应数据，则左表数据为NULL。</p>
 
-<h4 id="3-懒汉式改">3.懒汉式改</h4>
+<h5 id="内连接">内连接</h5>
 
-<pre><code class="language-java">//序列化
-public class Singleton3 implements Serializable {
-    // volatile保证变量一致性
-    private volatile static Singleton3 singleton3 = null;
-    private Singleton3(){
-        //防止反射调用私有方法
-        if(singleton3 != null){
-            throw new RuntimeException(&quot;此类对象为单例模式，已被实例化&quot;);
-        }
-    }
-
-    public static Singleton3 newInstance(){
-        //为了避免每次都加锁，避免了一定的加锁的开销
-        if(singleton3 == null) {
-            //多线程
-            synchronized (singleton3) {
-                if (singleton3 == null) {
-                    singleton3 = new Singleton3();
-                }
-            }
-        }
-        return singleton3;
-    }
-}
-</code></pre>
-
-<p>说明：
-1. 外层singleton3 == null，为了避免每次都加锁，避免了一定的加锁的开销；
-2. 把类的构造函数定义为私有private，外部便无法通过new生成对象。</p>
+<p>两个表做笛卡尔积后根据on后面的条件进行筛选。</p>
 
     </div>
 
@@ -220,7 +171,7 @@ public class Singleton3 implements Serializable {
              
             <p class="copyright-item">
                     <span>Link:</span>
-                    <a href=https://pallcard.github.io/2019/%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F/>https://pallcard.github.io/2019/%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F/</span>
+                    <a href=https://pallcard.github.io/2019/mysql%E9%A2%98/>https://pallcard.github.io/2019/mysql%E9%A2%98/</span>
             </p>
             
             
@@ -228,17 +179,6 @@ public class Singleton3 implements Serializable {
 
   
     <div class="post-tags">
-        
-            <section>
-            <i class="iconfont icon-tag"></i>Tag(s): 
-            
-            <span class="tag"><a href="https://pallcard.github.io/tags/java/">
-                    #Java</a></span>
-            
-            <span class="tag"><a href="https://pallcard.github.io/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/">
-                    #设计模式</a></span>
-            
-            </section>
         
         <section>
                 <a href="javascript:window.history.back();">back</a></span> · 
@@ -248,10 +188,8 @@ public class Singleton3 implements Serializable {
 
     <div class="post-nav">
         
-        <a href="https://pallcard.github.io/2019/hugo%E6%90%AD%E5%BB%BAblog/" class="prev" rel="prev" title="Hugo搭建blog"><i class="iconfont icon-left"></i>&nbsp;Hugo搭建blog</a>
+        <a href="https://pallcard.github.io/2019/%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F/" class="prev" rel="prev" title="单例模式"><i class="iconfont icon-left"></i>&nbsp;单例模式</a>
          
-        
-        <a href="https://pallcard.github.io/2019/mysql%E9%A2%98/" class="next" rel="next" title="Mysql题">Mysql题&nbsp;<i class="iconfont icon-right"></i></a>
         
     </div>
 
