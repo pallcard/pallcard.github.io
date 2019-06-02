@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Java on 刘科个人博客</title>
-    <link>https://pallcard.github.io/tags/java/</link>
-    <description>Recent content in Java on 刘科个人博客</description>
+    <title>JMM on 刘科个人博客</title>
+    <link>https://pallcard.github.io/tags/jmm/</link>
+    <description>Recent content in JMM on 刘科个人博客</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
     <copyright>All rights reserved - 2019</copyright>
     <lastBuildDate>Sun, 02 Jun 2019 10:28:33 +0800</lastBuildDate>
     
-	<atom:link href="https://pallcard.github.io/tags/java/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://pallcard.github.io/tags/jmm/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
@@ -31,30 +31,6 @@ JMM解决的问题 &amp;nbsp; &amp;nbsp; &amp;nbsp;Java内存模型是围绕着�
 &amp;nbsp; &amp;nbsp; &amp;nbsp;使用 synchronized 关键字，在同步方法/同步块开始时（Monitor Enter）,使用共享变量时会从主内存中刷新变量值到工作内存中（即从主内存中读取最新值到线程私有的工作内存中），在同步方法/同步块结束时(Monitor Exit),会将工作内存中的变量值同步到主内存中去（即将线程私有的工作内存中的值写入到主内存进行同步）。
 &amp;nbsp; &amp;nbsp; &amp;nbsp;使用 Lock接口 的最常用的实现ReentrantLock(重入锁)来实现可见性：当我们在方法的开始位置执行lock.lock()方法，这和synchronized开始位置（Monitor Enter）有相同的语义，即使用共享变量时会从主内存中刷新变量值到工作内存中（即从主内存中读取最新值到线程私有的工作内存中），在方法的最后finally块里执行lock.unlock()方法，和synchronized结束位置（Monitor Exit）有相同的语义,即会将工作内存中的变量值同步到主内存中去（即将线程私有的工作内存中的值写入到主内存进行同步）。
 &amp;nbsp; &amp;nbsp; &amp;nbsp;final关键字 的可见性是指：被final修饰的变量，在构造函数数一旦初始化完成，并且在构造函数中并没有把“this”的引用传递出去，那么其他线程就可以看到final变量的值。 有序性 ：在本线程内观察，操作都是有序的；如果在一个线程中观察另外一个线程，所有的操作都是无序的。 &amp;nbsp; &amp;nbsp; &amp;nbsp;Java提供了两个关键字volatile和synchronized来保证多线程之间操作的有序性,volatile关键字本身通过加入内存屏障来禁止指令的重排序，而synchronized关键字通过一个变量在同一时间只允许有一个线程对其进行加锁的规则来实现。</description>
-    </item>
-    
-    <item>
-      <title>单例模式</title>
-      <link>https://pallcard.github.io/2019/%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F/</link>
-      <pubDate>Fri, 31 May 2019 17:15:52 +0800</pubDate>
-      
-      <guid>https://pallcard.github.io/2019/%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F/</guid>
-      <description>通过单例模式可以保证系统中，应用该模式的一个类只有一个实例。即一个类只有一个对象实例。
-1.懒汉式 public class Singleton1 { private static Singleton1 singleton1 = null; private Singleton1(){} public static Singleton1 newInstance() { if (singleton1 == null){ singleton1 = new Singleton1(); } return singleton1; } }  2.饿汉式 public class Singleton2 { private static Singleton2 singleton2 = new Singleton2(); private Singleton2(){} public static Singleton2 newSingleton(){ return singleton2; } }  3.懒汉式改 //序列化 public class Singleton3 implements Serializable { // volatile保证变量一致性 private volatile static Singleton3 singleton3 = null; private Singleton3(){ //防止反射调用私有方法 if(singleton3 !</description>
-    </item>
-    
-    <item>
-      <title>代理模式</title>
-      <link>https://pallcard.github.io/2019/java-proxy/</link>
-      <pubDate>Wed, 29 May 2019 20:06:16 +0800</pubDate>
-      
-      <guid>https://pallcard.github.io/2019/java-proxy/</guid>
-      <description>代理模式 代理模式是一种设计模式，提供了对目标对象额外的访问方式，即通过代理对象访问目标对象，这样可以在不修改原目标对象的前提下，提供额外的功能操作，扩展目标对象的功能。
-简言之，代理模式就是设置一个中间代理来控制访问原目标对象，以达到增强原对象的功能和简化访问方式。 静态代理 静态代理目录结构 主题接口 IUserDao
-public interface IUserDao { void saveUser(); }  主题接口实现类（被代理类） UserDao
-public class UserDao implements IUserDao{ @Override public void saveUser() { System.out.println(&amp;quot;保存用户数据&amp;quot;); } }  代理类 UserDaoProxy
-public class UserDaoProxy implements IUserDao { //目标对象 private IUserDao targer; public UserDaoProxy(IUserDao iUserDao){ this.targer = iUserDao; } @Override public void saveUser() { System.out.println(&amp;quot;开启事务&amp;quot;); targer.saveUser(); System.out.println(&amp;quot;提交事务&amp;quot;); } }  测试类 ProxyTest
-public class ProxyTest { @Test void testStaticProxy(){ //目标对象 IUserDao target = new UserDao(); //代理对象 UserDaoProxy proxy = new UserDaoProxy(target); proxy.</description>
     </item>
     
   </channel>

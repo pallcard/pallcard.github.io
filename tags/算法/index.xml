@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>算法 on 刘科个人博客</title>
+    <link>https://pallcard.github.io/tags/%E7%AE%97%E6%B3%95/</link>
+    <description>Recent content in 算法 on 刘科个人博客</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-CN</language>
+    <copyright>All rights reserved - 2019</copyright>
+    <lastBuildDate>Sat, 01 Jun 2019 20:42:19 +0800</lastBuildDate>
+    
+	<atom:link href="https://pallcard.github.io/tags/%E7%AE%97%E6%B3%95/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>算法</title>
+      <link>https://pallcard.github.io/2019/%E7%AE%97%E6%B3%95/</link>
+      <pubDate>Sat, 01 Jun 2019 20:42:19 +0800</pubDate>
+      
+      <guid>https://pallcard.github.io/2019/%E7%AE%97%E6%B3%95/</guid>
+      <description>题目描述 给定一个非空整数数组，除了某个元素只出现一次以外，其余每个元素出现两次。找出只出现一次的元素。
+示例 输入: [2,2,3] 输出: 3
+思想 使用按位异或。异或：如果a、b两个值不相同，则异或结果为1。 如果a、b两个值相同，异或结果为0。
+public static void main(String[] args) { int a [] = new int []{2,2,3}; int temp = 0; for (int i = 0; i &amp;lt; a.length; i++) { temp ^= a[i]; } System.out.println(temp); }  加强 上述数组中有两个数出现一次，求这两个数。
+示例 输入: [2, 2, 6, 4, 5, 5] 输出: 4, 6
+思想 先将所有数按位异或，得到temp，找到temp中二进制位为1的下标，通过这个下标将所用数分为两个数组，分别异或可以得到两个值。 若有两个数都只出现了一次，若将所有数进行按位异或后，所得到的数中，若按照上述划分，必然可以将这两个数分到不同的数组中
+public static void main(String[] args) { int a [] = new int []{2, 2, 6, 4, 5, 5}; int temp = 0; int max = 0; for (int i = 0; i &amp;lt; a.</description>
+    </item>
+    
+  </channel>
+</rss>

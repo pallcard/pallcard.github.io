@@ -9,9 +9,9 @@
   <meta name="description" content="hust研一">
   <meta name="keywords" content="Java,博客">
   
-  <link rel="prev" href="https://pallcard.github.io/2019/%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F/" />
-  <link rel="next" href="https://pallcard.github.io/2019/%E7%AE%97%E6%B3%95/" />
-  <link rel="canonical" href="https://pallcard.github.io/2019/mysql%E9%A2%98/" />
+  <link rel="prev" href="https://pallcard.github.io/2019/mysql%E9%A2%98/" />
+  <link rel="next" href="https://pallcard.github.io/2019/jmm/" />
+  <link rel="canonical" href="https://pallcard.github.io/2019/%E7%AE%97%E6%B3%95/" />
   <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
@@ -22,10 +22,10 @@
   <title>
        
        
-           Mysql题 | 刘科个人博客
+           算法 | 刘科个人博客
        
   </title>
-  <meta name="title" content="Mysql题 | 刘科个人博客">
+  <meta name="title" content="算法 | 刘科个人博客">
     
   
   <link rel="stylesheet" href="/font/iconfont.css">
@@ -44,9 +44,9 @@
          "@id": "https:\/\/pallcard.github.io\/"
     },
     "articleSection" : "posts",
-    "name" : "Mysql题",
-    "headline" : "Mysql题",
-    "description" : "1.左连接、右连接、内连接 左连接 以左表为基础，根据on后面的条件进行连接，若右表中无对应数据，则右表数据为NULL。\n右连接 以右表为基础，根据on后面的条件进行连接，若左表中无对应数据，则左表数据为NULL。\n内连接 两个表做笛卡尔积后根据on后面的条件进行筛选。",
+    "name" : "算法",
+    "headline" : "算法",
+    "description" : "题目描述 给定一个非空整数数组，除了某个元素只出现一次以外，其余每个元素出现两次。找出只出现一次的元素。\n示例 输入: [2,2,3] 输出: 3\n思想 使用按位异或。异或：如果a、b两个值不相同，则异或结果为1。 如果a、b两个值相同，异或结果为0。\npublic static void main(String[] args) { int a [] = new int []{2,2,3}; int temp = 0; for (int i = 0; i \x26lt; a.length; i\x2b\x2b) { temp ^= a[i]; } System.out.println(temp); }  加强 上述数组中有两个数出现一次，求这两个数。\n示例 输入: [2, 2, 6, 4, 5, 5] 输出: 4, 6\n思想 先将所有数按位异或，得到temp，找到temp中二进制位为1的下标，通过这个下标将所用数分为两个数组，分别异或可以得到两个值。 若有两个数都只出现了一次，若将所有数进行按位异或后，所得到的数中，若按照上述划分，必然可以将这两个数分到不同的数组中\npublic static void main(String[] args) { int a [] = new int []{2, 2, 6, 4, 5, 5}; int temp = 0; int max = 0; for (int i = 0; i \x26lt; a.",
     "inLanguage" : "zh-CN",
     "author" : "刘科",
     "creator" : "刘科",
@@ -54,11 +54,11 @@
     "accountablePerson" : "刘科",
     "copyrightHolder" : "刘科",
     "copyrightYear" : "2019",
-    "datePublished": "2019-06-01 18:52:16 \x2b0800 CST",
-    "dateModified" : "2019-06-01 18:52:16 \x2b0800 CST",
-    "url" : "https:\/\/pallcard.github.io\/2019\/mysql%E9%A2%98\/",
-    "wordCount" : "7",
-    "keywords" : [ "Mysql", "刘科个人博客"]
+    "datePublished": "2019-06-01 20:42:19 \x2b0800 CST",
+    "dateModified" : "2019-06-01 20:42:19 \x2b0800 CST",
+    "url" : "https:\/\/pallcard.github.io\/2019\/%E7%AE%97%E6%B3%95\/",
+    "wordCount" : "200",
+    "keywords" : [ "算法", "刘科个人博客"]
 }
 </script>
 
@@ -116,7 +116,7 @@
       		
 <article class="post-warp" itemscope itemtype="http://schema.org/Article">
     <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">Mysql题</h1>
+        <h1 class="post-title" itemprop="name headline">算法</h1>
         <div class="post-meta">
                 Written by <a itemprop="name" href="https://pallcard.github.io/" rel="author">刘科</a> with ♥ 
                 <span class="post-time">
@@ -125,7 +125,7 @@
                 in
                 <i class="iconfont icon-folder"></i>
                 <span class="post-category">
-                        <a href="https://pallcard.github.io/categories/mysql/"> Mysql </a>
+                        <a href="https://pallcard.github.io/categories/%E7%AE%97%E6%B3%95/"> 算法 </a>
                         
                 </span>
         </div>
@@ -148,19 +148,80 @@
 
           
 
-<h4 id="1-左连接-右连接-内连接">1.左连接、右连接、内连接</h4>
+<h4 id="题目描述">题目描述</h4>
 
-<h5 id="左连接">左连接</h5>
+<p>给定一个非空整数数组，除了某个元素只出现一次以外，其余每个元素出现两次。找出只出现一次的元素。</p>
 
-<p>以左表为基础，根据on后面的条件进行连接，若右表中无对应数据，则右表数据为NULL。</p>
+<h5 id="示例">示例</h5>
 
-<h5 id="右连接">右连接</h5>
+<p>输入: [2,2,3]
+输出: 3</p>
 
-<p>以右表为基础，根据on后面的条件进行连接，若左表中无对应数据，则左表数据为NULL。</p>
+<h5 id="思想">思想</h5>
 
-<h5 id="内连接">内连接</h5>
+<p>使用按位异或。异或：如果a、b两个值不相同，则异或结果为1。 如果a、b两个值相同，异或结果为0。</p>
 
-<p>两个表做笛卡尔积后根据on后面的条件进行筛选。</p>
+<pre><code class="language-java">public static void main(String[] args) {
+	int a [] = new int []{2,2,3};
+	int temp = 0;
+	for (int i = 0; i &lt; a.length; i++) {
+		temp ^= a[i];
+	}
+	System.out.println(temp);
+}
+</code></pre>
+
+<h4 id="加强">加强</h4>
+
+<p>上述数组中有两个数出现一次，求这两个数。</p>
+
+<h5 id="示例-1">示例</h5>
+
+<p>输入: [2, 2, 6, 4, 5, 5]
+输出: 4, 6</p>
+
+<h5 id="思想-1">思想</h5>
+
+<p>先将所有数按位异或，得到temp，找到temp中二进制位为1的下标，通过这个下标将所用数分为两个数组，分别异或可以得到两个值。
+<strong><em>若有两个数都只出现了一次，若将所有数进行按位异或后，所得到的数中，若按照上述划分，必然可以将这两个数分到不同的数组中</em></strong></p>
+
+<pre><code class="language-java">public static void main(String[] args) {
+	int a [] = new int []{2, 2, 6, 4, 5, 5};
+	int temp = 0;
+	int max = 0;
+	for (int i = 0; i &lt; a.length; i++) {
+		temp ^= a[i];
+		if (max &lt; a[i]) {
+			max = a[i];
+		}
+	}
+
+	int maxLength = Integer.toBinaryString(max).length();
+	String tempString = Integer.toBinaryString(temp);
+	StringBuilder sb = new StringBuilder(maxLength);
+	for (int i = 0; i &lt; maxLength-tempString.length(); i++) {
+		sb.append(&quot;0&quot;);
+	}
+	sb.append(tempString);
+	int index = sb.length() - 1;
+	for (; index &gt;= 0; index--) {
+		if(sb.charAt(index) == '1') {
+			break;
+		}
+	}
+	int temp1 = 0;
+	int temp2 = 0;
+	for (int i = 0; i &lt; a.length; i++) {
+		String aiBinary = Integer.toBinaryString(a[i]);
+		if(aiBinary.length()&gt;index &amp;&amp; aiBinary.charAt(aiBinary.length()-index-1) == '1') {
+			temp1 ^= a[i];
+		} else {
+			temp2 ^= a[i];
+		}
+	}
+	System.out.print(temp1 + &quot;, &quot; + temp2);
+}
+</code></pre>
 
     </div>
 
@@ -175,7 +236,7 @@
              
             <p class="copyright-item">
                     <span>Link:</span>
-                    <a href=https://pallcard.github.io/2019/mysql%E9%A2%98/>https://pallcard.github.io/2019/mysql%E9%A2%98/</span>
+                    <a href=https://pallcard.github.io/2019/%E7%AE%97%E6%B3%95/>https://pallcard.github.io/2019/%E7%AE%97%E6%B3%95/</span>
             </p>
             
             
@@ -187,8 +248,8 @@
             <section>
             <i class="iconfont icon-tag"></i>Tag(s): 
             
-            <span class="tag"><a href="https://pallcard.github.io/tags/mysql/">
-                    #Mysql</a></span>
+            <span class="tag"><a href="https://pallcard.github.io/tags/%E7%AE%97%E6%B3%95/">
+                    #算法</a></span>
             
             </section>
         
@@ -200,10 +261,10 @@
 
     <div class="post-nav">
         
-        <a href="https://pallcard.github.io/2019/%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F/" class="prev" rel="prev" title="单例模式"><i class="iconfont icon-left"></i>&nbsp;单例模式</a>
+        <a href="https://pallcard.github.io/2019/mysql%E9%A2%98/" class="prev" rel="prev" title="Mysql题"><i class="iconfont icon-left"></i>&nbsp;Mysql题</a>
          
         
-        <a href="https://pallcard.github.io/2019/%E7%AE%97%E6%B3%95/" class="next" rel="next" title="算法">算法&nbsp;<i class="iconfont icon-right"></i></a>
+        <a href="https://pallcard.github.io/2019/jmm/" class="next" rel="next" title="JMM">JMM&nbsp;<i class="iconfont icon-right"></i></a>
         
     </div>
 
