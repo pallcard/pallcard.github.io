@@ -6,8 +6,60 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
     <copyright>All rights reserved - 2019</copyright>
-    <lastBuildDate>Tue, 04 Jun 2019 16:55:28 +0800</lastBuildDate>
+    <lastBuildDate>Tue, 04 Jun 2019 19:24:08 +0800</lastBuildDate>
     <atom:link href="/" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>算法003</title>
+      <link>https://pallcard.github.io/2019/algorithm003/</link>
+      <pubDate>Tue, 04 Jun 2019 19:24:08 +0800</pubDate>
+      
+      <guid>https://pallcard.github.io/2019/algorithm003/</guid>
+      <description>
+
+&lt;h5 id=&#34;描述&#34;&gt;描述&lt;/h5&gt;
+
+&lt;p&gt;将一个字符串中的空格替换成 &amp;ldquo;%20&amp;rdquo;。&lt;/p&gt;
+
+&lt;h5 id=&#34;例子&#34;&gt;例子&lt;/h5&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;Input:
+	&amp;quot;A B&amp;quot;
+Output:
+	&amp;quot;A%20B&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h4 id=&#34;思路&#34;&gt;思路&lt;/h4&gt;
+
+&lt;p&gt;由于要将字符串中所用空格替换为%20，故若字符串含有一个空格，则字符串的总长度会增长2，故可以先遍历一遍字符串，若将字符串的总长度变为相应的长度，需要两个指针，分别指向原字符串长度的最后一个票p1，和新字符串的最后一个p2，若原字符串为字符，则直接赋值给p2；若原字符串为空格，则赋值%20。&lt;/p&gt;
+
+&lt;h5 id=&#34;代码&#34;&gt;代码&lt;/h5&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;public class Question003 {
+    public static void main(String[] args) {
+        StringBuilder sb = new StringBuilder(&amp;quot;A B&amp;quot;);
+        int p1 = sb.length()-1;//指向原字符串最后一个
+        for (int i = 0; i &amp;lt;= p1; i++) {
+            if(sb.charAt(i) == &#39; &#39;) {
+                sb.append(&amp;quot;  &amp;quot;);
+            }
+        }
+        int p2 = sb.length()-1;//指向新字符串最后一个
+        while (p1 &amp;gt;= 0 &amp;amp;&amp;amp; p1 &amp;lt; p2) {
+            if(sb.charAt(p1) != &#39; &#39;) {
+                sb.setCharAt(p2--,sb.charAt(p1--));
+            } else if(sb.charAt(p1--) == &#39; &#39;) {
+                sb.setCharAt(p2--, &#39;0&#39;);
+                sb.setCharAt(p2--, &#39;2&#39;);
+                sb.setCharAt(p2--, &#39;%&#39;);
+            }
+        }
+        System.out.println(sb);
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+</description>
+    </item>
     
     <item>
       <title>算法002</title>
