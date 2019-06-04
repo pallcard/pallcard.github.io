@@ -7,10 +7,32 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
     <copyright>All rights reserved - 2019</copyright>
-    <lastBuildDate>Sun, 02 Jun 2019 10:28:33 +0800</lastBuildDate>
+    <lastBuildDate>Tue, 04 Jun 2019 16:55:28 +0800</lastBuildDate>
     
 	<atom:link href="https://pallcard.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>算法002</title>
+      <link>https://pallcard.github.io/2019/algorithm002/</link>
+      <pubDate>Tue, 04 Jun 2019 16:55:28 +0800</pubDate>
+      
+      <guid>https://pallcard.github.io/2019/algorithm002/</guid>
+      <description>描述 给定一个二维数组，其每一行从左到右递增排序，从上到下也是递增排序。 给定一个数，判断这个数是否在该二维数组中。
+例子 Input: 数组： { {1, 4, 7, 11, 15}, {2, 5, 8, 12, 19}, {3, 6, 9, 16, 22}, {10, 13, 14, 17, 24}, {18, 21, 23, 26, 30}, }; 目标值：24 Output: 2  思路 由于每一行从左到右递增排序，从上到下也是递增排序，故可以从右上角开始遍历，若大于目标值，列减1；若小于目标值，行加1；若等于则成功找到。
+代码 public class Question002 { public static void main(String[] args) { int target = 24; int [][] array = new int [][]{ {1, 4, 7, 11, 15}, {2, 5, 8, 12, 19}, {3, 6, 9, 16, 22}, {10, 13, 14, 17, 24}, {18, 21, 23, 26, 30}, }; int row = 0, col = array.</description>
+    </item>
+    
+    <item>
+      <title>算法001</title>
+      <link>https://pallcard.github.io/2019/algorithm001/</link>
+      <pubDate>Tue, 04 Jun 2019 16:37:28 +0800</pubDate>
+      
+      <guid>https://pallcard.github.io/2019/algorithm001/</guid>
+      <description> 描述 在一个长度为 n 的数组里的所有数字都在 0 到 n-1 的范围内。数组中某些数字是重复的，但不知道有几个数字是重复的，也不知道每个数字重复几次。请找出数组中任意一个重复的数字。
+例子 Input: {2, 3, 1, 0, 2, 5} Output: 2  思路 由于数组中的值大小 为0 到 n-1，可以通过交换就数组中的元素放到与其下标对应的位置，若有两个数要出现在同一个位置，则找到了这个数。
+代码 public class Question001 { public static void main(String[] args) { int[] array = new int[] {2,3,1,0,2,5}; for (int i = 0; i &amp;lt; array.length; i++) { while(i != array[i]) { if(array[i] == array[array[i]]) { System.out.println(array[i]); return; } else { swap(array,i,array[i]); } } } } public static void swap(int[] array, int left, int right) { int temp = array[left]; array[left] = array[right]; array[right] = temp; } }  </description>
+    </item>
     
     <item>
       <title>JMM</title>
