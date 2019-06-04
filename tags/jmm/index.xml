@@ -30,7 +30,7 @@ JMM解决的问题 &amp;nbsp; &amp;nbsp; &amp;nbsp;Java内存模型是围绕着�
 &amp;nbsp; &amp;nbsp; &amp;nbsp;无论是 普通变量 还是 volatile变量 都是如此，区别在于：volatile的特殊规则保证了volatile变量值修改后的新值立刻同步到主内存，每次使用volatile变量前立即从主内存中刷新 ，因此volatile保证了多线程之间的操作变量的可见性，而普通变量则不能保证这一点。 除了volatile关键字能实现可见性之外，还有synchronized,Lock，final也是可以的。
 &amp;nbsp; &amp;nbsp; &amp;nbsp;使用 synchronized 关键字，在同步方法/同步块开始时（Monitor Enter）,使用共享变量时会从主内存中刷新变量值到工作内存中（即从主内存中读取最新值到线程私有的工作内存中），在同步方法/同步块结束时(Monitor Exit),会将工作内存中的变量值同步到主内存中去（即将线程私有的工作内存中的值写入到主内存进行同步）。
 &amp;nbsp; &amp;nbsp; &amp;nbsp;使用 Lock接口 的最常用的实现ReentrantLock(重入锁)来实现可见性：当我们在方法的开始位置执行lock.lock()方法，这和synchronized开始位置（Monitor Enter）有相同的语义，即使用共享变量时会从主内存中刷新变量值到工作内存中（即从主内存中读取最新值到线程私有的工作内存中），在方法的最后finally块里执行lock.unlock()方法，和synchronized结束位置（Monitor Exit）有相同的语义,即会将工作内存中的变量值同步到主内存中去（即将线程私有的工作内存中的值写入到主内存进行同步）。
-&amp;nbsp; &amp;nbsp; &amp;nbsp;final关键字 的可见性是指：被final修饰的变量，在构造函数数一旦初始化完成，并且在构造函数中并没有把“this”的引用传递出去，那么其他线程就可以看到final变量的值。 有序性 ：在本线程内观察，操作都是有序的；如果在一个线程中观察另外一个线程，所有的操作都是无序的。 &amp;nbsp; &amp;nbsp; &amp;nbsp;Java提供了两个关键字volatile和synchronized来保证多线程之间操作的有序性,volatile关键字本身通过加入内存屏障来禁止指令的重排序，而synchronized关键字通过一个变量在同一时间只允许有一个线程对其进行加锁的规则来实现。</description>
+&amp;nbsp; &amp;nbsp; &amp;nbsp;final关键字 的可见性是指：被final修饰的变量，在构造函数数一旦初始化完成，并且在构造函数中并没有把“this”的引用传递出去，那么其他线程就可以看到final变量的值。</description>
     </item>
     
   </channel>
