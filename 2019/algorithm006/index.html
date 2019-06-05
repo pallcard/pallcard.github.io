@@ -9,9 +9,9 @@
   <meta name="description" content="hust研一">
   <meta name="keywords" content="Java,博客">
   
-  <link rel="prev" href="https://pallcard.github.io/2019/algorithm003/" />
-  <link rel="next" href="https://pallcard.github.io/2019/algorithm005/" />
-  <link rel="canonical" href="https://pallcard.github.io/2019/algorithm004/" />
+  <link rel="prev" href="https://pallcard.github.io/2019/algorithm005/" />
+  <link rel="next" href="https://pallcard.github.io/2019/algorithm007/" />
+  <link rel="canonical" href="https://pallcard.github.io/2019/algorithm006/" />
   <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
@@ -22,10 +22,10 @@
   <title>
        
        
-           算法004 | 刘科个人博客
+           算法006 | 刘科个人博客
        
   </title>
-  <meta name="title" content="算法004 | 刘科个人博客">
+  <meta name="title" content="算法006 | 刘科个人博客">
     
   
   <link rel="stylesheet" href="/font/iconfont.css">
@@ -44,9 +44,9 @@
          "@id": "https:\/\/pallcard.github.io\/"
     },
     "articleSection" : "posts",
-    "name" : "算法004",
-    "headline" : "算法004",
-    "description" : "描述 从尾到头反过来打印出每个结点的值。\n例子 Input: 1 -\x26gt; 2 -\x26gt; 3 Output: 3 2 1  思路 方法一：递归调用 方法二：使用栈\n代码 class Node { private Node next; private int val; public Node(Node next, int val) { this.next = next; this.val = val; } public Node getNext() { return next; } public void setNext(Node next) { this.next = next; } public int getVal() { return val; } public void setVal(int val) { this.val = val; } } public class Question004 { public static void main(String[] args) { Node node3 = new Node(null, 3); Node node2 = new Node(node3, 2); Node node1 = new Node(node2, 1); Node node = node1; \/\/使用栈 Stack\x26lt;Integer\x26gt; stack = new Stack\x26lt;\x26gt;(); while (node !",
+    "name" : "算法006",
+    "headline" : "算法006",
+    "description" : "描述 给定一个二叉树和其中的一个结点，请找出中序遍历顺序的下一个结点并且返回。 注意，树中的结点不仅包含左右子结点，同时包含指向父结点的指针。\n例子 Input: 二叉树 Output: 中序遍历顺序的下一个结点  思路 中序遍历顺序的下一个结点，中序遍历是左根右， 判断该结点是否有右孩子， 1.若有，则下一个结点的最左子结点 2.若无，则下一个结点为第一个左链指向该结点的祖先结点的结点\n代码 public class Question006 { class TreeLinkNode { int val; TreeLinkNode left = null; TreeLinkNode right = null; TreeLinkNode next = null; TreeLinkNode(int val) { this.val = val; } } public TreeLinkNode GetNext(TreeLinkNode pNode) { TreeLinkNode resultNode = null; if(null != pNode.right) { resultNode = pNode.right; while (null != resultNode.left) { resultNode = resultNode.next; } } else { TreeLinkNode temp = pNode; resultNode = pNode.",
     "inLanguage" : "zh-CN",
     "author" : "刘科",
     "creator" : "刘科",
@@ -54,10 +54,10 @@
     "accountablePerson" : "刘科",
     "copyrightHolder" : "刘科",
     "copyrightYear" : "2019",
-    "datePublished": "2019-06-04 19:45:58 \x2b0800 CST",
-    "dateModified" : "2019-06-04 19:45:58 \x2b0800 CST",
-    "url" : "https:\/\/pallcard.github.io\/2019\/algorithm004\/",
-    "wordCount" : "145",
+    "datePublished": "2019-06-05 14:50:36 \x2b0800 CST",
+    "dateModified" : "2019-06-05 14:50:36 \x2b0800 CST",
+    "url" : "https:\/\/pallcard.github.io\/2019\/algorithm006\/",
+    "wordCount" : "99",
     "keywords" : [ "Algorithm","Java", "刘科个人博客"]
 }
 </script>
@@ -116,11 +116,11 @@
       		
 <article class="post-warp" itemscope itemtype="http://schema.org/Article">
     <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">算法004</h1>
+        <h1 class="post-title" itemprop="name headline">算法006</h1>
         <div class="post-meta">
                 Written by <a itemprop="name" href="https://pallcard.github.io/" rel="author">刘科</a> with ♥ 
                 <span class="post-time">
-                on <time datetime=2019-06-04 itemprop="datePublished">June 4, 2019</time>
+                on <time datetime=2019-06-05 itemprop="datePublished">June 5, 2019</time>
                 </span>
                 in
                 <i class="iconfont icon-folder"></i>
@@ -150,73 +150,55 @@
 
 <h5 id="描述">描述</h5>
 
-<p>从尾到头反过来打印出每个结点的值。</p>
+<p>给定一个二叉树和其中的一个结点，请找出中序遍历顺序的下一个结点并且返回。
+注意，树中的结点不仅包含左右子结点，同时包含指向父结点的指针。</p>
 
 <h5 id="例子">例子</h5>
 
 <pre><code class="language-java">Input:
-	1 -&gt; 2 -&gt; 3
+	二叉树
 Output:
-	3 2 1
+	中序遍历顺序的下一个结点
 </code></pre>
 
 <h4 id="思路">思路</h4>
 
-<p>方法一：递归调用
-方法二：使用栈</p>
+<p>中序遍历顺序的下一个结点，中序遍历是左根右，
+判断该结点是否有右孩子，
+ 1.若有，则下一个结点的最左子结点
+ 2.若无，则下一个结点为第一个左链指向该结点的祖先结点的结点</p>
 
 <h5 id="代码">代码</h5>
 
-<pre><code class="language-java">class Node {
-    private Node next;
-    private int val;
+<pre><code class="language-java">public class Question006 {
 
-    public Node(Node next, int val) {
-        this.next = next;
-        this.val = val;
-    }
+    class TreeLinkNode {
+        int val;
+        TreeLinkNode left = null;
+        TreeLinkNode right = null;
+        TreeLinkNode next = null;
 
-    public Node getNext() {
-        return next;
-    }
-
-    public void setNext(Node next) {
-        this.next = next;
-    }
-
-    public int getVal() {
-        return val;
-    }
-
-    public void setVal(int val) {
-        this.val = val;
-    }
-}
-
-public class Question004 {
-    public static void main(String[] args) {
-        Node node3 = new Node(null, 3);
-        Node node2 = new Node(node3, 2);
-        Node node1 = new Node(node2, 1);
-        Node node = node1;
-		//使用栈
-        Stack&lt;Integer&gt; stack = new Stack&lt;&gt;();
-        while (node != null) {
-            stack.push(node.getVal());
-            node = node.getNext();
+        TreeLinkNode(int val) {
+            this.val = val;
         }
-
-        while (!stack.empty()) {
-            System.out.println(stack.pop());
-        }
-        //递归调用
-//        printListFromTailToHead(node1);
     }
-    public static void printListFromTailToHead(Node list) {
-        if (list.getNext() != null) {
-            printListFromTailToHead(list.getNext());
+
+    public TreeLinkNode GetNext(TreeLinkNode pNode) {
+        TreeLinkNode resultNode = null;
+        if(null != pNode.right) {
+            resultNode = pNode.right;
+            while (null != resultNode.left) {
+                resultNode = resultNode.next;
+            }
+        } else {
+            TreeLinkNode temp = pNode;
+            resultNode = pNode.next;
+            while (null != resultNode &amp;&amp; resultNode.left != temp) {
+                temp = pNode.next;
+                resultNode = temp.next;
+            }
         }
-        System.out.println(list.getVal());
+        return resultNode;
     }
 }
 </code></pre>
@@ -234,7 +216,7 @@ public class Question004 {
              
             <p class="copyright-item">
                     <span>Link:</span>
-                    <a href=https://pallcard.github.io/2019/algorithm004/>https://pallcard.github.io/2019/algorithm004/</span>
+                    <a href=https://pallcard.github.io/2019/algorithm006/>https://pallcard.github.io/2019/algorithm006/</span>
             </p>
             
             
@@ -262,10 +244,10 @@ public class Question004 {
 
     <div class="post-nav">
         
-        <a href="https://pallcard.github.io/2019/algorithm003/" class="prev" rel="prev" title="算法003"><i class="iconfont icon-left"></i>&nbsp;算法003</a>
+        <a href="https://pallcard.github.io/2019/algorithm005/" class="prev" rel="prev" title="算法005"><i class="iconfont icon-left"></i>&nbsp;算法005</a>
          
         
-        <a href="https://pallcard.github.io/2019/algorithm005/" class="next" rel="next" title="算法005">算法005&nbsp;<i class="iconfont icon-right"></i></a>
+        <a href="https://pallcard.github.io/2019/algorithm007/" class="next" rel="next" title="算法007">算法007&nbsp;<i class="iconfont icon-right"></i></a>
         
     </div>
 

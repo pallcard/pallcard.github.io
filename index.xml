@@ -6,11 +6,128 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
     <copyright>All rights reserved - 2019</copyright>
-    <lastBuildDate>Wed, 05 Jun 2019 10:22:59 +0800</lastBuildDate>
+    <lastBuildDate>Wed, 05 Jun 2019 15:40:44 +0800</lastBuildDate>
     <atom:link href="/" rel="self" type="application/rss+xml" />
     
     <item>
-      <title>Algorithm005</title>
+      <title>算法007</title>
+      <link>https://pallcard.github.io/2019/algorithm007/</link>
+      <pubDate>Wed, 05 Jun 2019 15:40:44 +0800</pubDate>
+      
+      <guid>https://pallcard.github.io/2019/algorithm007/</guid>
+      <description>
+
+&lt;h5 id=&#34;描述&#34;&gt;描述&lt;/h5&gt;
+
+&lt;p&gt;用两个栈来实现一个队列，完成队列的 Push 和 Pop 操作。&lt;/p&gt;
+
+&lt;h5 id=&#34;例子&#34;&gt;例子&lt;/h5&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;Input:
+	
+Output:
+	
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h4 id=&#34;思路&#34;&gt;思路&lt;/h4&gt;
+
+&lt;p&gt;一个栈负责入队，另一个栈负责出队。
+ *  队列push操作，直接进第一个栈
+ *  队列pop操作，判断第二个栈是否为空，若空将第一个栈所有元素进栈到第二个栈中，若不为空，则第二个栈直接出栈&lt;/p&gt;
+
+&lt;h5 id=&#34;代码&#34;&gt;代码&lt;/h5&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;public class Question007 {
+    private static Stack&amp;lt;Integer&amp;gt; stack1 = new Stack&amp;lt;&amp;gt;();
+    private static Stack&amp;lt;Integer&amp;gt; stack2 = new Stack&amp;lt;&amp;gt;();
+
+    public void push(Integer item){
+        stack1.push(item);
+    }
+
+    public Integer pop() throws Exception {
+        if(stack2.isEmpty()) {
+            while (!stack1.isEmpty()){
+                stack2.push(stack1.peek());
+            }
+        }
+        if(stack2.isEmpty()) {
+            throw new Exception(&amp;quot;队列为空&amp;quot;);
+        }
+        return stack2.peek();
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>算法006</title>
+      <link>https://pallcard.github.io/2019/algorithm006/</link>
+      <pubDate>Wed, 05 Jun 2019 14:50:36 +0800</pubDate>
+      
+      <guid>https://pallcard.github.io/2019/algorithm006/</guid>
+      <description>
+
+&lt;h5 id=&#34;描述&#34;&gt;描述&lt;/h5&gt;
+
+&lt;p&gt;给定一个二叉树和其中的一个结点，请找出中序遍历顺序的下一个结点并且返回。
+注意，树中的结点不仅包含左右子结点，同时包含指向父结点的指针。&lt;/p&gt;
+
+&lt;h5 id=&#34;例子&#34;&gt;例子&lt;/h5&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;Input:
+	二叉树
+Output:
+	中序遍历顺序的下一个结点
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h4 id=&#34;思路&#34;&gt;思路&lt;/h4&gt;
+
+&lt;p&gt;中序遍历顺序的下一个结点，中序遍历是左根右，
+判断该结点是否有右孩子，
+ 1.若有，则下一个结点的最左子结点
+ 2.若无，则下一个结点为第一个左链指向该结点的祖先结点的结点&lt;/p&gt;
+
+&lt;h5 id=&#34;代码&#34;&gt;代码&lt;/h5&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;public class Question006 {
+
+    class TreeLinkNode {
+        int val;
+        TreeLinkNode left = null;
+        TreeLinkNode right = null;
+        TreeLinkNode next = null;
+
+        TreeLinkNode(int val) {
+            this.val = val;
+        }
+    }
+
+    public TreeLinkNode GetNext(TreeLinkNode pNode) {
+        TreeLinkNode resultNode = null;
+        if(null != pNode.right) {
+            resultNode = pNode.right;
+            while (null != resultNode.left) {
+                resultNode = resultNode.next;
+            }
+        } else {
+            TreeLinkNode temp = pNode;
+            resultNode = pNode.next;
+            while (null != resultNode &amp;amp;&amp;amp; resultNode.left != temp) {
+                temp = pNode.next;
+                resultNode = temp.next;
+            }
+        }
+        return resultNode;
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>算法005</title>
       <link>https://pallcard.github.io/2019/algorithm005/</link>
       <pubDate>Wed, 05 Jun 2019 10:22:59 +0800</pubDate>
       
