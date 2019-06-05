@@ -9,9 +9,9 @@
   <meta name="description" content="hust研一">
   <meta name="keywords" content="Java,博客">
   
-  <link rel="prev" href="https://pallcard.github.io/2019/algorithm002/" />
-  <link rel="next" href="https://pallcard.github.io/2019/algorithm004/" />
-  <link rel="canonical" href="https://pallcard.github.io/2019/algorithm003/" />
+  <link rel="prev" href="https://pallcard.github.io/2019/algorithm003/" />
+  <link rel="next" href="https://pallcard.github.io/2019/algorithm005/" />
+  <link rel="canonical" href="https://pallcard.github.io/2019/algorithm004/" />
   <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
@@ -22,10 +22,10 @@
   <title>
        
        
-           算法003 | 刘科个人博客
+           算法004 | 刘科个人博客
        
   </title>
-  <meta name="title" content="算法003 | 刘科个人博客">
+  <meta name="title" content="算法004 | 刘科个人博客">
     
   
   <link rel="stylesheet" href="/font/iconfont.css">
@@ -44,9 +44,9 @@
          "@id": "https:\/\/pallcard.github.io\/"
     },
     "articleSection" : "posts",
-    "name" : "算法003",
-    "headline" : "算法003",
-    "description" : "描述 将一个字符串中的空格替换成 \x26ldquo;%20\x26rdquo;。\n例子 Input: \x26quot;A B\x26quot; Output: \x26quot;A%20B\x26quot;  思路 由于要将字符串中所用空格替换为%20，故若字符串含有一个空格，则字符串的总长度会增长2，故可以先遍历一遍字符串，若将字符串的总长度变为相应的长度，需要两个指针，分别指向原字符串长度的最后一个票p1，和新字符串的最后一个p2，若原字符串为字符，则直接赋值给p2；若原字符串为空格，则赋值%20。\n代码 public class Question003 { public static void main(String[] args) { StringBuilder sb = new StringBuilder(\x26quot;A B\x26quot;); int p1 = sb.length()-1;\/\/指向原字符串最后一个 for (int i = 0; i \x26lt;= p1; i\x2b\x2b) { if(sb.charAt(i) == \x27 \x27) { sb.append(\x26quot; \x26quot;); } } int p2 = sb.length()-1;\/\/指向新字符串最后一个 while (p1 \x26gt;= 0 \x26amp;\x26amp; p1 \x26lt; p2) { if(sb.charAt(p1) != \x27 \x27) { sb.",
+    "name" : "算法004",
+    "headline" : "算法004",
+    "description" : "描述 从尾到头反过来打印出每个结点的值。\n例子 Input: 1 -\x26gt; 2 -\x26gt; 3 Output: 3 2 1  思路 方法一：递归调用 方法二：使用栈\n代码 class Node { private Node next; private int val; public Node(Node next, int val) { this.next = next; this.val = val; } public Node getNext() { return next; } public void setNext(Node next) { this.next = next; } public int getVal() { return val; } public void setVal(int val) { this.val = val; } } public class Question004 { public static void main(String[] args) { Node node3 = new Node(null, 3); Node node2 = new Node(node3, 2); Node node1 = new Node(node2, 1); Node node = node1; \/\/使用栈 Stack\x26lt;Integer\x26gt; stack = new Stack\x26lt;\x26gt;(); while (node !",
     "inLanguage" : "zh-CN",
     "author" : "刘科",
     "creator" : "刘科",
@@ -54,10 +54,10 @@
     "accountablePerson" : "刘科",
     "copyrightHolder" : "刘科",
     "copyrightYear" : "2019",
-    "datePublished": "2019-06-04 19:24:08 \x2b0800 CST",
-    "dateModified" : "2019-06-04 19:24:08 \x2b0800 CST",
-    "url" : "https:\/\/pallcard.github.io\/2019\/algorithm003\/",
-    "wordCount" : "88",
+    "datePublished": "2019-06-04 19:45:58 \x2b0800 CST",
+    "dateModified" : "2019-06-04 19:45:58 \x2b0800 CST",
+    "url" : "https:\/\/pallcard.github.io\/2019\/algorithm004\/",
+    "wordCount" : "145",
     "keywords" : [ "Algorithm","Java", "刘科个人博客"]
 }
 </script>
@@ -116,7 +116,7 @@
       		
 <article class="post-warp" itemscope itemtype="http://schema.org/Article">
     <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">算法003</h1>
+        <h1 class="post-title" itemprop="name headline">算法004</h1>
         <div class="post-meta">
                 Written by <a itemprop="name" href="https://pallcard.github.io/" rel="author">刘科</a> with ♥ 
                 <span class="post-time">
@@ -150,42 +150,73 @@
 
 <h5 id="描述">描述</h5>
 
-<p>将一个字符串中的空格替换成 &ldquo;%20&rdquo;。</p>
+<p>从尾到头反过来打印出每个结点的值。</p>
 
 <h5 id="例子">例子</h5>
 
 <pre><code class="language-java">Input:
-	&quot;A B&quot;
+	1 -&gt; 2 -&gt; 3
 Output:
-	&quot;A%20B&quot;
+	3 2 1
 </code></pre>
 
 <h4 id="思路">思路</h4>
 
-<p>由于要将字符串中所用空格替换为%20，故若字符串含有一个空格，则字符串的总长度会增长2，故可以先遍历一遍字符串，若将字符串的总长度变为相应的长度，需要两个指针，分别指向原字符串长度的最后一个票p1，和新字符串的最后一个p2，若原字符串为字符，则直接赋值给p2；若原字符串为空格，则赋值%20。</p>
+<p>方法一：递归调用
+方法二：使用栈</p>
 
 <h5 id="代码">代码</h5>
 
-<pre><code class="language-java">public class Question003 {
+<pre><code class="language-java">class Node {
+    private Node next;
+    private int val;
+
+    public Node(Node next, int val) {
+        this.next = next;
+        this.val = val;
+    }
+
+    public Node getNext() {
+        return next;
+    }
+
+    public void setNext(Node next) {
+        this.next = next;
+    }
+
+    public int getVal() {
+        return val;
+    }
+
+    public void setVal(int val) {
+        this.val = val;
+    }
+}
+
+public class Question004 {
     public static void main(String[] args) {
-        StringBuilder sb = new StringBuilder(&quot;A B&quot;);
-        int p1 = sb.length()-1;//指向原字符串最后一个
-        for (int i = 0; i &lt;= p1; i++) {
-            if(sb.charAt(i) == ' ') {
-                sb.append(&quot;  &quot;);
-            }
+        Node node3 = new Node(null, 3);
+        Node node2 = new Node(node3, 2);
+        Node node1 = new Node(node2, 1);
+        Node node = node1;
+		//使用栈
+        Stack&lt;Integer&gt; stack = new Stack&lt;&gt;();
+        while (node != null) {
+            stack.push(node.getVal());
+            node = node.getNext();
         }
-        int p2 = sb.length()-1;//指向新字符串最后一个
-        while (p1 &gt;= 0 &amp;&amp; p1 &lt; p2) {
-            if(sb.charAt(p1) != ' ') {
-                sb.setCharAt(p2--,sb.charAt(p1--));
-            } else if(sb.charAt(p1--) == ' ') {
-                sb.setCharAt(p2--, '0');
-                sb.setCharAt(p2--, '2');
-                sb.setCharAt(p2--, '%');
-            }
+
+        while (!stack.empty()) {
+            System.out.println(stack.pop());
         }
-        System.out.println(sb);
+        //递归调用
+//        printListFromTailToHead(node1);
+    }
+    public static void printListFromTailToHead(Node list) {
+        if (list.getNext() != null) {
+            printListFromTailToHead(list.getNext());
+        }
+        System.out.println(list.getVal());
     }
 }
 </code></pre>
@@ -203,7 +234,7 @@ Output:
              
             <p class="copyright-item">
                     <span>Link:</span>
-                    <a href=https://pallcard.github.io/2019/algorithm003/>https://pallcard.github.io/2019/algorithm003/</span>
+                    <a href=https://pallcard.github.io/2019/algorithm004/>https://pallcard.github.io/2019/algorithm004/</span>
             </p>
             
             
@@ -231,10 +262,10 @@ Output:
 
     <div class="post-nav">
         
-        <a href="https://pallcard.github.io/2019/algorithm002/" class="prev" rel="prev" title="算法002"><i class="iconfont icon-left"></i>&nbsp;算法002</a>
+        <a href="https://pallcard.github.io/2019/algorithm003/" class="prev" rel="prev" title="算法003"><i class="iconfont icon-left"></i>&nbsp;算法003</a>
          
         
-        <a href="https://pallcard.github.io/2019/algorithm004/" class="next" rel="next" title="算法004">算法004&nbsp;<i class="iconfont icon-right"></i></a>
+        <a href="https://pallcard.github.io/2019/algorithm005/" class="next" rel="next" title="Algorithm005">Algorithm005&nbsp;<i class="iconfont icon-right"></i></a>
         
     </div>
 

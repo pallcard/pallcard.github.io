@@ -9,9 +9,9 @@
   <meta name="description" content="hust研一">
   <meta name="keywords" content="Java,博客">
   
-  <link rel="prev" href="https://pallcard.github.io/2019/algorithm002/" />
-  <link rel="next" href="https://pallcard.github.io/2019/algorithm004/" />
-  <link rel="canonical" href="https://pallcard.github.io/2019/algorithm003/" />
+  <link rel="prev" href="https://pallcard.github.io/2019/algorithm004/" />
+  
+  <link rel="canonical" href="https://pallcard.github.io/2019/algorithm005/" />
   <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
@@ -22,10 +22,10 @@
   <title>
        
        
-           算法003 | 刘科个人博客
+           Algorithm005 | 刘科个人博客
        
   </title>
-  <meta name="title" content="算法003 | 刘科个人博客">
+  <meta name="title" content="Algorithm005 | 刘科个人博客">
     
   
   <link rel="stylesheet" href="/font/iconfont.css">
@@ -44,9 +44,9 @@
          "@id": "https:\/\/pallcard.github.io\/"
     },
     "articleSection" : "posts",
-    "name" : "算法003",
-    "headline" : "算法003",
-    "description" : "描述 将一个字符串中的空格替换成 \x26ldquo;%20\x26rdquo;。\n例子 Input: \x26quot;A B\x26quot; Output: \x26quot;A%20B\x26quot;  思路 由于要将字符串中所用空格替换为%20，故若字符串含有一个空格，则字符串的总长度会增长2，故可以先遍历一遍字符串，若将字符串的总长度变为相应的长度，需要两个指针，分别指向原字符串长度的最后一个票p1，和新字符串的最后一个p2，若原字符串为字符，则直接赋值给p2；若原字符串为空格，则赋值%20。\n代码 public class Question003 { public static void main(String[] args) { StringBuilder sb = new StringBuilder(\x26quot;A B\x26quot;); int p1 = sb.length()-1;\/\/指向原字符串最后一个 for (int i = 0; i \x26lt;= p1; i\x2b\x2b) { if(sb.charAt(i) == \x27 \x27) { sb.append(\x26quot; \x26quot;); } } int p2 = sb.length()-1;\/\/指向新字符串最后一个 while (p1 \x26gt;= 0 \x26amp;\x26amp; p1 \x26lt; p2) { if(sb.charAt(p1) != \x27 \x27) { sb.",
+    "name" : "Algorithm005",
+    "headline" : "Algorithm005",
+    "description" : "描述 根据二叉树的前序遍历和中序遍历的结果，重建出该二叉树。假设输入的前序遍历和中序遍历的结果中都不含重复的数字。\n例子 Input: preorder：{3,9,20,15,7} inorder：{9,3,15,20,7} Output: 该二叉树  思路 根据先序遍历确定根，再通过中序遍历将数组划分为两部分，分别是左子树、右子树。 故可以通过一个HashMap存储中序遍历的数组值与下标，key为值，value为下标。\n代码 class TreeNode { private TreeNode leftChild; private TreeNode rightChild; private int value; public TreeNode(int value) { this.value = value; } public TreeNode getLeftChild() { return leftChild; } public void setLeftChild(TreeNode leftChild) { this.leftChild = leftChild; } public TreeNode getRightChild() { return rightChild; } public void setRightChild(TreeNode rightChild) { this.rightChild = rightChild; } public int getValue() { return value; } public void setValue(int value) { this.",
     "inLanguage" : "zh-CN",
     "author" : "刘科",
     "creator" : "刘科",
@@ -54,10 +54,10 @@
     "accountablePerson" : "刘科",
     "copyrightHolder" : "刘科",
     "copyrightYear" : "2019",
-    "datePublished": "2019-06-04 19:24:08 \x2b0800 CST",
-    "dateModified" : "2019-06-04 19:24:08 \x2b0800 CST",
-    "url" : "https:\/\/pallcard.github.io\/2019\/algorithm003\/",
-    "wordCount" : "88",
+    "datePublished": "2019-06-05 10:22:59 \x2b0800 CST",
+    "dateModified" : "2019-06-05 10:22:59 \x2b0800 CST",
+    "url" : "https:\/\/pallcard.github.io\/2019\/algorithm005\/",
+    "wordCount" : "182",
     "keywords" : [ "Algorithm","Java", "刘科个人博客"]
 }
 </script>
@@ -116,11 +116,11 @@
       		
 <article class="post-warp" itemscope itemtype="http://schema.org/Article">
     <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">算法003</h1>
+        <h1 class="post-title" itemprop="name headline">Algorithm005</h1>
         <div class="post-meta">
                 Written by <a itemprop="name" href="https://pallcard.github.io/" rel="author">刘科</a> with ♥ 
                 <span class="post-time">
-                on <time datetime=2019-06-04 itemprop="datePublished">June 4, 2019</time>
+                on <time datetime=2019-06-05 itemprop="datePublished">June 5, 2019</time>
                 </span>
                 in
                 <i class="iconfont icon-folder"></i>
@@ -150,42 +150,86 @@
 
 <h5 id="描述">描述</h5>
 
-<p>将一个字符串中的空格替换成 &ldquo;%20&rdquo;。</p>
+<p>根据二叉树的前序遍历和中序遍历的结果，重建出该二叉树。假设输入的前序遍历和中序遍历的结果中都不含重复的数字。</p>
 
 <h5 id="例子">例子</h5>
 
 <pre><code class="language-java">Input:
-	&quot;A B&quot;
+	preorder：{3,9,20,15,7}
+	inorder：{9,3,15,20,7}
 Output:
-	&quot;A%20B&quot;
+	该二叉树
 </code></pre>
 
 <h4 id="思路">思路</h4>
 
-<p>由于要将字符串中所用空格替换为%20，故若字符串含有一个空格，则字符串的总长度会增长2，故可以先遍历一遍字符串，若将字符串的总长度变为相应的长度，需要两个指针，分别指向原字符串长度的最后一个票p1，和新字符串的最后一个p2，若原字符串为字符，则直接赋值给p2；若原字符串为空格，则赋值%20。</p>
+<p>根据先序遍历确定根，再通过中序遍历将数组划分为两部分，分别是左子树、右子树。
+故可以通过一个HashMap存储中序遍历的数组值与下标，key为值，value为下标。</p>
 
 <h5 id="代码">代码</h5>
 
-<pre><code class="language-java">public class Question003 {
+<pre><code class="language-java">class TreeNode {
+    private TreeNode leftChild;
+    private TreeNode rightChild;
+    private int value;
+
+    public TreeNode(int value) {
+        this.value = value;
+    }
+
+    public TreeNode getLeftChild() {
+        return leftChild;
+    }
+
+    public void setLeftChild(TreeNode leftChild) {
+        this.leftChild = leftChild;
+    }
+
+    public TreeNode getRightChild() {
+        return rightChild;
+    }
+
+    public void setRightChild(TreeNode rightChild) {
+        this.rightChild = rightChild;
+    }
+
+    public int getValue() {
+        return value;
+    }
+
+    public void setValue(int value) {
+        this.value = value;
+    }
+}
+
+public class Question005 {
+	//中序遍历结果，用来对二叉树进行划分，左右子树
+    //为了方便快速的找出根结点对应的下标，来确定左右子树结点个数
+    private static HashMap&lt;Integer, Integer&gt; preorderMap = new HashMap&lt;&gt;();
     public static void main(String[] args) {
-        StringBuilder sb = new StringBuilder(&quot;A B&quot;);
-        int p1 = sb.length()-1;//指向原字符串最后一个
-        for (int i = 0; i &lt;= p1; i++) {
-            if(sb.charAt(i) == ' ') {
-                sb.append(&quot;  &quot;);
-            }
+        int [] preorder = new int[] {3,9,20,15,7};
+        int [] inorder = new int[] {9,3,15,20,7};
+
+        for (int i = 0; i &lt; preorder.length; i++) {
+            preorderMap.put(inorder[i],i);
         }
-        int p2 = sb.length()-1;//指向新字符串最后一个
-        while (p1 &gt;= 0 &amp;&amp; p1 &lt; p2) {
-            if(sb.charAt(p1) != ' ') {
-                sb.setCharAt(p2--,sb.charAt(p1--));
-            } else if(sb.charAt(p1--) == ' ') {
-                sb.setCharAt(p2--, '0');
-                sb.setCharAt(p2--, '2');
-                sb.setCharAt(p2--, '%');
-            }
+        TreeNode root = reConstructBinaryTree(preorder,0, preorder.length);
+    }
+    /**
+     * pre：前序遍历数组
+     * preL：二叉树起始结点下标
+     * length：长度
+     */
+    public static TreeNode reConstructBinaryTree(int [] pre, int preL, int length) {
+        if (length == 1) {
+            return new TreeNode(pre[preL]);
         }
-        System.out.println(sb);
+        TreeNode root = new TreeNode(pre[preL]);
+        Integer index = preorderMap.get(root.getValue());
+        int leftLength = index - preL;
+        root.setLeftChild(reConstructBinaryTree(pre,preL+1,leftLength));
+        root.setRightChild(reConstructBinaryTree(pre,index+1,length-leftLength-1));
+        return root;
     }
 }
 </code></pre>
@@ -203,7 +247,7 @@ Output:
              
             <p class="copyright-item">
                     <span>Link:</span>
-                    <a href=https://pallcard.github.io/2019/algorithm003/>https://pallcard.github.io/2019/algorithm003/</span>
+                    <a href=https://pallcard.github.io/2019/algorithm005/>https://pallcard.github.io/2019/algorithm005/</span>
             </p>
             
             
@@ -231,10 +275,8 @@ Output:
 
     <div class="post-nav">
         
-        <a href="https://pallcard.github.io/2019/algorithm002/" class="prev" rel="prev" title="算法002"><i class="iconfont icon-left"></i>&nbsp;算法002</a>
+        <a href="https://pallcard.github.io/2019/algorithm004/" class="prev" rel="prev" title="算法004"><i class="iconfont icon-left"></i>&nbsp;算法004</a>
          
-        
-        <a href="https://pallcard.github.io/2019/algorithm004/" class="next" rel="next" title="算法004">算法004&nbsp;<i class="iconfont icon-right"></i></a>
         
     </div>
 

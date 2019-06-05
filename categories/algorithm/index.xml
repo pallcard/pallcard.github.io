@@ -7,10 +7,32 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
     <copyright>All rights reserved - 2019</copyright>
-    <lastBuildDate>Tue, 04 Jun 2019 19:24:08 +0800</lastBuildDate>
+    <lastBuildDate>Wed, 05 Jun 2019 10:22:59 +0800</lastBuildDate>
     
 	<atom:link href="https://pallcard.github.io/categories/algorithm/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Algorithm005</title>
+      <link>https://pallcard.github.io/2019/algorithm005/</link>
+      <pubDate>Wed, 05 Jun 2019 10:22:59 +0800</pubDate>
+      
+      <guid>https://pallcard.github.io/2019/algorithm005/</guid>
+      <description>描述 根据二叉树的前序遍历和中序遍历的结果，重建出该二叉树。假设输入的前序遍历和中序遍历的结果中都不含重复的数字。
+例子 Input: preorder：{3,9,20,15,7} inorder：{9,3,15,20,7} Output: 该二叉树  思路 根据先序遍历确定根，再通过中序遍历将数组划分为两部分，分别是左子树、右子树。 故可以通过一个HashMap存储中序遍历的数组值与下标，key为值，value为下标。
+代码 class TreeNode { private TreeNode leftChild; private TreeNode rightChild; private int value; public TreeNode(int value) { this.value = value; } public TreeNode getLeftChild() { return leftChild; } public void setLeftChild(TreeNode leftChild) { this.leftChild = leftChild; } public TreeNode getRightChild() { return rightChild; } public void setRightChild(TreeNode rightChild) { this.rightChild = rightChild; } public int getValue() { return value; } public void setValue(int value) { this.</description>
+    </item>
+    
+    <item>
+      <title>算法004</title>
+      <link>https://pallcard.github.io/2019/algorithm004/</link>
+      <pubDate>Tue, 04 Jun 2019 19:45:58 +0800</pubDate>
+      
+      <guid>https://pallcard.github.io/2019/algorithm004/</guid>
+      <description>描述 从尾到头反过来打印出每个结点的值。
+例子 Input: 1 -&amp;gt; 2 -&amp;gt; 3 Output: 3 2 1  思路 方法一：递归调用 方法二：使用栈
+代码 class Node { private Node next; private int val; public Node(Node next, int val) { this.next = next; this.val = val; } public Node getNext() { return next; } public void setNext(Node next) { this.next = next; } public int getVal() { return val; } public void setVal(int val) { this.val = val; } } public class Question004 { public static void main(String[] args) { Node node3 = new Node(null, 3); Node node2 = new Node(node3, 2); Node node1 = new Node(node2, 1); Node node = node1; //使用栈 Stack&amp;lt;Integer&amp;gt; stack = new Stack&amp;lt;&amp;gt;(); while (node !</description>
+    </item>
     
     <item>
       <title>算法003</title>
