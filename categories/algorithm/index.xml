@@ -7,10 +7,20 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
     <copyright>All rights reserved - 2019</copyright>
-    <lastBuildDate>Wed, 05 Jun 2019 15:40:44 +0800</lastBuildDate>
+    <lastBuildDate>Wed, 05 Jun 2019 20:40:17 +0800</lastBuildDate>
     
 	<atom:link href="https://pallcard.github.io/categories/algorithm/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>算法008</title>
+      <link>https://pallcard.github.io/2019/algorithm008/</link>
+      <pubDate>Wed, 05 Jun 2019 20:40:17 +0800</pubDate>
+      
+      <guid>https://pallcard.github.io/2019/algorithm008/</guid>
+      <description>public class Question008 { public static void main(String[] args) { Scanner sc = new Scanner(System.in); int m = sc.nextInt(); int n = sc.nextInt();
+ int [][] array = new int [m][n]; for (int i = 0; i &amp;lt; m; i++) { for (int j = 0; j &amp;lt; n; j++) { array[i][j] = -1; } } int x = 0, y = 0; int count = 1; // 右1 下2 左3 上4 int last_t = 1; while (count &amp;lt;= m*n) { array[x][y] = count++; if(last_t == 1) { if (y+1&amp;lt;n &amp;amp;&amp;amp; array[x][y+1] &amp;lt; 0){ y++; } else { last_t = 2; if (x+1 &amp;lt; m &amp;amp;&amp;amp; array[x+1][y] &amp;lt; 0) { x++; }else { break; } } //下 } else if (last_t == 2) { if(x+1 &amp;lt; m &amp;amp;&amp;amp; array[x+1][y] &amp;lt; 0) { x++; } else { last_t = 3; if (y-1 &amp;gt;= 0 &amp;amp;&amp;amp; array[x][y-1] &amp;lt; 0) { y--; } else { break; } } //左 } else if (last_t == 3) { if(y-1 &amp;gt;= 0 &amp;amp;&amp;amp; array[x][y-1] &amp;lt; 0) { y--; } else { last_t = 4; if (x-1 &amp;gt;= 0 &amp;amp;&amp;amp; array[x-1][y] &amp;lt; 0) { x--; } else { break; } } } //上 else { if(x-1 &amp;gt;= 0 &amp;amp;&amp;amp; array[x-1][y] &amp;lt; 0) { x--; } else { last_t = 1; if (y+1 &amp;lt; n &amp;amp;&amp;amp; array[x][y+1] &amp;lt; 0) { y++; } else { break; } } } } for (int i = 0; i &amp;lt; m; i++) { for (int j = 0; j &amp;lt; n; j++) { System.</description>
+    </item>
     
     <item>
       <title>算法007</title>

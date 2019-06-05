@@ -9,9 +9,9 @@
   <meta name="description" content="hust研一">
   <meta name="keywords" content="Java,博客">
   
-  <link rel="prev" href="https://pallcard.github.io/2019/algorithm006/" />
-  <link rel="next" href="https://pallcard.github.io/2019/algorithm008/" />
-  <link rel="canonical" href="https://pallcard.github.io/2019/algorithm007/" />
+  <link rel="prev" href="https://pallcard.github.io/2019/algorithm007/" />
+  
+  <link rel="canonical" href="https://pallcard.github.io/2019/algorithm008/" />
   <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
@@ -22,10 +22,10 @@
   <title>
        
        
-           算法007 | 刘科个人博客
+           算法008 | 刘科个人博客
        
   </title>
-  <meta name="title" content="算法007 | 刘科个人博客">
+  <meta name="title" content="算法008 | 刘科个人博客">
     
   
   <link rel="stylesheet" href="/font/iconfont.css">
@@ -44,9 +44,9 @@
          "@id": "https:\/\/pallcard.github.io\/"
     },
     "articleSection" : "posts",
-    "name" : "算法007",
-    "headline" : "算法007",
-    "description" : " 描述 用两个栈来实现一个队列，完成队列的 Push 和 Pop 操作。\n例子 Input: Output:  思路 一个栈负责入队，另一个栈负责出队。 * 队列push操作，直接进第一个栈 * 队列pop操作，判断第二个栈是否为空，若空将第一个栈所有元素进栈到第二个栈中，若不为空，则第二个栈直接出栈\n代码 public class Question007 { private static Stack\x26lt;Integer\x26gt; stack1 = new Stack\x26lt;\x26gt;(); private static Stack\x26lt;Integer\x26gt; stack2 = new Stack\x26lt;\x26gt;(); public void push(Integer item){ stack1.push(item); } public Integer pop() throws Exception { if(stack2.isEmpty()) { while (!stack1.isEmpty()){ stack2.push(stack1.peek()); } } if(stack2.isEmpty()) { throw new Exception(\x26quot;队列为空\x26quot;); } return stack2.peek(); } }  ",
+    "name" : "算法008",
+    "headline" : "算法008",
+    "description" : "public class Question008 { public static void main(String[] args) { Scanner sc = new Scanner(System.in); int m = sc.nextInt(); int n = sc.nextInt();\n int [][] array = new int [m][n]; for (int i = 0; i \x26lt; m; i\x2b\x2b) { for (int j = 0; j \x26lt; n; j\x2b\x2b) { array[i][j] = -1; } } int x = 0, y = 0; int count = 1; \/\/ 右1 下2 左3 上4 int last_t = 1; while (count \x26lt;= m*n) { array[x][y] = count\x2b\x2b; if(last_t == 1) { if (y\x2b1\x26lt;n \x26amp;\x26amp; array[x][y\x2b1] \x26lt; 0){ y\x2b\x2b; } else { last_t = 2; if (x\x2b1 \x26lt; m \x26amp;\x26amp; array[x\x2b1][y] \x26lt; 0) { x\x2b\x2b; }else { break; } } \/\/下 } else if (last_t == 2) { if(x\x2b1 \x26lt; m \x26amp;\x26amp; array[x\x2b1][y] \x26lt; 0) { x\x2b\x2b; } else { last_t = 3; if (y-1 \x26gt;= 0 \x26amp;\x26amp; array[x][y-1] \x26lt; 0) { y--; } else { break; } } \/\/左 } else if (last_t == 3) { if(y-1 \x26gt;= 0 \x26amp;\x26amp; array[x][y-1] \x26lt; 0) { y--; } else { last_t = 4; if (x-1 \x26gt;= 0 \x26amp;\x26amp; array[x-1][y] \x26lt; 0) { x--; } else { break; } } } \/\/上 else { if(x-1 \x26gt;= 0 \x26amp;\x26amp; array[x-1][y] \x26lt; 0) { x--; } else { last_t = 1; if (y\x2b1 \x26lt; n \x26amp;\x26amp; array[x][y\x2b1] \x26lt; 0) { y\x2b\x2b; } else { break; } } } } for (int i = 0; i \x26lt; m; i\x2b\x2b) { for (int j = 0; j \x26lt; n; j\x2b\x2b) { System.",
     "inLanguage" : "zh-CN",
     "author" : "刘科",
     "creator" : "刘科",
@@ -54,10 +54,10 @@
     "accountablePerson" : "刘科",
     "copyrightHolder" : "刘科",
     "copyrightYear" : "2019",
-    "datePublished": "2019-06-05 15:40:44 \x2b0800 CST",
-    "dateModified" : "2019-06-05 15:40:44 \x2b0800 CST",
-    "url" : "https:\/\/pallcard.github.io\/2019\/algorithm007\/",
-    "wordCount" : "63",
+    "datePublished": "2019-06-05 20:40:17 \x2b0800 CST",
+    "dateModified" : "2019-06-05 20:40:17 \x2b0800 CST",
+    "url" : "https:\/\/pallcard.github.io\/2019\/algorithm008\/",
+    "wordCount" : "256",
     "keywords" : [ "Algorithm","Java", "刘科个人博客"]
 }
 </script>
@@ -116,7 +116,7 @@
       		
 <article class="post-warp" itemscope itemtype="http://schema.org/Article">
     <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">算法007</h1>
+        <h1 class="post-title" itemprop="name headline">算法008</h1>
         <div class="post-meta">
                 Written by <a itemprop="name" href="https://pallcard.github.io/" rel="author">刘科</a> with ♥ 
                 <span class="post-time">
@@ -146,49 +146,84 @@
           
           
 
-          
+          <p>public class Question008 {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int m = sc.nextInt();
+        int n = sc.nextInt();</p>
 
-<h5 id="描述">描述</h5>
-
-<p>用两个栈来实现一个队列，完成队列的 Push 和 Pop 操作。</p>
-
-<h5 id="例子">例子</h5>
-
-<pre><code class="language-java">Input:
-	
-Output:
-	
-</code></pre>
-
-<h4 id="思路">思路</h4>
-
-<p>一个栈负责入队，另一个栈负责出队。
- *  队列push操作，直接进第一个栈
- *  队列pop操作，判断第二个栈是否为空，若空将第一个栈所有元素进栈到第二个栈中，若不为空，则第二个栈直接出栈</p>
-
-<h5 id="代码">代码</h5>
-
-<pre><code class="language-java">public class Question007 {
-    private static Stack&lt;Integer&gt; stack1 = new Stack&lt;&gt;();
-    private static Stack&lt;Integer&gt; stack2 = new Stack&lt;&gt;();
-
-    public void push(Integer item){
-        stack1.push(item);
+<pre><code>    int [][] array = new int [m][n];
+    for (int i = 0; i &lt; m; i++) {
+        for (int j = 0; j &lt; n; j++) {
+            array[i][j] = -1;
+        }
     }
-
-    public Integer pop() throws Exception {
-        if(stack2.isEmpty()) {
-            while (!stack1.isEmpty()){
-                stack2.push(stack1.peek());
+    int x = 0, y = 0;
+    int count = 1;
+    // 右1 下2 左3 上4
+    int last_t = 1;
+    while (count &lt;= m*n) {
+        array[x][y] = count++;
+        if(last_t == 1) {
+            if (y+1&lt;n &amp;&amp; array[x][y+1] &lt; 0){
+                y++;
+            } else {
+                last_t = 2;
+                if (x+1 &lt; m &amp;&amp; array[x+1][y] &lt; 0) {
+                    x++;
+                }else {
+                    break;
+                }
+            }
+            //下
+        } else if (last_t == 2) {
+            if(x+1 &lt; m &amp;&amp; array[x+1][y] &lt; 0) {
+                x++;
+            } else {
+                last_t = 3;
+                if (y-1 &gt;= 0 &amp;&amp; array[x][y-1] &lt; 0) {
+                    y--;
+                } else {
+                    break;
+                }
+            }
+            //左
+        } else if (last_t == 3) {
+            if(y-1 &gt;= 0 &amp;&amp; array[x][y-1] &lt; 0) {
+                y--;
+            } else {
+                last_t = 4;
+                if (x-1 &gt;= 0 &amp;&amp; array[x-1][y] &lt; 0) {
+                    x--;
+                } else {
+                    break;
+                }
             }
         }
-        if(stack2.isEmpty()) {
-            throw new Exception(&quot;队列为空&quot;);
+        //上
+        else {
+            if(x-1 &gt;= 0  &amp;&amp; array[x-1][y] &lt; 0) {
+                x--;
+            } else {
+                last_t = 1;
+                if (y+1 &lt; n  &amp;&amp; array[x][y+1] &lt; 0) {
+                    y++;
+                } else {
+                    break;
+                }
+            }
         }
-        return stack2.peek();
+    }
+    for (int i = 0; i &lt; m; i++) {
+        for (int j = 0; j &lt; n; j++) {
+            System.out.print(array[i][j]+&quot;\t&quot;);
+        }
+        System.out.println();
     }
 }
 </code></pre>
+
+<p>}</p>
 
     </div>
 
@@ -203,7 +238,7 @@ Output:
              
             <p class="copyright-item">
                     <span>Link:</span>
-                    <a href=https://pallcard.github.io/2019/algorithm007/>https://pallcard.github.io/2019/algorithm007/</span>
+                    <a href=https://pallcard.github.io/2019/algorithm008/>https://pallcard.github.io/2019/algorithm008/</span>
             </p>
             
             
@@ -231,10 +266,8 @@ Output:
 
     <div class="post-nav">
         
-        <a href="https://pallcard.github.io/2019/algorithm006/" class="prev" rel="prev" title="算法006"><i class="iconfont icon-left"></i>&nbsp;算法006</a>
+        <a href="https://pallcard.github.io/2019/algorithm007/" class="prev" rel="prev" title="算法007"><i class="iconfont icon-left"></i>&nbsp;算法007</a>
          
-        
-        <a href="https://pallcard.github.io/2019/algorithm008/" class="next" rel="next" title="算法008">算法008&nbsp;<i class="iconfont icon-right"></i></a>
         
     </div>
 
