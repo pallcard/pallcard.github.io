@@ -7,10 +7,75 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
     <copyright>All rights reserved - 2019</copyright>
-    <lastBuildDate>Tue, 04 Jun 2019 16:55:28 +0800</lastBuildDate>
+    <lastBuildDate>Wed, 05 Jun 2019 20:40:17 +0800</lastBuildDate>
     
 	<atom:link href="https://pallcard.github.io/tags/%E6%80%BB%E6%95%B0/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>算法008</title>
+      <link>https://pallcard.github.io/2019/algorithm008/</link>
+      <pubDate>Wed, 05 Jun 2019 20:40:17 +0800</pubDate>
+      
+      <guid>https://pallcard.github.io/2019/algorithm008/</guid>
+      <description>public class Question008 { public static void main(String[] args) { Scanner sc = new Scanner(System.in); int m = sc.nextInt(); int n = sc.nextInt();
+ int [][] array = new int [m][n]; for (int i = 0; i &amp;lt; m; i++) { for (int j = 0; j &amp;lt; n; j++) { array[i][j] = -1; } } int x = 0, y = 0; int count = 1; // 右1 下2 左3 上4 int last_t = 1; while (count &amp;lt;= m*n) { array[x][y] = count++; if(last_t == 1) { if (y+1&amp;lt;n &amp;amp;&amp;amp; array[x][y+1] &amp;lt; 0){ y++; } else { last_t = 2; if (x+1 &amp;lt; m &amp;amp;&amp;amp; array[x+1][y] &amp;lt; 0) { x++; }else { break; } } //下 } else if (last_t == 2) { if(x+1 &amp;lt; m &amp;amp;&amp;amp; array[x+1][y] &amp;lt; 0) { x++; } else { last_t = 3; if (y-1 &amp;gt;= 0 &amp;amp;&amp;amp; array[x][y-1] &amp;lt; 0) { y--; } else { break; } } //左 } else if (last_t == 3) { if(y-1 &amp;gt;= 0 &amp;amp;&amp;amp; array[x][y-1] &amp;lt; 0) { y--; } else { last_t = 4; if (x-1 &amp;gt;= 0 &amp;amp;&amp;amp; array[x-1][y] &amp;lt; 0) { x--; } else { break; } } } //上 else { if(x-1 &amp;gt;= 0 &amp;amp;&amp;amp; array[x-1][y] &amp;lt; 0) { x--; } else { last_t = 1; if (y+1 &amp;lt; n &amp;amp;&amp;amp; array[x][y+1] &amp;lt; 0) { y++; } else { break; } } } } for (int i = 0; i &amp;lt; m; i++) { for (int j = 0; j &amp;lt; n; j++) { System.</description>
+    </item>
+    
+    <item>
+      <title>算法007</title>
+      <link>https://pallcard.github.io/2019/algorithm007/</link>
+      <pubDate>Wed, 05 Jun 2019 15:40:44 +0800</pubDate>
+      
+      <guid>https://pallcard.github.io/2019/algorithm007/</guid>
+      <description> 描述 用两个栈来实现一个队列，完成队列的 Push 和 Pop 操作。
+例子 Input: Output:  思路 一个栈负责入队，另一个栈负责出队。 * 队列push操作，直接进第一个栈 * 队列pop操作，判断第二个栈是否为空，若空将第一个栈所有元素进栈到第二个栈中，若不为空，则第二个栈直接出栈
+代码 public class Question007 { private static Stack&amp;lt;Integer&amp;gt; stack1 = new Stack&amp;lt;&amp;gt;(); private static Stack&amp;lt;Integer&amp;gt; stack2 = new Stack&amp;lt;&amp;gt;(); public void push(Integer item){ stack1.push(item); } public Integer pop() throws Exception { if(stack2.isEmpty()) { while (!stack1.isEmpty()){ stack2.push(stack1.peek()); } } if(stack2.isEmpty()) { throw new Exception(&amp;quot;队列为空&amp;quot;); } return stack2.peek(); } }  </description>
+    </item>
+    
+    <item>
+      <title>算法006</title>
+      <link>https://pallcard.github.io/2019/algorithm006/</link>
+      <pubDate>Wed, 05 Jun 2019 14:50:36 +0800</pubDate>
+      
+      <guid>https://pallcard.github.io/2019/algorithm006/</guid>
+      <description>描述 给定一个二叉树和其中的一个结点，请找出中序遍历顺序的下一个结点并且返回。 注意，树中的结点不仅包含左右子结点，同时包含指向父结点的指针。
+例子 Input: 二叉树 Output: 中序遍历顺序的下一个结点  思路 中序遍历顺序的下一个结点，中序遍历是左根右， 判断该结点是否有右孩子， 1.若有，则下一个结点的最左子结点 2.若无，则下一个结点为第一个左链指向该结点的祖先结点的结点
+代码 public class Question006 { class TreeLinkNode { int val; TreeLinkNode left = null; TreeLinkNode right = null; TreeLinkNode next = null; TreeLinkNode(int val) { this.val = val; } } public TreeLinkNode GetNext(TreeLinkNode pNode) { TreeLinkNode resultNode = null; if(null != pNode.right) { resultNode = pNode.right; while (null != resultNode.left) { resultNode = resultNode.next; } } else { TreeLinkNode temp = pNode; resultNode = pNode.</description>
+    </item>
+    
+    <item>
+      <title>算法005</title>
+      <link>https://pallcard.github.io/2019/algorithm005/</link>
+      <pubDate>Wed, 05 Jun 2019 10:22:59 +0800</pubDate>
+      
+      <guid>https://pallcard.github.io/2019/algorithm005/</guid>
+      <description>描述 根据二叉树的前序遍历和中序遍历的结果，重建出该二叉树。假设输入的前序遍历和中序遍历的结果中都不含重复的数字。
+例子 Input: preorder：{3,9,20,15,7} inorder：{9,3,15,20,7} Output: 该二叉树  思路 根据先序遍历确定根，再通过中序遍历将数组划分为两部分，分别是左子树、右子树。 故可以通过一个HashMap存储中序遍历的数组值与下标，key为值，value为下标。
+代码 class TreeNode { private TreeNode leftChild; private TreeNode rightChild; private int value; public TreeNode(int value) { this.value = value; } public TreeNode getLeftChild() { return leftChild; } public void setLeftChild(TreeNode leftChild) { this.leftChild = leftChild; } public TreeNode getRightChild() { return rightChild; } public void setRightChild(TreeNode rightChild) { this.rightChild = rightChild; } public int getValue() { return value; } public void setValue(int value) { this.</description>
+    </item>
+    
+    <item>
+      <title>算法004</title>
+      <link>https://pallcard.github.io/2019/algorithm004/</link>
+      <pubDate>Tue, 04 Jun 2019 19:45:58 +0800</pubDate>
+      
+      <guid>https://pallcard.github.io/2019/algorithm004/</guid>
+      <description>描述 从尾到头反过来打印出每个结点的值。
+例子 Input: 1 -&amp;gt; 2 -&amp;gt; 3 Output: 3 2 1  思路 方法一：递归调用 方法二：使用栈
+代码 class Node { private Node next; private int val; public Node(Node next, int val) { this.next = next; this.val = val; } public Node getNext() { return next; } public void setNext(Node next) { this.next = next; } public int getVal() { return val; } public void setVal(int val) { this.val = val; } } public class Question004 { public static void main(String[] args) { Node node3 = new Node(null, 3); Node node2 = new Node(node3, 2); Node node1 = new Node(node2, 1); Node node = node1; //使用栈 Stack&amp;lt;Integer&amp;gt; stack = new Stack&amp;lt;&amp;gt;(); while (node !</description>
+    </item>
+    
+    <item>
+      <title>算法003</title>
+      <link>https://pallcard.github.io/2019/algorithm003/</link>
+      <pubDate>Tue, 04 Jun 2019 19:24:08 +0800</pubDate>
+      
+      <guid>https://pallcard.github.io/2019/algorithm003/</guid>
+      <description>描述 将一个字符串中的空格替换成 &amp;ldquo;%20&amp;rdquo;。
+例子 Input: &amp;quot;A B&amp;quot; Output: &amp;quot;A%20B&amp;quot;  思路 由于要将字符串中所用空格替换为%20，故若字符串含有一个空格，则字符串的总长度会增长2，故可以先遍历一遍字符串，若将字符串的总长度变为相应的长度，需要两个指针，分别指向原字符串长度的最后一个票p1，和新字符串的最后一个p2，若原字符串为字符，则直接赋值给p2；若原字符串为空格，则赋值%20。
+代码 public class Question003 { public static void main(String[] args) { StringBuilder sb = new StringBuilder(&amp;quot;A B&amp;quot;); int p1 = sb.length()-1;//指向原字符串最后一个 for (int i = 0; i &amp;lt;= p1; i++) { if(sb.charAt(i) == &#39; &#39;) { sb.append(&amp;quot; &amp;quot;); } } int p2 = sb.length()-1;//指向新字符串最后一个 while (p1 &amp;gt;= 0 &amp;amp;&amp;amp; p1 &amp;lt; p2) { if(sb.charAt(p1) != &#39; &#39;) { sb.</description>
+    </item>
     
     <item>
       <title>算法002</title>
@@ -21,6 +86,107 @@
       <description>描述 给定一个二维数组，其每一行从左到右递增排序，从上到下也是递增排序。 给定一个数，判断这个数是否在该二维数组中。
 例子 Input: 数组： { {1, 4, 7, 11, 15}, {2, 5, 8, 12, 19}, {3, 6, 9, 16, 22}, {10, 13, 14, 17, 24}, {18, 21, 23, 26, 30}, }; 目标值：24 Output: 2  思路 由于每一行从左到右递增排序，从上到下也是递增排序，故可以从右上角开始遍历，若大于目标值，列减1；若小于目标值，行加1；若等于则成功找到。
 代码 public class Question002 { public static void main(String[] args) { int target = 24; int [][] array = new int [][]{ {1, 4, 7, 11, 15}, {2, 5, 8, 12, 19}, {3, 6, 9, 16, 22}, {10, 13, 14, 17, 24}, {18, 21, 23, 26, 30}, }; int row = 0, col = array.</description>
+    </item>
+    
+    <item>
+      <title>算法001</title>
+      <link>https://pallcard.github.io/2019/algorithm001/</link>
+      <pubDate>Tue, 04 Jun 2019 16:37:28 +0800</pubDate>
+      
+      <guid>https://pallcard.github.io/2019/algorithm001/</guid>
+      <description> 描述 在一个长度为 n 的数组里的所有数字都在 0 到 n-1 的范围内。数组中某些数字是重复的，但不知道有几个数字是重复的，也不知道每个数字重复几次。请找出数组中任意一个重复的数字。
+例子 Input: {2, 3, 1, 0, 2, 5} Output: 2  思路 由于数组中的值大小 为0 到 n-1，可以通过交换就数组中的元素放到与其下标对应的位置，若有两个数要出现在同一个位置，则找到了这个数。
+代码 public class Question001 { public static void main(String[] args) { int[] array = new int[] {2,3,1,0,2,5}; for (int i = 0; i &amp;lt; array.length; i++) { while(i != array[i]) { if(array[i] == array[array[i]]) { System.out.println(array[i]); return; } else { swap(array,i,array[i]); } } } } public static void swap(int[] array, int left, int right) { int temp = array[left]; array[left] = array[right]; array[right] = temp; } }  </description>
+    </item>
+    
+    <item>
+      <title>JMM</title>
+      <link>https://pallcard.github.io/2019/jmm/</link>
+      <pubDate>Sun, 02 Jun 2019 10:28:33 +0800</pubDate>
+      
+      <guid>https://pallcard.github.io/2019/jmm/</guid>
+      <description>JMM &amp;nbsp; &amp;nbsp; &amp;nbsp;Java虚拟机规范中定义了Java内存模型（Java Memory Model，JMM），用于屏蔽掉各种硬件和操作系统的内存访问差异，以实现让Java程序在各种平台下都能达到一致的并发效果，JMM规范了Java虚拟机与计算机内存是如何协同工作的。
+JMM模型下的线程间通信 线程和主内存之间的抽象关系图： 线程间通信必须要经过主内存。
+如下，如果线程A与线程B之间要通信的话，必须要经历下面2个步骤：
+1）线程A把本地内存A中更新过的共享变量刷新到主内存中去。
+2）线程B到主内存中去读取线程A之前已更新过的共享变量。 注： 当线程操作某个对象时，执行顺序如下： (1) 从主存复制变量到当前工作内存 (read and load) (2) 执行代码，改变共享变量值 (use and assign) (3) 用工作内存数据刷新主存相关内容 (store and write)
+JMM解决的问题 &amp;nbsp; &amp;nbsp; &amp;nbsp;Java内存模型是围绕着并发编程中原子性、可见性、有序性这三个特征来建立的，那我们依次看一下这三个特征：
+原子性 ：一个操作不能被打断，要么全部执行完毕，要么不执行。 基本类型数据的访问大都是原子操作，long 和double类型的变量是64位，但是在32位JVM中，32位的JVM会将64位数据的读写操作分为2次32位的读写操作来进行，这就导致了long、double类型的变量在32位虚拟机中是非原子操作，数据有可能会被破坏，也就意味着多个线程在并发访问的时候是线程非安全的。
+可见性 ：一个线程对共享变量做了修改之后，其他的线程立即能够看到（感知到）该变量这种修改（变化）。
+&amp;nbsp; &amp;nbsp; &amp;nbsp;Java内存模型是通过将在工作内存中的变量修改后的值同步到主内存，在读取变量前从主内存刷新最新值到工作内存中，这种依赖主内存的方式来实现可见性的。
+&amp;nbsp; &amp;nbsp; &amp;nbsp;无论是 普通变量 还是 volatile变量 都是如此，区别在于：volatile的特殊规则保证了volatile变量值修改后的新值立刻同步到主内存，每次使用volatile变量前立即从主内存中刷新 ，因此volatile保证了多线程之间的操作变量的可见性，而普通变量则不能保证这一点。 除了volatile关键字能实现可见性之外，还有synchronized,Lock，final也是可以的。
+&amp;nbsp; &amp;nbsp; &amp;nbsp;使用 synchronized 关键字，在同步方法/同步块开始时（Monitor Enter）,使用共享变量时会从主内存中刷新变量值到工作内存中（即从主内存中读取最新值到线程私有的工作内存中），在同步方法/同步块结束时(Monitor Exit),会将工作内存中的变量值同步到主内存中去（即将线程私有的工作内存中的值写入到主内存进行同步）。
+&amp;nbsp; &amp;nbsp; &amp;nbsp;使用 Lock接口 的最常用的实现ReentrantLock(重入锁)来实现可见性：当我们在方法的开始位置执行lock.lock()方法，这和synchronized开始位置（Monitor Enter）有相同的语义，即使用共享变量时会从主内存中刷新变量值到工作内存中（即从主内存中读取最新值到线程私有的工作内存中），在方法的最后finally块里执行lock.unlock()方法，和synchronized结束位置（Monitor Exit）有相同的语义,即会将工作内存中的变量值同步到主内存中去（即将线程私有的工作内存中的值写入到主内存进行同步）。
+&amp;nbsp; &amp;nbsp; &amp;nbsp;final关键字 的可见性是指：被final修饰的变量，在构造函数数一旦初始化完成，并且在构造函数中并没有把“this”的引用传递出去，那么其他线程就可以看到final变量的值。</description>
+    </item>
+    
+    <item>
+      <title>算法</title>
+      <link>https://pallcard.github.io/2019/%E7%AE%97%E6%B3%95/</link>
+      <pubDate>Sat, 01 Jun 2019 20:42:19 +0800</pubDate>
+      
+      <guid>https://pallcard.github.io/2019/%E7%AE%97%E6%B3%95/</guid>
+      <description>题目描述 给定一个非空整数数组，除了某个元素只出现一次以外，其余每个元素出现两次。找出只出现一次的元素。
+示例 输入: [2,2,3] 输出: 3
+思想 使用按位异或。异或：如果a、b两个值不相同，则异或结果为1。 如果a、b两个值相同，异或结果为0。
+public static void main(String[] args) { int a [] = new int []{2,2,3}; int temp = 0; for (int i = 0; i &amp;lt; a.length; i++) { temp ^= a[i]; } System.out.println(temp); }  加强 上述数组中有两个数出现一次，求这两个数。
+示例 输入: [2, 2, 6, 4, 5, 5] 输出: 4, 6
+思想 先将所有数按位异或，得到temp，找到temp中二进制位为1的下标，通过这个下标将所用数分为两个数组，分别异或可以得到两个值。 若有两个数都只出现了一次，若将所有数进行按位异或后，所得到的数中，若按照上述划分，必然可以将这两个数分到不同的数组中
+public static void main(String[] args) { int a [] = new int []{2, 2, 6, 4, 5, 5}; int temp = 0; int max = 0; for (int i = 0; i &amp;lt; a.</description>
+    </item>
+    
+    <item>
+      <title>单例模式</title>
+      <link>https://pallcard.github.io/2019/%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F/</link>
+      <pubDate>Fri, 31 May 2019 17:15:52 +0800</pubDate>
+      
+      <guid>https://pallcard.github.io/2019/%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F/</guid>
+      <description>通过单例模式可以保证系统中，应用该模式的一个类只有一个实例。即一个类只有一个对象实例。
+1.懒汉式 public class Singleton1 { private static Singleton1 singleton1 = null; private Singleton1(){} public static Singleton1 newInstance() { if (singleton1 == null){ singleton1 = new Singleton1(); } return singleton1; } }  2.饿汉式 public class Singleton2 { private static Singleton2 singleton2 = new Singleton2(); private Singleton2(){} public static Singleton2 newSingleton(){ return singleton2; } }  3.懒汉式改 //序列化 public class Singleton3 implements Serializable { // volatile保证变量一致性 private volatile static Singleton3 singleton3 = null; private Singleton3(){ //防止反射调用私有方法 if(singleton3 !</description>
+    </item>
+    
+    <item>
+      <title>Hugo搭建blog</title>
+      <link>https://pallcard.github.io/2019/hugo%E6%90%AD%E5%BB%BAblog/</link>
+      <pubDate>Fri, 31 May 2019 16:21:56 +0800</pubDate>
+      
+      <guid>https://pallcard.github.io/2019/hugo%E6%90%AD%E5%BB%BAblog/</guid>
+      <description>在windows下使用hugo搭建blog
+官方网站 https://www.gohugo.org/
+1.安装hugo 在https://github.com/gohugoio/hugo/releases找到相应版本的hugo镜像，下载后解压，如下： 配置环境变量：将解压后压缩包放在E盘，则添加如下环境变量 输入如下命令判断是否按照成功
+hugo version  2.建立站点 使用如下命令（blog为路径名）
+hugo new site blog cd blog  生成目录如下 3.增加文章 输入以下命令后会在content里创建一个文件
+hugo new about.md  打开文件，
+--- title: &amp;quot;About&amp;quot; date: 2019-05-31T15:47:28+08:00 draft: true ---  4.安装主题 主题选择的是LeaveIt，安装后会在themes中生成对应文件
+cd themes git clone https://github.com/liuzc/LeaveIt.git  并在config.toml中配置如下
+theme = &amp;quot;LeaveIt&amp;quot;  4.运行hugo hugo server -D  5.配置 在content中新建文件夹posts，并在config.toml中加入配置如下：
+# 菜单的配置 [menu] [[menu.main]] name = &amp;quot;博客&amp;quot; url = &amp;quot;/posts/&amp;quot; weight = 1 [[menu.</description>
+    </item>
+    
+    <item>
+      <title>代理模式</title>
+      <link>https://pallcard.github.io/2019/java-proxy/</link>
+      <pubDate>Wed, 29 May 2019 20:06:16 +0800</pubDate>
+      
+      <guid>https://pallcard.github.io/2019/java-proxy/</guid>
+      <description>代理模式 代理模式是一种设计模式，提供了对目标对象额外的访问方式，即通过代理对象访问目标对象，这样可以在不修改原目标对象的前提下，提供额外的功能操作，扩展目标对象的功能。
+简言之，代理模式就是设置一个中间代理来控制访问原目标对象，以达到增强原对象的功能和简化访问方式。 静态代理 静态代理目录结构 主题接口 IUserDao
+public interface IUserDao { void saveUser(); }  主题接口实现类（被代理类） UserDao
+public class UserDao implements IUserDao{ @Override public void saveUser() { System.out.println(&amp;quot;保存用户数据&amp;quot;); } }  代理类 UserDaoProxy
+public class UserDaoProxy implements IUserDao { //目标对象 private IUserDao targer; public UserDaoProxy(IUserDao iUserDao){ this.targer = iUserDao; } @Override public void saveUser() { System.out.println(&amp;quot;开启事务&amp;quot;); targer.saveUser(); System.out.println(&amp;quot;提交事务&amp;quot;); } }  测试类 ProxyTest
+public class ProxyTest { @Test void testStaticProxy(){ //目标对象 IUserDao target = new UserDao(); //代理对象 UserDaoProxy proxy = new UserDaoProxy(target); proxy.</description>
+    </item>
+    
+    <item>
+      <title>Mysql基础</title>
+      <link>https://pallcard.github.io/2019/mysql%E5%9F%BA%E7%A1%80/</link>
+      <pubDate>Mon, 27 May 2019 18:56:26 +0800</pubDate>
+      
+      <guid>https://pallcard.github.io/2019/mysql%E5%9F%BA%E7%A1%80/</guid>
+      <description>DBMS分类  基于共享文件系统的DBMS，例如：Microsoft Access 基于客户机—服务器的DBMS，例如：MySql，Oracle，SQL Server  连接mysql 格式：
+mysql -h 主机地址 -u 用户名 -p 用户密码 例如：/usr/local/mysql/bin/mysql -u root -p  选择数据库 最初连接mysql时，没有任何数据库可供使用，需要使用use来选择一个数据库
+use 数据库名称 例如：USE mysql  显示数据库一些信息 SHOW DATABASES; //显示所有数据库 SHOW TABLES; //显示当前数据库中所有表 SHOW COLUMNS FROM xxx; //显示xxx表中的列 DESCRIBE xxx；//同上 SHOW STATUS; //用于显示广泛的服务器状态信息 SHOW GRANTS; //显示授权用户权限 SHOW ERRORS和SHOW WARNINGS；//用来显示服务器错误或警告消息  检索数据 许多SQL开发人员喜欢对所有SQL关键字使用大写，而对所有 列和表名使用小写，这样做使代码更易于阅读和调试。
+select SELECT DISTINCT yyy FROM xxx LIMIT 5; //检索xxx表中yyy列(DISTINCT去重，不多于5) SELECT * FROM xxx LIMIT 5, 5; //从第5行开始5行，下标0  注 DITINCT会作用于所有的列，不会部分使用</description>
     </item>
     
   </channel>
