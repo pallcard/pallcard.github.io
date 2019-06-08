@@ -6,8 +6,371 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
     <copyright>All rights reserved - 2019</copyright>
-    <lastBuildDate>Wed, 05 Jun 2019 20:40:17 +0800</lastBuildDate>
+    <lastBuildDate>Sat, 08 Jun 2019 17:49:19 +0800</lastBuildDate>
     <atom:link href="/" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>SpringBoot之Swagger</title>
+      <link>https://pallcard.github.io/2019/springboot%E4%B9%8Bswagger/</link>
+      <pubDate>Sat, 08 Jun 2019 17:49:19 +0800</pubDate>
+      
+      <guid>https://pallcard.github.io/2019/springboot%E4%B9%8Bswagger/</guid>
+      <description>
+
+&lt;h5 id=&#34;swagger框架&#34;&gt;Swagger框架&lt;/h5&gt;
+
+&lt;p&gt;描述和测试API接口,自动生成API接口文档。&lt;/p&gt;
+
+&lt;h6 id=&#34;1-添加依赖&#34;&gt;1.添加依赖&lt;/h6&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;&amp;lt;dependency&amp;gt;
+    &amp;lt;groupId&amp;gt;io.springfox&amp;lt;/groupId&amp;gt;
+    &amp;lt;artifactId&amp;gt;springfox-swagger2&amp;lt;/artifactId&amp;gt;
+    &amp;lt;version&amp;gt;2.9.2&amp;lt;/version&amp;gt;
+&amp;lt;/dependency&amp;gt;
+&amp;lt;dependency&amp;gt;
+    &amp;lt;groupId&amp;gt;io.springfox&amp;lt;/groupId&amp;gt;
+    &amp;lt;artifactId&amp;gt;springfox-swagger-ui&amp;lt;/artifactId&amp;gt;
+    &amp;lt;version&amp;gt;2.9.2&amp;lt;/version&amp;gt;
+&amp;lt;/dependency&amp;gt;
+
+&amp;lt;!--lombok依赖--&amp;gt;
+&amp;lt;dependency&amp;gt;
+    &amp;lt;groupId&amp;gt;org.projectlombok&amp;lt;/groupId&amp;gt;
+    &amp;lt;artifactId&amp;gt;lombok&amp;lt;/artifactId&amp;gt;
+    &amp;lt;version&amp;gt;1.18.8&amp;lt;/version&amp;gt;
+    &amp;lt;scope&amp;gt;provided&amp;lt;/scope&amp;gt;
+&amp;lt;/dependency&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h6 id=&#34;2-swagger配置&#34;&gt;2.Swagger配置&lt;/h6&gt;
+
+&lt;p&gt;在resources目录下新建application.yml文件，添加如下配置&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;swagger:
+  title: SpringBoot学习
+  description: SpringBoot学习
+  version: 1.0.0
+  name: lk
+  url: https://pallcard.github.io
+  email: 1250585541@qq.com
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;新建SwaggerConfig文件&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;@Configuration
+@EnableWebMvc
+@EnableSwagger2
+@ConfigurationProperties(prefix = &amp;quot;swagger&amp;quot;)
+@Data //lombok
+@ComponentScan(basePackages = {&amp;quot;cn.wishhust.demo.controller&amp;quot;})
+public class SwaggerConfig {
+
+    private String title;
+    private String description;
+    private String version;
+
+    private String name;
+    private String url;
+    private String email;
+
+    @Bean
+    public Docket customDocket() {
+        return new Docket(DocumentationType.SWAGGER_2).apiInfo(apiInfo());
+    }
+
+    private ApiInfo apiInfo() {
+        Contact contact = new Contact(name, url, email);
+        return new ApiInfoBuilder()
+                .title(title)
+                .description(description)
+                .contact(contact)
+                .version(version)
+                .build();
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;MVC配置:过滤网页静态资源&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;@Configuration
+class WebMvcConfig implements WebMvcConfigurer {
+
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        registry.addResourceHandler(&amp;quot;swagger-ui.html&amp;quot;)
+                .addResourceLocations(&amp;quot;classpath:/META-INF/resources/&amp;quot;);
+
+        registry.addResourceHandler(&amp;quot;/webjars/**&amp;quot;)
+                .addResourceLocations(&amp;quot;classpath:/META-INF/resources/webjars/&amp;quot;);
+    }
+    
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h6 id=&#34;3-使用&#34;&gt;3.使用&lt;/h6&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;@RestController
+@RequestMapping(&amp;quot;/test&amp;quot;)
+@Api(value = &amp;quot;测试&amp;quot;)
+public class HelloWorld {
+
+    Logger log = LoggerFactory.getLogger(HelloWorld.class);
+    
+    @GetMapping(value={&amp;quot;/hello&amp;quot;})
+    @ApiOperation(value = &amp;quot;hello&amp;quot;)
+//    @ApiImplicitParam
+    public String hello(){
+        return &amp;quot;Hello Spring Boot&amp;quot;;
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;参考：&lt;a href=&#34;https://zed058.cn&#34; rel=&#34;nofollow noreferrer&#34; target=&#34;_blank&#34;&gt;https://zed058.cn&lt;/a&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>SpringBoot传递参数</title>
+      <link>https://pallcard.github.io/2019/springboot%E4%BC%A0%E9%80%92%E5%8F%82%E6%95%B0/</link>
+      <pubDate>Sat, 08 Jun 2019 17:08:34 +0800</pubDate>
+      
+      <guid>https://pallcard.github.io/2019/springboot%E4%BC%A0%E9%80%92%E5%8F%82%E6%95%B0/</guid>
+      <description>
+
+&lt;h5 id=&#34;url传参&#34;&gt;url传参&lt;/h5&gt;
+
+&lt;h6 id=&#34;1-get方式&#34;&gt;1.get方式&lt;/h6&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt; 	// 访问：http://localhost:8080/test/get/xxx
+    @GetMapping(&amp;quot;/get/{name}&amp;quot;)
+    public String get(@PathVariable(&amp;quot;name&amp;quot;) String name2){
+        System.out.println(&amp;quot;name: &amp;quot;+ name2);
+        return &amp;quot;Hi &amp;quot;+ name2;
+    }
+
+    // 访问：http://localhost:8080/test/get2?name=yyy
+    @GetMapping(&amp;quot;/get2&amp;quot;)
+    // 请求参数名字与方法中的形参一致，可以省略@RequestParam
+    // public String get2(String name2) {
+    public String get2(@RequestParam(&amp;quot;name&amp;quot;) String name2) {
+        System.out.println(&amp;quot;name: &amp;quot;+ name2);
+        return &amp;quot;Hi &amp;quot;+ name2;
+    }
+
+    @GetMapping(&amp;quot;/get3&amp;quot;)
+    //给一个默认值或者required = false
+    public String get3(@RequestParam(value = &amp;quot;name&amp;quot;, defaultValue = &amp;quot;admin&amp;quot;) String name) {
+        System.out.println(&amp;quot;name: &amp;quot;+ name);
+        return &amp;quot;Hi &amp;quot;+ name;
+    }
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h6 id=&#34;2-post方式&#34;&gt;2.post方式&lt;/h6&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;    @PostMapping(&amp;quot;/post&amp;quot;)
+    //@RequestParam同get
+    public String post(@RequestParam(&amp;quot;username&amp;quot;) String name, Integer age){
+        log.info(&amp;quot;name=&amp;quot; + name+&amp;quot;, age=&amp;quot; + age);
+        return &amp;quot;name=&amp;quot; + name+&amp;quot;, age=&amp;quot; + age;
+    }
+    
+    @PostMapping(&amp;quot;post2&amp;quot;)
+    public String post2(HttpServletRequest request) {
+        ServletInputStream is = null;
+        StringBuilder sb = null;
+        try {
+            is = request.getInputStream();
+            sb = new StringBuilder();
+            byte[] buf = new byte[1024];
+            int len = 0;
+            while ((len = is.read(buf)) != -1){
+                sb.append(new String(buf,0,len));
+            }
+            System.out.println(sb.toString());
+            return sb.toString();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (is != null) {
+                    is.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return sb.toString();
+    }
+
+    @PostMapping(&amp;quot;/post3&amp;quot;)
+    public String post3(@RequestBody User user) {
+        log.info(user.toString());
+        return null;
+    }
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;&lt;em&gt;注&lt;/em&gt;&lt;/strong&gt;
+* 把json作为参数传递,要用【RequestBody】&lt;/p&gt;
+
+&lt;p&gt;参考：&lt;a href=&#34;https://zed058.cn&#34; rel=&#34;nofollow noreferrer&#34; target=&#34;_blank&#34;&gt;https://zed058.cn&lt;/a&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>SpringBoot启动类</title>
+      <link>https://pallcard.github.io/2019/springboot%E5%90%AF%E5%8A%A8%E7%B1%BB/</link>
+      <pubDate>Sat, 08 Jun 2019 10:53:04 +0800</pubDate>
+      
+      <guid>https://pallcard.github.io/2019/springboot%E5%90%AF%E5%8A%A8%E7%B1%BB/</guid>
+      <description>
+
+&lt;h5 id=&#34;1-pom文件&#34;&gt;1.POM文件&lt;/h5&gt;
+
+&lt;p&gt;整个项目的pom文件中（pom.xml）,可以看到该项目的parent，通过点击&lt;artifactId&gt;标签，可以进入parent中，这样可以看到项目的最终的parent。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;&amp;lt;parent&amp;gt;
+        &amp;lt;groupId&amp;gt;org.springframework.boot&amp;lt;/groupId&amp;gt;
+        &amp;lt;artifactId&amp;gt;spring-boot-starter-parent&amp;lt;/artifactId&amp;gt;
+        &amp;lt;version&amp;gt;2.1.5.RELEASE&amp;lt;/version&amp;gt;
+        &amp;lt;relativePath/&amp;gt; &amp;lt;!-- lookup parent from repository --&amp;gt;
+    &amp;lt;/parent&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h5 id=&#34;2-启动器&#34;&gt;2.启动器&lt;/h5&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;&amp;lt;dependencies&amp;gt;
+        &amp;lt;dependency&amp;gt;
+            &amp;lt;groupId&amp;gt;org.springframework.boot&amp;lt;/groupId&amp;gt;
+            &amp;lt;artifactId&amp;gt;spring-boot-starter-web&amp;lt;/artifactId&amp;gt;
+        &amp;lt;/dependency&amp;gt;
+        &amp;lt;dependency&amp;gt;
+            &amp;lt;groupId&amp;gt;org.springframework.boot&amp;lt;/groupId&amp;gt;
+            &amp;lt;artifactId&amp;gt;spring-boot-starter-test&amp;lt;/artifactId&amp;gt;
+            &amp;lt;scope&amp;gt;test&amp;lt;/scope&amp;gt;
+        &amp;lt;/dependency&amp;gt;
+    &amp;lt;/dependencies&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;&lt;em&gt;注：&lt;/em&gt;&lt;/strong&gt;
+spring-boot-starter：spring-boot场景启动器，帮我们导入了web模块正常运行所依赖的组件；
+SpringBoot启动器文档：&lt;a href=&#34;https://docs.spring.io/spring-boot/docs/2.1.5.RELEASE/reference/htmlsingle/#using-boot-starter&#34; rel=&#34;nofollow noreferrer&#34; target=&#34;_blank&#34;&gt;https://docs.spring.io/spring-boot/docs/2.1.5.RELEASE/reference/htmlsingle/#using-boot-starter&lt;/a&gt;&lt;/p&gt;
+
+&lt;h5 id=&#34;3-主程序类&#34;&gt;3.主程序类&lt;/h5&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;@SpringBootApplication
+public class DemoApplication {
+
+    public static void main(String[] args) {
+        SpringApplication.run(DemoApplication.class, args);
+    }
+
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ul&gt;
+&lt;li&gt;@SpringBootApplication：用来标注这个类为SpringBoot的主配置类，该注解是一个组合注解。&lt;/li&gt;
+&lt;li&gt;将主配置类（@SpringBootApplication标注的类）的所在包及下面所有子包里面的所有组件扫描到Spring容器；&lt;/li&gt;
+&lt;li&gt;Spring Boot在启动的时候从类路径下的META-INF/spring.factories中获取EnableAutoConfiguration指定的值，将这些值作为自动配置类导入到容器中，自动配置类就生效，帮我们进行自动配置工作；
+&lt;code&gt;java
+@Target({ElementType.TYPE})
+@Retention(RetentionPolicy.RUNTIME)
+@Documented
+@Inherited
+@SpringBootConfiguration
+@EnableAutoConfiguration
+@ComponentScan(
+excludeFilters = {@Filter(
+type = FilterType.CUSTOM,
+classes = {TypeExcludeFilter.class}
+), @Filter(
+type = FilterType.CUSTOM,
+classes = {AutoConfigurationExcludeFilter.class}
+)}
+)
+public @interface SpringBootApplication {
+&lt;/code&gt;
+* @SpringBootConfiguration: SpringBoot的配置类，
+* @EnableAutoConfiguration：开启自动配置功能
+
+参考：&lt;a href=&#34;https://zed058.cn&#34; rel=&#34;nofollow noreferrer&#34; target=&#34;_blank&#34;&gt;https://zed058.cn&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>SpringBoot入门</title>
+      <link>https://pallcard.github.io/2019/springboot%E5%85%A5%E9%97%A8/</link>
+      <pubDate>Sat, 08 Jun 2019 10:18:29 +0800</pubDate>
+      
+      <guid>https://pallcard.github.io/2019/springboot%E5%85%A5%E9%97%A8/</guid>
+      <description>
+
+&lt;h5 id=&#34;创建工程&#34;&gt;创建工程&lt;/h5&gt;
+
+&lt;p&gt;使用IDEA，按照提示创建即可。&lt;/p&gt;
+
+&lt;h5 id=&#34;修改banner&#34;&gt;修改Banner&lt;/h5&gt;
+
+&lt;p&gt;在resources目录下创建banner.txt文件，改文件用于指定banner，文字生成banner的网址：&lt;a href=&#34;http://patorjk.com/software/taag。&#34; rel=&#34;nofollow noreferrer&#34; target=&#34;_blank&#34;&gt;http://patorjk.com/software/taag。&lt;/a&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;${AnsiColor.BLUE}
+.____     ____  __.
+|    |   |    |/ _|
+|    |   |      &amp;lt;  
+|    |___|    |  \ 
+|_______ \____|__ \
+        \/       \/
+-----版本号-----${spring-boot.version}      
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;说明：
+${AnsiColor.BLUE}   表示Banner文字的颜色
+${spring-boot.version}  当前使用的SpringBoot版本&lt;/p&gt;
+
+&lt;h5 id=&#34;创建controller类&#34;&gt;创建Controller类&lt;/h5&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;@Controller
+public class HelloWorld {
+    @RequestMapping(value = &amp;quot;/hello&amp;quot;,method = RequestMethod.GET)
+    @ResponseBody
+    public String hello(){
+        return &amp;quot;Hello Spring Boot&amp;quot;;
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;访问：&lt;a href=&#34;http://localhost:8080/hello，即可以看到Hello&#34; rel=&#34;nofollow noreferrer&#34; target=&#34;_blank&#34;&gt;http://localhost:8080/hello，即可以看到Hello&lt;/a&gt; Spring Boot
+&lt;strong&gt;&lt;em&gt;另外一种注解方式&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;@RestController
+public class HelloWorld {
+    @GetMapping(&amp;quot;/hello&amp;quot;)
+    public String hello(){
+        return &amp;quot;Hello Spring Boot&amp;quot;;
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;说明
+* @RestController：处理http请求：等同于@Controller+@ResponseBody
+* @GetMapping：@RequestMapping以get请求的简写&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;&lt;em&gt;url的其他形式&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;@RestController
+@RequestMapping(&amp;quot;/test&amp;quot;)
+public class HelloWorld {
+    @GetMapping(value={&amp;quot;/hello&amp;quot;,&amp;quot;/hi&amp;quot;})
+    public String hello(){
+        return &amp;quot;Hello Spring Boot&amp;quot;;
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;参考：&lt;a href=&#34;https://zed058.cn&#34; rel=&#34;nofollow noreferrer&#34; target=&#34;_blank&#34;&gt;https://zed058.cn&lt;/a&gt;
+文档：&lt;a href=&#34;https://docs.spring.io/spring-boot/docs/2.1.4.RELEASE/reference/htmlsingle/&#34; rel=&#34;nofollow noreferrer&#34; target=&#34;_blank&#34;&gt;https://docs.spring.io/spring-boot/docs/2.1.4.RELEASE/reference/htmlsingle/&lt;/a&gt;&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>算法008</title>
@@ -728,876 +1091,6 @@ Output:
 &lt;h5 id=&#34;内连接&#34;&gt;内连接&lt;/h5&gt;
 
 &lt;p&gt;两个表做笛卡尔积后根据on后面的条件进行筛选。&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>单例模式</title>
-      <link>https://pallcard.github.io/2019/%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F/</link>
-      <pubDate>Fri, 31 May 2019 17:15:52 +0800</pubDate>
-      
-      <guid>https://pallcard.github.io/2019/%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F/</guid>
-      <description>
-
-&lt;p&gt;通过单例模式可以保证系统中，应用该模式的一个类只有一个实例。即一个类只有一个对象实例。&lt;/p&gt;
-
-&lt;h4 id=&#34;1-懒汉式&#34;&gt;1.懒汉式&lt;/h4&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;public class Singleton1 {
-    private static Singleton1 singleton1 = null;
-    private Singleton1(){}
-    public static Singleton1 newInstance() {
-        if (singleton1 == null){
-            singleton1 = new Singleton1();
-        }
-        return  singleton1;
-    }
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h4 id=&#34;2-饿汉式&#34;&gt;2.饿汉式&lt;/h4&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;public class Singleton2 {
-    private static Singleton2 singleton2 = new Singleton2();
-    private Singleton2(){}
-    public static Singleton2 newSingleton(){
-        return singleton2;
-    }
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h4 id=&#34;3-懒汉式改&#34;&gt;3.懒汉式改&lt;/h4&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;//序列化
-public class Singleton3 implements Serializable {
-    // volatile保证变量一致性
-    private volatile static Singleton3 singleton3 = null;
-    private Singleton3(){
-        //防止反射调用私有方法
-        if(singleton3 != null){
-            throw new RuntimeException(&amp;quot;此类对象为单例模式，已被实例化&amp;quot;);
-        }
-    }
-
-    public static Singleton3 newInstance(){
-        //为了避免每次都加锁，避免了一定的加锁的开销
-        if(singleton3 == null) {
-            //多线程
-            synchronized (singleton3) {
-                if (singleton3 == null) {
-                    singleton3 = new Singleton3();
-                }
-            }
-        }
-        return singleton3;
-    }
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;说明：
-1. 外层singleton3 == null，为了避免每次都加锁，避免了一定的加锁的开销；
-2. 把类的构造函数定义为私有private，外部便无法通过new生成对象。&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>Hugo搭建blog</title>
-      <link>https://pallcard.github.io/2019/hugo%E6%90%AD%E5%BB%BAblog/</link>
-      <pubDate>Fri, 31 May 2019 16:21:56 +0800</pubDate>
-      
-      <guid>https://pallcard.github.io/2019/hugo%E6%90%AD%E5%BB%BAblog/</guid>
-      <description>
-
-&lt;p&gt;在windows下使用hugo搭建blog&lt;/p&gt;
-
-&lt;h4 id=&#34;官方网站&#34;&gt;官方网站&lt;/h4&gt;
-
-&lt;p&gt;&lt;a href=&#34;https://www.gohugo.org/&#34; rel=&#34;nofollow noreferrer&#34; target=&#34;_blank&#34;&gt;https://www.gohugo.org/&lt;/a&gt;&lt;/p&gt;
-
-&lt;h5 id=&#34;1-安装hugo&#34;&gt;1.安装hugo&lt;/h5&gt;
-
-&lt;p&gt;在&lt;a href=&#34;https://github.com/gohugoio/hugo/releases找到相应版本的hugo镜像，下载后解压，如下：&#34; rel=&#34;nofollow noreferrer&#34; target=&#34;_blank&#34;&gt;https://github.com/gohugoio/hugo/releases找到相应版本的hugo镜像，下载后解压，如下：&lt;/a&gt;
-&lt;img src=&#34;https://pallcard.github.io/images/hugo001.png&#34; alt=&#34;windows&#34; /&gt;
-配置环境变量：将解压后压缩包放在E盘，则添加如下环境变量
-&lt;img src=&#34;https://pallcard.github.io/images/hugo002.png&#34; alt=&#34;环境变量&#34; /&gt;
-输入如下命令判断是否按照成功&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;hugo version
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://pallcard.github.io/images/hugo003.png&#34; alt=&#34;检查安装&#34; /&gt;&lt;/p&gt;
-
-&lt;h5 id=&#34;2-建立站点&#34;&gt;2.建立站点&lt;/h5&gt;
-
-&lt;p&gt;使用如下命令（blog为路径名）&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;hugo new site blog
-cd blog
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;生成目录如下
-&lt;img src=&#34;https://pallcard.github.io/images/hugo004.png&#34; alt=&#34;blog目录&#34; /&gt;&lt;/p&gt;
-
-&lt;h5 id=&#34;3-增加文章&#34;&gt;3.增加文章&lt;/h5&gt;
-
-&lt;p&gt;输入以下命令后会在content里创建一个文件&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;hugo new about.md
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;打开文件，&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;---
-title: &amp;quot;About&amp;quot;
-date: 2019-05-31T15:47:28+08:00
-draft: true
----
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h5 id=&#34;4-安装主题&#34;&gt;4.安装主题&lt;/h5&gt;
-
-&lt;p&gt;主题选择的是LeaveIt，安装后会在themes中生成对应文件&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;cd themes
-git clone https://github.com/liuzc/LeaveIt.git
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;并在config.toml中配置如下&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;theme = &amp;quot;LeaveIt&amp;quot;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h5 id=&#34;4-运行hugo&#34;&gt;4.运行hugo&lt;/h5&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;hugo server -D
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h5 id=&#34;5-配置&#34;&gt;5.配置&lt;/h5&gt;
-
-&lt;p&gt;在content中新建文件夹posts，并在config.toml中加入配置如下：&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;# 菜单的配置
-[menu]
-  [[menu.main]]
-    name = &amp;quot;博客&amp;quot;
-    url = &amp;quot;/posts/&amp;quot;
-    weight = 1
-  [[menu.main]]
-    name = &amp;quot;分类&amp;quot;
-    url = &amp;quot;/categories/&amp;quot;
-    weight = 2
-  [[menu.main]]
-    name = &amp;quot;标签&amp;quot;
-    url = &amp;quot;/tags/&amp;quot;
-    weight = 3
-  [[menu.main]]
-    name = &amp;quot;关于&amp;quot;
-    url = &amp;quot;/about/&amp;quot;
-    weight = 4
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;在建新文章时，categories中为文章分类，tags为标签。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;---
-title: &amp;quot;代理模式&amp;quot;
-date: 2019-05-29T20:06:16+08:00
-draft: false
-categories: [&amp;quot;Java&amp;quot;]
-tags: [&amp;quot;Java&amp;quot;,&amp;quot;设计模式&amp;quot;]
----
-#### 内容
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h5 id=&#34;5-部署&#34;&gt;5.部署&lt;/h5&gt;
-
-&lt;p&gt;部署到GitHub Pages 上，首先在GitHub上创建一个Repository，命名为：pallcard.github.io （pallcard替换为你的github用户名）。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;hugo --theme=LeaveIt --baseUrl=&amp;quot;http://pallcard.github.io/&amp;quot;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;将pubilc目录里所有文件 push 到刚创建的Repository的 master 分支。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;cd public
-git init
-git remote add origin https://github.com/pallcard/pallcard.github.io.git
-git add -A
-git commit -m &amp;quot;first commit&amp;quot;
-git push -u origin master
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;浏览器里访问:&lt;a href=&#34;http://coderzh.pallcard.io/&#34; rel=&#34;nofollow noreferrer&#34; target=&#34;_blank&#34;&gt;http://coderzh.pallcard.io/&lt;/a&gt;&lt;/p&gt;
-
-&lt;h5 id=&#34;6-注意&#34;&gt;6.注意&lt;/h5&gt;
-
-&lt;p&gt;1.每次使用hugo new posts/xxx.md创建文章后，&lt;strong&gt;&lt;em&gt;记得要将draft 改为false&lt;/em&gt;&lt;/strong&gt;
-2.更新部署时，在根目录执行hugo，然后push到github上即可&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>代理模式</title>
-      <link>https://pallcard.github.io/2019/java-proxy/</link>
-      <pubDate>Wed, 29 May 2019 20:06:16 +0800</pubDate>
-      
-      <guid>https://pallcard.github.io/2019/java-proxy/</guid>
-      <description>
-
-&lt;h4 id=&#34;代理模式&#34;&gt;代理模式&lt;/h4&gt;
-
-&lt;p&gt;代理模式是一种设计模式，提供了对目标对象额外的访问方式，即通过代理对象访问目标对象，这样可以在不修改原目标对象的前提下，提供额外的功能操作，扩展目标对象的功能。&lt;/p&gt;
-
-&lt;p&gt;简言之，代理模式就是设置一个中间代理来控制访问原目标对象，以达到增强原对象的功能和简化访问方式。
-&lt;img src=&#34;https://pallcard.github.io/images/java-proxy001.png&#34; alt=&#34;代理模式&#34; /&gt;&lt;/p&gt;
-
-&lt;h4 id=&#34;静态代理&#34;&gt;静态代理&lt;/h4&gt;
-
-&lt;p&gt;静态代理目录结构
-&lt;img src=&#34;https://pallcard.github.io/images/java-proxy002.png&#34; alt=&#34;目录结构&#34; /&gt;
-&lt;strong&gt;&lt;em&gt;主题接口 IUserDao&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;public interface IUserDao {
-    void saveUser();
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;strong&gt;&lt;em&gt;主题接口实现类（被代理类） UserDao&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;public class UserDao implements IUserDao{
-    @Override
-    public void saveUser() {
-        System.out.println(&amp;quot;保存用户数据&amp;quot;);
-    }
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;strong&gt;&lt;em&gt;代理类 UserDaoProxy&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;public class UserDaoProxy implements IUserDao {
-    
-    //目标对象
-    private IUserDao targer;
-
-    public UserDaoProxy(IUserDao iUserDao){
-        this.targer = iUserDao;
-    }
-
-    @Override
-    public void saveUser() {
-        System.out.println(&amp;quot;开启事务&amp;quot;);
-        targer.saveUser();
-        System.out.println(&amp;quot;提交事务&amp;quot;);
-    }
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;strong&gt;&lt;em&gt;测试类 ProxyTest&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;public class ProxyTest {
-    @Test
-    void testStaticProxy(){
-        //目标对象
-        IUserDao target = new UserDao();
-        //代理对象
-        UserDaoProxy proxy = new UserDaoProxy(target);
-        proxy.saveUser();
-    }
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h4 id=&#34;动态代理&#34;&gt;动态代理&lt;/h4&gt;
-
-&lt;p&gt;&lt;strong&gt;&lt;em&gt;要求真实对象必须有实现接口&lt;/em&gt;&lt;/strong&gt;
-&lt;strong&gt;&lt;em&gt;说明：&lt;/em&gt;&lt;/strong&gt;
-* Proxy提供了创建动态代理类和实例的静态方法，它也是由这些方法创建的所有动态代理类的超类。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;//返回指定接口的代理类的实例，该接口将方法调用分派给指定的调用处理程序。
-public static Object newProxyInstance(ClassLoader loader,//类加载器
-                                      类&amp;lt;?&amp;gt;[] interfaces,//代理类实现的接口列表
-                                      InvocationHandler h//调度方法调用的调用处理函数
-                                      ) throws IllegalArgumentException                                  
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;strong&gt;&lt;em&gt;InvocationHandler&lt;/em&gt;&lt;/strong&gt; 是由代理实例的调用处理程序实现的接口&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;Object invoke(Object proxy,   //调用该方法的代理实例
-              方法 method,  //所述方法对应于调用代理实例上的接口方法的实例
-              Object[] args) //接口方法参数
-       throws Throwable
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;strong&gt;&lt;em&gt;IUserDao、UserDao同上&lt;/em&gt;&lt;/strong&gt;
-&lt;strong&gt;&lt;em&gt;UserDaoProxy&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;public class ProxyFactory {
-
-    //目标对象
-    private Object targer;
-
-    public ProxyFactory(Object targer){
-        this.targer = targer;
-    }
-
-    public Object getProxyInstance() {
-        return Proxy.newProxyInstance(targer.getClass().getClassLoader(), targer.getClass().getInterfaces(), new InvocationHandler() {
-            @Override
-            public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-                System.out.println(proxy.getClass());
-                System.out.println(&amp;quot;开启事务&amp;quot;);
-                method.invoke(targer, args);
-                System.out.println(&amp;quot;提交事务&amp;quot;);
-                return null;
-            }
-        });
-    }
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;strong&gt;&lt;em&gt;一般可以改成如下&lt;/em&gt;&lt;/strong&gt;
-说明：
-代理类继承InvocationHandler&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;public class ProxyFactory2 implements InvocationHandler{
-
-    //目标对象
-    private Object targer;
-
-    public ProxyFactory2(Object targer){
-        this.targer = targer;
-    }
-
-    public &amp;lt;T&amp;gt; T getProxyInstance() {
-        return (T) Proxy.newProxyInstance(targer.getClass().getClassLoader(),
-                targer.getClass().getInterfaces(),
-                this);
-    }
-
-    @Override
-    public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-        System.out.println(&amp;quot;开启事务&amp;quot;);
-        Object invoke = method.invoke(targer, args);
-        System.out.println(&amp;quot;提交事务&amp;quot;);
-        return invoke;
-    }
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;strong&gt;&lt;em&gt;动态代理测试&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;public class ProxyTest {
-    @Test
-    void testStaticProxy(){
-        //目标对象
-        IUserDao target = new UserDao();
-        //代理对象
-//        IUserDao proxyInstance = (IUserDao) new UserDaoProxy(target).getProxyInstance();
-        IUserDao proxyInstance = new UserDaoProxy2(target).getProxyInstance();//将强转放到了代理类中
-        proxyInstance.saveUser();
-    }
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;strong&gt;&lt;em&gt;注意&lt;/em&gt;&lt;/strong&gt;
-* 若在invoke中调用 proxy.toString()会出现栈溢出，原因是改方法会继续调用invoke方法，出现循环调用，最终栈溢出。
-* 关于invoke方法中proxy参数的作用：只有proxy 实例在InvocationHandler 实现类里加载才能产生第二个参数method (静态代码块是虚拟机加载类的时候执行的，而且只执行一次）&lt;/p&gt;
-
-&lt;h4 id=&#34;cglib代理&#34;&gt;cglib代理&lt;/h4&gt;
-
-&lt;p&gt;引入依赖&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;compile &amp;quot;cglib:cglib:3.2.5&amp;quot;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;strong&gt;&lt;em&gt;UserDao&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;public class UserDao {
-    public void saveUser() {
-        System.out.println(&amp;quot;保存用户数据&amp;quot;);
-    }
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;strong&gt;&lt;em&gt;ProxyFactory&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;public class ProxyFactory implements MethodInterceptor {
-    //目标对象
-    private Object target;
-
-    public ProxyFactory(Object target){
-        this.target = target;
-    }
-
-    public Object getProxyInstance() {
-        Enhancer enhancer = new Enhancer();
-        enhancer.setSuperclass(target.getClass());
-        enhancer.setCallback(this);
-        return enhancer.create();
-    }
-
-    @Override
-    public Object intercept(Object obj, Method method, Object[] args, MethodProxy proxy) throws Throwable {
-        System.out.println(&amp;quot;开启事务&amp;quot;);
-        Object invoke = method.invoke(target, args);
-        System.out.println(&amp;quot;提交事务&amp;quot;);
-        return invoke;
-    }
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;ProxyTest类&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;public class ProxyTest {
-    @Test
-    public void testcglibProxy(){
-        //目标对象
-        UserDao target = new UserDao();
-        //代理对象
-        UserDao proxy = (UserDao) new ProxyFactory(target).getProxyInstance();
-        proxy.saveUser();
-    }
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;table&gt;
-&lt;thead&gt;
-&lt;tr&gt;
-&lt;th&gt;代理方式&lt;/th&gt;
-&lt;th&gt;实现&lt;/th&gt;
-&lt;th&gt;优点&lt;/th&gt;
-&lt;th&gt;缺点&lt;/th&gt;
-&lt;th&gt;特点&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;
-
-&lt;tbody&gt;
-&lt;tr&gt;
-&lt;td&gt;JDK静态代理&lt;/td&gt;
-&lt;td&gt;代理类与委托类实现同一接口，并且在代理类中需要硬编码接口&lt;/td&gt;
-&lt;td&gt;实现简单，容易理解&lt;/td&gt;
-&lt;td&gt;代理类需要硬编码接口，在实际应用中可能会导致重复编码，浪费存储空间并且效率很低&lt;/td&gt;
-&lt;td&gt;&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td&gt;JDK动态代理&lt;/td&gt;
-&lt;td&gt;代理类与委托类实现同一接口，主要是通过代理类实现InvocationHandler并重写invoke方法来进行动态代理的，在invoke方法中将对方法进行增强处理&lt;/td&gt;
-&lt;td&gt;不需要硬编码接口，代码复用率高&lt;/td&gt;
-&lt;td&gt;只能够代理实现了接口的委托类&lt;/td&gt;
-&lt;td&gt;底层使用反射机制进行方法的调用&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td&gt;CGLIB动态代理&lt;/td&gt;
-&lt;td&gt;代理类将委托类作为自己的父类并为其中的非final委托方法创建两个方法，一个是与委托方法签名相同的方法，它在方法中会通过super调用委托方法；另一个是代理类独有的方法。在代理方法中，它会判断是否存在实现了MethodInterceptor接口的对象，若存在则将调用intercept方法对委托方法进行代理&lt;/td&gt;
-&lt;td&gt;可以在运行时对类或者是接口进行增强操作，且委托类无需实现接口&lt;/td&gt;
-&lt;td&gt;不能对final类以及final方法进行代理&lt;/td&gt;
-&lt;td&gt;底层将方法全部存入一个数组中，通过数组索引直接进行方法调用&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;
-
-&lt;p&gt;参考：
-&lt;a href=&#34;https://segmentfault.com/a/1190000011291179#articleHeader3&#34; rel=&#34;nofollow noreferrer&#34; target=&#34;_blank&#34;&gt;https://segmentfault.com/a/1190000011291179#articleHeader3&lt;/a&gt;
-&lt;a href=&#34;https://www.jianshu.com/p/9a61af393e41?from=timeline&amp;amp;isappinstalled=0&#34; rel=&#34;nofollow noreferrer&#34; target=&#34;_blank&#34;&gt;https://www.jianshu.com/p/9a61af393e41?from=timeline&amp;amp;isappinstalled=0&lt;/a&gt;&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>Mysql基础</title>
-      <link>https://pallcard.github.io/2019/mysql%E5%9F%BA%E7%A1%80/</link>
-      <pubDate>Mon, 27 May 2019 18:56:26 +0800</pubDate>
-      
-      <guid>https://pallcard.github.io/2019/mysql%E5%9F%BA%E7%A1%80/</guid>
-      <description>
-
-&lt;h4 id=&#34;dbms分类&#34;&gt;DBMS分类&lt;/h4&gt;
-
-&lt;ol&gt;
-&lt;li&gt;基于共享文件系统的DBMS，例如：Microsoft Access&lt;/li&gt;
-&lt;li&gt;基于客户机—服务器的DBMS，例如：MySql，Oracle，SQL Server&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;h4 id=&#34;连接mysql&#34;&gt;连接mysql&lt;/h4&gt;
-
-&lt;p&gt;格式：&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;mysql -h 主机地址 -u 用户名 -p 用户密码
-例如：/usr/local/mysql/bin/mysql -u root -p
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h4 id=&#34;选择数据库&#34;&gt;选择数据库&lt;/h4&gt;
-
-&lt;p&gt;最初连接mysql时，没有任何数据库可供使用，需要使用use来选择一个数据库&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;use 数据库名称
-例如：USE mysql
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h4 id=&#34;显示数据库一些信息&#34;&gt;显示数据库一些信息&lt;/h4&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;SHOW DATABASES;   //显示所有数据库
-SHOW TABLES;       //显示当前数据库中所有表
-SHOW COLUMNS FROM xxx;   //显示xxx表中的列
-DESCRIBE xxx；//同上
-SHOW STATUS;   //用于显示广泛的服务器状态信息
-SHOW GRANTS;  //显示授权用户权限
-SHOW ERRORS和SHOW WARNINGS；//用来显示服务器错误或警告消息
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h4 id=&#34;检索数据&#34;&gt;检索数据&lt;/h4&gt;
-
-&lt;p&gt;许多SQL开发人员喜欢对所有SQL关键字使用大写，而对所有 列和表名使用小写，这样做使代码更易于阅读和调试。&lt;/p&gt;
-
-&lt;h5 id=&#34;select&#34;&gt;select&lt;/h5&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;SELECT DISTINCT yyy FROM xxx LIMIT 5; //检索xxx表中yyy列(DISTINCT去重，不多于5)
-SELECT * FROM xxx LIMIT 5, 5; //从第5行开始5行，下标0
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;strong&gt;&lt;em&gt;注&lt;/em&gt;&lt;/strong&gt;
-DITINCT会作用于所有的列，不会部分使用&lt;/p&gt;
-
-&lt;h5 id=&#34;order-by&#34;&gt;order by&lt;/h5&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;select * from xxx order by yyy;  
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;strong&gt;&lt;em&gt;注&lt;/em&gt;&lt;/strong&gt;
-1.默认升序，降序使用DESC
-2.可以指定多列，先按第一列排，再按照第二列，。。。
-3.在多个列上降序排序 如果想在多个列上进行降序排序，必须 对每个列指定DESC关键字。
-4. limit要在order by之后&lt;/p&gt;
-
-&lt;h5 id=&#34;where&#34;&gt;where&lt;/h5&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;select * from xxx where yyy=&amp;quot;&amp;quot;;
-例：
-SELECT * FROM news WHERE title = &amp;quot;新闻4&amp;quot; ORDER BY title;
-SELECT * FROM news WHERE title BETWEEN &amp;quot;新闻1&amp;quot; AND &amp;quot;新闻5&amp;quot; ORDER BY title;
-SELECT * FROM news WHERE creator_id IS NULL LIMIT 10;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;strong&gt;&lt;em&gt;注&lt;/em&gt;&lt;/strong&gt;
-1.在SELECT语句中，数据根据WHERE子句中指定的搜索条件进行过滤
-2.order by位于where之后&lt;/p&gt;
-
-&lt;h5 id=&#34;and-or-in&#34;&gt;AND OR IN&lt;/h5&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;SELECT * FROM news WHERE title BETWEEN &amp;quot;新闻3&amp;quot; AND &amp;quot;新闻6&amp;quot; OR id &amp;lt; 3;
-例如：IN的使用
-SELECT * FROM news WHERE title NOT IN (&amp;quot;新闻1&amp;quot;,&amp;quot;新闻2&amp;quot;,&amp;quot;新闻3&amp;quot;,&amp;quot;新闻10&amp;quot;);
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;strong&gt;&lt;em&gt;注&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;
-
-&lt;ol&gt;
-&lt;li&gt;SQL（像多数语言一样）在处理OR操作符前，优先处理AND操 作符。&lt;strong&gt;&lt;em&gt;使用圆括号明确地分组相应的操作符&lt;/em&gt;&lt;/strong&gt;，圆括号具有较AND或OR操作符高的计算次序
-2.IN在WHERE子句中用来指定要匹配值的清单的关键字，功能与OR 相当。&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;h5 id=&#34;通配符&#34;&gt;通配符&lt;/h5&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;SELECT * FROM news WHERE title LIKE &amp;quot;新闻1%&amp;quot;
-SELECT * FROM news WHERE title LIKE &amp;quot;新闻_&amp;quot;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;ol&gt;
-&lt;li&gt;%表示任何字符出现 &lt;strong&gt;&lt;em&gt;任意次数&lt;/em&gt;&lt;/strong&gt;,不能匹配到NULL&lt;/li&gt;
-&lt;li&gt;_匹配单个字符&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;h5 id=&#34;正则表达式&#34;&gt;正则表达式&lt;/h5&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;SELECT * FROM news WHERE title REGEXP &amp;quot;新闻1|新闻2&amp;quot;;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;1.注意与like的区别&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;搜索两个串之一（或者为这个串，或者为另一个串），使用|,例如1|2&lt;/li&gt;
-&lt;li&gt;匹配任何单一字符[],例如[1,2,3]是匹配1或2或3&lt;/li&gt;
-&lt;li&gt;匹配特殊字符，必须用\为前导，例如\.&lt;/li&gt;
-&lt;li&gt;重复元素&lt;/li&gt;
-&lt;li&gt;^有两种用法。在集合中（用[和]定义），用它 来否定该集合，否则，用来指串的开始处。[0-9\.]一个数（包括以小数点开始的数）&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;table&gt;
-&lt;thead&gt;
-&lt;tr&gt;
-&lt;th&gt;字符&lt;/th&gt;
-&lt;th&gt;说明&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;
-
-&lt;tbody&gt;
-&lt;tr&gt;
-&lt;td&gt;*&lt;/td&gt;
-&lt;td&gt;0个或多个匹配&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td&gt;+&lt;/td&gt;
-&lt;td&gt;1个或多个匹配&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td&gt;？&lt;/td&gt;
-&lt;td&gt;0个或1个匹配&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td&gt;｛n｝&lt;/td&gt;
-&lt;td&gt;指定数目的匹配&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td&gt;｛n,｝&lt;/td&gt;
-&lt;td&gt;不少于指定数目的匹配&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td&gt;{n,m}&lt;/td&gt;
-&lt;td&gt;匹配数目的范围（m不超过255）&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td&gt;^&lt;/td&gt;
-&lt;td&gt;文本的开始&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td&gt;$&lt;/td&gt;
-&lt;td&gt;文本的结尾&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;
-
-&lt;h4 id=&#34;计算字段&#34;&gt;计算字段&lt;/h4&gt;
-
-&lt;h5 id=&#34;拼接&#34;&gt;拼接&lt;/h5&gt;
-
-&lt;p&gt;拼接（concatenate） 将值联结到一起构成单个值。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;SELECT CONCAT(&amp;quot;title:&amp;quot;,title,&amp;quot;,id:&amp;quot;,id) AS test2 FROM news LIMIT 0,10;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;trim(),ltrim(),rtrim(),去掉串左右空格
-as 别名
-计算+ - * /&lt;/p&gt;
-
-&lt;h5 id=&#34;函数&#34;&gt;函数&lt;/h5&gt;
-
-&lt;h5 id=&#34;聚集函数&#34;&gt;聚集函数&lt;/h5&gt;
-
-&lt;table&gt;
-&lt;thead&gt;
-&lt;tr&gt;
-&lt;th&gt;函数&lt;/th&gt;
-&lt;th&gt;说明&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;
-
-&lt;tbody&gt;
-&lt;tr&gt;
-&lt;td&gt;AVG()&lt;/td&gt;
-&lt;td&gt;返回某列的平均值&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td&gt;COUNT()&lt;/td&gt;
-&lt;td&gt;返回某列的行数&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td&gt;MAX()&lt;/td&gt;
-&lt;td&gt;返回某列的最大值&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td&gt;MIN()&lt;/td&gt;
-&lt;td&gt;返回某列的最小值&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td&gt;SUM()&lt;/td&gt;
-&lt;td&gt;返回某列值之和&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;
-
-&lt;p&gt;&lt;strong&gt;&lt;em&gt;注&lt;/em&gt;&lt;/strong&gt;
-聚集函数中使用 DISTINCT&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;SELECT COUNT(DISTINCT title) FROM news;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h5 id=&#34;分组&#34;&gt;分组&lt;/h5&gt;
-
-&lt;p&gt;&lt;strong&gt;&lt;em&gt;格式&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;SELECT type, COUNT(*) AS num FROM news GROUP BY type;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;strong&gt;&lt;em&gt;筛选&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;SELECT *, COUNT(title) AS num FROM news GROUP BY TYPE HAVING num &amp;gt; 2;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;table&gt;
-&lt;thead&gt;
-&lt;tr&gt;
-&lt;th&gt;子句&lt;/th&gt;
-&lt;th&gt;说明&lt;/th&gt;
-&lt;th&gt;是否必须使用&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;
-
-&lt;tbody&gt;
-&lt;tr&gt;
-&lt;td&gt;SELECT&lt;/td&gt;
-&lt;td&gt;要返回的列或表达式&lt;/td&gt;
-&lt;td&gt;是&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td&gt;FROM&lt;/td&gt;
-&lt;td&gt;从中检索数据的表&lt;/td&gt;
-&lt;td&gt;仅在从表选择数据时使用&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td&gt;WHERE&lt;/td&gt;
-&lt;td&gt;行级过滤&lt;/td&gt;
-&lt;td&gt;否&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td&gt;GROUP BY&lt;/td&gt;
-&lt;td&gt;分组说明&lt;/td&gt;
-&lt;td&gt;仅在按组计算聚集时使用&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td&gt;HAVING&lt;/td&gt;
-&lt;td&gt;组级过滤&lt;/td&gt;
-&lt;td&gt;否&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td&gt;ORDER BY&lt;/td&gt;
-&lt;td&gt;输出排序顺序&lt;/td&gt;
-&lt;td&gt;否&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td&gt;LIMIT&lt;/td&gt;
-&lt;td&gt;要检索的行数&lt;/td&gt;
-&lt;td&gt;否&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;
-
-&lt;h5 id=&#34;子查询&#34;&gt;子查询&lt;/h5&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;SELECT * FROM theme WHERE id IN (SELECT id FROM news WHERE create_time &amp;gt; &amp;quot;2019-01-12&amp;quot;);
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h4 id=&#34;联结&#34;&gt;联结&lt;/h4&gt;
-
-&lt;p&gt;1.内部联结&lt;/p&gt;
-
-&lt;p&gt;它基于两个表之间的 相等测试。这种联结也称为内部联结。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;SELECT * FROM movie_arrange,films WHERE movie_arrange.id = films.id;
-//推荐
-SELECT * FROM movie_arrange INNER JOIN films ON movie_arrange.id = films.id;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;2.外部联结
-许多联结将一个表中的行与另一个表中的行相关联。但有时候会需 要包含没有关联行的那些行。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;//左外连接，左表所有行保留
-SELECT * FROM movie_arrange LEFT OUTER JOIN films ON movie_arrange.id = films.id;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h4 id=&#34;组合查询&#34;&gt;组合查询&lt;/h4&gt;
-
-&lt;p&gt;MySQL也允许执行多个查询（多条SELECT语句），并将结果作为单个 查询结果集返回。这些组合查询通常称为并（union）或复合查询&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;SELECT cinema_id, movie_name FROM movie_arrange
-UNION
-SELECT id, name FROM films
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;strong&gt;&lt;em&gt;注&lt;/em&gt;&lt;/strong&gt;
-UNION 会自动取消重复行，如果想返回所有匹配行，可使用UNION ALL&lt;/p&gt;
-
-&lt;h4 id=&#34;全文搜索&#34;&gt;全文搜索&lt;/h4&gt;
-
-&lt;p&gt;为了进行全文本搜索，必须索引被搜索的列，而且要随着数据的改 变不断地重新索引。&lt;/p&gt;
-
-&lt;p&gt;全文搜索会将行中内容使用分词器进行拆分，并建立索引，&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;建表时加入
-FULLTEXT (title,body)
-查询时，Match()指定被搜索的列，Against()指定要使用的搜索表达式。
-SELECT * FROM articles 
-WHERE MATCH (title,body)
-AGAINST (&#39;database&#39; IN NATURAL LANGUAGE MODE);
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;参考：
-&lt;a href=&#34;https://blog.csdn.net/bbirdsky/article/details/45368897&#34; rel=&#34;nofollow noreferrer&#34; target=&#34;_blank&#34;&gt;https://blog.csdn.net/bbirdsky/article/details/45368897&lt;/a&gt;&lt;/p&gt;
-
-&lt;h4 id=&#34;插入-更新-删除&#34;&gt;插入 更新 删除&lt;/h4&gt;
-
-&lt;p&gt;&lt;strong&gt;&lt;em&gt;插入&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;INSERT INTO articles (title,body) VALUES
-(&#39;How To Use MySQL Well&#39;,&#39;After you went...&#39;),
- (&#39;MySQL Tutorial&#39;,&#39;DBMS stands for DataBase ...&#39;);
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;strong&gt;&lt;em&gt;更新&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;UPDATE articles SET title = &#39;def&#39; WHERE id = 1;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;strong&gt;&lt;em&gt;删除&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;DELETE FROM articles WHERE id = 7;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;strong&gt;&lt;em&gt;注&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;如果省略了WHERE子句，则UPDATE或DELETE将被应用到表中 所有的行&lt;/p&gt;
-
-&lt;h4 id=&#34;表操作&#34;&gt;表操作&lt;/h4&gt;
-
-&lt;p&gt;&lt;strong&gt;&lt;em&gt;创建表&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;CREATE TABLE articles (
-     id INT UNSIGNED AUTO_INCREMENT NOT NULL PRIMARY KEY,
-     title VARCHAR(200) DEFAULT &#39;no title&#39;,
-     body TEXT,
-     FULLTEXT (title,body)
-) ENGINE=INNODB;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;strong&gt;&lt;em&gt;更新表&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;ALTER TABLE articles ADD score CHAR(2);
-ALTER TABLE articles DROP score;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;strong&gt;&lt;em&gt;删除表&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;DROP TABLE articles
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;strong&gt;&lt;em&gt;重命名表&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;RENAME TABLE articles TO articles2;
-&lt;/code&gt;&lt;/pre&gt;
 </description>
     </item>
     

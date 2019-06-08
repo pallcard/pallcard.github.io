@@ -9,9 +9,9 @@
   <meta name="description" content="hust研一">
   <meta name="keywords" content="Java,博客">
   
-  <link rel="prev" href="https://pallcard.github.io/2019/algorithm007/" />
-  <link rel="next" href="https://pallcard.github.io/2019/springboot%E5%85%A5%E9%97%A8/" />
-  <link rel="canonical" href="https://pallcard.github.io/2019/algorithm008/" />
+  <link rel="prev" href="https://pallcard.github.io/2019/algorithm008/" />
+  <link rel="next" href="https://pallcard.github.io/2019/springboot%E5%90%AF%E5%8A%A8%E7%B1%BB/" />
+  <link rel="canonical" href="https://pallcard.github.io/2019/springboot%E5%85%A5%E9%97%A8/" />
   <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
@@ -22,10 +22,10 @@
   <title>
        
        
-           算法008 | 刘科个人博客
+           SpringBoot入门 | 刘科个人博客
        
   </title>
-  <meta name="title" content="算法008 | 刘科个人博客">
+  <meta name="title" content="SpringBoot入门 | 刘科个人博客">
     
   
   <link rel="stylesheet" href="/font/iconfont.css">
@@ -44,9 +44,9 @@
          "@id": "https:\/\/pallcard.github.io\/"
     },
     "articleSection" : "posts",
-    "name" : "算法008",
-    "headline" : "算法008",
-    "description" : "public class Question008 { public static void main(String[] args) { Scanner sc = new Scanner(System.in); int m = sc.nextInt(); int n = sc.nextInt();\n int [][] array = new int [m][n]; for (int i = 0; i \x26lt; m; i\x2b\x2b) { for (int j = 0; j \x26lt; n; j\x2b\x2b) { array[i][j] = -1; } } int x = 0, y = 0; int count = 1; \/\/ 右1 下2 左3 上4 int last_t = 1; while (count \x26lt;= m*n) { array[x][y] = count\x2b\x2b; if(last_t == 1) { if (y\x2b1\x26lt;n \x26amp;\x26amp; array[x][y\x2b1] \x26lt; 0){ y\x2b\x2b; } else { last_t = 2; if (x\x2b1 \x26lt; m \x26amp;\x26amp; array[x\x2b1][y] \x26lt; 0) { x\x2b\x2b; }else { break; } } \/\/下 } else if (last_t == 2) { if(x\x2b1 \x26lt; m \x26amp;\x26amp; array[x\x2b1][y] \x26lt; 0) { x\x2b\x2b; } else { last_t = 3; if (y-1 \x26gt;= 0 \x26amp;\x26amp; array[x][y-1] \x26lt; 0) { y--; } else { break; } } \/\/左 } else if (last_t == 3) { if(y-1 \x26gt;= 0 \x26amp;\x26amp; array[x][y-1] \x26lt; 0) { y--; } else { last_t = 4; if (x-1 \x26gt;= 0 \x26amp;\x26amp; array[x-1][y] \x26lt; 0) { x--; } else { break; } } } \/\/上 else { if(x-1 \x26gt;= 0 \x26amp;\x26amp; array[x-1][y] \x26lt; 0) { x--; } else { last_t = 1; if (y\x2b1 \x26lt; n \x26amp;\x26amp; array[x][y\x2b1] \x26lt; 0) { y\x2b\x2b; } else { break; } } } } for (int i = 0; i \x26lt; m; i\x2b\x2b) { for (int j = 0; j \x26lt; n; j\x2b\x2b) { System.",
+    "name" : "SpringBoot入门",
+    "headline" : "SpringBoot入门",
+    "description" : "创建工程 使用IDEA，按照提示创建即可。\n修改Banner 在resources目录下创建banner.txt文件，改文件用于指定banner，文字生成banner的网址：http:\/\/patorjk.com\/software\/taag。\n${AnsiColor.BLUE} .____ ____ __. | | | |\/ _| | | | \x26lt; | |___| | \\ |_______ \\____|__ \\ \\\/ \\\/ -----版本号-----${spring-boot.version}  说明： ${AnsiColor.BLUE} 表示Banner文字的颜色 ${spring-boot.version} 当前使用的SpringBoot版本\n创建Controller类 @Controller public class HelloWorld { @RequestMapping(value = \x26quot;\/hello\x26quot;,method = RequestMethod.GET) @ResponseBody public String hello(){ return \x26quot;Hello Spring Boot\x26quot;; } }  访问：http:\/\/localhost:8080\/hello，即可以看到Hello Spring Boot 另外一种注解方式\n@RestController public class HelloWorld { @GetMapping(\x26quot;\/hello\x26quot;) public String hello(){ return \x26quot;Hello Spring Boot\x26quot;; } }  说明 * @RestController：处理http请求：等同于@Controller\x2b@ResponseBody * @GetMapping：@RequestMapping以get请求的简写",
     "inLanguage" : "zh-CN",
     "author" : "刘科",
     "creator" : "刘科",
@@ -54,11 +54,11 @@
     "accountablePerson" : "刘科",
     "copyrightHolder" : "刘科",
     "copyrightYear" : "2019",
-    "datePublished": "2019-06-05 20:40:17 \x2b0800 CST",
-    "dateModified" : "2019-06-05 20:40:17 \x2b0800 CST",
-    "url" : "https:\/\/pallcard.github.io\/2019\/algorithm008\/",
-    "wordCount" : "256",
-    "keywords" : [ "Algorithm","Java","总数", "刘科个人博客"]
+    "datePublished": "2019-06-08 10:18:29 \x2b0800 CST",
+    "dateModified" : "2019-06-08 10:18:29 \x2b0800 CST",
+    "url" : "https:\/\/pallcard.github.io\/2019\/springboot%E5%85%A5%E9%97%A8\/",
+    "wordCount" : "96",
+    "keywords" : [ "SpringBoot","总数", "刘科个人博客"]
 }
 </script>
 
@@ -116,16 +116,16 @@
       		
 <article class="post-warp" itemscope itemtype="http://schema.org/Article">
     <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">算法008</h1>
+        <h1 class="post-title" itemprop="name headline">SpringBoot入门</h1>
         <div class="post-meta">
                 Written by <a itemprop="name" href="https://pallcard.github.io/" rel="author">刘科</a> with ♥ 
                 <span class="post-time">
-                on <time datetime=2019-06-05 itemprop="datePublished">June 5, 2019</time>
+                on <time datetime=2019-06-08 itemprop="datePublished">June 8, 2019</time>
                 </span>
                 in
                 <i class="iconfont icon-folder"></i>
                 <span class="post-category">
-                        <a href="https://pallcard.github.io/categories/algorithm/"> Algorithm </a>
+                        <a href="https://pallcard.github.io/categories/springboot/"> SpringBoot </a>
                         
                 </span>
         </div>
@@ -146,84 +146,72 @@
           
           
 
-          <p>public class Question008 {
-    public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-        int m = sc.nextInt();
-        int n = sc.nextInt();</p>
+          
 
-<pre><code>    int [][] array = new int [m][n];
-    for (int i = 0; i &lt; m; i++) {
-        for (int j = 0; j &lt; n; j++) {
-            array[i][j] = -1;
-        }
-    }
-    int x = 0, y = 0;
-    int count = 1;
-    // 右1 下2 左3 上4
-    int last_t = 1;
-    while (count &lt;= m*n) {
-        array[x][y] = count++;
-        if(last_t == 1) {
-            if (y+1&lt;n &amp;&amp; array[x][y+1] &lt; 0){
-                y++;
-            } else {
-                last_t = 2;
-                if (x+1 &lt; m &amp;&amp; array[x+1][y] &lt; 0) {
-                    x++;
-                }else {
-                    break;
-                }
-            }
-            //下
-        } else if (last_t == 2) {
-            if(x+1 &lt; m &amp;&amp; array[x+1][y] &lt; 0) {
-                x++;
-            } else {
-                last_t = 3;
-                if (y-1 &gt;= 0 &amp;&amp; array[x][y-1] &lt; 0) {
-                    y--;
-                } else {
-                    break;
-                }
-            }
-            //左
-        } else if (last_t == 3) {
-            if(y-1 &gt;= 0 &amp;&amp; array[x][y-1] &lt; 0) {
-                y--;
-            } else {
-                last_t = 4;
-                if (x-1 &gt;= 0 &amp;&amp; array[x-1][y] &lt; 0) {
-                    x--;
-                } else {
-                    break;
-                }
-            }
-        }
-        //上
-        else {
-            if(x-1 &gt;= 0  &amp;&amp; array[x-1][y] &lt; 0) {
-                x--;
-            } else {
-                last_t = 1;
-                if (y+1 &lt; n  &amp;&amp; array[x][y+1] &lt; 0) {
-                    y++;
-                } else {
-                    break;
-                }
-            }
-        }
-    }
-    for (int i = 0; i &lt; m; i++) {
-        for (int j = 0; j &lt; n; j++) {
-            System.out.print(array[i][j]+&quot;\t&quot;);
-        }
-        System.out.println();
+<h5 id="创建工程">创建工程</h5>
+
+<p>使用IDEA，按照提示创建即可。</p>
+
+<h5 id="修改banner">修改Banner</h5>
+
+<p>在resources目录下创建banner.txt文件，改文件用于指定banner，文字生成banner的网址：<a href="http://patorjk.com/software/taag。" rel="nofollow noreferrer" target="_blank">http://patorjk.com/software/taag。</a></p>
+
+<pre><code class="language-java">${AnsiColor.BLUE}
+.____     ____  __.
+|    |   |    |/ _|
+|    |   |      &lt;  
+|    |___|    |  \ 
+|_______ \____|__ \
+        \/       \/
+-----版本号-----${spring-boot.version}      
+</code></pre>
+
+<p>说明：
+${AnsiColor.BLUE}   表示Banner文字的颜色
+${spring-boot.version}  当前使用的SpringBoot版本</p>
+
+<h5 id="创建controller类">创建Controller类</h5>
+
+<pre><code class="language-java">@Controller
+public class HelloWorld {
+    @RequestMapping(value = &quot;/hello&quot;,method = RequestMethod.GET)
+    @ResponseBody
+    public String hello(){
+        return &quot;Hello Spring Boot&quot;;
     }
 }
 </code></pre>
 
-<p>}</p>
+<p>访问：<a href="http://localhost:8080/hello，即可以看到Hello" rel="nofollow noreferrer" target="_blank">http://localhost:8080/hello，即可以看到Hello</a> Spring Boot
+<strong><em>另外一种注解方式</em></strong></p>
+
+<pre><code class="language-java">@RestController
+public class HelloWorld {
+    @GetMapping(&quot;/hello&quot;)
+    public String hello(){
+        return &quot;Hello Spring Boot&quot;;
+    }
+}
+</code></pre>
+
+<p>说明
+* @RestController：处理http请求：等同于@Controller+@ResponseBody
+* @GetMapping：@RequestMapping以get请求的简写</p>
+
+<p><strong><em>url的其他形式</em></strong></p>
+
+<pre><code class="language-java">@RestController
+@RequestMapping(&quot;/test&quot;)
+public class HelloWorld {
+    @GetMapping(value={&quot;/hello&quot;,&quot;/hi&quot;})
+    public String hello(){
+        return &quot;Hello Spring Boot&quot;;
+    }
+}
+</code></pre>
+
+<p>参考：<a href="https://zed058.cn" rel="nofollow noreferrer" target="_blank">https://zed058.cn</a>
+文档：<a href="https://docs.spring.io/spring-boot/docs/2.1.4.RELEASE/reference/htmlsingle/" rel="nofollow noreferrer" target="_blank">https://docs.spring.io/spring-boot/docs/2.1.4.RELEASE/reference/htmlsingle/</a></p>
 
     </div>
 
@@ -238,7 +226,7 @@
              
             <p class="copyright-item">
                     <span>Link:</span>
-                    <a href=https://pallcard.github.io/2019/algorithm008/>https://pallcard.github.io/2019/algorithm008/</span>
+                    <a href=https://pallcard.github.io/2019/springboot%E5%85%A5%E9%97%A8/>https://pallcard.github.io/2019/springboot%E5%85%A5%E9%97%A8/</span>
             </p>
             
             
@@ -250,11 +238,8 @@
             <section>
             <i class="iconfont icon-tag"></i>Tag(s): 
             
-            <span class="tag"><a href="https://pallcard.github.io/tags/algorithm/">
-                    #Algorithm</a></span>
-            
-            <span class="tag"><a href="https://pallcard.github.io/tags/java/">
-                    #Java</a></span>
+            <span class="tag"><a href="https://pallcard.github.io/tags/springboot/">
+                    #SpringBoot</a></span>
             
             <span class="tag"><a href="https://pallcard.github.io/tags/%E6%80%BB%E6%95%B0/">
                     #总数</a></span>
@@ -269,10 +254,10 @@
 
     <div class="post-nav">
         
-        <a href="https://pallcard.github.io/2019/algorithm007/" class="prev" rel="prev" title="算法007"><i class="iconfont icon-left"></i>&nbsp;算法007</a>
+        <a href="https://pallcard.github.io/2019/algorithm008/" class="prev" rel="prev" title="算法008"><i class="iconfont icon-left"></i>&nbsp;算法008</a>
          
         
-        <a href="https://pallcard.github.io/2019/springboot%E5%85%A5%E9%97%A8/" class="next" rel="next" title="SpringBoot入门">SpringBoot入门&nbsp;<i class="iconfont icon-right"></i></a>
+        <a href="https://pallcard.github.io/2019/springboot%E5%90%AF%E5%8A%A8%E7%B1%BB/" class="next" rel="next" title="SpringBoot启动类">SpringBoot启动类&nbsp;<i class="iconfont icon-right"></i></a>
         
     </div>
 

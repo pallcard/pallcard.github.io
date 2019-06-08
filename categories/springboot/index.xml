@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>SpringBoot on 刘科个人博客</title>
+    <link>https://pallcard.github.io/categories/springboot/</link>
+    <description>Recent content in SpringBoot on 刘科个人博客</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-CN</language>
+    <copyright>All rights reserved - 2019</copyright>
+    <lastBuildDate>Sat, 08 Jun 2019 17:49:19 +0800</lastBuildDate>
+    
+	<atom:link href="https://pallcard.github.io/categories/springboot/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>SpringBoot之Swagger</title>
+      <link>https://pallcard.github.io/2019/springboot%E4%B9%8Bswagger/</link>
+      <pubDate>Sat, 08 Jun 2019 17:49:19 +0800</pubDate>
+      
+      <guid>https://pallcard.github.io/2019/springboot%E4%B9%8Bswagger/</guid>
+      <description>Swagger框架 描述和测试API接口,自动生成API接口文档。
+1.添加依赖 &amp;lt;dependency&amp;gt; &amp;lt;groupId&amp;gt;io.springfox&amp;lt;/groupId&amp;gt; &amp;lt;artifactId&amp;gt;springfox-swagger2&amp;lt;/artifactId&amp;gt; &amp;lt;version&amp;gt;2.9.2&amp;lt;/version&amp;gt; &amp;lt;/dependency&amp;gt; &amp;lt;dependency&amp;gt; &amp;lt;groupId&amp;gt;io.springfox&amp;lt;/groupId&amp;gt; &amp;lt;artifactId&amp;gt;springfox-swagger-ui&amp;lt;/artifactId&amp;gt; &amp;lt;version&amp;gt;2.9.2&amp;lt;/version&amp;gt; &amp;lt;/dependency&amp;gt; &amp;lt;!--lombok依赖--&amp;gt; &amp;lt;dependency&amp;gt; &amp;lt;groupId&amp;gt;org.projectlombok&amp;lt;/groupId&amp;gt; &amp;lt;artifactId&amp;gt;lombok&amp;lt;/artifactId&amp;gt; &amp;lt;version&amp;gt;1.18.8&amp;lt;/version&amp;gt; &amp;lt;scope&amp;gt;provided&amp;lt;/scope&amp;gt; &amp;lt;/dependency&amp;gt;  2.Swagger配置 在resources目录下新建application.yml文件，添加如下配置
+swagger: title: SpringBoot学习 description: SpringBoot学习 version: 1.0.0 name: lk url: https://pallcard.github.io email: 1250585541@qq.com  新建SwaggerConfig文件
+@Configuration @EnableWebMvc @EnableSwagger2 @ConfigurationProperties(prefix = &amp;quot;swagger&amp;quot;) @Data //lombok @ComponentScan(basePackages = {&amp;quot;cn.wishhust.demo.controller&amp;quot;}) public class SwaggerConfig { private String title; private String description; private String version; private String name; private String url; private String email; @Bean public Docket customDocket() { return new Docket(DocumentationType.</description>
+    </item>
+    
+    <item>
+      <title>SpringBoot传递参数</title>
+      <link>https://pallcard.github.io/2019/springboot%E4%BC%A0%E9%80%92%E5%8F%82%E6%95%B0/</link>
+      <pubDate>Sat, 08 Jun 2019 17:08:34 +0800</pubDate>
+      
+      <guid>https://pallcard.github.io/2019/springboot%E4%BC%A0%E9%80%92%E5%8F%82%E6%95%B0/</guid>
+      <description>url传参 1.get方式 // 访问：http://localhost:8080/test/get/xxx @GetMapping(&amp;quot;/get/{name}&amp;quot;) public String get(@PathVariable(&amp;quot;name&amp;quot;) String name2){ System.out.println(&amp;quot;name: &amp;quot;+ name2); return &amp;quot;Hi &amp;quot;+ name2; } // 访问：http://localhost:8080/test/get2?name=yyy @GetMapping(&amp;quot;/get2&amp;quot;) // 请求参数名字与方法中的形参一致，可以省略@RequestParam // public String get2(String name2) { public String get2(@RequestParam(&amp;quot;name&amp;quot;) String name2) { System.out.println(&amp;quot;name: &amp;quot;+ name2); return &amp;quot;Hi &amp;quot;+ name2; } @GetMapping(&amp;quot;/get3&amp;quot;) //给一个默认值或者required = false public String get3(@RequestParam(value = &amp;quot;name&amp;quot;, defaultValue = &amp;quot;admin&amp;quot;) String name) { System.out.println(&amp;quot;name: &amp;quot;+ name); return &amp;quot;Hi &amp;quot;+ name; }  2.post方式 @PostMapping(&amp;quot;/post&amp;quot;) //@RequestParam同get public String post(@RequestParam(&amp;quot;username&amp;quot;) String name, Integer age){ log.</description>
+    </item>
+    
+    <item>
+      <title>SpringBoot启动类</title>
+      <link>https://pallcard.github.io/2019/springboot%E5%90%AF%E5%8A%A8%E7%B1%BB/</link>
+      <pubDate>Sat, 08 Jun 2019 10:53:04 +0800</pubDate>
+      
+      <guid>https://pallcard.github.io/2019/springboot%E5%90%AF%E5%8A%A8%E7%B1%BB/</guid>
+      <description>1.POM文件 整个项目的pom文件中（pom.xml）,可以看到该项目的parent，通过点击标签，可以进入parent中，这样可以看到项目的最终的parent。
+&amp;lt;parent&amp;gt; &amp;lt;groupId&amp;gt;org.springframework.boot&amp;lt;/groupId&amp;gt; &amp;lt;artifactId&amp;gt;spring-boot-starter-parent&amp;lt;/artifactId&amp;gt; &amp;lt;version&amp;gt;2.1.5.RELEASE&amp;lt;/version&amp;gt; &amp;lt;relativePath/&amp;gt; &amp;lt;!-- lookup parent from repository --&amp;gt; &amp;lt;/parent&amp;gt;  2.启动器 &amp;lt;dependencies&amp;gt; &amp;lt;dependency&amp;gt; &amp;lt;groupId&amp;gt;org.springframework.boot&amp;lt;/groupId&amp;gt; &amp;lt;artifactId&amp;gt;spring-boot-starter-web&amp;lt;/artifactId&amp;gt; &amp;lt;/dependency&amp;gt; &amp;lt;dependency&amp;gt; &amp;lt;groupId&amp;gt;org.springframework.boot&amp;lt;/groupId&amp;gt; &amp;lt;artifactId&amp;gt;spring-boot-starter-test&amp;lt;/artifactId&amp;gt; &amp;lt;scope&amp;gt;test&amp;lt;/scope&amp;gt; &amp;lt;/dependency&amp;gt; &amp;lt;/dependencies&amp;gt;  注： spring-boot-starter：spring-boot场景启动器，帮我们导入了web模块正常运行所依赖的组件； SpringBoot启动器文档：https://docs.spring.io/spring-boot/docs/2.1.5.RELEASE/reference/htmlsingle/#using-boot-starter
+3.主程序类 @SpringBootApplication public class DemoApplication { public static void main(String[] args) { SpringApplication.run(DemoApplication.class, args); } }   @SpringBootApplication：用来标注这个类为SpringBoot的主配置类，该注解是一个组合注解。 将主配置类（@SpringBootApplication标注的类）的所在包及下面所有子包里面的所有组件扫描到Spring容器； Spring Boot在启动的时候从类路径下的META-INF/spring.factories中获取EnableAutoConfiguration指定的值，将这些值作为自动配置类导入到容器中，自动配置类就生效，帮我们进行自动配置工作； java @Target({ElementType.TYPE}) @Retention(RetentionPolicy.RUNTIME) @Documented @Inherited @SpringBootConfiguration @EnableAutoConfiguration @ComponentScan( excludeFilters = {@Filter( type = FilterType.CUSTOM, classes = {TypeExcludeFilter.</description>
+    </item>
+    
+    <item>
+      <title>SpringBoot入门</title>
+      <link>https://pallcard.github.io/2019/springboot%E5%85%A5%E9%97%A8/</link>
+      <pubDate>Sat, 08 Jun 2019 10:18:29 +0800</pubDate>
+      
+      <guid>https://pallcard.github.io/2019/springboot%E5%85%A5%E9%97%A8/</guid>
+      <description>创建工程 使用IDEA，按照提示创建即可。
+修改Banner 在resources目录下创建banner.txt文件，改文件用于指定banner，文字生成banner的网址：http://patorjk.com/software/taag。
+${AnsiColor.BLUE} .____ ____ __. | | | |/ _| | | | &amp;lt; | |___| | \ |_______ \____|__ \ \/ \/ -----版本号-----${spring-boot.version}  说明： ${AnsiColor.BLUE} 表示Banner文字的颜色 ${spring-boot.version} 当前使用的SpringBoot版本
+创建Controller类 @Controller public class HelloWorld { @RequestMapping(value = &amp;quot;/hello&amp;quot;,method = RequestMethod.GET) @ResponseBody public String hello(){ return &amp;quot;Hello Spring Boot&amp;quot;; } }  访问：http://localhost:8080/hello，即可以看到Hello Spring Boot 另外一种注解方式
+@RestController public class HelloWorld { @GetMapping(&amp;quot;/hello&amp;quot;) public String hello(){ return &amp;quot;Hello Spring Boot&amp;quot;; } }  说明 * @RestController：处理http请求：等同于@Controller+@ResponseBody * @GetMapping：@RequestMapping以get请求的简写</description>
+    </item>
+    
+  </channel>
+</rss>

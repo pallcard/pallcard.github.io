@@ -9,9 +9,9 @@
   <meta name="description" content="hust研一">
   <meta name="keywords" content="Java,博客">
   
-  <link rel="prev" href="https://pallcard.github.io/2019/algorithm007/" />
-  <link rel="next" href="https://pallcard.github.io/2019/springboot%E5%85%A5%E9%97%A8/" />
-  <link rel="canonical" href="https://pallcard.github.io/2019/algorithm008/" />
+  <link rel="prev" href="https://pallcard.github.io/2019/springboot%E5%90%AF%E5%8A%A8%E7%B1%BB/" />
+  <link rel="next" href="https://pallcard.github.io/2019/springboot%E4%B9%8Bswagger/" />
+  <link rel="canonical" href="https://pallcard.github.io/2019/springboot%E4%BC%A0%E9%80%92%E5%8F%82%E6%95%B0/" />
   <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
@@ -22,10 +22,10 @@
   <title>
        
        
-           算法008 | 刘科个人博客
+           SpringBoot传递参数 | 刘科个人博客
        
   </title>
-  <meta name="title" content="算法008 | 刘科个人博客">
+  <meta name="title" content="SpringBoot传递参数 | 刘科个人博客">
     
   
   <link rel="stylesheet" href="/font/iconfont.css">
@@ -44,9 +44,9 @@
          "@id": "https:\/\/pallcard.github.io\/"
     },
     "articleSection" : "posts",
-    "name" : "算法008",
-    "headline" : "算法008",
-    "description" : "public class Question008 { public static void main(String[] args) { Scanner sc = new Scanner(System.in); int m = sc.nextInt(); int n = sc.nextInt();\n int [][] array = new int [m][n]; for (int i = 0; i \x26lt; m; i\x2b\x2b) { for (int j = 0; j \x26lt; n; j\x2b\x2b) { array[i][j] = -1; } } int x = 0, y = 0; int count = 1; \/\/ 右1 下2 左3 上4 int last_t = 1; while (count \x26lt;= m*n) { array[x][y] = count\x2b\x2b; if(last_t == 1) { if (y\x2b1\x26lt;n \x26amp;\x26amp; array[x][y\x2b1] \x26lt; 0){ y\x2b\x2b; } else { last_t = 2; if (x\x2b1 \x26lt; m \x26amp;\x26amp; array[x\x2b1][y] \x26lt; 0) { x\x2b\x2b; }else { break; } } \/\/下 } else if (last_t == 2) { if(x\x2b1 \x26lt; m \x26amp;\x26amp; array[x\x2b1][y] \x26lt; 0) { x\x2b\x2b; } else { last_t = 3; if (y-1 \x26gt;= 0 \x26amp;\x26amp; array[x][y-1] \x26lt; 0) { y--; } else { break; } } \/\/左 } else if (last_t == 3) { if(y-1 \x26gt;= 0 \x26amp;\x26amp; array[x][y-1] \x26lt; 0) { y--; } else { last_t = 4; if (x-1 \x26gt;= 0 \x26amp;\x26amp; array[x-1][y] \x26lt; 0) { x--; } else { break; } } } \/\/上 else { if(x-1 \x26gt;= 0 \x26amp;\x26amp; array[x-1][y] \x26lt; 0) { x--; } else { last_t = 1; if (y\x2b1 \x26lt; n \x26amp;\x26amp; array[x][y\x2b1] \x26lt; 0) { y\x2b\x2b; } else { break; } } } } for (int i = 0; i \x26lt; m; i\x2b\x2b) { for (int j = 0; j \x26lt; n; j\x2b\x2b) { System.",
+    "name" : "SpringBoot传递参数",
+    "headline" : "SpringBoot传递参数",
+    "description" : "url传参 1.get方式 \/\/ 访问：http:\/\/localhost:8080\/test\/get\/xxx @GetMapping(\x26quot;\/get\/{name}\x26quot;) public String get(@PathVariable(\x26quot;name\x26quot;) String name2){ System.out.println(\x26quot;name: \x26quot;\x2b name2); return \x26quot;Hi \x26quot;\x2b name2; } \/\/ 访问：http:\/\/localhost:8080\/test\/get2?name=yyy @GetMapping(\x26quot;\/get2\x26quot;) \/\/ 请求参数名字与方法中的形参一致，可以省略@RequestParam \/\/ public String get2(String name2) { public String get2(@RequestParam(\x26quot;name\x26quot;) String name2) { System.out.println(\x26quot;name: \x26quot;\x2b name2); return \x26quot;Hi \x26quot;\x2b name2; } @GetMapping(\x26quot;\/get3\x26quot;) \/\/给一个默认值或者required = false public String get3(@RequestParam(value = \x26quot;name\x26quot;, defaultValue = \x26quot;admin\x26quot;) String name) { System.out.println(\x26quot;name: \x26quot;\x2b name); return \x26quot;Hi \x26quot;\x2b name; }  2.post方式 @PostMapping(\x26quot;\/post\x26quot;) \/\/@RequestParam同get public String post(@RequestParam(\x26quot;username\x26quot;) String name, Integer age){ log.",
     "inLanguage" : "zh-CN",
     "author" : "刘科",
     "creator" : "刘科",
@@ -54,11 +54,11 @@
     "accountablePerson" : "刘科",
     "copyrightHolder" : "刘科",
     "copyrightYear" : "2019",
-    "datePublished": "2019-06-05 20:40:17 \x2b0800 CST",
-    "dateModified" : "2019-06-05 20:40:17 \x2b0800 CST",
-    "url" : "https:\/\/pallcard.github.io\/2019\/algorithm008\/",
-    "wordCount" : "256",
-    "keywords" : [ "Algorithm","Java","总数", "刘科个人博客"]
+    "datePublished": "2019-06-08 17:08:34 \x2b0800 CST",
+    "dateModified" : "2019-06-08 17:08:34 \x2b0800 CST",
+    "url" : "https:\/\/pallcard.github.io\/2019\/springboot%E4%BC%A0%E9%80%92%E5%8F%82%E6%95%B0\/",
+    "wordCount" : "178",
+    "keywords" : [ "SpringBoot","总数", "刘科个人博客"]
 }
 </script>
 
@@ -116,16 +116,16 @@
       		
 <article class="post-warp" itemscope itemtype="http://schema.org/Article">
     <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">算法008</h1>
+        <h1 class="post-title" itemprop="name headline">SpringBoot传递参数</h1>
         <div class="post-meta">
                 Written by <a itemprop="name" href="https://pallcard.github.io/" rel="author">刘科</a> with ♥ 
                 <span class="post-time">
-                on <time datetime=2019-06-05 itemprop="datePublished">June 5, 2019</time>
+                on <time datetime=2019-06-08 itemprop="datePublished">June 8, 2019</time>
                 </span>
                 in
                 <i class="iconfont icon-folder"></i>
                 <span class="post-category">
-                        <a href="https://pallcard.github.io/categories/algorithm/"> Algorithm </a>
+                        <a href="https://pallcard.github.io/categories/springboot/"> SpringBoot </a>
                         
                 </span>
         </div>
@@ -146,84 +146,84 @@
           
           
 
-          <p>public class Question008 {
-    public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-        int m = sc.nextInt();
-        int n = sc.nextInt();</p>
+          
 
-<pre><code>    int [][] array = new int [m][n];
-    for (int i = 0; i &lt; m; i++) {
-        for (int j = 0; j &lt; n; j++) {
-            array[i][j] = -1;
-        }
+<h5 id="url传参">url传参</h5>
+
+<h6 id="1-get方式">1.get方式</h6>
+
+<pre><code class="language-java"> 	// 访问：http://localhost:8080/test/get/xxx
+    @GetMapping(&quot;/get/{name}&quot;)
+    public String get(@PathVariable(&quot;name&quot;) String name2){
+        System.out.println(&quot;name: &quot;+ name2);
+        return &quot;Hi &quot;+ name2;
     }
-    int x = 0, y = 0;
-    int count = 1;
-    // 右1 下2 左3 上4
-    int last_t = 1;
-    while (count &lt;= m*n) {
-        array[x][y] = count++;
-        if(last_t == 1) {
-            if (y+1&lt;n &amp;&amp; array[x][y+1] &lt; 0){
-                y++;
-            } else {
-                last_t = 2;
-                if (x+1 &lt; m &amp;&amp; array[x+1][y] &lt; 0) {
-                    x++;
-                }else {
-                    break;
-                }
-            }
-            //下
-        } else if (last_t == 2) {
-            if(x+1 &lt; m &amp;&amp; array[x+1][y] &lt; 0) {
-                x++;
-            } else {
-                last_t = 3;
-                if (y-1 &gt;= 0 &amp;&amp; array[x][y-1] &lt; 0) {
-                    y--;
-                } else {
-                    break;
-                }
-            }
-            //左
-        } else if (last_t == 3) {
-            if(y-1 &gt;= 0 &amp;&amp; array[x][y-1] &lt; 0) {
-                y--;
-            } else {
-                last_t = 4;
-                if (x-1 &gt;= 0 &amp;&amp; array[x-1][y] &lt; 0) {
-                    x--;
-                } else {
-                    break;
-                }
-            }
-        }
-        //上
-        else {
-            if(x-1 &gt;= 0  &amp;&amp; array[x-1][y] &lt; 0) {
-                x--;
-            } else {
-                last_t = 1;
-                if (y+1 &lt; n  &amp;&amp; array[x][y+1] &lt; 0) {
-                    y++;
-                } else {
-                    break;
-                }
-            }
-        }
+
+    // 访问：http://localhost:8080/test/get2?name=yyy
+    @GetMapping(&quot;/get2&quot;)
+    // 请求参数名字与方法中的形参一致，可以省略@RequestParam
+    // public String get2(String name2) {
+    public String get2(@RequestParam(&quot;name&quot;) String name2) {
+        System.out.println(&quot;name: &quot;+ name2);
+        return &quot;Hi &quot;+ name2;
     }
-    for (int i = 0; i &lt; m; i++) {
-        for (int j = 0; j &lt; n; j++) {
-            System.out.print(array[i][j]+&quot;\t&quot;);
-        }
-        System.out.println();
+
+    @GetMapping(&quot;/get3&quot;)
+    //给一个默认值或者required = false
+    public String get3(@RequestParam(value = &quot;name&quot;, defaultValue = &quot;admin&quot;) String name) {
+        System.out.println(&quot;name: &quot;+ name);
+        return &quot;Hi &quot;+ name;
     }
-}
 </code></pre>
 
-<p>}</p>
+<h6 id="2-post方式">2.post方式</h6>
+
+<pre><code class="language-java">    @PostMapping(&quot;/post&quot;)
+    //@RequestParam同get
+    public String post(@RequestParam(&quot;username&quot;) String name, Integer age){
+        log.info(&quot;name=&quot; + name+&quot;, age=&quot; + age);
+        return &quot;name=&quot; + name+&quot;, age=&quot; + age;
+    }
+    
+    @PostMapping(&quot;post2&quot;)
+    public String post2(HttpServletRequest request) {
+        ServletInputStream is = null;
+        StringBuilder sb = null;
+        try {
+            is = request.getInputStream();
+            sb = new StringBuilder();
+            byte[] buf = new byte[1024];
+            int len = 0;
+            while ((len = is.read(buf)) != -1){
+                sb.append(new String(buf,0,len));
+            }
+            System.out.println(sb.toString());
+            return sb.toString();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (is != null) {
+                    is.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return sb.toString();
+    }
+
+    @PostMapping(&quot;/post3&quot;)
+    public String post3(@RequestBody User user) {
+        log.info(user.toString());
+        return null;
+    }
+</code></pre>
+
+<p><strong><em>注</em></strong>
+* 把json作为参数传递,要用【RequestBody】</p>
+
+<p>参考：<a href="https://zed058.cn" rel="nofollow noreferrer" target="_blank">https://zed058.cn</a></p>
 
     </div>
 
@@ -238,7 +238,7 @@
              
             <p class="copyright-item">
                     <span>Link:</span>
-                    <a href=https://pallcard.github.io/2019/algorithm008/>https://pallcard.github.io/2019/algorithm008/</span>
+                    <a href=https://pallcard.github.io/2019/springboot%E4%BC%A0%E9%80%92%E5%8F%82%E6%95%B0/>https://pallcard.github.io/2019/springboot%E4%BC%A0%E9%80%92%E5%8F%82%E6%95%B0/</span>
             </p>
             
             
@@ -250,11 +250,8 @@
             <section>
             <i class="iconfont icon-tag"></i>Tag(s): 
             
-            <span class="tag"><a href="https://pallcard.github.io/tags/algorithm/">
-                    #Algorithm</a></span>
-            
-            <span class="tag"><a href="https://pallcard.github.io/tags/java/">
-                    #Java</a></span>
+            <span class="tag"><a href="https://pallcard.github.io/tags/springboot/">
+                    #SpringBoot</a></span>
             
             <span class="tag"><a href="https://pallcard.github.io/tags/%E6%80%BB%E6%95%B0/">
                     #总数</a></span>
@@ -269,10 +266,10 @@
 
     <div class="post-nav">
         
-        <a href="https://pallcard.github.io/2019/algorithm007/" class="prev" rel="prev" title="算法007"><i class="iconfont icon-left"></i>&nbsp;算法007</a>
+        <a href="https://pallcard.github.io/2019/springboot%E5%90%AF%E5%8A%A8%E7%B1%BB/" class="prev" rel="prev" title="SpringBoot启动类"><i class="iconfont icon-left"></i>&nbsp;SpringBoot启动类</a>
          
         
-        <a href="https://pallcard.github.io/2019/springboot%E5%85%A5%E9%97%A8/" class="next" rel="next" title="SpringBoot入门">SpringBoot入门&nbsp;<i class="iconfont icon-right"></i></a>
+        <a href="https://pallcard.github.io/2019/springboot%E4%B9%8Bswagger/" class="next" rel="next" title="SpringBoot之Swagger">SpringBoot之Swagger&nbsp;<i class="iconfont icon-right"></i></a>
         
     </div>
 
