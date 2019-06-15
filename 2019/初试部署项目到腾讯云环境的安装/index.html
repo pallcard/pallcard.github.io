@@ -46,7 +46,7 @@
     "articleSection" : "posts",
     "name" : "初试部署项目到腾讯云（环境的安装）",
     "headline" : "初试部署项目到腾讯云（环境的安装）",
-    "description" : "linux常用命令  ls：查看该目录下文件 pwd：查看文件目录 rm -f 文件名：删除文件 \/usr\/local\/mysql\/bin\/mysql -u root -p 登录mysql  第一步：jdk的安装 下载jdk后，解压报错（原因是选择接受协议的问题），输入如下命令：\nwget --no-check-certificate --no-cookies --header \x26quot;Cookie: oraclelicense=accept-securebackup-cookie\x26quot; https:\/\/download.oracle.com\/otn-pub\/java\/jdk\/8u201-b09\/42970487e3af4f5aa5bca3f542482c60\/jdk-8u201-linux-x64.tar.gz  解压jdk压缩包，使用命令 tar -zxvf 文件名\n然后配置环境变量，主要编辑以下两个文件\nvi \/etc\/environment vi \/etc\/profile  最后使用java -version查看版本信息\n第二步：mysql的安装  下载mysql ，以5.7为例\nsudo wget https:\/\/cdn.mysql.com\/\/Downloads\/MySQL-5.7\/mysql-5.7.25-linux-glibc2.12-x86_64.tar.gz  解压 tar -zxvf 文件名\n 移动 文件到 \/usr\/local\/  重命名 mv 文件名 mysql\n 新建data目录 mkdir data\n 新建mysql用户、mysql用户组\n  mysql用户组\ngroupadd mysql   mysql用户",
+    "description" : "linux常用命令  ls：查看该目录下文件 pwd：查看文件目录 rm -f 文件名：删除文件 \/usr\/local\/mysql\/bin\/mysql -u root -p 登录mysql  第一步：jdk的安装 下载jdk后，解压报错（原因是选择接受协议的问题），输入如下命令：\nwget --no-check-certificate --no-cookies --header \x26quot;Cookie: oraclelicense=accept-securebackup-cookie\x26quot; https:\/\/download.oracle.com\/otn-pub\/java\/jdk\/8u201-b09\/42970487e3af4f5aa5bca3f542482c60\/jdk-8u201-linux-x64.tar.gz  解压jdk压缩包，使用命令 tar -zxvf 文件名\n然后配置环境变量，主要编辑以下两个文件\nvi \/etc\/environment vi \/etc\/profile  最后使用java -version查看版本信息\n第二步：mysql的安装  下载mysql ，以5.7为例  sudo wget https:\/\/cdn.mysql.com\/\/Downloads\/MySQL-5.7\/mysql-5.7.25-linux-glibc2.12-x86_64.tar.gz  解压 tar -zxvf 文件名\n 移动 文件到 \/usr\/local\/  重命名 mv 文件名 mysql\n 新建data目录 mkdir data\n 新建mysql用户、mysql用户组\n  mysql用户组\ngroupadd mysql  mysql用户",
     "inLanguage" : "zh-CN",
     "author" : "刘科",
     "creator" : "刘科",
@@ -57,7 +57,7 @@
     "datePublished": "2019-06-15 19:32:56 \x2b0800 CST",
     "dateModified" : "2019-06-15 19:32:56 \x2b0800 CST",
     "url" : "https:\/\/pallcard.github.io\/2019\/%E5%88%9D%E8%AF%95%E9%83%A8%E7%BD%B2%E9%A1%B9%E7%9B%AE%E5%88%B0%E8%85%BE%E8%AE%AF%E4%BA%91%E7%8E%AF%E5%A2%83%E7%9A%84%E5%AE%89%E8%A3%85\/",
-    "wordCount" : "228",
+    "wordCount" : "225",
     "keywords" : [ "项目部署","Linux","总数", "刘科个人博客"]
 }
 </script>
@@ -179,7 +179,8 @@ vi /etc/profile
 <h4 id="第二步-mysql的安装">第二步：mysql的安装</h4>
 
 <ol>
-<li><p>下载mysql ，以5.7为例</p>
+<li>下载mysql ，以5.7为例</li>
+</ol>
 
 <pre><code class="language-java">sudo wget https://cdn.mysql.com//Downloads/MySQL-5.7/mysql-5.7.25-linux-glibc2.12-x86_64.tar.gz
 </code></pre>
@@ -201,8 +202,7 @@ vi /etc/profile
 <p><strong>mysql用户组</strong></p>
 
 <pre><code class="language-java">groupadd mysql
-</code></pre></li>
-</ol>
+</code></pre>
 
 <p><strong>mysql用户</strong></p>
 
@@ -210,18 +210,18 @@ vi /etc/profile
 </code></pre>
 
 <ol>
-<li><p>将/usr/local/mysql的所有者及所属组改为mysql</p>
+<li>将/usr/local/mysql的所有者及所属组改为mysql</li>
+</ol>
 
 <pre><code class="language-java">chown -R mysql.mysql /usr/local/mysql
 </code></pre>
 
 <ol>
-<li>配置，初始化
-<code>java
-/usr/local/mysql/bin/mysqld --defaults-file=/etc/my.cnf --user=mysql --basedir=/usr/local/mysql --datadir=/usr/local/mysql/data --initialize
-</code></li>
-</ol></li>
+<li>配置，初始化</li>
 </ol>
+
+<pre><code class="language-java">/usr/local/mysql/bin/mysqld --defaults-file=/etc/my.cnf --user=mysql --basedir=/usr/local/mysql --datadir=/usr/local/mysql/data --initialize
+</code></pre>
 
 <p>执行后出错，libnuma原因，执行如下命令，后再初始化</p>
 
@@ -249,7 +249,8 @@ pid-file=/var/run/mysqld/mysqld.pid
 </code></pre>
 
 <ol>
-<li><p>开启服务</p>
+<li>开启服务</li>
+</ol>
 
 <pre><code class="language-java">将mysql加入服务
 cp /usr/local/mysql/support-files/mysql.server /etc/init.d/mysql
@@ -260,36 +261,28 @@ service mysql start
 </code></pre>
 
 <ol>
-<li><p>设置密码
-```java</p>
-
-<h1 id="登录-由于-etc-my-cnf中设置了取消密码验证-所以此处密码任意">登录（由于/etc/my.cnf中设置了取消密码验证，所以此处密码任意）</h1></li>
+<li>设置密码</li>
 </ol>
 
-<p>/usr/local/mysql/bin/mysql -u root -p</p>
+<pre><code class="language-java"># 登录（由于/etc/my.cnf中设置了取消密码验证，所以此处密码任意）
 
-<h1 id="操作mysql数据库">操作mysql数据库</h1>
+/usr/local/mysql/bin/mysql -u root -p
 
-<blockquote>
-<blockquote>
-<p>use mysql;</p>
-</blockquote>
-</blockquote>
+# 操作mysql数据库
 
-<h1 id="修改密码">修改密码</h1>
+&gt;&gt;use mysql;
 
-<blockquote>
-<blockquote>
-<p>update user set authentication_string=password(&lsquo;你的密码&rsquo;) where user=&lsquo;root&rsquo;;</p>
+# 修改密码
 
-<p>flush privileges;</p>
+&gt;&gt;update user set authentication_string=password('你的密码') where user='root';
 
-<p>exit;
-```</p>
-</blockquote>
-</blockquote></li>
+&gt;&gt;flush privileges;
 
-<li><p>将/etc/my.cnf中的skip-grant-tables删除，至此mysql安装完成</p></li>
+&gt;&gt;exit;
+</code></pre>
+
+<ol>
+<li>将/etc/my.cnf中的skip-grant-tables删除，至此mysql安装完成</li>
 </ol>
 
 <p><strong>注: mysql 远程连接问题</strong></p>
@@ -307,16 +300,19 @@ flush privileges;
 <h4 id="第三步-redis的安装">第三步：redis的安装</h4>
 
 <ol>
-<li>下载 解压
-```java
-wget <a href="http://download.redis.io/releases/redis-4.0.10.tar.gz" rel="nofollow noreferrer" target="_blank">http://download.redis.io/releases/redis-4.0.10.tar.gz</a></li>
+<li>下载 解压</li>
 </ol>
 
-<p>tar -xzf redis-4.0.10.tar.gz</p>
+<pre><code class="language-java">wget http://download.redis.io/releases/redis-4.0.10.tar.gz
 
-<pre><code>2. 编译
-```java
-cd redis-4.0.10
+tar -xzf redis-4.0.10.tar.gz
+</code></pre>
+
+<ol>
+<li>编译</li>
+</ol>
+
+<pre><code class="language-java">cd redis-4.0.10
 make
 </code></pre>
 

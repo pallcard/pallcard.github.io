@@ -37,13 +37,12 @@ client 客户端，作为业务请求的发起方，通过专有接口，使用T
 wget --no-check-certificate --no-cookies --header &amp;quot;Cookie: oraclelicense=accept-securebackup-cookie&amp;quot; https://download.oracle.com/otn-pub/java/jdk/8u201-b09/42970487e3af4f5aa5bca3f542482c60/jdk-8u201-linux-x64.tar.gz  解压jdk压缩包，使用命令 tar -zxvf 文件名
 然后配置环境变量，主要编辑以下两个文件
 vi /etc/environment vi /etc/profile  最后使用java -version查看版本信息
-第二步：mysql的安装  下载mysql ，以5.7为例
-sudo wget https://cdn.mysql.com//Downloads/MySQL-5.7/mysql-5.7.25-linux-glibc2.12-x86_64.tar.gz  解压 tar -zxvf 文件名
+第二步：mysql的安装  下载mysql ，以5.7为例  sudo wget https://cdn.mysql.com//Downloads/MySQL-5.7/mysql-5.7.25-linux-glibc2.12-x86_64.tar.gz  解压 tar -zxvf 文件名
  移动 文件到 /usr/local/  重命名 mv 文件名 mysql
  新建data目录 mkdir data
  新建mysql用户、mysql用户组
   mysql用户组
-groupadd mysql   mysql用户</description>
+groupadd mysql  mysql用户</description>
     </item>
     
     <item>

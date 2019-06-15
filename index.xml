@@ -252,7 +252,8 @@ vi /etc/profile
 &lt;h4 id=&#34;第二步-mysql的安装&#34;&gt;第二步：mysql的安装&lt;/h4&gt;
 
 &lt;ol&gt;
-&lt;li&gt;&lt;p&gt;下载mysql ，以5.7为例&lt;/p&gt;
+&lt;li&gt;下载mysql ，以5.7为例&lt;/li&gt;
+&lt;/ol&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;sudo wget https://cdn.mysql.com//Downloads/MySQL-5.7/mysql-5.7.25-linux-glibc2.12-x86_64.tar.gz
 &lt;/code&gt;&lt;/pre&gt;
@@ -274,8 +275,7 @@ vi /etc/profile
 &lt;p&gt;&lt;strong&gt;mysql用户组&lt;/strong&gt;&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;groupadd mysql
-&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
-&lt;/ol&gt;
+&lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;&lt;strong&gt;mysql用户&lt;/strong&gt;&lt;/p&gt;
 
@@ -283,18 +283,18 @@ vi /etc/profile
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;ol&gt;
-&lt;li&gt;&lt;p&gt;将/usr/local/mysql的所有者及所属组改为mysql&lt;/p&gt;
+&lt;li&gt;将/usr/local/mysql的所有者及所属组改为mysql&lt;/li&gt;
+&lt;/ol&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;chown -R mysql.mysql /usr/local/mysql
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;ol&gt;
-&lt;li&gt;配置，初始化
-&lt;code&gt;java
-/usr/local/mysql/bin/mysqld --defaults-file=/etc/my.cnf --user=mysql --basedir=/usr/local/mysql --datadir=/usr/local/mysql/data --initialize
-&lt;/code&gt;&lt;/li&gt;
-&lt;/ol&gt;&lt;/li&gt;
+&lt;li&gt;配置，初始化&lt;/li&gt;
 &lt;/ol&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;/usr/local/mysql/bin/mysqld --defaults-file=/etc/my.cnf --user=mysql --basedir=/usr/local/mysql --datadir=/usr/local/mysql/data --initialize
+&lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;执行后出错，libnuma原因，执行如下命令，后再初始化&lt;/p&gt;
 
@@ -322,7 +322,8 @@ pid-file=/var/run/mysqld/mysqld.pid
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;ol&gt;
-&lt;li&gt;&lt;p&gt;开启服务&lt;/p&gt;
+&lt;li&gt;开启服务&lt;/li&gt;
+&lt;/ol&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;将mysql加入服务
 cp /usr/local/mysql/support-files/mysql.server /etc/init.d/mysql
@@ -333,36 +334,28 @@ service mysql start
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;ol&gt;
-&lt;li&gt;&lt;p&gt;设置密码
-```java&lt;/p&gt;
-
-&lt;h1 id=&#34;登录-由于-etc-my-cnf中设置了取消密码验证-所以此处密码任意&#34;&gt;登录（由于/etc/my.cnf中设置了取消密码验证，所以此处密码任意）&lt;/h1&gt;&lt;/li&gt;
+&lt;li&gt;设置密码&lt;/li&gt;
 &lt;/ol&gt;
 
-&lt;p&gt;/usr/local/mysql/bin/mysql -u root -p&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;# 登录（由于/etc/my.cnf中设置了取消密码验证，所以此处密码任意）
 
-&lt;h1 id=&#34;操作mysql数据库&#34;&gt;操作mysql数据库&lt;/h1&gt;
+/usr/local/mysql/bin/mysql -u root -p
 
-&lt;blockquote&gt;
-&lt;blockquote&gt;
-&lt;p&gt;use mysql;&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;/blockquote&gt;
+# 操作mysql数据库
 
-&lt;h1 id=&#34;修改密码&#34;&gt;修改密码&lt;/h1&gt;
+&amp;gt;&amp;gt;use mysql;
 
-&lt;blockquote&gt;
-&lt;blockquote&gt;
-&lt;p&gt;update user set authentication_string=password(&amp;lsquo;你的密码&amp;rsquo;) where user=&amp;lsquo;root&amp;rsquo;;&lt;/p&gt;
+# 修改密码
 
-&lt;p&gt;flush privileges;&lt;/p&gt;
+&amp;gt;&amp;gt;update user set authentication_string=password(&#39;你的密码&#39;) where user=&#39;root&#39;;
 
-&lt;p&gt;exit;
-```&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;/blockquote&gt;&lt;/li&gt;
+&amp;gt;&amp;gt;flush privileges;
 
-&lt;li&gt;&lt;p&gt;将/etc/my.cnf中的skip-grant-tables删除，至此mysql安装完成&lt;/p&gt;&lt;/li&gt;
+&amp;gt;&amp;gt;exit;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ol&gt;
+&lt;li&gt;将/etc/my.cnf中的skip-grant-tables删除，至此mysql安装完成&lt;/li&gt;
 &lt;/ol&gt;
 
 &lt;p&gt;&lt;strong&gt;注: mysql 远程连接问题&lt;/strong&gt;&lt;/p&gt;
@@ -380,16 +373,19 @@ flush privileges;
 &lt;h4 id=&#34;第三步-redis的安装&#34;&gt;第三步：redis的安装&lt;/h4&gt;
 
 &lt;ol&gt;
-&lt;li&gt;下载 解压
-```java
-wget &lt;a href=&#34;http://download.redis.io/releases/redis-4.0.10.tar.gz&#34; rel=&#34;nofollow noreferrer&#34; target=&#34;_blank&#34;&gt;http://download.redis.io/releases/redis-4.0.10.tar.gz&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;下载 解压&lt;/li&gt;
 &lt;/ol&gt;
 
-&lt;p&gt;tar -xzf redis-4.0.10.tar.gz&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;wget http://download.redis.io/releases/redis-4.0.10.tar.gz
 
-&lt;pre&gt;&lt;code&gt;2. 编译
-```java
-cd redis-4.0.10
+tar -xzf redis-4.0.10.tar.gz
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ol&gt;
+&lt;li&gt;编译&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;cd redis-4.0.10
 make
 &lt;/code&gt;&lt;/pre&gt;
 
