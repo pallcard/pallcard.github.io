@@ -251,26 +251,20 @@ vi /etc/profile
 
 &lt;h4 id=&#34;第二步-mysql的安装&#34;&gt;第二步：mysql的安装&lt;/h4&gt;
 
-&lt;ol&gt;
-&lt;li&gt;下载mysql ，以5.7为例&lt;/li&gt;
-&lt;/ol&gt;
+&lt;p&gt;&lt;strong&gt;&lt;em&gt;1.下载mysql ，以5.7为例&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;sudo wget https://cdn.mysql.com//Downloads/MySQL-5.7/mysql-5.7.25-linux-glibc2.12-x86_64.tar.gz
+# 解压  
+tar -zxvf mysql-5.7.25-linux-glibc2.12-x86_64.tar.gz
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;解压  tar -zxvf 文件名&lt;/p&gt;
-
-&lt;ol&gt;
-&lt;li&gt;移动 文件到 /usr/local/&lt;/li&gt;
-&lt;/ol&gt;
+&lt;p&gt;&lt;strong&gt;&lt;em&gt;2.移动 文件到 /usr/local/&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;
 
 &lt;p&gt;重命名 mv 文件名 mysql&lt;/p&gt;
 
-&lt;ol&gt;
-&lt;li&gt;&lt;p&gt;新建data目录 mkdir data&lt;/p&gt;&lt;/li&gt;
+&lt;p&gt;&lt;strong&gt;&lt;em&gt;3.新建data目录 mkdir data&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;
 
-&lt;li&gt;&lt;p&gt;新建mysql用户、mysql用户组&lt;/p&gt;&lt;/li&gt;
-&lt;/ol&gt;
+&lt;p&gt;&lt;strong&gt;&lt;em&gt;4.新建mysql用户、mysql用户组&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;strong&gt;mysql用户组&lt;/strong&gt;&lt;/p&gt;
 
@@ -282,16 +276,12 @@ vi /etc/profile
 &lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;useradd mysql -g mysql
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;ol&gt;
-&lt;li&gt;将/usr/local/mysql的所有者及所属组改为mysql&lt;/li&gt;
-&lt;/ol&gt;
+&lt;p&gt;&lt;strong&gt;&lt;em&gt;5.将/usr/local/mysql的所有者及所属组改为mysql&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;chown -R mysql.mysql /usr/local/mysql
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;ol&gt;
-&lt;li&gt;配置，初始化&lt;/li&gt;
-&lt;/ol&gt;
+&lt;p&gt;&lt;strong&gt;&lt;em&gt;6.配置，初始化&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;/usr/local/mysql/bin/mysqld --defaults-file=/etc/my.cnf --user=mysql --basedir=/usr/local/mysql --datadir=/usr/local/mysql/data --initialize
 &lt;/code&gt;&lt;/pre&gt;
@@ -321,9 +311,7 @@ log-error=/var/log/mysqld.log
 pid-file=/var/run/mysqld/mysqld.pid
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;ol&gt;
-&lt;li&gt;开启服务&lt;/li&gt;
-&lt;/ol&gt;
+&lt;p&gt;&lt;strong&gt;&lt;em&gt;7.开启服务&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;将mysql加入服务
 cp /usr/local/mysql/support-files/mysql.server /etc/init.d/mysql
@@ -333,9 +321,7 @@ chkconfig mysql on
 service mysql start
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;ol&gt;
-&lt;li&gt;设置密码&lt;/li&gt;
-&lt;/ol&gt;
+&lt;p&gt;&lt;strong&gt;&lt;em&gt;8.设置密码&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;# 登录（由于/etc/my.cnf中设置了取消密码验证，所以此处密码任意）
 
@@ -354,9 +340,7 @@ service mysql start
 &amp;gt;&amp;gt;exit;
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;ol&gt;
-&lt;li&gt;将/etc/my.cnf中的skip-grant-tables删除，至此mysql安装完成&lt;/li&gt;
-&lt;/ol&gt;
+&lt;p&gt;&lt;strong&gt;&lt;em&gt;9.将/etc/my.cnf中的skip-grant-tables删除，至此mysql安装完成&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;strong&gt;注: mysql 远程连接问题&lt;/strong&gt;&lt;/p&gt;
 
@@ -372,18 +356,14 @@ flush privileges;
 
 &lt;h4 id=&#34;第三步-redis的安装&#34;&gt;第三步：redis的安装&lt;/h4&gt;
 
-&lt;ol&gt;
-&lt;li&gt;下载 解压&lt;/li&gt;
-&lt;/ol&gt;
+&lt;p&gt;&lt;strong&gt;&lt;em&gt;1.下载 解压&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;wget http://download.redis.io/releases/redis-4.0.10.tar.gz
 
 tar -xzf redis-4.0.10.tar.gz
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;ol&gt;
-&lt;li&gt;编译&lt;/li&gt;
-&lt;/ol&gt;
+&lt;p&gt;&lt;strong&gt;&lt;em&gt;2.编译&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;cd redis-4.0.10
 make
@@ -391,9 +371,7 @@ make
 
 &lt;p&gt;注：若执行make出错，可能是c++未装，使用命令 yum -y install gcc-c++&lt;/p&gt;
 
-&lt;ol&gt;
-&lt;li&gt;配置远程访问&lt;/li&gt;
-&lt;/ol&gt;
+&lt;p&gt;&lt;strong&gt;&lt;em&gt;3.配置远程访问&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;
 
 &lt;p&gt;进入redis目录，vi redis.conf 修改配置文件&lt;/p&gt;
 
