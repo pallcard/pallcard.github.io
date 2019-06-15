@@ -32,11 +32,11 @@ FastDFS 系统有三个角色：跟踪服务器(Tracker Server)、存储服务�
 
 &lt;p&gt;&lt;strong&gt;client&lt;/strong&gt;
 客户端，作为业务请求的发起方，通过专有接口，使用TCP/IP协议与跟踪器服务器或存储节点进行数据交互。
-&lt;img src=&#34;https://pallcard.github.io/images/linux001.png&#34; alt=&#34;文件上传&#34; /&gt;&lt;/p&gt;
+&lt;img src=&#34;https://pallcard.github.io/images/fastdfs001.png&#34; alt=&#34;文件上传&#34; /&gt;&lt;/p&gt;
 
 &lt;h5 id=&#34;文件上传&#34;&gt;文件上传&lt;/h5&gt;
 
-&lt;p&gt;&lt;img src=&#34;https://pallcard.github.io/images/linux002.png&#34; alt=&#34;在这里插入图片描述&#34; /&gt;
+&lt;p&gt;&lt;img src=&#34;https://pallcard.github.io/images/fastdfs002.png&#34; alt=&#34;在这里插入图片描述&#34; /&gt;
 &lt;strong&gt;生成file id&lt;/strong&gt;
 选择存储目录之后，storage会生成一个file_id，采用base64编码，包含有：storage server ip，文件创建时间，文件大小，文件CRC32校验码和随机数。每个存储目录下有两个256*256个子目录，storage会按文件file_id进行两次hash，路由到其中一个子目录，然后将文件以file_id为名字存储。
 文件路径如下：
@@ -57,7 +57,7 @@ group0/M00/00/00/rBAAAl0EkICAIiBOAAABowgL3Pk888.png
 
 &lt;h5 id=&#34;文件下载&#34;&gt;文件下载&lt;/h5&gt;
 
-&lt;p&gt;&lt;img src=&#34;https://pallcard.github.io/images/linux003.png&#34; alt=&#34;文件下载&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://pallcard.github.io/images/fastdfs003.png&#34; alt=&#34;文件下载&#34; /&gt;&lt;/p&gt;
 
 &lt;h4 id=&#34;2-安装fastdfs环境&#34;&gt;2.安装FastDFS环境&lt;/h4&gt;
 
@@ -209,7 +209,7 @@ vim mod_fastdfs.conf
 
 &lt;h5 id=&#34;部署结构图&#34;&gt;部署结构图&lt;/h5&gt;
 
-&lt;p&gt;&lt;img src=&#34;https://pallcard.github.io/images/linux004.png&#34; alt=&#34;部署结构图&#34; /&gt;
+&lt;p&gt;&lt;img src=&#34;https://pallcard.github.io/images/fastdfs004.png&#34; alt=&#34;部署结构图&#34; /&gt;
 参考：&lt;a href=&#34;https://www.cnblogs.com/chiangchou/p/fastdfs.html&#34; rel=&#34;nofollow noreferrer&#34; target=&#34;_blank&#34;&gt;https://www.cnblogs.com/chiangchou/p/fastdfs.html&lt;/a&gt;
            &lt;a href=&#34;https://www.cnblogs.com/chiangchou/p/fastdfs.html&#34; rel=&#34;nofollow noreferrer&#34; target=&#34;_blank&#34;&gt;https://www.cnblogs.com/chiangchou/p/fastdfs.html&lt;/a&gt;&lt;/p&gt;
 </description>

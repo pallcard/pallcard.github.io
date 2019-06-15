@@ -165,11 +165,11 @@ FastDFS 系统有三个角色：跟踪服务器(Tracker Server)、存储服务�
 
 <p><strong>client</strong>
 客户端，作为业务请求的发起方，通过专有接口，使用TCP/IP协议与跟踪器服务器或存储节点进行数据交互。
-<figure><img src="/images/ring.svg" data-sizes="auto" data-src="/images/linux001.png" alt="文件上传" class="lazyload"><figcaption class="image-caption">文件上传</figcaption></figure></p>
+<figure><img src="/images/ring.svg" data-sizes="auto" data-src="/images/fastdfs001.png" alt="文件上传" class="lazyload"><figcaption class="image-caption">文件上传</figcaption></figure></p>
 
 <h5 id="文件上传">文件上传</h5>
 
-<p><figure><img src="/images/ring.svg" data-sizes="auto" data-src="/images/linux002.png" alt="在这里插入图片描述" class="lazyload"><figcaption class="image-caption">在这里插入图片描述</figcaption></figure>
+<p><figure><img src="/images/ring.svg" data-sizes="auto" data-src="/images/fastdfs002.png" alt="在这里插入图片描述" class="lazyload"><figcaption class="image-caption">在这里插入图片描述</figcaption></figure>
 <strong>生成file id</strong>
 选择存储目录之后，storage会生成一个file_id，采用base64编码，包含有：storage server ip，文件创建时间，文件大小，文件CRC32校验码和随机数。每个存储目录下有两个256*256个子目录，storage会按文件file_id进行两次hash，路由到其中一个子目录，然后将文件以file_id为名字存储。
 文件路径如下：
@@ -190,7 +190,7 @@ group0/M00/00/00/rBAAAl0EkICAIiBOAAABowgL3Pk888.png
 
 <h5 id="文件下载">文件下载</h5>
 
-<p><figure><img src="/images/ring.svg" data-sizes="auto" data-src="/images/linux003.png" alt="文件下载" class="lazyload"><figcaption class="image-caption">文件下载</figcaption></figure></p>
+<p><figure><img src="/images/ring.svg" data-sizes="auto" data-src="/images/fastdfs003.png" alt="文件下载" class="lazyload"><figcaption class="image-caption">文件下载</figcaption></figure></p>
 
 <h4 id="2-安装fastdfs环境">2.安装FastDFS环境</h4>
 
@@ -342,7 +342,7 @@ vim mod_fastdfs.conf
 
 <h5 id="部署结构图">部署结构图</h5>
 
-<p><figure><img src="/images/ring.svg" data-sizes="auto" data-src="/images/linux004.png" alt="部署结构图" class="lazyload"><figcaption class="image-caption">部署结构图</figcaption></figure>
+<p><figure><img src="/images/ring.svg" data-sizes="auto" data-src="/images/fastdfs004.png" alt="部署结构图" class="lazyload"><figcaption class="image-caption">部署结构图</figcaption></figure>
 参考：<a href="https://www.cnblogs.com/chiangchou/p/fastdfs.html" rel="nofollow noreferrer" target="_blank">https://www.cnblogs.com/chiangchou/p/fastdfs.html</a>
            <a href="https://www.cnblogs.com/chiangchou/p/fastdfs.html" rel="nofollow noreferrer" target="_blank">https://www.cnblogs.com/chiangchou/p/fastdfs.html</a></p>
 
