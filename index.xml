@@ -6,8 +6,597 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
     <copyright>All rights reserved - 2019</copyright>
-    <lastBuildDate>Sat, 08 Jun 2019 17:49:19 +0800</lastBuildDate>
+    <lastBuildDate>Sat, 15 Jun 2019 19:43:24 +0800</lastBuildDate>
     <atom:link href="/" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>FastDFS</title>
+      <link>https://pallcard.github.io/2019/fastdfs/</link>
+      <pubDate>Sat, 15 Jun 2019 19:43:24 +0800</pubDate>
+      
+      <guid>https://pallcard.github.io/2019/fastdfs/</guid>
+      <description>
+
+&lt;h4 id=&#34;1-fastdfs-理论&#34;&gt;1. FastDFS 理论&lt;/h4&gt;
+
+&lt;p&gt;FastDFS 是一个开源的高性能分布式文件系统（DFS）。 它的主要功能包括：文件存储，文件同步和文件访问，以及高容量和负载平衡。主要解决了海量数据存储问题，特别适合以中小文件（建议范围：4KB &amp;lt; file_size &amp;lt;500MB）为载体的在线服务。
+FastDFS 系统有三个角色：跟踪服务器(Tracker Server)、存储服务器(Storage Server)和客户端(Client)。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;tracker server&lt;/strong&gt;
+跟踪服务器，主要做调度工作，起负载均衡的作用。负责管理所有的storage server和group，每个storage在启动后会连接tracker，告诉tracker自己所属的group，并保持周期性心跳，tracker根据storage的心跳信息，建立映射表，tracke管理的元数据很少（tracker上的元数据都是由storage汇报产生），并且直接存在内存中，本身不需要持久化任何数据。tracker之间是对等的，因此扩展tracker是很容易的，直接增加tracker服务，同时修改storage的配置，增加新增的tarcker服务的地址和端口，重启即可。所有的tracker都会接受storage的心跳信息，以生成元数据信息。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;storage server&lt;/strong&gt;
+存储服务器（又称：存储节点或数据服务器），顾名思义是用来保存文件的和文件属性的。以group为单位，每个group内可以包含多台storage server，数据互为备份，存储容量空间以group中storage server容量最小的为准。以group为单位组织存储能够方便的进行应用隔离、负责均衡和副本数定制；确定是group的容量受单机容量的限制。group内机器故障，需要依赖group内其他机器重新同步数据来恢复数据（更换坏盘，重启fdfs_storaged即可）。storage存储依赖本地文件系统，storage课配置多个数据存储目录，磁盘不做raid，直接分别挂在到多个目录，将这些目录配置为storage的数据目录即可。&lt;/p&gt;
+
+&lt;p&gt;storage接收写请求的时候，会根据配置好的规则，选择其中一个存储目录来存储文件；为了避免单个目录下的文件过多，storage第一次启动的时候，会在每个数据存储目录创建2级子目录，每级256，总共65536个目录，新写的文件会以hash的方式路由到其中一个子目录下，然后将文件数据直接作为一个本地文件存储。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;client&lt;/strong&gt;
+客户端，作为业务请求的发起方，通过专有接口，使用TCP/IP协议与跟踪器服务器或存储节点进行数据交互。
+&lt;img src=&#34;https://pallcard.github.io/images/linux001.png&#34; alt=&#34;文件上传&#34; /&gt;&lt;/p&gt;
+
+&lt;h5 id=&#34;文件上传&#34;&gt;文件上传&lt;/h5&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://pallcard.github.io/images/linux002.png&#34; alt=&#34;在这里插入图片描述&#34; /&gt;
+&lt;strong&gt;生成file id&lt;/strong&gt;
+选择存储目录之后，storage会生成一个file_id，采用base64编码，包含有：storage server ip，文件创建时间，文件大小，文件CRC32校验码和随机数。每个存储目录下有两个256*256个子目录，storage会按文件file_id进行两次hash，路由到其中一个子目录，然后将文件以file_id为名字存储。
+文件路径如下：
+group0/M00/00/00/rBAAAl0EkICAIiBOAAABowgL3Pk888.png
+* 组名：group0
+* 磁盘： M00
+* 目录：00/00
+* 文件名：rBAAAl0EkICAIiBOAAABowgL3Pk888.png&lt;/p&gt;
+
+&lt;p&gt;文件索引信息包括：&lt;strong&gt;组名，虚拟磁盘路径，数据两级目录，文件名&lt;/strong&gt;。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;组名：文件上传后所在的存储组名称，在文件上传成功后有存储服务器返回，需要客户端自行保存。&lt;/li&gt;
+&lt;li&gt;虚拟磁盘路径：存储服务器配置的虚拟路径，与磁盘选项store_path*对应。&lt;/li&gt;
+&lt;li&gt;数据两级目录：存储服务器在每个虚拟磁盘路径下创建的两级目录，用于存储数据文件。&lt;/li&gt;
+&lt;li&gt;文件名：与文件上传时不同。是由存储服务器根据特定信息生成，文件名包含：源存储服务器IP地址、文件创建时间戳、文件大小、随机数和文件拓展名等信息。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h5 id=&#34;文件下载&#34;&gt;文件下载&lt;/h5&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://pallcard.github.io/images/linux003.png&#34; alt=&#34;文件下载&#34; /&gt;&lt;/p&gt;
+
+&lt;h4 id=&#34;2-安装fastdfs环境&#34;&gt;2.安装FastDFS环境&lt;/h4&gt;
+
+&lt;h5 id=&#34;下载安装-libfastcommon&#34;&gt;下载安装 libfastcommon&lt;/h5&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;yum -y install libevent
+# 下载libfastcommon
+wget https://github.com/happyfish100/libfastcommon/archive/V1.0.7.tar.gz
+# 解压
+tar -zxvf V1.0.7.tar.gz
+# 编译、安装
+cd libfastcommon-1.0.7
+ ./make.sh
+ ./make.sh install
+ cd /usr/lib64
+ ll libfast* 
+ # 复制libfastcommon.so 到 usr/lib
+ cp libfastcommon.so /usr/lib
+ cd /usr/lib
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h5 id=&#34;下载安装fastdfs&#34;&gt;下载安装FastDFS&lt;/h5&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;# 下载FastDFS
+wget https://github.com/happyfish100/fastdfs/archive/V5.05.tar.gz
+# 解压FastDFS
+tar -zxvf V5.05.tar.gz
+# 编译、安装
+cd fastdfs-5.05
+ ./make.sh
+ ./make.sh install
+ 
+# 配置tracker
+cd /usr/bin
+ll fdfs*
+cd /etc/fdfs/
+# 进入 fastdfs-5.05/conf目录
+cp * /etc/fdfs/
+vim tracker.conf
+# 修改 base_path=/fastdfs/tracker
+cd /
+mkdir /fastdfs/tracker -p
+cd fastdfs/
+mkdir storage
+mkdir client
+cd /usr/bin
+fdfs_trackerd /etc/fdfs/tracker.conf
+fdfs_trackerd /etc/fdfs/tracker.conf restart
+
+# 配置storage
+vim storage.conf
+# 修改 base_path=/fastdfs/storage
+#     store_path0=/fastdfs/storage
+#     tracker_server=203.195.238.249:22122
+cd /usr/bin
+fdfs_storaged /etc/fdfs/storage.conf restart
+
+# 配置client
+vim client.conf
+# 修改 base_path=/fastdfs/client
+#     tracker_server=203.195.238.249:22122
+# 测试 (先放一张图片到/root/test/headImg.jpg)
+fdfs_test /etc/fdfs/client.conf upload /root/test/headImg.jpg
+# 返回路径http://203.195.238.249/group1/M00/00/00/rBAAAl0EX5WAQtpGAACGZ5UrSuI275_big.jpg
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h5 id=&#34;目录结构&#34;&gt;目录结构&lt;/h5&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;|--- /
+	|---fastdfs
+		|---client
+		|---storage
+			|---data
+				|---存储的文件 256*256个目录
+			|---logs
+		|---tracker
+			|---data
+			|---logs
+		|---tmp
+	|---usr
+		|---lib
+			|---libfastcommon.so
+		|---lib64
+			|---libfastcommon.so
+		|---bin
+			|---fdfs* 命令工具
+	|---etc
+		|---fdfs
+			|---client.conf
+			|---tracker.conf
+			|---storage.conf
+			|---mod_fastdfs.conf
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h5 id=&#34;安装nginx&#34;&gt;安装nginx&lt;/h5&gt;
+
+&lt;p&gt;1.安装nginx
+2.修改配置文件，加入如下配置&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;	server  {
+        listen       88;
+        server_name  localhost;
+       
+        location /group1/M00 {
+           alias /fastdfs/storage/data;
+		}
+    }
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;3.即可根据服务器的80端口访问到图片&lt;/p&gt;
+
+&lt;h5 id=&#34;fastdfs-nginx-module&#34;&gt;fastdfs-nginx-module&lt;/h5&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;# 下载
+wget wget https://github.com/happyfish100/fastdfs-nginx-module/archive/5e5f3566bbfa57418b5506aaefbe107a42c9fcb1.zip
+# 解压
+unzip 5e5f3566bbfa57418b5506aaefbe107a42c9fcb1.zip
+# 重命名
+mv fastdfs-nginx-module-5e5f3566bbfa57418b5506aaefbe107a42c9fcb1  fastdfs-nginx-module-master
+# 先停掉nginx服务
+/usr/local/nginx/sbin/nginx -s stop
+# 进入之前安装nginx的解压包的位置
+cd nginx-1.14.2
+# 添加fastdfs-nginx-module模块
+./configure --add-module=../fastdfs-nginx-module-master/src
+# 重新编译、安装
+make &amp;amp;&amp;amp; make install
+# 复制fastdfs-nginx-module 源码中的配置文件到/etc/fdfs 目录
+cp mod_fastdfs.conf /etc/fdfs
+cd /etc/fdfs
+mkdir /fastdfs/tmp
+vim mod_fastdfs.conf
+# 修改 store_path0=/fastdfs/storage
+#     tracker_server=203.195.238.249:22122
+#     base_path=/fastdfs/tmp
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;修改nginx的配置文件&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;	server  {
+        listen       88;
+        server_name  localhost;
+       
+        location /group1/M00 {
+            ngx_fastdfs_module;
+		}
+    }
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h5 id=&#34;部署结构图&#34;&gt;部署结构图&lt;/h5&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://pallcard.github.io/images/linux004.png&#34; alt=&#34;部署结构图&#34; /&gt;
+参考：&lt;a href=&#34;https://www.cnblogs.com/chiangchou/p/fastdfs.html&#34; rel=&#34;nofollow noreferrer&#34; target=&#34;_blank&#34;&gt;https://www.cnblogs.com/chiangchou/p/fastdfs.html&lt;/a&gt;
+           &lt;a href=&#34;https://www.cnblogs.com/chiangchou/p/fastdfs.html&#34; rel=&#34;nofollow noreferrer&#34; target=&#34;_blank&#34;&gt;https://www.cnblogs.com/chiangchou/p/fastdfs.html&lt;/a&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>初试部署项目到腾讯云（环境的安装）</title>
+      <link>https://pallcard.github.io/2019/%E5%88%9D%E8%AF%95%E9%83%A8%E7%BD%B2%E9%A1%B9%E7%9B%AE%E5%88%B0%E8%85%BE%E8%AE%AF%E4%BA%91%E7%8E%AF%E5%A2%83%E7%9A%84%E5%AE%89%E8%A3%85/</link>
+      <pubDate>Sat, 15 Jun 2019 19:32:56 +0800</pubDate>
+      
+      <guid>https://pallcard.github.io/2019/%E5%88%9D%E8%AF%95%E9%83%A8%E7%BD%B2%E9%A1%B9%E7%9B%AE%E5%88%B0%E8%85%BE%E8%AE%AF%E4%BA%91%E7%8E%AF%E5%A2%83%E7%9A%84%E5%AE%89%E8%A3%85/</guid>
+      <description>
+
+&lt;h4 id=&#34;linux常用命令&#34;&gt;linux常用命令&lt;/h4&gt;
+
+&lt;ul&gt;
+&lt;li&gt;ls：查看该目录下文件&lt;/li&gt;
+&lt;li&gt;pwd：查看文件目录&lt;/li&gt;
+&lt;li&gt;rm -f 文件名：删除文件&lt;/li&gt;
+&lt;li&gt;/usr/local/mysql/bin/mysql -u root -p 登录mysql&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h4 id=&#34;第一步-jdk的安装&#34;&gt;第一步：jdk的安装&lt;/h4&gt;
+
+&lt;p&gt;下载jdk后，解压报错（原因是选择接受协议的问题），输入如下命令：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;wget --no-check-certificate --no-cookies --header &amp;quot;Cookie: oraclelicense=accept-securebackup-cookie&amp;quot; https://download.oracle.com/otn-pub/java/jdk/8u201-b09/42970487e3af4f5aa5bca3f542482c60/jdk-8u201-linux-x64.tar.gz
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;解压jdk压缩包，使用命令 tar -zxvf 文件名&lt;/p&gt;
+
+&lt;p&gt;然后配置环境变量，主要编辑以下两个文件&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;vi /etc/environment 
+vi /etc/profile
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;最后使用java -version查看版本信息&lt;/p&gt;
+
+&lt;h4 id=&#34;第二步-mysql的安装&#34;&gt;第二步：mysql的安装&lt;/h4&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;下载mysql ，以5.7为例&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;sudo wget https://cdn.mysql.com//Downloads/MySQL-5.7/mysql-5.7.25-linux-glibc2.12-x86_64.tar.gz
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;解压  tar -zxvf 文件名&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;移动 文件到 /usr/local/&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;重命名 mv 文件名 mysql&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;新建data目录 mkdir data&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;新建mysql用户、mysql用户组&lt;/p&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;&lt;strong&gt;mysql用户组&lt;/strong&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;groupadd mysql
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;&lt;strong&gt;mysql用户&lt;/strong&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;useradd mysql -g mysql
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;将/usr/local/mysql的所有者及所属组改为mysql&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;chown -R mysql.mysql /usr/local/mysql
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ol&gt;
+&lt;li&gt;配置，初始化
+&lt;code&gt;java
+/usr/local/mysql/bin/mysqld --defaults-file=/etc/my.cnf --user=mysql --basedir=/usr/local/mysql --datadir=/usr/local/mysql/data --initialize
+&lt;/code&gt;&lt;/li&gt;
+&lt;/ol&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;执行后出错，libnuma原因，执行如下命令，后再初始化&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;yum install -y numactl
+vim /etc/my.cnf
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;my.cnf中改为&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;[mysqld]
+datadir=/usr/local/mysql/data
+basedir=/usr/local/mysql
+socket=/tmp/mysql.sock
+user=mysql
+port=3306
+character-set-server=utf8
+# 取消密码验证
+skip-grant-tables
+# Disabling symbolic-links is recommended to prevent assorted security risks
+symbolic-links=0
+# skip-grant-tables
+[mysqld_safe]
+log-error=/var/log/mysqld.log
+pid-file=/var/run/mysqld/mysqld.pid
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;开启服务&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;将mysql加入服务
+cp /usr/local/mysql/support-files/mysql.server /etc/init.d/mysql
+# 开机自启
+chkconfig mysql on
+# 开启
+service mysql start
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;设置密码
+```java&lt;/p&gt;
+
+&lt;h1 id=&#34;登录-由于-etc-my-cnf中设置了取消密码验证-所以此处密码任意&#34;&gt;登录（由于/etc/my.cnf中设置了取消密码验证，所以此处密码任意）&lt;/h1&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;/usr/local/mysql/bin/mysql -u root -p&lt;/p&gt;
+
+&lt;h1 id=&#34;操作mysql数据库&#34;&gt;操作mysql数据库&lt;/h1&gt;
+
+&lt;blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;use mysql;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;/blockquote&gt;
+
+&lt;h1 id=&#34;修改密码&#34;&gt;修改密码&lt;/h1&gt;
+
+&lt;blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;update user set authentication_string=password(&amp;lsquo;你的密码&amp;rsquo;) where user=&amp;lsquo;root&amp;rsquo;;&lt;/p&gt;
+
+&lt;p&gt;flush privileges;&lt;/p&gt;
+
+&lt;p&gt;exit;
+```&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;/blockquote&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;将/etc/my.cnf中的skip-grant-tables删除，至此mysql安装完成&lt;/p&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;&lt;strong&gt;注: mysql 远程连接问题&lt;/strong&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;use mysql
+
+select host,user from user;
+
+update user set host=&#39;%&#39; where user =&amp;quot;root&amp;quot;;
+
+# 刷新权限
+flush privileges;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h4 id=&#34;第三步-redis的安装&#34;&gt;第三步：redis的安装&lt;/h4&gt;
+
+&lt;ol&gt;
+&lt;li&gt;下载 解压
+```java
+wget &lt;a href=&#34;http://download.redis.io/releases/redis-4.0.10.tar.gz&#34; rel=&#34;nofollow noreferrer&#34; target=&#34;_blank&#34;&gt;http://download.redis.io/releases/redis-4.0.10.tar.gz&lt;/a&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;tar -xzf redis-4.0.10.tar.gz&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;2. 编译
+```java
+cd redis-4.0.10
+make
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;注：若执行make出错，可能是c++未装，使用命令 yum -y install gcc-c++&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;配置远程访问&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;进入redis目录，vi redis.conf 修改配置文件&lt;/p&gt;
+
+&lt;p&gt;注释绑定的本机地址
+​​&lt;img src=&#34;https://pallcard.github.io/images/linux001.png&#34; alt=&#34;在这里插入图片描述&#34; /&gt;
+设置redis-service为后台服务
+将&amp;rdquo;daemonize no&amp;rdquo;改为&amp;rdquo;daemonize yes&amp;rdquo;
+​​​​​​​​&lt;img src=&#34;https://pallcard.github.io/images/linux002.png&#34; alt=&#34;在这里插入图片描述&#34; /&gt;
+设置redis-cli连接redis服务器的密码
+&lt;img src=&#34;https://pallcard.github.io/images/linux003.png&#34; alt=&#34;在这里插入图片描述&#34; /&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;# 启动redis（进入redis目录）
+./src/redis-server redis.conf
+# 查看进程
+ps -ef | grep redis
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h5 id=&#34;第四步-nginx的安装&#34;&gt;第四步：nginx的安装&lt;/h5&gt;
+
+&lt;p&gt;准备(安装pcre和zlib最新版本):&lt;/p&gt;
+
+&lt;p&gt;1.pcre:&lt;a href=&#34;https://ftp.pcre.org/pub/pcre/&#34; rel=&#34;nofollow noreferrer&#34; target=&#34;_blank&#34;&gt;https://ftp.pcre.org/pub/pcre/&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;2.zlib:&lt;a href=&#34;http://www.zlib.net/&#34; rel=&#34;nofollow noreferrer&#34; target=&#34;_blank&#34;&gt;http://www.zlib.net/&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;3.nginx：&lt;a href=&#34;https://nginx.org/en/download.html&#34; rel=&#34;nofollow noreferrer&#34; target=&#34;_blank&#34;&gt;https://nginx.org/en/download.html&lt;/a&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;wget 下载地址
+tar -xvzf 文件名
+cd 文件目录
+./configure
+make &amp;amp;&amp;amp; make install
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;注&lt;/strong&gt;：在阿里云添加安全组规则&lt;/p&gt;
+
+&lt;p&gt;参考博客：&lt;/p&gt;
+
+&lt;p&gt;主要参考：&lt;a href=&#34;https://www.jianshu.com/p/9cac6c9df0e0&#34; rel=&#34;nofollow noreferrer&#34; target=&#34;_blank&#34;&gt;https://www.jianshu.com/p/9cac6c9df0e0&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;mysql：&lt;a href=&#34;https://www.cnblogs.com/hl15/p/9541479.html&#34; rel=&#34;nofollow noreferrer&#34; target=&#34;_blank&#34;&gt;https://www.cnblogs.com/hl15/p/9541479.html&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;redis：&lt;a href=&#34;https://www.cnblogs.com/wangchunniu1314/p/6339416.html&#34; rel=&#34;nofollow noreferrer&#34; target=&#34;_blank&#34;&gt;https://www.cnblogs.com/wangchunniu1314/p/6339416.html&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;make出错：&lt;a href=&#34;https://blog.csdn.net/weixin_40493969/article/details/81150469&#34; rel=&#34;nofollow noreferrer&#34; target=&#34;_blank&#34;&gt;https://blog.csdn.net/weixin_40493969/article/details/81150469&lt;/a&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>SpringBoot之配置文件</title>
+      <link>https://pallcard.github.io/2019/springboot%E4%B9%8B%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6/</link>
+      <pubDate>Sat, 08 Jun 2019 20:21:05 +0800</pubDate>
+      
+      <guid>https://pallcard.github.io/2019/springboot%E4%B9%8B%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6/</guid>
+      <description>
+
+&lt;h5 id=&#34;1-配置文件基本使用&#34;&gt;1.配置文件基本使用&lt;/h5&gt;
+
+&lt;p&gt;使用.yml配置文件，在resources目录下新建application.yml文件&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;server:
+  port: 8081 #修改端口号
+  servlet:
+    context-path: /lk  #端口号后需额外添加字符
+#以上等同于application.properties的以下写法
+#server.port=8081
+#server.servlet.context-path=/zed
+
+swagger:
+  title: SpringBoot学习
+  description: SpringBoot学习
+  version: 1.0.0
+  name: lk
+  url: https://pallcard.github.io
+  email: 1250585541@qq.com
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;&lt;em&gt;注&lt;/em&gt;&lt;/strong&gt;
+* 其中空格有严格的要求&lt;/p&gt;
+
+&lt;h5 id=&#34;2-切换配置文件&#34;&gt;2.切换配置文件&lt;/h5&gt;
+
+&lt;p&gt;在resources目录下新建application-dev.yml文件，application-prod.yml文件&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;//文件目录
+resources|-
+         application.yml
+         application-dev.yml
+         application-prod.yml
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;其中application.yml来切换配置文件&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;spring:
+  profiles:
+    active: dev
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;&lt;em&gt;激活文件选择&lt;/em&gt;&lt;/strong&gt;
+* 使用上述application.yml来设置
+* 使用java -jar ***.jar &amp;ndash;spring.profiles.active=dev;
+* IDEA中可以如下设置
+&lt;img src=&#34;images/springboot001.png&#34; alt=&#34;激活配置文件&#34; /&gt;&lt;/p&gt;
+
+&lt;h5 id=&#34;3-配置文件使用&#34;&gt;3.配置文件使用&lt;/h5&gt;
+
+&lt;ul&gt;
+&lt;li&gt;单值注入 （.yml中值若用双引号，转义字符会转义）
+```java
+//.yml中
+person:
+name: zhangsan \n lisi
+name2: &amp;lsquo;zhangsan \n lisi&amp;rsquo;
+name3: &amp;ldquo;zhangsan \n lisi&amp;rdquo;
+age: 18
+boss: false&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;//使用
+    @Value(&amp;ldquo;${person.name}&amp;rdquo;)
+    private String name;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;@Value(&amp;quot;${person.name2}&amp;quot;)
+private String name2;
+
+
+@Value(&amp;quot;${person.name3}&amp;quot;)
+private String name3;
+
+@Value(&amp;quot;${person.age}&amp;quot;)
+private String age;
+
+@Value(&amp;quot;${person.boss}&amp;quot;)
+private String boss;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code&gt;* 批量注入 
+```java
+//application.yml
+student:
+  name: lk
+  age: 23
+  boss: false
+  birth: 1997/1/1
+  maps: {k1: v1, k2: v2}
+  lists:
+  - 张三
+  - 李四
+  dog:
+    name: 小黑
+    age: 2
+    
+// pojo.Student
+@ConfigurationProperties(prefix = &amp;quot;student&amp;quot;)
+@Component
+@Data
+public class Student {
+    private String name;
+    private Integer age;
+    private Boolean boss;
+    private Date birth;
+    private Map&amp;lt;String, Object&amp;gt; maps;
+    private List&amp;lt;String&amp;gt; lists;
+    private Dog dog;
+}
+// pojo.Dog 
+@Data
+public class Dog {
+    private String name;
+    private Integer age;
+}
+
+//值注入
+ @Autowired
+ private Student student;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;&lt;em&gt;注&lt;/em&gt;&lt;/strong&gt;
+* 将配置文件中配置的每一个属性的值，映射到这个组件中
+* @ConfigurationProperties：告诉SpringBoot将本类中的所有属性和配置文件中相关的配置进行绑定；
+* prefix = &amp;ldquo;person&amp;rdquo;：配置文件中哪个下面的所有属性进行一一映射
+* 只有这个组件是容器中的组件，才能使用容器提供的@ConfigurationProperties功能；
+* @Data是一个插件，免去了getter/setter和toString这些繁琐的东西&lt;/p&gt;
+
+&lt;h5 id=&#34;4-两种注入区别&#34;&gt;4.两种注入区别&lt;/h5&gt;
+
+&lt;p&gt;|   |@ConfigurationProperties   |@Value
+|&amp;ndash;|&amp;ndash;|&amp;ndash;
+|功能|    批量注入配置文件中的属性|一个个指定
+|松散绑定（松散语法） |支持|    不支持
+|SpEL： #{}  |不支持    |支持
+|JSR303数据校验 |支持 |不支持
+|复杂类型封装|    支持| 不支持&lt;/p&gt;
+
+&lt;p&gt;松散语法绑定：last_name = last-name = lastName 他们取的值都是相同的&lt;/p&gt;
+
+&lt;p&gt;参考：&lt;a href=&#34;https://zed058.cn&#34; rel=&#34;nofollow noreferrer&#34; target=&#34;_blank&#34;&gt;https://zed058.cn&lt;/a&gt;&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>SpringBoot之Swagger</title>
@@ -920,177 +1509,6 @@ Output:
     }
 }
 &lt;/code&gt;&lt;/pre&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>JMM</title>
-      <link>https://pallcard.github.io/2019/jmm/</link>
-      <pubDate>Sun, 02 Jun 2019 10:28:33 +0800</pubDate>
-      
-      <guid>https://pallcard.github.io/2019/jmm/</guid>
-      <description>
-
-&lt;h4 id=&#34;jmm&#34;&gt;JMM&lt;/h4&gt;
-
-&lt;p&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp;Java虚拟机规范中定义了Java内存模型（Java Memory Model，JMM），用于屏蔽掉各种硬件和操作系统的内存访问差异，以实现让Java程序在各种平台下都能达到一致的并发效果，JMM规范了Java虚拟机与计算机内存是如何协同工作的。&lt;/p&gt;
-
-&lt;h4 id=&#34;jmm模型下的线程间通信&#34;&gt;JMM模型下的线程间通信&lt;/h4&gt;
-
-&lt;p&gt;线程和主内存之间的抽象关系图：
-&lt;img src=&#34;https://pallcard.github.io/images/jmm001.png&#34; alt=&#34;线程和主内存&#34; /&gt;
-线程间通信必须要经过主内存。&lt;/p&gt;
-
-&lt;p&gt;如下，如果线程A与线程B之间要通信的话，必须要经历下面2个步骤：&lt;/p&gt;
-
-&lt;p&gt;1）线程A把本地内存A中更新过的共享变量刷新到主内存中去。&lt;/p&gt;
-
-&lt;p&gt;2）线程B到主内存中去读取线程A之前已更新过的共享变量。
-&lt;img src=&#34;https://pallcard.github.io/images/jmm002.png&#34; alt=&#34;线程通讯&#34; /&gt;
-&lt;strong&gt;&lt;em&gt;注：&lt;/em&gt;&lt;/strong&gt; 当线程操作某个对象时，执行顺序如下：
-(1) 从主存复制变量到当前工作内存 (read and load)
-(2) 执行代码，改变共享变量值 (use and assign)
-(3) 用工作内存数据刷新主存相关内容 (store and write)&lt;/p&gt;
-
-&lt;h4 id=&#34;jmm解决的问题&#34;&gt;JMM解决的问题&lt;/h4&gt;
-
-&lt;p&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp;Java内存模型是围绕着并发编程中原子性、可见性、有序性这三个特征来建立的，那我们依次看一下这三个特征：&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;&lt;em&gt;原子性&lt;/em&gt;&lt;/strong&gt; ：一个操作不能被打断，要么全部执行完毕，要么不执行。
-基本类型数据的访问大都是原子操作，long 和double类型的变量是64位，但是在32位JVM中，32位的JVM会将64位数据的读写操作分为2次32位的读写操作来进行，这就导致了long、double类型的变量在32位虚拟机中是非原子操作，数据有可能会被破坏，也就意味着多个线程在并发访问的时候是线程非安全的。&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;&lt;em&gt;可见性&lt;/em&gt;&lt;/strong&gt; ：一个线程对共享变量做了修改之后，其他的线程立即能够看到（感知到）该变量这种修改（变化）。&lt;/p&gt;
-
-&lt;p&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp;Java内存模型是通过将在工作内存中的变量修改后的值同步到主内存，在读取变量前从主内存刷新最新值到工作内存中，这种依赖主内存的方式来实现可见性的。&lt;/p&gt;
-
-&lt;p&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp;无论是 &lt;strong&gt;&lt;em&gt;普通变量&lt;/em&gt;&lt;/strong&gt; 还是 &lt;strong&gt;&lt;em&gt;volatile变量&lt;/em&gt;&lt;/strong&gt; 都是如此，区别在于：&lt;strong&gt;&lt;em&gt;volatile的特殊规则保证了volatile变量值修改后的新值立刻同步到主内存，每次使用volatile变量前立即从主内存中刷新&lt;/em&gt;&lt;/strong&gt; ，因此volatile保证了多线程之间的操作变量的可见性，而普通变量则不能保证这一点。
-除了volatile关键字能实现可见性之外，还有synchronized,Lock，final也是可以的。&lt;/p&gt;
-
-&lt;p&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp;使用 &lt;strong&gt;&lt;em&gt;synchronized&lt;/em&gt;&lt;/strong&gt; 关键字，在同步方法/同步块开始时（Monitor Enter）,使用共享变量时会从主内存中刷新变量值到工作内存中（即从主内存中读取最新值到线程私有的工作内存中），在同步方法/同步块结束时(Monitor Exit),会将工作内存中的变量值同步到主内存中去（即将线程私有的工作内存中的值写入到主内存进行同步）。&lt;/p&gt;
-
-&lt;p&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp;使用 &lt;strong&gt;&lt;em&gt;Lock接口&lt;/em&gt;&lt;/strong&gt; 的最常用的实现ReentrantLock(重入锁)来实现可见性：当我们在方法的开始位置执行lock.lock()方法，这和synchronized开始位置（Monitor Enter）有相同的语义，即使用共享变量时会从主内存中刷新变量值到工作内存中（即从主内存中读取最新值到线程私有的工作内存中），在方法的最后finally块里执行lock.unlock()方法，和synchronized结束位置（Monitor Exit）有相同的语义,即会将工作内存中的变量值同步到主内存中去（即将线程私有的工作内存中的值写入到主内存进行同步）。&lt;/p&gt;
-
-&lt;p&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp;&lt;strong&gt;&lt;em&gt;final关键字&lt;/em&gt;&lt;/strong&gt; 的可见性是指：被final修饰的变量，在构造函数数一旦初始化完成，并且在构造函数中并没有把“this”的引用传递出去，那么其他线程就可以看到final变量的值。&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;&lt;em&gt;有序性&lt;/em&gt;&lt;/strong&gt; ：在本线程内观察，操作都是有序的；如果在一个线程中观察另外一个线程，所有的操作都是无序的。
-&amp;nbsp; &amp;nbsp; &amp;nbsp;Java提供了两个关键字volatile和synchronized来保证多线程之间操作的有序性,volatile关键字本身通过加入内存屏障来禁止指令的重排序，而synchronized关键字通过一个变量在同一时间只允许有一个线程对其进行加锁的规则来实现。&lt;/p&gt;
-
-&lt;blockquote&gt;
-&lt;p&gt;as-if-serial语义：不管怎么重排序（编译器和处理器为了提高并行度），（&lt;strong&gt;&lt;em&gt;单线程&lt;/em&gt;&lt;/strong&gt;）程序的执行结果不会改变。&lt;/p&gt;
-
-&lt;p&gt;happens-before原则定义如下：
-1. 如果一个操作happens-before另一个操作，那么第一个操作的执行结果将对第二个操作可见，而且第一个操作的执行顺序排在第二个操作之前。
-2. 两个操作之间存在happens-before关系，并不意味着一定要按照happens-before原则制定的顺序来执行。如果重排序之后的执行结果与按照happens-before关系来执行的结果一致，那么这种重排序并不非法。&lt;/p&gt;
-&lt;/blockquote&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>算法</title>
-      <link>https://pallcard.github.io/2019/%E7%AE%97%E6%B3%95/</link>
-      <pubDate>Sat, 01 Jun 2019 20:42:19 +0800</pubDate>
-      
-      <guid>https://pallcard.github.io/2019/%E7%AE%97%E6%B3%95/</guid>
-      <description>
-
-&lt;h4 id=&#34;题目描述&#34;&gt;题目描述&lt;/h4&gt;
-
-&lt;p&gt;给定一个非空整数数组，除了某个元素只出现一次以外，其余每个元素出现两次。找出只出现一次的元素。&lt;/p&gt;
-
-&lt;h5 id=&#34;示例&#34;&gt;示例&lt;/h5&gt;
-
-&lt;p&gt;输入: [2,2,3]
-输出: 3&lt;/p&gt;
-
-&lt;h5 id=&#34;思想&#34;&gt;思想&lt;/h5&gt;
-
-&lt;p&gt;使用按位异或。异或：如果a、b两个值不相同，则异或结果为1。 如果a、b两个值相同，异或结果为0。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;public static void main(String[] args) {
-	int a [] = new int []{2,2,3};
-	int temp = 0;
-	for (int i = 0; i &amp;lt; a.length; i++) {
-		temp ^= a[i];
-	}
-	System.out.println(temp);
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h4 id=&#34;加强&#34;&gt;加强&lt;/h4&gt;
-
-&lt;p&gt;上述数组中有两个数出现一次，求这两个数。&lt;/p&gt;
-
-&lt;h5 id=&#34;示例-1&#34;&gt;示例&lt;/h5&gt;
-
-&lt;p&gt;输入: [2, 2, 6, 4, 5, 5]
-输出: 4, 6&lt;/p&gt;
-
-&lt;h5 id=&#34;思想-1&#34;&gt;思想&lt;/h5&gt;
-
-&lt;p&gt;先将所有数按位异或，得到temp，找到temp中二进制位为1的下标，通过这个下标将所用数分为两个数组，分别异或可以得到两个值。
-&lt;strong&gt;&lt;em&gt;若有两个数都只出现了一次，若将所有数进行按位异或后，所得到的数中，若按照上述划分，必然可以将这两个数分到不同的数组中&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;public static void main(String[] args) {
-	int a [] = new int []{2, 2, 6, 4, 5, 5};
-	int temp = 0;
-	int max = 0;
-	for (int i = 0; i &amp;lt; a.length; i++) {
-		temp ^= a[i];
-		if (max &amp;lt; a[i]) {
-			max = a[i];
-		}
-	}
-
-	int maxLength = Integer.toBinaryString(max).length();
-	String tempString = Integer.toBinaryString(temp);
-	StringBuilder sb = new StringBuilder(maxLength);
-	for (int i = 0; i &amp;lt; maxLength-tempString.length(); i++) {
-		sb.append(&amp;quot;0&amp;quot;);
-	}
-	sb.append(tempString);
-	int index = sb.length() - 1;
-	for (; index &amp;gt;= 0; index--) {
-		if(sb.charAt(index) == &#39;1&#39;) {
-			break;
-		}
-	}
-	int temp1 = 0;
-	int temp2 = 0;
-	for (int i = 0; i &amp;lt; a.length; i++) {
-		String aiBinary = Integer.toBinaryString(a[i]);
-		if(aiBinary.length()&amp;gt;index &amp;amp;&amp;amp; aiBinary.charAt(aiBinary.length()-index-1) == &#39;1&#39;) {
-			temp1 ^= a[i];
-		} else {
-			temp2 ^= a[i];
-		}
-	}
-	System.out.print(temp1 + &amp;quot;, &amp;quot; + temp2);
-}
-&lt;/code&gt;&lt;/pre&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>Mysql题</title>
-      <link>https://pallcard.github.io/2019/mysql%E9%A2%98/</link>
-      <pubDate>Sat, 01 Jun 2019 18:52:16 +0800</pubDate>
-      
-      <guid>https://pallcard.github.io/2019/mysql%E9%A2%98/</guid>
-      <description>
-
-&lt;h4 id=&#34;1-左连接-右连接-内连接&#34;&gt;1.左连接、右连接、内连接&lt;/h4&gt;
-
-&lt;h5 id=&#34;左连接&#34;&gt;左连接&lt;/h5&gt;
-
-&lt;p&gt;以左表为基础，根据on后面的条件进行连接，若右表中无对应数据，则右表数据为NULL。&lt;/p&gt;
-
-&lt;h5 id=&#34;右连接&#34;&gt;右连接&lt;/h5&gt;
-
-&lt;p&gt;以右表为基础，根据on后面的条件进行连接，若左表中无对应数据，则左表数据为NULL。&lt;/p&gt;
-
-&lt;h5 id=&#34;内连接&#34;&gt;内连接&lt;/h5&gt;
-
-&lt;p&gt;两个表做笛卡尔积后根据on后面的条件进行筛选。&lt;/p&gt;
 </description>
     </item>
     

@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+  <meta http-equiv="content-type" content="text/html;charset=utf-8">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noodp"/>
+  <meta name="author" content="刘科">
+  <meta name="description" content="hust研一">
+  <meta name="keywords" content="Java,博客">
+  
+  <link rel="prev" href="https://pallcard.github.io/2019/%E5%88%9D%E8%AF%95%E9%83%A8%E7%BD%B2%E9%A1%B9%E7%9B%AE%E5%88%B0%E8%85%BE%E8%AE%AF%E4%BA%91%E7%8E%AF%E5%A2%83%E7%9A%84%E5%AE%89%E8%A3%85/" />
+  
+  <link rel="canonical" href="https://pallcard.github.io/2019/fastdfs/" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+  <meta name="msapplication-TileColor" content="#da532c">
+  <meta name="theme-color" content="#ffffff">
+  <title>
+       
+       
+           FastDFS | 刘科个人博客
+       
+  </title>
+  <meta name="title" content="FastDFS | 刘科个人博客">
+    
+  
+  <link rel="stylesheet" href="/font/iconfont.css">
+  <link rel="stylesheet" href="/css/main.min.css">
+
+
+  
+  
+ 
+
+<script type="application/ld+json">
+ "@context" : "http://schema.org",
+    "@type" : "BlogPosting",
+    "mainEntityOfPage": {
+         "@type": "WebPage",
+         "@id": "https:\/\/pallcard.github.io\/"
+    },
+    "articleSection" : "posts",
+    "name" : "FastDFS",
+    "headline" : "FastDFS",
+    "description" : "1. FastDFS 理论 FastDFS 是一个开源的高性能分布式文件系统（DFS）。 它的主要功能包括：文件存储，文件同步和文件访问，以及高容量和负载平衡。主要解决了海量数据存储问题，特别适合以中小文件（建议范围：4KB \x26lt; file_size \x26lt;500MB）为载体的在线服务。 FastDFS 系统有三个角色：跟踪服务器(Tracker Server)、存储服务器(Storage Server)和客户端(Client)。\ntracker server 跟踪服务器，主要做调度工作，起负载均衡的作用。负责管理所有的storage server和group，每个storage在启动后会连接tracker，告诉tracker自己所属的group，并保持周期性心跳，tracker根据storage的心跳信息，建立映射表，tracke管理的元数据很少（tracker上的元数据都是由storage汇报产生），并且直接存在内存中，本身不需要持久化任何数据。tracker之间是对等的，因此扩展tracker是很容易的，直接增加tracker服务，同时修改storage的配置，增加新增的tarcker服务的地址和端口，重启即可。所有的tracker都会接受storage的心跳信息，以生成元数据信息。\nstorage server 存储服务器（又称：存储节点或数据服务器），顾名思义是用来保存文件的和文件属性的。以group为单位，每个group内可以包含多台storage server，数据互为备份，存储容量空间以group中storage server容量最小的为准。以group为单位组织存储能够方便的进行应用隔离、负责均衡和副本数定制；确定是group的容量受单机容量的限制。group内机器故障，需要依赖group内其他机器重新同步数据来恢复数据（更换坏盘，重启fdfs_storaged即可）。storage存储依赖本地文件系统，storage课配置多个数据存储目录，磁盘不做raid，直接分别挂在到多个目录，将这些目录配置为storage的数据目录即可。\nstorage接收写请求的时候，会根据配置好的规则，选择其中一个存储目录来存储文件；为了避免单个目录下的文件过多，storage第一次启动的时候，会在每个数据存储目录创建2级子目录，每级256，总共65536个目录，新写的文件会以hash的方式路由到其中一个子目录下，然后将文件数据直接作为一个本地文件存储。\nclient 客户端，作为业务请求的发起方，通过专有接口，使用TCP\/IP协议与跟踪器服务器或存储节点进行数据交互。 文件上传 生成file id 选择存储目录之后，storage会生成一个file_id，采用base64编码，包含有：storage server ip，文件创建时间，文件大小，文件CRC32校验码和随机数。每个存储目录下有两个256*256个子目录，storage会按文件file_id进行两次hash，路由到其中一个子目录，然后将文件以file_id为名字存储。 文件路径如下： group0\/M00\/00\/00\/rBAAAl0EkICAIiBOAAABowgL3Pk888.png * 组名：group0 * 磁盘： M00 * 目录：00\/00 * 文件名：rBAAAl0EkICAIiBOAAABowgL3Pk888.png\n文件索引信息包括：组名，虚拟磁盘路径，数据两级目录，文件名。\n 组名：文件上传后所在的存储组名称，在文件上传成功后有存储服务器返回，需要客户端自行保存。 虚拟磁盘路径：存储服务器配置的虚拟路径，与磁盘选项store_path*对应。 数据两级目录：存储服务器在每个虚拟磁盘路径下创建的两级目录，用于存储数据文件。 文件名：与文件上传时不同。是由存储服务器根据特定信息生成，文件名包含：源存储服务器IP地址、文件创建时间戳、文件大小、随机数和文件拓展名等信息。  文件下载 2.安装FastDFS环境 下载安装 libfastcommon yum -y install libevent # 下载libfastcommon wget https:\/\/github.com\/happyfish100\/libfastcommon\/archive\/V1.0.7.tar.gz # 解压 tar -zxvf V1.0.7.tar.gz # 编译、安装 cd libfastcommon-1.",
+    "inLanguage" : "zh-CN",
+    "author" : "刘科",
+    "creator" : "刘科",
+    "publisher": "刘科",
+    "accountablePerson" : "刘科",
+    "copyrightHolder" : "刘科",
+    "copyrightYear" : "2019",
+    "datePublished": "2019-06-15 19:43:24 \x2b0800 CST",
+    "dateModified" : "2019-06-15 19:43:24 \x2b0800 CST",
+    "url" : "https:\/\/pallcard.github.io\/2019\/fastdfs\/",
+    "wordCount" : "287",
+    "keywords" : [ "项目部署","Linux","总数", "刘科个人博客"]
+}
+</script>
+
+</head>
+
+  
+
+
+  <body class="">
+    <div class="wrapper">
+        <nav class="navbar">
+    <div class="container">
+        <div class="navbar-header header-logo">
+        	<a href="javascript:void(0);" class="theme-switch"><i class="iconfont icon-xihuan"></i></a>&nbsp;<a href="https://pallcard.github.io/">刘科个人博客</a>
+        </div>
+        <div class="menu navbar-right">
+                
+                
+                <a class="menu-item" href="/posts/" title="">博客</a>
+                
+                <a class="menu-item" href="/categories/" title="">分类</a>
+                
+                <a class="menu-item" href="/tags/" title="">标签</a>
+                
+                <a class="menu-item" href="/about/" title="">关于</a>
+                
+        </div>
+    </div>
+</nav>
+<nav class="navbar-mobile" id="nav-mobile" style="display: none">
+     <div class="container">
+        <div class="navbar-header">
+            <div>  <a href="javascript:void(0);" class="theme-switch"><i class="iconfont icon-xihuan"></i></a>&nbsp;<a href="https://pallcard.github.io/">刘科个人博客</a></div>
+            <div class="menu-toggle">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+     
+          <div class="menu" id="mobile-menu">
+                
+                
+                <a class="menu-item" href="/posts/" title="">博客</a>
+                
+                <a class="menu-item" href="/categories/" title="">分类</a>
+                
+                <a class="menu-item" href="/tags/" title="">标签</a>
+                
+                <a class="menu-item" href="/about/" title="">关于</a>
+                
+        </div>
+    </div>
+</nav>
+    	 <main class="main">
+          <div class="container">
+      		
+<article class="post-warp" itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">FastDFS</h1>
+        <div class="post-meta">
+                Written by <a itemprop="name" href="https://pallcard.github.io/" rel="author">刘科</a> with ♥ 
+                <span class="post-time">
+                on <time datetime=2019-06-15 itemprop="datePublished">June 15, 2019</time>
+                </span>
+                in
+                <i class="iconfont icon-folder"></i>
+                <span class="post-category">
+                        <a href="https://pallcard.github.io/categories/%E9%A1%B9%E7%9B%AE%E9%83%A8%E7%BD%B2/"> 项目部署 </a>
+                        
+                </span>
+        </div>
+    </header>
+    <div class="post-content">
+        
+
+        
+            
+        
+
+        
+        
+     
+          
+          
+          
+
+          
+          
+          
+
+          
+
+<h4 id="1-fastdfs-理论">1. FastDFS 理论</h4>
+
+<p>FastDFS 是一个开源的高性能分布式文件系统（DFS）。 它的主要功能包括：文件存储，文件同步和文件访问，以及高容量和负载平衡。主要解决了海量数据存储问题，特别适合以中小文件（建议范围：4KB &lt; file_size &lt;500MB）为载体的在线服务。
+FastDFS 系统有三个角色：跟踪服务器(Tracker Server)、存储服务器(Storage Server)和客户端(Client)。</p>
+
+<p><strong>tracker server</strong>
+跟踪服务器，主要做调度工作，起负载均衡的作用。负责管理所有的storage server和group，每个storage在启动后会连接tracker，告诉tracker自己所属的group，并保持周期性心跳，tracker根据storage的心跳信息，建立映射表，tracke管理的元数据很少（tracker上的元数据都是由storage汇报产生），并且直接存在内存中，本身不需要持久化任何数据。tracker之间是对等的，因此扩展tracker是很容易的，直接增加tracker服务，同时修改storage的配置，增加新增的tarcker服务的地址和端口，重启即可。所有的tracker都会接受storage的心跳信息，以生成元数据信息。</p>
+
+<p><strong>storage server</strong>
+存储服务器（又称：存储节点或数据服务器），顾名思义是用来保存文件的和文件属性的。以group为单位，每个group内可以包含多台storage server，数据互为备份，存储容量空间以group中storage server容量最小的为准。以group为单位组织存储能够方便的进行应用隔离、负责均衡和副本数定制；确定是group的容量受单机容量的限制。group内机器故障，需要依赖group内其他机器重新同步数据来恢复数据（更换坏盘，重启fdfs_storaged即可）。storage存储依赖本地文件系统，storage课配置多个数据存储目录，磁盘不做raid，直接分别挂在到多个目录，将这些目录配置为storage的数据目录即可。</p>
+
+<p>storage接收写请求的时候，会根据配置好的规则，选择其中一个存储目录来存储文件；为了避免单个目录下的文件过多，storage第一次启动的时候，会在每个数据存储目录创建2级子目录，每级256，总共65536个目录，新写的文件会以hash的方式路由到其中一个子目录下，然后将文件数据直接作为一个本地文件存储。</p>
+
+<p><strong>client</strong>
+客户端，作为业务请求的发起方，通过专有接口，使用TCP/IP协议与跟踪器服务器或存储节点进行数据交互。
+<figure><img src="/images/ring.svg" data-sizes="auto" data-src="/images/linux001.png" alt="文件上传" class="lazyload"><figcaption class="image-caption">文件上传</figcaption></figure></p>
+
+<h5 id="文件上传">文件上传</h5>
+
+<p><figure><img src="/images/ring.svg" data-sizes="auto" data-src="/images/linux002.png" alt="在这里插入图片描述" class="lazyload"><figcaption class="image-caption">在这里插入图片描述</figcaption></figure>
+<strong>生成file id</strong>
+选择存储目录之后，storage会生成一个file_id，采用base64编码，包含有：storage server ip，文件创建时间，文件大小，文件CRC32校验码和随机数。每个存储目录下有两个256*256个子目录，storage会按文件file_id进行两次hash，路由到其中一个子目录，然后将文件以file_id为名字存储。
+文件路径如下：
+group0/M00/00/00/rBAAAl0EkICAIiBOAAABowgL3Pk888.png
+* 组名：group0
+* 磁盘： M00
+* 目录：00/00
+* 文件名：rBAAAl0EkICAIiBOAAABowgL3Pk888.png</p>
+
+<p>文件索引信息包括：<strong>组名，虚拟磁盘路径，数据两级目录，文件名</strong>。</p>
+
+<ul>
+<li>组名：文件上传后所在的存储组名称，在文件上传成功后有存储服务器返回，需要客户端自行保存。</li>
+<li>虚拟磁盘路径：存储服务器配置的虚拟路径，与磁盘选项store_path*对应。</li>
+<li>数据两级目录：存储服务器在每个虚拟磁盘路径下创建的两级目录，用于存储数据文件。</li>
+<li>文件名：与文件上传时不同。是由存储服务器根据特定信息生成，文件名包含：源存储服务器IP地址、文件创建时间戳、文件大小、随机数和文件拓展名等信息。</li>
+</ul>
+
+<h5 id="文件下载">文件下载</h5>
+
+<p><figure><img src="/images/ring.svg" data-sizes="auto" data-src="/images/linux003.png" alt="文件下载" class="lazyload"><figcaption class="image-caption">文件下载</figcaption></figure></p>
+
+<h4 id="2-安装fastdfs环境">2.安装FastDFS环境</h4>
+
+<h5 id="下载安装-libfastcommon">下载安装 libfastcommon</h5>
+
+<pre><code class="language-java">yum -y install libevent
+# 下载libfastcommon
+wget https://github.com/happyfish100/libfastcommon/archive/V1.0.7.tar.gz
+# 解压
+tar -zxvf V1.0.7.tar.gz
+# 编译、安装
+cd libfastcommon-1.0.7
+ ./make.sh
+ ./make.sh install
+ cd /usr/lib64
+ ll libfast* 
+ # 复制libfastcommon.so 到 usr/lib
+ cp libfastcommon.so /usr/lib
+ cd /usr/lib
+</code></pre>
+
+<h5 id="下载安装fastdfs">下载安装FastDFS</h5>
+
+<pre><code class="language-java"># 下载FastDFS
+wget https://github.com/happyfish100/fastdfs/archive/V5.05.tar.gz
+# 解压FastDFS
+tar -zxvf V5.05.tar.gz
+# 编译、安装
+cd fastdfs-5.05
+ ./make.sh
+ ./make.sh install
+ 
+# 配置tracker
+cd /usr/bin
+ll fdfs*
+cd /etc/fdfs/
+# 进入 fastdfs-5.05/conf目录
+cp * /etc/fdfs/
+vim tracker.conf
+# 修改 base_path=/fastdfs/tracker
+cd /
+mkdir /fastdfs/tracker -p
+cd fastdfs/
+mkdir storage
+mkdir client
+cd /usr/bin
+fdfs_trackerd /etc/fdfs/tracker.conf
+fdfs_trackerd /etc/fdfs/tracker.conf restart
+
+# 配置storage
+vim storage.conf
+# 修改 base_path=/fastdfs/storage
+#     store_path0=/fastdfs/storage
+#     tracker_server=203.195.238.249:22122
+cd /usr/bin
+fdfs_storaged /etc/fdfs/storage.conf restart
+
+# 配置client
+vim client.conf
+# 修改 base_path=/fastdfs/client
+#     tracker_server=203.195.238.249:22122
+# 测试 (先放一张图片到/root/test/headImg.jpg)
+fdfs_test /etc/fdfs/client.conf upload /root/test/headImg.jpg
+# 返回路径http://203.195.238.249/group1/M00/00/00/rBAAAl0EX5WAQtpGAACGZ5UrSuI275_big.jpg
+</code></pre>
+
+<h5 id="目录结构">目录结构</h5>
+
+<pre><code class="language-java">|--- /
+	|---fastdfs
+		|---client
+		|---storage
+			|---data
+				|---存储的文件 256*256个目录
+			|---logs
+		|---tracker
+			|---data
+			|---logs
+		|---tmp
+	|---usr
+		|---lib
+			|---libfastcommon.so
+		|---lib64
+			|---libfastcommon.so
+		|---bin
+			|---fdfs* 命令工具
+	|---etc
+		|---fdfs
+			|---client.conf
+			|---tracker.conf
+			|---storage.conf
+			|---mod_fastdfs.conf
+</code></pre>
+
+<h5 id="安装nginx">安装nginx</h5>
+
+<p>1.安装nginx
+2.修改配置文件，加入如下配置</p>
+
+<pre><code class="language-java">	server  {
+        listen       88;
+        server_name  localhost;
+       
+        location /group1/M00 {
+           alias /fastdfs/storage/data;
+		}
+    }
+</code></pre>
+
+<p>3.即可根据服务器的80端口访问到图片</p>
+
+<h5 id="fastdfs-nginx-module">fastdfs-nginx-module</h5>
+
+<pre><code class="language-java"># 下载
+wget wget https://github.com/happyfish100/fastdfs-nginx-module/archive/5e5f3566bbfa57418b5506aaefbe107a42c9fcb1.zip
+# 解压
+unzip 5e5f3566bbfa57418b5506aaefbe107a42c9fcb1.zip
+# 重命名
+mv fastdfs-nginx-module-5e5f3566bbfa57418b5506aaefbe107a42c9fcb1  fastdfs-nginx-module-master
+# 先停掉nginx服务
+/usr/local/nginx/sbin/nginx -s stop
+# 进入之前安装nginx的解压包的位置
+cd nginx-1.14.2
+# 添加fastdfs-nginx-module模块
+./configure --add-module=../fastdfs-nginx-module-master/src
+# 重新编译、安装
+make &amp;&amp; make install
+# 复制fastdfs-nginx-module 源码中的配置文件到/etc/fdfs 目录
+cp mod_fastdfs.conf /etc/fdfs
+cd /etc/fdfs
+mkdir /fastdfs/tmp
+vim mod_fastdfs.conf
+# 修改 store_path0=/fastdfs/storage
+#     tracker_server=203.195.238.249:22122
+#     base_path=/fastdfs/tmp
+</code></pre>
+
+<p>修改nginx的配置文件</p>
+
+<pre><code class="language-java">	server  {
+        listen       88;
+        server_name  localhost;
+       
+        location /group1/M00 {
+            ngx_fastdfs_module;
+		}
+    }
+</code></pre>
+
+<h5 id="部署结构图">部署结构图</h5>
+
+<p><figure><img src="/images/ring.svg" data-sizes="auto" data-src="/images/linux004.png" alt="部署结构图" class="lazyload"><figcaption class="image-caption">部署结构图</figcaption></figure>
+参考：<a href="https://www.cnblogs.com/chiangchou/p/fastdfs.html" rel="nofollow noreferrer" target="_blank">https://www.cnblogs.com/chiangchou/p/fastdfs.html</a>
+           <a href="https://www.cnblogs.com/chiangchou/p/fastdfs.html" rel="nofollow noreferrer" target="_blank">https://www.cnblogs.com/chiangchou/p/fastdfs.html</a></p>
+
+    </div>
+
+    <div class="post-copyright">
+             
+            <p class="copyright-item">
+                <span>Author:</span>
+                <span>刘科 </span>
+                </p>
+            
+           
+             
+            <p class="copyright-item">
+                    <span>Link:</span>
+                    <a href=https://pallcard.github.io/2019/fastdfs/>https://pallcard.github.io/2019/fastdfs/</span>
+            </p>
+            
+            
+    </div>
+
+  
+    <div class="post-tags">
+        
+            <section>
+            <i class="iconfont icon-tag"></i>Tag(s): 
+            
+            <span class="tag"><a href="https://pallcard.github.io/tags/%E9%A1%B9%E7%9B%AE%E9%83%A8%E7%BD%B2/">
+                    #项目部署</a></span>
+            
+            <span class="tag"><a href="https://pallcard.github.io/tags/linux/">
+                    #Linux</a></span>
+            
+            <span class="tag"><a href="https://pallcard.github.io/tags/%E6%80%BB%E6%95%B0/">
+                    #总数</a></span>
+            
+            </section>
+        
+        <section>
+                <a href="javascript:window.history.back();">back</a></span> · 
+                <span><a href="https://pallcard.github.io/">home</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav">
+        
+        <a href="https://pallcard.github.io/2019/%E5%88%9D%E8%AF%95%E9%83%A8%E7%BD%B2%E9%A1%B9%E7%9B%AE%E5%88%B0%E8%85%BE%E8%AE%AF%E4%BA%91%E7%8E%AF%E5%A2%83%E7%9A%84%E5%AE%89%E8%A3%85/" class="prev" rel="prev" title="初试部署项目到腾讯云（环境的安装）"><i class="iconfont icon-left"></i>&nbsp;初试部署项目到腾讯云（环境的安装）</a>
+         
+        
+    </div>
+
+    <div class="post-comment">
+          
+                 
+          
+    </div>
+</article>
+          </div>
+		   </main>
+      <footer class="footer">
+    <div class="copyright">
+        &copy;
+        
+        <span class="with-love">
+    	 <i class="iconfont icon-love"></i> 
+         </span>
+         
+            <span class="author" itemprop="copyrightHolder"><a href="https://pallcard.github.io/">刘科</a> | </span> 
+         
+
+         
+            <a href="http://www.miibeian.gov.cn/" target="_blank" rel="external nofollow">鄂ICP备19006996号-1 </a> |
+         
+		  <span>Powered by <a href="https://gohugo.io/" target="_blank" rel="external nofollow">Hugo</a> & <a href="https://github.com/liuzc/leaveit" target="_blank" rel="external nofollow">LeaveIt</a></span> 
+    </div>
+</footer>
+
+
+
+
+
+
+
+
+
+
+
+
+    
+     <link href="//lib.baomitu.com/lightgallery/1.6.11/css/lightgallery.min.css" rel="stylesheet">  
+      
+     <script src="/js/vendor_gallery.min.js" async="" ></script>
+    
+  
+
+
+
+     </div>
+  </body>
+</html>
