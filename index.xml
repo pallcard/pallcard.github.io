@@ -6,8 +6,116 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
     <copyright>All rights reserved - 2019</copyright>
-    <lastBuildDate>Sat, 15 Jun 2019 19:43:24 +0800</lastBuildDate>
+    <lastBuildDate>Wed, 19 Jun 2019 19:12:01 +0800</lastBuildDate>
     <atom:link href="/" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Nginx问题</title>
+      <link>https://pallcard.github.io/2019/nginx%E9%97%AE%E9%A2%98/</link>
+      <pubDate>Wed, 19 Jun 2019 19:12:01 +0800</pubDate>
+      
+      <guid>https://pallcard.github.io/2019/nginx%E9%97%AE%E9%A2%98/</guid>
+      <description>&lt;p&gt;&lt;strong&gt;常用命令&lt;/strong&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;/usr/local/webserver/nginx/sbin/nginx -s reload            # 重新载入配置文件
+/usr/local/webserver/nginx/sbin/nginx -s reopen            # 重启 Nginx
+/usr/local/webserver/nginx/sbin/nginx -s stop              # 停止 Nginx
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;错误信息1&lt;/strong&gt;
+后期添加配置文件后，重新运行报错，（云服务器为centos，最初按照时直接用的默认安装）&lt;/p&gt;
+
+&lt;p&gt;错误信息：./configure: error: SSL modules require the OpenSSL library.&lt;/p&gt;
+
+&lt;p&gt;解决办法：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;# 安装 
+yum -y install openssl openssl-devel
+
+yum -y install openssl openssl-devel
+
+./configure --prefix=/usr/local/nginx --with-http_ssl_module
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;错误信息2&lt;/strong&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;# 防火墙问题（也可能是安全组设置的问题）
+
+# 关闭防火墙命令：
+systemctl stop firewalld.service
+
+# 开启防火墙：
+systemctl start firewalld.service
+
+# 关闭开机自启动：
+systemctl disable firewalld.service
+
+# 开启开机启动：
+systemctl enable firewalld.service
+
+# 开放80
+
+firewall-cmd --zone=public --add-port=80/tcp --permanent （--permanent永久生效，没有此参数重启后失效）
+
+# 开放1000-2000
+
+firewall-cmd --zone=public --add-port=1000-2000/tcp --permanent 
+
+# 查看指定端口被哪个进程占用的情况
+
+netstat -tunlp|grep 端口号
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;错误信息3&lt;/strong&gt;
+linux下启动nginx报错libpcre.so.0&lt;/p&gt;
+
+&lt;p&gt;解决办法：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;命令查找nginx动态关联的lib包
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;ldd $(which /usr/local/nginx/sbin/nginx)&lt;/p&gt;
+
+&lt;p&gt;使用关联命令，重新关联&lt;/p&gt;
+
+&lt;p&gt;ln -s /usr/local/lib/libpcre.so.0 /lib64&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;错误信息4&lt;/strong&gt;
+nginx: [error] invalid PID number ; in /usr/local/nginx/logs/nginx.pid&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;解决办法：
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;第一步：执行命令  killall -9 nginx   杀掉nginx 进程&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;第二步：执行命令  /usr/local/nginx/sbin/nginx -c /usr/local/nginx/conf/nginx.conf  &lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;第三步：重新加载配置文件，执行命令  ./nginx -s reload &lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;strong&gt;错误信息5&lt;/strong&gt;
+配置ssl报错
+nginx: [emerg] unknown directive &amp;ldquo;ssl&amp;rdquo; in /usr/local/nginx/conf/nginx.conf:
+到解压的nginx目录下&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;./configure --with-http_ssl_module
+# nginx之前添加了fastdfs-nginx-module
+# ./configure --with-http_ssl_module --add-module=../fastdfs-nginx-module-master/src
+make # 不能执行make install 会覆盖
+# 把原来nginx备份
+cp /usr/local/nginx/sbin/nginx /usr/local/nginx/sbin/nginx.bak
+# 把新的nginx覆盖旧的
+cp objs/nginx /usr/local/nginx/sbin/nginx
+# 出现错误时cp: cannot create regular file ‘/usr/local/nginx/sbin/nginx’: Text file busy ，使用以下命令解决
+# cp -rfp objs/nginx /usr/local/nginx/sbin/nginx
+# 测试nginx是否正确
+/usr/local/nginx/sbin/nginx -t
+# 重启nginx
+/usr/local/nginx/sbin/nginx -s reload
+&lt;/code&gt;&lt;/pre&gt;
+</description>
+    </item>
     
     <item>
       <title>FastDFS</title>
@@ -1429,57 +1537,6 @@ Output:
         if (row &amp;gt;= array[0].length || col &amp;lt;= 0){
             System.out.println(&amp;quot;false&amp;quot;);
         }
-    }
-}
-&lt;/code&gt;&lt;/pre&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>算法001</title>
-      <link>https://pallcard.github.io/2019/algorithm001/</link>
-      <pubDate>Tue, 04 Jun 2019 16:37:28 +0800</pubDate>
-      
-      <guid>https://pallcard.github.io/2019/algorithm001/</guid>
-      <description>
-
-&lt;h5 id=&#34;描述&#34;&gt;描述&lt;/h5&gt;
-
-&lt;p&gt;在一个长度为 n 的数组里的所有数字都在 0 到 n-1 的范围内。数组中某些数字是重复的，但不知道有几个数字是重复的，也不知道每个数字重复几次。请找出数组中任意一个重复的数字。&lt;/p&gt;
-
-&lt;h5 id=&#34;例子&#34;&gt;例子&lt;/h5&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;Input:
-	{2, 3, 1, 0, 2, 5}
-Output:
-	2
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h4 id=&#34;思路&#34;&gt;思路&lt;/h4&gt;
-
-&lt;p&gt;由于数组中的值大小 为0 到 n-1，可以通过交换就数组中的元素放到与其下标对应的位置，若有两个数要出现在同一个位置，则找到了这个数。&lt;/p&gt;
-
-&lt;h5 id=&#34;代码&#34;&gt;代码&lt;/h5&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;public class Question001 {
-    public static void main(String[] args) {
-        int[] array = new int[] {2,3,1,0,2,5};
-        for (int i = 0; i &amp;lt; array.length; i++) {
-            while(i != array[i]) {
-                if(array[i] == array[array[i]]) {
-                    System.out.println(array[i]);
-                    return;
-                } else {
-                    swap(array,i,array[i]);
-                }
-            }
-        }
-    }
-
-    public static void swap(int[] array, int left, int right) {
-        int temp = array[left];
-        array[left] = array[right];
-        array[right] = temp;
     }
 }
 &lt;/code&gt;&lt;/pre&gt;
