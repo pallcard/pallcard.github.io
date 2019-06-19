@@ -19,11 +19,12 @@
       
       <guid>https://pallcard.github.io/2019/nginx%E9%97%AE%E9%A2%98/</guid>
       <description>常用命令
-/usr/local/webserver/nginx/sbin/nginx -s reload # 重新载入配置文件 /usr/local/webserver/nginx/sbin/nginx -s reopen # 重启 Nginx /usr/local/webserver/nginx/sbin/nginx -s stop # 停止 Nginx  错误信息1 后期添加配置文件后，重新运行报错，（云服务器为centos，最初按照时直接用的默认安装）
+/usr/local/webserver/nginx/sbin/nginx -s reload # 重新载入配置文件 /usr/local/webserver/nginx/sbin/nginx -s reopen # 重启 Nginx /usr/local/webserver/nginx/sbin/nginx -s stop # 停止 Nginx  错误信息1
+后期添加配置文件后，重新运行报错，（云服务器为centos，最初按照时直接用的默认安装）
 错误信息：./configure: error: SSL modules require the OpenSSL library.
 解决办法：
 # 安装 yum -y install openssl openssl-devel yum -y install openssl openssl-devel ./configure --prefix=/usr/local/nginx --with-http_ssl_module  错误信息2
-# 防火墙问题（也可能是安全组设置的问题） # 关闭防火墙命令： systemctl stop firewalld.service # 开启防火墙： systemctl start firewalld.service # 关闭开机自启动： systemctl disable firewalld.service # 开启开机启动： systemctl enable firewalld.service # 开放80 firewall-cmd --zone=public --add-port=80/tcp --permanent （--permanent永久生效，没有此参数重启后失效） # 开放1000-2000 firewall-cmd --zone=public --add-port=1000-2000/tcp --permanent # 查看指定端口被哪个进程占用的情况 netstat -tunlp|grep 端口号  错误信息3 linux下启动nginx报错libpcre.</description>
+# 防火墙问题（也可能是安全组设置的问题） # 关闭防火墙命令： systemctl stop firewalld.service # 开启防火墙： systemctl start firewalld.service # 关闭开机自启动： systemctl disable firewalld.service # 开启开机启动： systemctl enable firewalld.service # 开放80 firewall-cmd --zone=public --add-port=80/tcp --permanent （--permanent永久生效，没有此参数重启后失效） # 开放1000-2000 firewall-cmd --zone=public --add-port=1000-2000/tcp --permanent # 查看指定端口被哪个进程占用的情况 netstat -tunlp|grep 端口号  错误信息3</description>
     </item>
     
     <item>

@@ -22,8 +22,9 @@
 /usr/local/webserver/nginx/sbin/nginx -s stop              # 停止 Nginx
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;&lt;strong&gt;错误信息1&lt;/strong&gt;
-后期添加配置文件后，重新运行报错，（云服务器为centos，最初按照时直接用的默认安装）&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;错误信息1&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;后期添加配置文件后，重新运行报错，（云服务器为centos，最初按照时直接用的默认安装）&lt;/p&gt;
 
 &lt;p&gt;错误信息：./configure: error: SSL modules require the OpenSSL library.&lt;/p&gt;
 
@@ -66,8 +67,9 @@ firewall-cmd --zone=public --add-port=1000-2000/tcp --permanent 
 netstat -tunlp|grep 端口号
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;&lt;strong&gt;错误信息3&lt;/strong&gt;
-linux下启动nginx报错libpcre.so.0&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;错误信息3&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;linux下启动nginx报错libpcre.so.0&lt;/p&gt;
 
 &lt;p&gt;解决办法：&lt;/p&gt;
 
@@ -94,12 +96,14 @@ nginx: [error] invalid PID number ; in /usr/local/nginx/logs/nginx.pid&lt;/p&gt;
 &lt;li&gt;&lt;p&gt;第三步：重新加载配置文件，执行命令  ./nginx -s reload &lt;/p&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;&lt;strong&gt;错误信息5&lt;/strong&gt;
-配置ssl报错
-nginx: [emerg] unknown directive &amp;ldquo;ssl&amp;rdquo; in /usr/local/nginx/conf/nginx.conf:
-到解压的nginx目录下&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;错误信息5&lt;/strong&gt;&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;./configure --with-http_ssl_module
+&lt;p&gt;配置ssl报错&lt;/p&gt;
+
+&lt;p&gt;nginx: [emerg] unknown directive &amp;ldquo;ssl&amp;rdquo; in /usr/local/nginx/conf/nginx.conf:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;# 到解压的nginx目录下
+./configure --with-http_ssl_module
 # nginx之前添加了fastdfs-nginx-module
 # ./configure --with-http_ssl_module --add-module=../fastdfs-nginx-module-master/src
 make # 不能执行make install 会覆盖

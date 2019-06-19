@@ -46,7 +46,7 @@
     "articleSection" : "posts",
     "name" : "Nginx问题",
     "headline" : "Nginx问题",
-    "description" : "常用命令\n\/usr\/local\/webserver\/nginx\/sbin\/nginx -s reload # 重新载入配置文件 \/usr\/local\/webserver\/nginx\/sbin\/nginx -s reopen # 重启 Nginx \/usr\/local\/webserver\/nginx\/sbin\/nginx -s stop # 停止 Nginx  错误信息1 后期添加配置文件后，重新运行报错，（云服务器为centos，最初按照时直接用的默认安装）\n错误信息：.\/configure: error: SSL modules require the OpenSSL library.\n解决办法：\n# 安装 yum -y install openssl openssl-devel yum -y install openssl openssl-devel .\/configure --prefix=\/usr\/local\/nginx --with-http_ssl_module  错误信息2\n# 防火墙问题（也可能是安全组设置的问题） # 关闭防火墙命令： systemctl stop firewalld.service # 开启防火墙： systemctl start firewalld.service # 关闭开机自启动： systemctl disable firewalld.service # 开启开机启动： systemctl enable firewalld.service # 开放80 firewall-cmd --zone=public --add-port=80\/tcp --permanent （--permanent永久生效，没有此参数重启后失效） # 开放1000-2000 firewall-cmd --zone=public --add-port=1000-2000\/tcp --permanent # 查看指定端口被哪个进程占用的情况 netstat -tunlp|grep 端口号  错误信息3 linux下启动nginx报错libpcre.",
+    "description" : "常用命令\n\/usr\/local\/webserver\/nginx\/sbin\/nginx -s reload # 重新载入配置文件 \/usr\/local\/webserver\/nginx\/sbin\/nginx -s reopen # 重启 Nginx \/usr\/local\/webserver\/nginx\/sbin\/nginx -s stop # 停止 Nginx  错误信息1\n后期添加配置文件后，重新运行报错，（云服务器为centos，最初按照时直接用的默认安装）\n错误信息：.\/configure: error: SSL modules require the OpenSSL library.\n解决办法：\n# 安装 yum -y install openssl openssl-devel yum -y install openssl openssl-devel .\/configure --prefix=\/usr\/local\/nginx --with-http_ssl_module  错误信息2\n# 防火墙问题（也可能是安全组设置的问题） # 关闭防火墙命令： systemctl stop firewalld.service # 开启防火墙： systemctl start firewalld.service # 关闭开机自启动： systemctl disable firewalld.service # 开启开机启动： systemctl enable firewalld.service # 开放80 firewall-cmd --zone=public --add-port=80\/tcp --permanent （--permanent永久生效，没有此参数重启后失效） # 开放1000-2000 firewall-cmd --zone=public --add-port=1000-2000\/tcp --permanent # 查看指定端口被哪个进程占用的情况 netstat -tunlp|grep 端口号  错误信息3",
     "inLanguage" : "zh-CN",
     "author" : "刘科",
     "creator" : "刘科",
@@ -57,7 +57,7 @@
     "datePublished": "2019-06-19 19:12:01 \x2b0800 CST",
     "dateModified" : "2019-06-19 19:12:01 \x2b0800 CST",
     "url" : "https:\/\/pallcard.github.io\/2019\/nginx%E9%97%AE%E9%A2%98\/",
-    "wordCount" : "179",
+    "wordCount" : "180",
     "keywords" : [ "项目部署","nginx","总数", "刘科个人博客"]
 }
 </script>
@@ -153,8 +153,9 @@
 /usr/local/webserver/nginx/sbin/nginx -s stop              # 停止 Nginx
 </code></pre>
 
-<p><strong>错误信息1</strong>
-后期添加配置文件后，重新运行报错，（云服务器为centos，最初按照时直接用的默认安装）</p>
+<p><strong>错误信息1</strong></p>
+
+<p>后期添加配置文件后，重新运行报错，（云服务器为centos，最初按照时直接用的默认安装）</p>
 
 <p>错误信息：./configure: error: SSL modules require the OpenSSL library.</p>
 
@@ -197,8 +198,9 @@ firewall-cmd --zone=public --add-port=1000-2000/tcp --permanent 
 netstat -tunlp|grep 端口号
 </code></pre>
 
-<p><strong>错误信息3</strong>
-linux下启动nginx报错libpcre.so.0</p>
+<p><strong>错误信息3</strong></p>
+
+<p>linux下启动nginx报错libpcre.so.0</p>
 
 <p>解决办法：</p>
 
@@ -225,12 +227,14 @@ nginx: [error] invalid PID number ; in /usr/local/nginx/logs/nginx.pid</p>
 <li><p>第三步：重新加载配置文件，执行命令  ./nginx -s reload </p></li>
 </ul>
 
-<p><strong>错误信息5</strong>
-配置ssl报错
-nginx: [emerg] unknown directive &ldquo;ssl&rdquo; in /usr/local/nginx/conf/nginx.conf:
-到解压的nginx目录下</p>
+<p><strong>错误信息5</strong></p>
 
-<pre><code class="language-java">./configure --with-http_ssl_module
+<p>配置ssl报错</p>
+
+<p>nginx: [emerg] unknown directive &ldquo;ssl&rdquo; in /usr/local/nginx/conf/nginx.conf:</p>
+
+<pre><code class="language-java"># 到解压的nginx目录下
+./configure --with-http_ssl_module
 # nginx之前添加了fastdfs-nginx-module
 # ./configure --with-http_ssl_module --add-module=../fastdfs-nginx-module-master/src
 make # 不能执行make install 会覆盖
