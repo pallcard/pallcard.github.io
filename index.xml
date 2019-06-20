@@ -73,8 +73,7 @@ netstat -tunlp|grep 端口号
 
 &lt;p&gt;解决办法：&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;命令查找nginx动态关联的lib包
-&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;命令查找nginx动态关联的lib包&lt;/p&gt;
 
 &lt;p&gt;ldd $(which /usr/local/nginx/sbin/nginx)&lt;/p&gt;
 
@@ -85,8 +84,7 @@ netstat -tunlp|grep 端口号
 &lt;p&gt;&lt;strong&gt;错误信息4&lt;/strong&gt;
 nginx: [error] invalid PID number ; in /usr/local/nginx/logs/nginx.pid&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;解决办法：
-&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;解决办法：&lt;/p&gt;
 
 &lt;ul&gt;
 &lt;li&gt;&lt;p&gt;第一步：执行命令  killall -9 nginx   杀掉nginx 进程&lt;/p&gt;&lt;/li&gt;
