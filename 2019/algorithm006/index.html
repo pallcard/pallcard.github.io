@@ -1,4 +1,304 @@
-<div class="post-comment">
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+  <meta http-equiv="content-type" content="text/html;charset=utf-8">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noodp"/>
+  <meta name="author" content="刘科">
+  <meta name="description" content="hust研一">
+  <meta name="keywords" content="Java,博客">
+  
+  <link rel="prev" href="https://pallcard.github.io/2019/algorithm005/" />
+  <link rel="next" href="https://pallcard.github.io/2019/algorithm007/" />
+  <link rel="canonical" href="https://pallcard.github.io/2019/algorithm006/" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+  <meta name="msapplication-TileColor" content="#da532c">
+  <meta name="theme-color" content="#ffffff">
+  <title>
+       
+       
+           算法006 | 刘科个人博客
+       
+  </title>
+  <meta name="title" content="算法006 | 刘科个人博客">
     
+  
+  <link rel="stylesheet" href="/font/iconfont.css">
+  <link rel="stylesheet" href="/css/main.min.css">
+
+
+  
+  
+ 
+
+<script type="application/ld+json">
+ "@context" : "http://schema.org",
+    "@type" : "BlogPosting",
+    "mainEntityOfPage": {
+         "@type": "WebPage",
+         "@id": "https:\/\/pallcard.github.io\/"
+    },
+    "articleSection" : "posts",
+    "name" : "算法006",
+    "headline" : "算法006",
+    "description" : "描述 给定一个二叉树和其中的一个结点，请找出中序遍历顺序的下一个结点并且返回。 注意，树中的结点不仅包含左右子结点，同时包含指向父结点的指针。\n例子 Input: 二叉树 Output: 中序遍历顺序的下一个结点  思路 中序遍历顺序的下一个结点，中序遍历是左根右， 判断该结点是否有右孩子， 1.若有，则下一个结点的最左子结点 2.若无，则下一个结点为第一个左链指向该结点的祖先结点的结点\n代码 public class Question006 { class TreeLinkNode { int val; TreeLinkNode left = null; TreeLinkNode right = null; TreeLinkNode next = null; TreeLinkNode(int val) { this.val = val; } } public TreeLinkNode GetNext(TreeLinkNode pNode) { TreeLinkNode resultNode = null; if(null != pNode.right) { resultNode = pNode.right; while (null != resultNode.left) { resultNode = resultNode.next; } } else { TreeLinkNode temp = pNode; resultNode = pNode.",
+    "inLanguage" : "zh-CN",
+    "author" : "刘科",
+    "creator" : "刘科",
+    "publisher": "刘科",
+    "accountablePerson" : "刘科",
+    "copyrightHolder" : "刘科",
+    "copyrightYear" : "2019",
+    "datePublished": "2019-06-05 14:50:36 \x2b0800 CST",
+    "dateModified" : "2019-06-05 14:50:36 \x2b0800 CST",
+    "url" : "https:\/\/pallcard.github.io\/2019\/algorithm006\/",
+    "wordCount" : "99",
+    "keywords" : [ "Algorithm","Java","总数", "刘科个人博客"]
+}
+</script>
+
+</head>
+
+  
+
+
+  <body class="">
+    <div class="wrapper">
+        <nav class="navbar">
+    <div class="container">
+        <div class="navbar-header header-logo">
+        	<a href="javascript:void(0);" class="theme-switch"><i class="iconfont icon-xihuan"></i></a>&nbsp;<a href="https://pallcard.github.io/">刘科个人博客</a>
+        </div>
+        <div class="menu navbar-right">
+                
+                
+                <a class="menu-item" href="/posts/" title="">博客</a>
+                
+                <a class="menu-item" href="/categories/" title="">分类</a>
+                
+                <a class="menu-item" href="/tags/" title="">标签</a>
+                
+                <a class="menu-item" href="/about/" title="">关于</a>
+                
+        </div>
+    </div>
+</nav>
+<nav class="navbar-mobile" id="nav-mobile" style="display: none">
+     <div class="container">
+        <div class="navbar-header">
+            <div>  <a href="javascript:void(0);" class="theme-switch"><i class="iconfont icon-xihuan"></i></a>&nbsp;<a href="https://pallcard.github.io/">刘科个人博客</a></div>
+            <div class="menu-toggle">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
      
-</div>
+          <div class="menu" id="mobile-menu">
+                
+                
+                <a class="menu-item" href="/posts/" title="">博客</a>
+                
+                <a class="menu-item" href="/categories/" title="">分类</a>
+                
+                <a class="menu-item" href="/tags/" title="">标签</a>
+                
+                <a class="menu-item" href="/about/" title="">关于</a>
+                
+        </div>
+    </div>
+</nav>
+    	 <main class="main">
+          <div class="container">
+      		
+<article class="post-warp" itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">算法006</h1>
+        <div class="post-meta">
+                Written by <a itemprop="name" href="https://pallcard.github.io/" rel="author">刘科</a> with ♥ 
+                <span class="post-time">
+                on <time datetime=2019-06-05 itemprop="datePublished">June 5, 2019</time>
+                </span>
+                in
+                <i class="iconfont icon-folder"></i>
+                <span class="post-category">
+                        <a href="https://pallcard.github.io/categories/algorithm/"> Algorithm </a>
+                        
+                </span>
+        </div>
+    </header>
+    <div class="post-content">
+        
+
+        
+
+        
+        
+     
+          
+          
+          
+
+          
+          
+          
+
+          
+
+<h5 id="描述">描述</h5>
+
+<p>给定一个二叉树和其中的一个结点，请找出中序遍历顺序的下一个结点并且返回。
+注意，树中的结点不仅包含左右子结点，同时包含指向父结点的指针。</p>
+
+<h5 id="例子">例子</h5>
+
+<pre><code class="language-java">Input:
+	二叉树
+Output:
+	中序遍历顺序的下一个结点
+</code></pre>
+
+<h4 id="思路">思路</h4>
+
+<p>中序遍历顺序的下一个结点，中序遍历是左根右，
+判断该结点是否有右孩子，
+ 1.若有，则下一个结点的最左子结点
+ 2.若无，则下一个结点为第一个左链指向该结点的祖先结点的结点</p>
+
+<h5 id="代码">代码</h5>
+
+<pre><code class="language-java">public class Question006 {
+
+    class TreeLinkNode {
+        int val;
+        TreeLinkNode left = null;
+        TreeLinkNode right = null;
+        TreeLinkNode next = null;
+
+        TreeLinkNode(int val) {
+            this.val = val;
+        }
+    }
+
+    public TreeLinkNode GetNext(TreeLinkNode pNode) {
+        TreeLinkNode resultNode = null;
+        if(null != pNode.right) {
+            resultNode = pNode.right;
+            while (null != resultNode.left) {
+                resultNode = resultNode.next;
+            }
+        } else {
+            TreeLinkNode temp = pNode;
+            resultNode = pNode.next;
+            while (null != resultNode &amp;&amp; resultNode.left != temp) {
+                temp = pNode.next;
+                resultNode = temp.next;
+            }
+        }
+        return resultNode;
+    }
+}
+</code></pre>
+
+    </div>
+
+    <div class="post-copyright">
+             
+            <p class="copyright-item">
+                <span>Author:</span>
+                <span>刘科 </span>
+                </p>
+            
+           
+             
+            <p class="copyright-item">
+                    <span>Link:</span>
+                    <a href=https://pallcard.github.io/2019/algorithm006/>https://pallcard.github.io/2019/algorithm006/</span>
+            </p>
+            
+            
+    </div>
+
+  
+    <div class="post-tags">
+        
+            <section>
+            <i class="iconfont icon-tag"></i>Tag(s): 
+            
+            <span class="tag"><a href="https://pallcard.github.io/tags/algorithm/">
+                    #Algorithm</a></span>
+            
+            <span class="tag"><a href="https://pallcard.github.io/tags/java/">
+                    #Java</a></span>
+            
+            <span class="tag"><a href="https://pallcard.github.io/tags/%E6%80%BB%E6%95%B0/">
+                    #总数</a></span>
+            
+            </section>
+        
+        <section>
+                <a href="javascript:window.history.back();">back</a></span> · 
+                <span><a href="https://pallcard.github.io/">home</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav">
+        
+        <a href="https://pallcard.github.io/2019/algorithm005/" class="prev" rel="prev" title="算法005"><i class="iconfont icon-left"></i>&nbsp;算法005</a>
+         
+        
+        <a href="https://pallcard.github.io/2019/algorithm007/" class="next" rel="next" title="算法007">算法007&nbsp;<i class="iconfont icon-right"></i></a>
+        
+    </div>
+
+    <div class="post-comment">
+          
+                 
+          
+    </div>
+</article>
+          </div>
+		   </main>
+      <footer class="footer">
+    <div class="copyright">
+        &copy;
+        
+        <span class="with-love">
+    	 <i class="iconfont icon-love"></i> 
+         </span>
+         
+            <span class="author" itemprop="copyrightHolder"><a href="https://pallcard.github.io/">刘科</a> | </span> 
+         
+
+         
+            <a href="http://www.miibeian.gov.cn/" target="_blank" rel="external nofollow">鄂ICP备19006996号-1 </a> |
+         
+		  <span>Powered by <a href="https://gohugo.io/" target="_blank" rel="external nofollow">Hugo</a> & <a href="https://github.com/liuzc/leaveit" target="_blank" rel="external nofollow">LeaveIt</a></span> 
+    </div>
+</footer>
+
+
+
+
+
+
+
+
+
+
+
+
+    
+    
+    <script src="/js/vendor_no_gallery.min.js" async=""></script>
+    
+  
+
+
+
+     </div>
+  </body>
+</html>

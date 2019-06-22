@@ -1,4 +1,356 @@
-<div class="post-comment">
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+  <meta http-equiv="content-type" content="text/html;charset=utf-8">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noodp"/>
+  <meta name="author" content="刘科">
+  <meta name="description" content="hust研一">
+  <meta name="keywords" content="Java,博客">
+  
+  <link rel="prev" href="https://pallcard.github.io/2019/springboot%E4%BC%A0%E9%80%92%E5%8F%82%E6%95%B0/" />
+  <link rel="next" href="https://pallcard.github.io/2019/springboot%E4%B9%8B%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6/" />
+  <link rel="canonical" href="https://pallcard.github.io/2019/springboot%E4%B9%8Bswagger/" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+  <meta name="msapplication-TileColor" content="#da532c">
+  <meta name="theme-color" content="#ffffff">
+  <title>
+       
+       
+           SpringBoot之Swagger | 刘科个人博客
+       
+  </title>
+  <meta name="title" content="SpringBoot之Swagger | 刘科个人博客">
     
+  
+  <link rel="stylesheet" href="/font/iconfont.css">
+  <link rel="stylesheet" href="/css/main.min.css">
+
+
+  
+  
+ 
+
+<script type="application/ld+json">
+ "@context" : "http://schema.org",
+    "@type" : "BlogPosting",
+    "mainEntityOfPage": {
+         "@type": "WebPage",
+         "@id": "https:\/\/pallcard.github.io\/"
+    },
+    "articleSection" : "posts",
+    "name" : "SpringBoot之Swagger",
+    "headline" : "SpringBoot之Swagger",
+    "description" : "Swagger框架 描述和测试API接口,自动生成API接口文档。\n1.添加依赖 \x26lt;dependency\x26gt; \x26lt;groupId\x26gt;io.springfox\x26lt;\/groupId\x26gt; \x26lt;artifactId\x26gt;springfox-swagger2\x26lt;\/artifactId\x26gt; \x26lt;version\x26gt;2.9.2\x26lt;\/version\x26gt; \x26lt;\/dependency\x26gt; \x26lt;dependency\x26gt; \x26lt;groupId\x26gt;io.springfox\x26lt;\/groupId\x26gt; \x26lt;artifactId\x26gt;springfox-swagger-ui\x26lt;\/artifactId\x26gt; \x26lt;version\x26gt;2.9.2\x26lt;\/version\x26gt; \x26lt;\/dependency\x26gt; \x26lt;!--lombok依赖--\x26gt; \x26lt;dependency\x26gt; \x26lt;groupId\x26gt;org.projectlombok\x26lt;\/groupId\x26gt; \x26lt;artifactId\x26gt;lombok\x26lt;\/artifactId\x26gt; \x26lt;version\x26gt;1.18.8\x26lt;\/version\x26gt; \x26lt;scope\x26gt;provided\x26lt;\/scope\x26gt; \x26lt;\/dependency\x26gt;  2.Swagger配置 在resources目录下新建application.yml文件，添加如下配置\nswagger: title: SpringBoot学习 description: SpringBoot学习 version: 1.0.0 name: lk url: https:\/\/pallcard.github.io email: 1250585541@qq.com  新建SwaggerConfig文件\n@Configuration @EnableWebMvc @EnableSwagger2 @ConfigurationProperties(prefix = \x26quot;swagger\x26quot;) @Data \/\/lombok @ComponentScan(basePackages = {\x26quot;cn.wishhust.demo.controller\x26quot;}) public class SwaggerConfig { private String title; private String description; private String version; private String name; private String url; private String email; @Bean public Docket customDocket() { return new Docket(DocumentationType.",
+    "inLanguage" : "zh-CN",
+    "author" : "刘科",
+    "creator" : "刘科",
+    "publisher": "刘科",
+    "accountablePerson" : "刘科",
+    "copyrightHolder" : "刘科",
+    "copyrightYear" : "2019",
+    "datePublished": "2019-06-08 17:49:19 \x2b0800 CST",
+    "dateModified" : "2019-06-08 17:49:19 \x2b0800 CST",
+    "url" : "https:\/\/pallcard.github.io\/2019\/springboot%E4%B9%8Bswagger\/",
+    "wordCount" : "147",
+    "keywords" : [ "SpringBoot","总数", "刘科个人博客"]
+}
+</script>
+
+</head>
+
+  
+
+
+  <body class="">
+    <div class="wrapper">
+        <nav class="navbar">
+    <div class="container">
+        <div class="navbar-header header-logo">
+        	<a href="javascript:void(0);" class="theme-switch"><i class="iconfont icon-xihuan"></i></a>&nbsp;<a href="https://pallcard.github.io/">刘科个人博客</a>
+        </div>
+        <div class="menu navbar-right">
+                
+                
+                <a class="menu-item" href="/posts/" title="">博客</a>
+                
+                <a class="menu-item" href="/categories/" title="">分类</a>
+                
+                <a class="menu-item" href="/tags/" title="">标签</a>
+                
+                <a class="menu-item" href="/about/" title="">关于</a>
+                
+        </div>
+    </div>
+</nav>
+<nav class="navbar-mobile" id="nav-mobile" style="display: none">
+     <div class="container">
+        <div class="navbar-header">
+            <div>  <a href="javascript:void(0);" class="theme-switch"><i class="iconfont icon-xihuan"></i></a>&nbsp;<a href="https://pallcard.github.io/">刘科个人博客</a></div>
+            <div class="menu-toggle">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
      
-</div>
+          <div class="menu" id="mobile-menu">
+                
+                
+                <a class="menu-item" href="/posts/" title="">博客</a>
+                
+                <a class="menu-item" href="/categories/" title="">分类</a>
+                
+                <a class="menu-item" href="/tags/" title="">标签</a>
+                
+                <a class="menu-item" href="/about/" title="">关于</a>
+                
+        </div>
+    </div>
+</nav>
+    	 <main class="main">
+          <div class="container">
+      		
+<article class="post-warp" itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">SpringBoot之Swagger</h1>
+        <div class="post-meta">
+                Written by <a itemprop="name" href="https://pallcard.github.io/" rel="author">刘科</a> with ♥ 
+                <span class="post-time">
+                on <time datetime=2019-06-08 itemprop="datePublished">June 8, 2019</time>
+                </span>
+                in
+                <i class="iconfont icon-folder"></i>
+                <span class="post-category">
+                        <a href="https://pallcard.github.io/categories/springboot/"> SpringBoot </a>
+                        
+                </span>
+        </div>
+    </header>
+    <div class="post-content">
+        
+
+        
+
+        
+        
+     
+          
+          
+          
+
+          
+          
+          
+
+          
+
+<h5 id="swagger框架">Swagger框架</h5>
+
+<p>描述和测试API接口,自动生成API接口文档。</p>
+
+<h6 id="1-添加依赖">1.添加依赖</h6>
+
+<pre><code class="language-java">&lt;dependency&gt;
+    &lt;groupId&gt;io.springfox&lt;/groupId&gt;
+    &lt;artifactId&gt;springfox-swagger2&lt;/artifactId&gt;
+    &lt;version&gt;2.9.2&lt;/version&gt;
+&lt;/dependency&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;io.springfox&lt;/groupId&gt;
+    &lt;artifactId&gt;springfox-swagger-ui&lt;/artifactId&gt;
+    &lt;version&gt;2.9.2&lt;/version&gt;
+&lt;/dependency&gt;
+
+&lt;!--lombok依赖--&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;org.projectlombok&lt;/groupId&gt;
+    &lt;artifactId&gt;lombok&lt;/artifactId&gt;
+    &lt;version&gt;1.18.8&lt;/version&gt;
+    &lt;scope&gt;provided&lt;/scope&gt;
+&lt;/dependency&gt;
+</code></pre>
+
+<h6 id="2-swagger配置">2.Swagger配置</h6>
+
+<p>在resources目录下新建application.yml文件，添加如下配置</p>
+
+<pre><code class="language-java">swagger:
+  title: SpringBoot学习
+  description: SpringBoot学习
+  version: 1.0.0
+  name: lk
+  url: https://pallcard.github.io
+  email: 1250585541@qq.com
+</code></pre>
+
+<p>新建SwaggerConfig文件</p>
+
+<pre><code class="language-java">@Configuration
+@EnableWebMvc
+@EnableSwagger2
+@ConfigurationProperties(prefix = &quot;swagger&quot;)
+@Data //lombok
+@ComponentScan(basePackages = {&quot;cn.wishhust.demo.controller&quot;})
+public class SwaggerConfig {
+
+    private String title;
+    private String description;
+    private String version;
+
+    private String name;
+    private String url;
+    private String email;
+
+    @Bean
+    public Docket customDocket() {
+        return new Docket(DocumentationType.SWAGGER_2).apiInfo(apiInfo());
+    }
+
+    private ApiInfo apiInfo() {
+        Contact contact = new Contact(name, url, email);
+        return new ApiInfoBuilder()
+                .title(title)
+                .description(description)
+                .contact(contact)
+                .version(version)
+                .build();
+    }
+}
+</code></pre>
+
+<p>MVC配置:过滤网页静态资源</p>
+
+<pre><code class="language-java">@Configuration
+class WebMvcConfig implements WebMvcConfigurer {
+
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        registry.addResourceHandler(&quot;swagger-ui.html&quot;)
+                .addResourceLocations(&quot;classpath:/META-INF/resources/&quot;);
+
+        registry.addResourceHandler(&quot;/webjars/**&quot;)
+                .addResourceLocations(&quot;classpath:/META-INF/resources/webjars/&quot;);
+    }
+    
+}
+</code></pre>
+
+<h6 id="3-使用">3.使用</h6>
+
+<pre><code class="language-java">@RestController
+@RequestMapping(&quot;/test&quot;)
+@Api(value = &quot;测试&quot;)
+public class HelloWorld {
+
+    Logger log = LoggerFactory.getLogger(HelloWorld.class);
+    
+    @GetMapping(value={&quot;/hello&quot;})
+    @ApiOperation(value = &quot;hello&quot;)
+//    @ApiImplicitParam
+    public String hello(){
+        return &quot;Hello Spring Boot&quot;;
+    }
+}
+</code></pre>
+
+<p>参考：<a href="https://zed058.cn" rel="nofollow noreferrer" target="_blank">https://zed058.cn</a></p>
+
+    </div>
+
+    <div class="post-copyright">
+             
+            <p class="copyright-item">
+                <span>Author:</span>
+                <span>刘科 </span>
+                </p>
+            
+           
+             
+            <p class="copyright-item">
+                    <span>Link:</span>
+                    <a href=https://pallcard.github.io/2019/springboot%E4%B9%8Bswagger/>https://pallcard.github.io/2019/springboot%E4%B9%8Bswagger/</span>
+            </p>
+            
+            
+    </div>
+
+  
+    <div class="post-tags">
+        
+            <section>
+            <i class="iconfont icon-tag"></i>Tag(s): 
+            
+            <span class="tag"><a href="https://pallcard.github.io/tags/springboot/">
+                    #SpringBoot</a></span>
+            
+            <span class="tag"><a href="https://pallcard.github.io/tags/%E6%80%BB%E6%95%B0/">
+                    #总数</a></span>
+            
+            </section>
+        
+        <section>
+                <a href="javascript:window.history.back();">back</a></span> · 
+                <span><a href="https://pallcard.github.io/">home</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav">
+        
+        <a href="https://pallcard.github.io/2019/springboot%E4%BC%A0%E9%80%92%E5%8F%82%E6%95%B0/" class="prev" rel="prev" title="SpringBoot传递参数"><i class="iconfont icon-left"></i>&nbsp;SpringBoot传递参数</a>
+         
+        
+        <a href="https://pallcard.github.io/2019/springboot%E4%B9%8B%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6/" class="next" rel="next" title="SpringBoot之配置文件">SpringBoot之配置文件&nbsp;<i class="iconfont icon-right"></i></a>
+        
+    </div>
+
+    <div class="post-comment">
+          
+                 
+          
+    </div>
+</article>
+          </div>
+		   </main>
+      <footer class="footer">
+    <div class="copyright">
+        &copy;
+        
+        <span class="with-love">
+    	 <i class="iconfont icon-love"></i> 
+         </span>
+         
+            <span class="author" itemprop="copyrightHolder"><a href="https://pallcard.github.io/">刘科</a> | </span> 
+         
+
+         
+            <a href="http://www.miibeian.gov.cn/" target="_blank" rel="external nofollow">鄂ICP备19006996号-1 </a> |
+         
+		  <span>Powered by <a href="https://gohugo.io/" target="_blank" rel="external nofollow">Hugo</a> & <a href="https://github.com/liuzc/leaveit" target="_blank" rel="external nofollow">LeaveIt</a></span> 
+    </div>
+</footer>
+
+
+
+
+
+
+
+
+
+
+
+
+    
+    
+    <script src="/js/vendor_no_gallery.min.js" async=""></script>
+    
+  
+
+
+
+     </div>
+  </body>
+</html>

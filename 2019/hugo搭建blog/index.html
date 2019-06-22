@@ -1,4 +1,376 @@
-<div class="post-comment">
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+  <meta http-equiv="content-type" content="text/html;charset=utf-8">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noodp"/>
+  <meta name="author" content="刘科">
+  <meta name="description" content="hust研一">
+  <meta name="keywords" content="Java,博客">
+  
+  <link rel="prev" href="https://pallcard.github.io/2019/java-proxy/" />
+  <link rel="next" href="https://pallcard.github.io/2019/%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F/" />
+  <link rel="canonical" href="https://pallcard.github.io/2019/hugo%E6%90%AD%E5%BB%BAblog/" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+  <meta name="msapplication-TileColor" content="#da532c">
+  <meta name="theme-color" content="#ffffff">
+  <title>
+       
+       
+           Hugo搭建blog | 刘科个人博客
+       
+  </title>
+  <meta name="title" content="Hugo搭建blog | 刘科个人博客">
     
+  
+  <link rel="stylesheet" href="/font/iconfont.css">
+  <link rel="stylesheet" href="/css/main.min.css">
+
+
+  
+  
+ 
+
+<script type="application/ld+json">
+ "@context" : "http://schema.org",
+    "@type" : "BlogPosting",
+    "mainEntityOfPage": {
+         "@type": "WebPage",
+         "@id": "https:\/\/pallcard.github.io\/"
+    },
+    "articleSection" : "posts",
+    "name" : "Hugo搭建blog",
+    "headline" : "Hugo搭建blog",
+    "description" : "在windows下使用hugo搭建blog\n官方网站 https:\/\/www.gohugo.org\/\n1.安装hugo 在https:\/\/github.com\/gohugoio\/hugo\/releases找到相应版本的hugo镜像，下载后解压，如下： 配置环境变量：将解压后压缩包放在E盘，则添加如下环境变量 输入如下命令判断是否按照成功\nhugo version  2.建立站点 使用如下命令（blog为路径名）\nhugo new site blog cd blog  生成目录如下 3.增加文章 输入以下命令后会在content里创建一个文件\nhugo new about.md  打开文件，\n--- title: \x26quot;About\x26quot; date: 2019-05-31T15:47:28\x2b08:00 draft: true ---  4.安装主题 主题选择的是LeaveIt，安装后会在themes中生成对应文件\ncd themes git clone https:\/\/github.com\/liuzc\/LeaveIt.git  并在config.toml中配置如下\ntheme = \x26quot;LeaveIt\x26quot;  4.运行hugo hugo server -D  5.配置 在content中新建文件夹posts，并在config.toml中加入配置如下：\n# 菜单的配置 [menu] [[menu.main]] name = \x26quot;博客\x26quot; url = \x26quot;\/posts\/\x26quot; weight = 1 [[menu.",
+    "inLanguage" : "zh-CN",
+    "author" : "刘科",
+    "creator" : "刘科",
+    "publisher": "刘科",
+    "accountablePerson" : "刘科",
+    "copyrightHolder" : "刘科",
+    "copyrightYear" : "2019",
+    "datePublished": "2019-05-31 16:21:56 \x2b0800 CST",
+    "dateModified" : "2019-05-31 16:21:56 \x2b0800 CST",
+    "url" : "https:\/\/pallcard.github.io\/2019\/hugo%E6%90%AD%E5%BB%BAblog\/",
+    "wordCount" : "149",
+    "keywords" : [ "Hugo","blog","总数", "刘科个人博客"]
+}
+</script>
+
+</head>
+
+  
+
+
+  <body class="">
+    <div class="wrapper">
+        <nav class="navbar">
+    <div class="container">
+        <div class="navbar-header header-logo">
+        	<a href="javascript:void(0);" class="theme-switch"><i class="iconfont icon-xihuan"></i></a>&nbsp;<a href="https://pallcard.github.io/">刘科个人博客</a>
+        </div>
+        <div class="menu navbar-right">
+                
+                
+                <a class="menu-item" href="/posts/" title="">博客</a>
+                
+                <a class="menu-item" href="/categories/" title="">分类</a>
+                
+                <a class="menu-item" href="/tags/" title="">标签</a>
+                
+                <a class="menu-item" href="/about/" title="">关于</a>
+                
+        </div>
+    </div>
+</nav>
+<nav class="navbar-mobile" id="nav-mobile" style="display: none">
+     <div class="container">
+        <div class="navbar-header">
+            <div>  <a href="javascript:void(0);" class="theme-switch"><i class="iconfont icon-xihuan"></i></a>&nbsp;<a href="https://pallcard.github.io/">刘科个人博客</a></div>
+            <div class="menu-toggle">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
      
-</div>
+          <div class="menu" id="mobile-menu">
+                
+                
+                <a class="menu-item" href="/posts/" title="">博客</a>
+                
+                <a class="menu-item" href="/categories/" title="">分类</a>
+                
+                <a class="menu-item" href="/tags/" title="">标签</a>
+                
+                <a class="menu-item" href="/about/" title="">关于</a>
+                
+        </div>
+    </div>
+</nav>
+    	 <main class="main">
+          <div class="container">
+      		
+<article class="post-warp" itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">Hugo搭建blog</h1>
+        <div class="post-meta">
+                Written by <a itemprop="name" href="https://pallcard.github.io/" rel="author">刘科</a> with ♥ 
+                <span class="post-time">
+                on <time datetime=2019-05-31 itemprop="datePublished">May 31, 2019</time>
+                </span>
+                in
+                <i class="iconfont icon-folder"></i>
+                <span class="post-category">
+                        <a href="https://pallcard.github.io/categories/hugo/"> Hugo </a>
+                        
+                </span>
+        </div>
+    </header>
+    <div class="post-content">
+        
+
+        
+            
+        
+
+        
+        
+     
+          
+          
+          
+
+          
+          
+          
+
+          
+
+<p>在windows下使用hugo搭建blog</p>
+
+<h4 id="官方网站">官方网站</h4>
+
+<p><a href="https://www.gohugo.org/" rel="nofollow noreferrer" target="_blank">https://www.gohugo.org/</a></p>
+
+<h5 id="1-安装hugo">1.安装hugo</h5>
+
+<p>在<a href="https://github.com/gohugoio/hugo/releases找到相应版本的hugo镜像，下载后解压，如下：" rel="nofollow noreferrer" target="_blank">https://github.com/gohugoio/hugo/releases找到相应版本的hugo镜像，下载后解压，如下：</a>
+<figure><img src="/images/ring.svg" data-sizes="auto" data-src="/images/hugo001.png" alt="windows" class="lazyload"><figcaption class="image-caption">windows</figcaption></figure>
+配置环境变量：将解压后压缩包放在E盘，则添加如下环境变量
+<figure><img src="/images/ring.svg" data-sizes="auto" data-src="/images/hugo002.png" alt="环境变量" class="lazyload"><figcaption class="image-caption">环境变量</figcaption></figure>
+输入如下命令判断是否按照成功</p>
+
+<pre><code class="language-java">hugo version
+</code></pre>
+
+<p><figure><img src="/images/ring.svg" data-sizes="auto" data-src="/images/hugo003.png" alt="检查安装" class="lazyload"><figcaption class="image-caption">检查安装</figcaption></figure></p>
+
+<h5 id="2-建立站点">2.建立站点</h5>
+
+<p>使用如下命令（blog为路径名）</p>
+
+<pre><code class="language-java">hugo new site blog
+cd blog
+</code></pre>
+
+<p>生成目录如下
+<figure><img src="/images/ring.svg" data-sizes="auto" data-src="/images/hugo004.png" alt="blog目录" class="lazyload"><figcaption class="image-caption">blog目录</figcaption></figure></p>
+
+<h5 id="3-增加文章">3.增加文章</h5>
+
+<p>输入以下命令后会在content里创建一个文件</p>
+
+<pre><code class="language-java">hugo new about.md
+</code></pre>
+
+<p>打开文件，</p>
+
+<pre><code class="language-java">---
+title: &quot;About&quot;
+date: 2019-05-31T15:47:28+08:00
+draft: true
+---
+</code></pre>
+
+<h5 id="4-安装主题">4.安装主题</h5>
+
+<p>主题选择的是LeaveIt，安装后会在themes中生成对应文件</p>
+
+<pre><code class="language-java">cd themes
+git clone https://github.com/liuzc/LeaveIt.git
+</code></pre>
+
+<p>并在config.toml中配置如下</p>
+
+<pre><code class="language-java">theme = &quot;LeaveIt&quot;
+</code></pre>
+
+<h5 id="4-运行hugo">4.运行hugo</h5>
+
+<pre><code class="language-java">hugo server -D
+</code></pre>
+
+<h5 id="5-配置">5.配置</h5>
+
+<p>在content中新建文件夹posts，并在config.toml中加入配置如下：</p>
+
+<pre><code class="language-java"># 菜单的配置
+[menu]
+  [[menu.main]]
+    name = &quot;博客&quot;
+    url = &quot;/posts/&quot;
+    weight = 1
+  [[menu.main]]
+    name = &quot;分类&quot;
+    url = &quot;/categories/&quot;
+    weight = 2
+  [[menu.main]]
+    name = &quot;标签&quot;
+    url = &quot;/tags/&quot;
+    weight = 3
+  [[menu.main]]
+    name = &quot;关于&quot;
+    url = &quot;/about/&quot;
+    weight = 4
+</code></pre>
+
+<p>在建新文章时，categories中为文章分类，tags为标签。</p>
+
+<pre><code class="language-java">---
+title: &quot;代理模式&quot;
+date: 2019-05-29T20:06:16+08:00
+draft: false
+categories: [&quot;Java&quot;]
+tags: [&quot;Java&quot;,&quot;设计模式&quot;]
+---
+#### 内容
+</code></pre>
+
+<h5 id="5-部署">5.部署</h5>
+
+<p>部署到GitHub Pages 上，首先在GitHub上创建一个Repository，命名为：pallcard.github.io （pallcard替换为你的github用户名）。</p>
+
+<pre><code class="language-java">hugo --theme=LeaveIt --baseUrl=&quot;http://pallcard.github.io/&quot;
+</code></pre>
+
+<p>将pubilc目录里所有文件 push 到刚创建的Repository的 master 分支。</p>
+
+<pre><code class="language-java">cd public
+git init
+git remote add origin https://github.com/pallcard/pallcard.github.io.git
+git add -A
+git commit -m &quot;first commit&quot;
+git push -u origin master
+</code></pre>
+
+<p>浏览器里访问:<a href="http://coderzh.pallcard.io/" rel="nofollow noreferrer" target="_blank">http://coderzh.pallcard.io/</a></p>
+
+<h5 id="6-注意">6.注意</h5>
+
+<p>1.每次使用hugo new posts/xxx.md创建文章后，<strong><em>记得要将draft 改为false</em></strong>
+2.更新部署时，在根目录执行hugo，然后push到github上即可</p>
+
+    </div>
+
+    <div class="post-copyright">
+             
+            <p class="copyright-item">
+                <span>Author:</span>
+                <span>刘科 </span>
+                </p>
+            
+           
+             
+            <p class="copyright-item">
+                    <span>Link:</span>
+                    <a href=https://pallcard.github.io/2019/hugo%E6%90%AD%E5%BB%BAblog/>https://pallcard.github.io/2019/hugo%E6%90%AD%E5%BB%BAblog/</span>
+            </p>
+            
+            
+    </div>
+
+  
+    <div class="post-tags">
+        
+            <section>
+            <i class="iconfont icon-tag"></i>Tag(s): 
+            
+            <span class="tag"><a href="https://pallcard.github.io/tags/hugo/">
+                    #Hugo</a></span>
+            
+            <span class="tag"><a href="https://pallcard.github.io/tags/blog/">
+                    #blog</a></span>
+            
+            <span class="tag"><a href="https://pallcard.github.io/tags/%E6%80%BB%E6%95%B0/">
+                    #总数</a></span>
+            
+            </section>
+        
+        <section>
+                <a href="javascript:window.history.back();">back</a></span> · 
+                <span><a href="https://pallcard.github.io/">home</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav">
+        
+        <a href="https://pallcard.github.io/2019/java-proxy/" class="prev" rel="prev" title="代理模式"><i class="iconfont icon-left"></i>&nbsp;代理模式</a>
+         
+        
+        <a href="https://pallcard.github.io/2019/%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F/" class="next" rel="next" title="单例模式">单例模式&nbsp;<i class="iconfont icon-right"></i></a>
+        
+    </div>
+
+    <div class="post-comment">
+          
+                 
+          
+    </div>
+</article>
+          </div>
+		   </main>
+      <footer class="footer">
+    <div class="copyright">
+        &copy;
+        
+        <span class="with-love">
+    	 <i class="iconfont icon-love"></i> 
+         </span>
+         
+            <span class="author" itemprop="copyrightHolder"><a href="https://pallcard.github.io/">刘科</a> | </span> 
+         
+
+         
+            <a href="http://www.miibeian.gov.cn/" target="_blank" rel="external nofollow">鄂ICP备19006996号-1 </a> |
+         
+		  <span>Powered by <a href="https://gohugo.io/" target="_blank" rel="external nofollow">Hugo</a> & <a href="https://github.com/liuzc/leaveit" target="_blank" rel="external nofollow">LeaveIt</a></span> 
+    </div>
+</footer>
+
+
+
+
+
+
+
+
+
+
+
+
+    
+     <link href="//lib.baomitu.com/lightgallery/1.6.11/css/lightgallery.min.css" rel="stylesheet">  
+      
+     <script src="/js/vendor_gallery.min.js" async="" ></script>
+    
+  
+
+
+
+     </div>
+  </body>
+</html>

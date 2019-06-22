@@ -1,4 +1,447 @@
-<div class="post-comment">
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+  <meta http-equiv="content-type" content="text/html;charset=utf-8">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noodp"/>
+  <meta name="author" content="刘科">
+  <meta name="description" content="hust研一">
+  <meta name="keywords" content="Java,博客">
+  
+  <link rel="prev" href="https://pallcard.github.io/2019/springboot%E4%B9%8B%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6/" />
+  <link rel="next" href="https://pallcard.github.io/2019/fastdfs/" />
+  <link rel="canonical" href="https://pallcard.github.io/2019/%E5%88%9D%E8%AF%95%E9%83%A8%E7%BD%B2%E9%A1%B9%E7%9B%AE%E5%88%B0%E8%85%BE%E8%AE%AF%E4%BA%91%E7%8E%AF%E5%A2%83%E7%9A%84%E5%AE%89%E8%A3%85/" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+  <meta name="msapplication-TileColor" content="#da532c">
+  <meta name="theme-color" content="#ffffff">
+  <title>
+       
+       
+           初试部署项目到腾讯云（环境的安装） | 刘科个人博客
+       
+  </title>
+  <meta name="title" content="初试部署项目到腾讯云（环境的安装） | 刘科个人博客">
     
+  
+  <link rel="stylesheet" href="/font/iconfont.css">
+  <link rel="stylesheet" href="/css/main.min.css">
+
+
+  
+  
+ 
+
+<script type="application/ld+json">
+ "@context" : "http://schema.org",
+    "@type" : "BlogPosting",
+    "mainEntityOfPage": {
+         "@type": "WebPage",
+         "@id": "https:\/\/pallcard.github.io\/"
+    },
+    "articleSection" : "posts",
+    "name" : "初试部署项目到腾讯云（环境的安装）",
+    "headline" : "初试部署项目到腾讯云（环境的安装）",
+    "description" : "linux常用命令  ls：查看该目录下文件 pwd：查看文件目录 rm -f 文件名：删除文件 \/usr\/local\/mysql\/bin\/mysql -u root -p 登录mysql  第一步：jdk的安装 下载jdk后，解压报错（原因是选择接受协议的问题），输入如下命令：\nwget --no-check-certificate --no-cookies --header \x26quot;Cookie: oraclelicense=accept-securebackup-cookie\x26quot; https:\/\/download.oracle.com\/otn-pub\/java\/jdk\/8u201-b09\/42970487e3af4f5aa5bca3f542482c60\/jdk-8u201-linux-x64.tar.gz  解压jdk压缩包，使用命令 tar -zxvf 文件名\n然后配置环境变量，主要编辑以下两个文件\nvi \/etc\/environment vi \/etc\/profile  最后使用java -version查看版本信息\n第二步：mysql的安装 1.下载mysql ，以5.7为例\nsudo wget https:\/\/cdn.mysql.com\/\/Downloads\/MySQL-5.7\/mysql-5.7.25-linux-glibc2.12-x86_64.tar.gz # 解压 tar -zxvf mysql-5.7.25-linux-glibc2.12-x86_64.tar.gz  2.移动 文件到 \/usr\/local\/\n重命名 mv 文件名 mysql\n3.新建data目录 mkdir data\n4.新建mysql用户、mysql用户组\nmysql用户组\ngroupadd mysql  mysql用户\nuseradd mysql -g mysql  5.将\/usr\/local\/mysql的所有者及所属组改为mysql",
+    "inLanguage" : "zh-CN",
+    "author" : "刘科",
+    "creator" : "刘科",
+    "publisher": "刘科",
+    "accountablePerson" : "刘科",
+    "copyrightHolder" : "刘科",
+    "copyrightYear" : "2019",
+    "datePublished": "2019-06-15 19:32:56 \x2b0800 CST",
+    "dateModified" : "2019-06-15 19:32:56 \x2b0800 CST",
+    "url" : "https:\/\/pallcard.github.io\/2019\/%E5%88%9D%E8%AF%95%E9%83%A8%E7%BD%B2%E9%A1%B9%E7%9B%AE%E5%88%B0%E8%85%BE%E8%AE%AF%E4%BA%91%E7%8E%AF%E5%A2%83%E7%9A%84%E5%AE%89%E8%A3%85\/",
+    "wordCount" : "226",
+    "keywords" : [ "项目部署","Linux","总数", "刘科个人博客"]
+}
+</script>
+
+</head>
+
+  
+
+
+  <body class="">
+    <div class="wrapper">
+        <nav class="navbar">
+    <div class="container">
+        <div class="navbar-header header-logo">
+        	<a href="javascript:void(0);" class="theme-switch"><i class="iconfont icon-xihuan"></i></a>&nbsp;<a href="https://pallcard.github.io/">刘科个人博客</a>
+        </div>
+        <div class="menu navbar-right">
+                
+                
+                <a class="menu-item" href="/posts/" title="">博客</a>
+                
+                <a class="menu-item" href="/categories/" title="">分类</a>
+                
+                <a class="menu-item" href="/tags/" title="">标签</a>
+                
+                <a class="menu-item" href="/about/" title="">关于</a>
+                
+        </div>
+    </div>
+</nav>
+<nav class="navbar-mobile" id="nav-mobile" style="display: none">
+     <div class="container">
+        <div class="navbar-header">
+            <div>  <a href="javascript:void(0);" class="theme-switch"><i class="iconfont icon-xihuan"></i></a>&nbsp;<a href="https://pallcard.github.io/">刘科个人博客</a></div>
+            <div class="menu-toggle">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
      
-</div>
+          <div class="menu" id="mobile-menu">
+                
+                
+                <a class="menu-item" href="/posts/" title="">博客</a>
+                
+                <a class="menu-item" href="/categories/" title="">分类</a>
+                
+                <a class="menu-item" href="/tags/" title="">标签</a>
+                
+                <a class="menu-item" href="/about/" title="">关于</a>
+                
+        </div>
+    </div>
+</nav>
+    	 <main class="main">
+          <div class="container">
+      		
+<article class="post-warp" itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">初试部署项目到腾讯云（环境的安装）</h1>
+        <div class="post-meta">
+                Written by <a itemprop="name" href="https://pallcard.github.io/" rel="author">刘科</a> with ♥ 
+                <span class="post-time">
+                on <time datetime=2019-06-15 itemprop="datePublished">June 15, 2019</time>
+                </span>
+                in
+                <i class="iconfont icon-folder"></i>
+                <span class="post-category">
+                        <a href="https://pallcard.github.io/categories/%E9%A1%B9%E7%9B%AE%E9%83%A8%E7%BD%B2/"> 项目部署 </a>
+                        
+                </span>
+        </div>
+    </header>
+    <div class="post-content">
+        
+
+        
+            
+        
+
+        
+        
+     
+          
+          
+          
+
+          
+          
+          
+
+          
+
+<h4 id="linux常用命令">linux常用命令</h4>
+
+<ul>
+<li>ls：查看该目录下文件</li>
+<li>pwd：查看文件目录</li>
+<li>rm -f 文件名：删除文件</li>
+<li>/usr/local/mysql/bin/mysql -u root -p 登录mysql</li>
+</ul>
+
+<h4 id="第一步-jdk的安装">第一步：jdk的安装</h4>
+
+<p>下载jdk后，解压报错（原因是选择接受协议的问题），输入如下命令：</p>
+
+<pre><code class="language-java">wget --no-check-certificate --no-cookies --header &quot;Cookie: oraclelicense=accept-securebackup-cookie&quot; https://download.oracle.com/otn-pub/java/jdk/8u201-b09/42970487e3af4f5aa5bca3f542482c60/jdk-8u201-linux-x64.tar.gz
+</code></pre>
+
+<p>解压jdk压缩包，使用命令 tar -zxvf 文件名</p>
+
+<p>然后配置环境变量，主要编辑以下两个文件</p>
+
+<pre><code class="language-java">vi /etc/environment 
+vi /etc/profile
+</code></pre>
+
+<p>最后使用java -version查看版本信息</p>
+
+<h4 id="第二步-mysql的安装">第二步：mysql的安装</h4>
+
+<p><strong><em>1.下载mysql ，以5.7为例</em></strong></p>
+
+<pre><code class="language-java">sudo wget https://cdn.mysql.com//Downloads/MySQL-5.7/mysql-5.7.25-linux-glibc2.12-x86_64.tar.gz
+# 解压  
+tar -zxvf mysql-5.7.25-linux-glibc2.12-x86_64.tar.gz
+</code></pre>
+
+<p><strong><em>2.移动 文件到 /usr/local/</em></strong></p>
+
+<p>重命名 mv 文件名 mysql</p>
+
+<p><strong><em>3.新建data目录 mkdir data</em></strong></p>
+
+<p><strong><em>4.新建mysql用户、mysql用户组</em></strong></p>
+
+<p><strong>mysql用户组</strong></p>
+
+<pre><code class="language-java">groupadd mysql
+</code></pre>
+
+<p><strong>mysql用户</strong></p>
+
+<pre><code class="language-java">useradd mysql -g mysql
+</code></pre>
+
+<p><strong><em>5.将/usr/local/mysql的所有者及所属组改为mysql</em></strong></p>
+
+<pre><code class="language-java">chown -R mysql.mysql /usr/local/mysql
+</code></pre>
+
+<p><strong><em>6.配置，初始化</em></strong></p>
+
+<pre><code class="language-java">/usr/local/mysql/bin/mysqld --defaults-file=/etc/my.cnf --user=mysql --basedir=/usr/local/mysql --datadir=/usr/local/mysql/data --initialize
+</code></pre>
+
+<p>执行后出错，libnuma原因，执行如下命令，后再初始化</p>
+
+<pre><code class="language-java">yum install -y numactl
+vim /etc/my.cnf
+</code></pre>
+
+<p>my.cnf中改为</p>
+
+<pre><code class="language-java">[mysqld]
+datadir=/usr/local/mysql/data
+basedir=/usr/local/mysql
+socket=/tmp/mysql.sock
+user=mysql
+port=3306
+character-set-server=utf8
+# 取消密码验证
+skip-grant-tables
+# Disabling symbolic-links is recommended to prevent assorted security risks
+symbolic-links=0
+# skip-grant-tables
+[mysqld_safe]
+log-error=/var/log/mysqld.log
+pid-file=/var/run/mysqld/mysqld.pid
+</code></pre>
+
+<p><strong><em>7.开启服务</em></strong></p>
+
+<pre><code class="language-java">将mysql加入服务
+cp /usr/local/mysql/support-files/mysql.server /etc/init.d/mysql
+# 开机自启
+chkconfig mysql on
+# 开启
+service mysql start
+</code></pre>
+
+<p><strong><em>8.设置密码</em></strong></p>
+
+<pre><code class="language-java"># 登录（由于/etc/my.cnf中设置了取消密码验证，所以此处密码任意）
+
+/usr/local/mysql/bin/mysql -u root -p
+
+# 操作mysql数据库
+
+&gt;&gt;use mysql;
+
+# 修改密码
+
+&gt;&gt;update user set authentication_string=password('你的密码') where user='root';
+
+&gt;&gt;flush privileges;
+
+&gt;&gt;exit;
+</code></pre>
+
+<p><strong><em>9.将/etc/my.cnf中的skip-grant-tables删除，至此mysql安装完成</em></strong></p>
+
+<p><strong>注: mysql 远程连接问题</strong></p>
+
+<pre><code class="language-java">use mysql
+
+select host,user from user;
+
+update user set host='%' where user =&quot;root&quot;;
+
+# 刷新权限
+flush privileges;
+</code></pre>
+
+<h4 id="第三步-redis的安装">第三步：redis的安装</h4>
+
+<p><strong><em>1.下载 解压</em></strong></p>
+
+<pre><code class="language-java">wget http://download.redis.io/releases/redis-4.0.10.tar.gz
+
+tar -xzf redis-4.0.10.tar.gz
+</code></pre>
+
+<p><strong><em>2.编译</em></strong></p>
+
+<pre><code class="language-java">cd redis-4.0.10
+make
+</code></pre>
+
+<p>注：若执行make出错，可能是c++未装，使用命令 yum -y install gcc-c++</p>
+
+<p><strong><em>3.配置远程访问</em></strong></p>
+
+<p>进入redis目录，vi redis.conf 修改配置文件</p>
+
+<p>注释绑定的本机地址
+​​<figure><img src="/images/ring.svg" data-sizes="auto" data-src="/images/linux001.png" alt="在这里插入图片描述" class="lazyload"><figcaption class="image-caption">在这里插入图片描述</figcaption></figure>
+设置redis-service为后台服务
+将&rdquo;daemonize no&rdquo;改为&rdquo;daemonize yes&rdquo;
+​​​​​​​​<figure><img src="/images/ring.svg" data-sizes="auto" data-src="/images/linux002.png" alt="在这里插入图片描述" class="lazyload"><figcaption class="image-caption">在这里插入图片描述</figcaption></figure>
+设置redis-cli连接redis服务器的密码
+<figure><img src="/images/ring.svg" data-sizes="auto" data-src="/images/linux003.png" alt="在这里插入图片描述" class="lazyload"><figcaption class="image-caption">在这里插入图片描述</figcaption></figure></p>
+
+<pre><code class="language-java"># 启动redis（进入redis目录）
+./src/redis-server redis.conf
+# 查看进程
+ps -ef | grep redis
+</code></pre>
+
+<h5 id="第四步-nginx的安装">第四步：nginx的安装</h5>
+
+<p>准备(安装pcre和zlib最新版本):</p>
+
+<p>1.pcre:<a href="https://ftp.pcre.org/pub/pcre/" rel="nofollow noreferrer" target="_blank">https://ftp.pcre.org/pub/pcre/</a></p>
+
+<p>2.zlib:<a href="http://www.zlib.net/" rel="nofollow noreferrer" target="_blank">http://www.zlib.net/</a></p>
+
+<p>3.nginx：<a href="https://nginx.org/en/download.html" rel="nofollow noreferrer" target="_blank">https://nginx.org/en/download.html</a></p>
+
+<pre><code class="language-java">wget 下载地址
+tar -xvzf 文件名
+cd 文件目录
+./configure
+make &amp;&amp; make install
+</code></pre>
+
+<p><strong>注</strong>：在阿里云添加安全组规则</p>
+
+<p>参考博客：</p>
+
+<p>主要参考：<a href="https://www.jianshu.com/p/9cac6c9df0e0" rel="nofollow noreferrer" target="_blank">https://www.jianshu.com/p/9cac6c9df0e0</a></p>
+
+<p>mysql：<a href="https://www.cnblogs.com/hl15/p/9541479.html" rel="nofollow noreferrer" target="_blank">https://www.cnblogs.com/hl15/p/9541479.html</a></p>
+
+<p>redis：<a href="https://www.cnblogs.com/wangchunniu1314/p/6339416.html" rel="nofollow noreferrer" target="_blank">https://www.cnblogs.com/wangchunniu1314/p/6339416.html</a></p>
+
+<p>make出错：<a href="https://blog.csdn.net/weixin_40493969/article/details/81150469" rel="nofollow noreferrer" target="_blank">https://blog.csdn.net/weixin_40493969/article/details/81150469</a></p>
+
+    </div>
+
+    <div class="post-copyright">
+             
+            <p class="copyright-item">
+                <span>Author:</span>
+                <span>刘科 </span>
+                </p>
+            
+           
+             
+            <p class="copyright-item">
+                    <span>Link:</span>
+                    <a href=https://pallcard.github.io/2019/%E5%88%9D%E8%AF%95%E9%83%A8%E7%BD%B2%E9%A1%B9%E7%9B%AE%E5%88%B0%E8%85%BE%E8%AE%AF%E4%BA%91%E7%8E%AF%E5%A2%83%E7%9A%84%E5%AE%89%E8%A3%85/>https://pallcard.github.io/2019/%E5%88%9D%E8%AF%95%E9%83%A8%E7%BD%B2%E9%A1%B9%E7%9B%AE%E5%88%B0%E8%85%BE%E8%AE%AF%E4%BA%91%E7%8E%AF%E5%A2%83%E7%9A%84%E5%AE%89%E8%A3%85/</span>
+            </p>
+            
+            
+    </div>
+
+  
+    <div class="post-tags">
+        
+            <section>
+            <i class="iconfont icon-tag"></i>Tag(s): 
+            
+            <span class="tag"><a href="https://pallcard.github.io/tags/%E9%A1%B9%E7%9B%AE%E9%83%A8%E7%BD%B2/">
+                    #项目部署</a></span>
+            
+            <span class="tag"><a href="https://pallcard.github.io/tags/linux/">
+                    #Linux</a></span>
+            
+            <span class="tag"><a href="https://pallcard.github.io/tags/%E6%80%BB%E6%95%B0/">
+                    #总数</a></span>
+            
+            </section>
+        
+        <section>
+                <a href="javascript:window.history.back();">back</a></span> · 
+                <span><a href="https://pallcard.github.io/">home</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav">
+        
+        <a href="https://pallcard.github.io/2019/springboot%E4%B9%8B%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6/" class="prev" rel="prev" title="SpringBoot之配置文件"><i class="iconfont icon-left"></i>&nbsp;SpringBoot之配置文件</a>
+         
+        
+        <a href="https://pallcard.github.io/2019/fastdfs/" class="next" rel="next" title="FastDFS">FastDFS&nbsp;<i class="iconfont icon-right"></i></a>
+        
+    </div>
+
+    <div class="post-comment">
+          
+                 
+          
+    </div>
+</article>
+          </div>
+		   </main>
+      <footer class="footer">
+    <div class="copyright">
+        &copy;
+        
+        <span class="with-love">
+    	 <i class="iconfont icon-love"></i> 
+         </span>
+         
+            <span class="author" itemprop="copyrightHolder"><a href="https://pallcard.github.io/">刘科</a> | </span> 
+         
+
+         
+            <a href="http://www.miibeian.gov.cn/" target="_blank" rel="external nofollow">鄂ICP备19006996号-1 </a> |
+         
+		  <span>Powered by <a href="https://gohugo.io/" target="_blank" rel="external nofollow">Hugo</a> & <a href="https://github.com/liuzc/leaveit" target="_blank" rel="external nofollow">LeaveIt</a></span> 
+    </div>
+</footer>
+
+
+
+
+
+
+
+
+
+
+
+
+    
+     <link href="//lib.baomitu.com/lightgallery/1.6.11/css/lightgallery.min.css" rel="stylesheet">  
+      
+     <script src="/js/vendor_gallery.min.js" async="" ></script>
+    
+  
+
+
+
+     </div>
+  </body>
+</html>
