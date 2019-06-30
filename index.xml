@@ -21,7 +21,7 @@
 
 &lt;p&gt;整个实验使用Maven 来管理项目，编译器IDEA，github仓库 &lt;a href=&#34;https://github.com/pallcard/mybatis&#34; rel=&#34;nofollow noreferrer&#34; target=&#34;_blank&#34;&gt;https://github.com/pallcard/mybatis&lt;/a&gt;&lt;/p&gt;
 
-&lt;h6 id=&#34;jdbc连接数据库&#34;&gt;JDBC连接数据库&lt;/h6&gt;
+&lt;h5 id=&#34;jdbc连接数据库&#34;&gt;JDBC连接数据库&lt;/h5&gt;
 
 &lt;p&gt;&lt;strong&gt;1.引入依赖（pom.xml）&lt;/strong&gt;&lt;/p&gt;
 
@@ -654,11 +654,15 @@ log4j.appender.A1.layout.ConversionPattern=%-d{yyyy-MM-dd HH:mm:ss,SSS} [%t] [%c
 &amp;lt;/mappers&amp;gt;
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;&lt;strong&gt;4.测试&lt;/strong&gt;
-a.映射文件的命名空间（namespace）必须是mapper接口的全路径
-b.映射文件的statement的id必须和mapper接口的方法名保持一致
-c.Statement的resultType必须和mapper接口方法的返回类型一致
-d.statement的parameterType必须和mapper接口方法的参数类型一致（不一定）&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;4.测试&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;a.映射文件的命名空间（namespace）必须是mapper接口的全路径&lt;/p&gt;
+
+&lt;p&gt;b.映射文件的statement的id必须和mapper接口的方法名保持一致&lt;/p&gt;
+
+&lt;p&gt;c.Statement的resultType必须和mapper接口方法的返回类型一致&lt;/p&gt;
+
+&lt;p&gt;d.statement的parameterType必须和mapper接口方法的参数类型一致（不一定）&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;public class UserMapperTest {
 
@@ -776,10 +780,11 @@ parameterType：传入的参数类型，可以省略。
 parameterType：传入的参数类型，可以省略。
 标签内部：具体的sql语句。&lt;/p&gt;
 
-&lt;p&gt;&lt;strong&gt;2.#{}和${}&lt;/strong&gt;
-#{} 和 ${} 在预编译中的处理是不一样的。#{} 在预处理时，会把参数部分用一个占位符 ? 代替;而 ${} 则只是简单的字符串替换.&lt;strong&gt;优先使用 #{}, ${} 会导致 sql 注入的问题。&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;2.#{}和${}&lt;/strong&gt;&lt;/p&gt;
 
-&lt;p&gt;场景1：数据库有两个一模一样的表。历史表，当前表
+&lt;p&gt;#{} 和 ${} 在预编译中的处理是不一样的。#{} 在预处理时，会把参数部分用一个占位符 ? 代替;而 ${} 则只是简单的字符串替换.&lt;strong&gt;优先使用 #{}, ${} 会导致 sql 注入的问题。&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;场景&lt;/strong&gt;：数据库有两个一模一样的表。历史表，当前表
 查询表中的信息，有时候从历史表中去查询数据，有时候需要去新的表去查询数据。
 希望使用1个方法来完成操作。&lt;/p&gt;
 
@@ -814,8 +819,9 @@ parameterType：传入的参数类型，可以省略。
 3. where，set
 4. foreach&lt;/p&gt;
 
-&lt;p&gt;&lt;strong&gt;1.if&lt;/strong&gt;
-场景：查询用户，如果输入了姓名，则按姓名查询&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;1.if&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;场景：查询用户，如果输入了姓名，则按姓名查询&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;// 接口
 List&amp;lt;User&amp;gt; queryUserListByName(@Param(&amp;quot;userName&amp;quot;) String userName);
@@ -833,8 +839,9 @@ List&amp;lt;User&amp;gt; queryUserListByName(@Param(&amp;quot;userName&amp;quot;
 &amp;lt;/mapper&amp;gt;
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;&lt;strong&gt;2.choose，when，otherwise&lt;/strong&gt;
-场景：查询用户，如果输入了姓名则按照姓名模糊查找，否则如果输入了年龄则按照年龄查找，否则查找姓名为“ls”的用户。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;2.choose，when，otherwise&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;场景：查询用户，如果输入了姓名则按照姓名模糊查找，否则如果输入了年龄则按照年龄查找，否则查找姓名为“ls”的用户。&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;// 接口
 List&amp;lt;User&amp;gt; queryUserListByNameOrAge(@Param(&amp;quot;userName&amp;quot;) String userName,
@@ -865,8 +872,9 @@ List&amp;lt;User&amp;gt; queryUserListByNameOrAge(@Param(&amp;quot;userName&amp;
 &amp;lt;/mapper&amp;gt;
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;&lt;strong&gt;3.where 和set&lt;/strong&gt;
-场景一：查询所有用户，如果输入了姓名按照姓名进行模糊查询，如果输入年龄，按照年龄进行查询，如果两者都输入，两个条件都要成立。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;3.where 和set&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;场景一&lt;/strong&gt;：查询所有用户，如果输入了姓名按照姓名进行模糊查询，如果输入年龄，按照年龄进行查询，如果两者都输入，两个条件都要成立。&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;// 接口
 List&amp;lt;User&amp;gt; queryUserListByNameAndAge(@Param(&amp;quot;userName&amp;quot;) String userName,
@@ -890,7 +898,7 @@ List&amp;lt;User&amp;gt; queryUserListByNameAndAge(@Param(&amp;quot;userName&amp
 &amp;lt;/mapper&amp;gt;
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;场景二：修改用户信息，如果参数user中的某个属性为null，则不修改。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;场景二&lt;/strong&gt;：修改用户信息，如果参数user中的某个属性为null，则不修改。&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;// 接口
 void updateUser(User user);
@@ -914,8 +922,9 @@ void updateUser(User user);
 &amp;lt;/mapper&amp;gt;
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;&lt;strong&gt;4.foreach&lt;/strong&gt;
-场景：按照多个id查询用户信息。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;4.foreach&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;场景：按照多个id查询用户信息。&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;// 接口
 List&amp;lt;User&amp;gt; queryUserListByIds(@Param(&amp;quot;ids&amp;quot;) int[] ids);
@@ -934,9 +943,11 @@ List&amp;lt;User&amp;gt; queryUserListByIds(@Param(&amp;quot;ids&amp;quot;) int[
 
 &lt;h4 id=&#34;高级查询&#34;&gt;高级查询&lt;/h4&gt;
 
-&lt;p&gt;&lt;strong&gt;一对一查询&lt;/strong&gt;
-需求：查询订单，并查询出下单人的信息。
-&lt;strong&gt;Order.java&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;一对一查询&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;需求：查询订单，并查询出下单人的信息。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Order.java&lt;/strong&gt;&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;public class Order {
     private Integer id;
@@ -992,9 +1003,9 @@ List&amp;lt;User&amp;gt; queryUserListByIds(@Param(&amp;quot;ids&amp;quot;) int[
 
 &lt;h4 id=&#34;缓存&#34;&gt;缓存&lt;/h4&gt;
 
-&lt;p&gt;&lt;strong&gt;一级缓存&lt;/strong&gt;
-Mybatis的一级缓存的&lt;strong&gt;作用域是session&lt;/strong&gt;，当openSession()后，如果执行相同的SQL（相同语句和参数），Mybatis不进行执行SQL，而是从缓存中命中返回。原理：
-Mybatis执行查询时首先去缓存区命中，如果命中直接返回，没有命中则执行SQL，从数据库中查询。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;一级缓存&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Mybatis的一级缓存的&lt;strong&gt;作用域是session&lt;/strong&gt;，当openSession()后，如果执行相同的SQL（相同语句和参数），Mybatis不进行执行SQL，而是从缓存中命中返回。原理：Mybatis执行查询时首先去缓存区命中，如果命中直接返回，没有命中则执行SQL，从数据库中查询。&lt;/p&gt;
 
 &lt;p&gt;在mybatis中，一级缓存默认是开启的，并且一直无法关闭&lt;/p&gt;
 
@@ -1002,8 +1013,9 @@ Mybatis执行查询时首先去缓存区命中，如果命中直接返回，没�
 1、同一个session中
 2、相同的SQL和参数&lt;/p&gt;
 
-&lt;p&gt;&lt;strong&gt;二级缓存&lt;/strong&gt;
-mybatis 的二级缓存的&lt;strong&gt;作用域是一个mapper的namespace&lt;/strong&gt; ，同一个namespace中查询sql可以从缓存中命中。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;二级缓存&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;mybatis 的二级缓存的&lt;strong&gt;作用域是一个mapper的namespace&lt;/strong&gt; ，同一个namespace中查询sql可以从缓存中命中。&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;&amp;lt;mapper namespace=&amp;quot;cn.wishhust.mybatis.dao.mappers.UserMapper&amp;quot;&amp;gt;
     &amp;lt;cache/&amp;gt;
@@ -1020,8 +1032,9 @@ mybatis 的二级缓存的&lt;strong&gt;作用域是一个mapper的namespace&lt;
 
 &lt;h4 id=&#34;sql语句中出现-的解决方案&#34;&gt;sql语句中出现’&amp;lt;’的解决方案&lt;/h4&gt;
 
-&lt;p&gt;&lt;strong&gt;方法一：&lt;/strong&gt;
-|转义字符| 字符 |说明|
+&lt;p&gt;&lt;strong&gt;方法一：&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;|转义字符| 字符 |说明|
 |&amp;ndash;|&amp;ndash;|&amp;ndash;|
 | &amp;amp;lt； | &amp;lt; | 小于 |
 | &amp;amp;gt； | &amp;gt; | 小于 |
@@ -1031,16 +1044,19 @@ mybatis 的二级缓存的&lt;strong&gt;作用域是一个mapper的namespace&lt;
 
 &lt;p&gt;&lt;strong&gt;方法二：&lt;/strong&gt;&lt;/p&gt;
 
-&lt;![CDATA[ 符号 ]]&gt;
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;&amp;lt;![CDATA[ 符号 ]]&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;注：使用&amp;lt;![CDATA[ ]]&amp;gt;标记的sql语句中的&lt;where&gt; &lt;if&gt;等标签不会被解析。&lt;/p&gt;
+&lt;p&gt;注：使用&amp;lt;![CDATA[ ]]&amp;gt;标记的sql语句中的&amp;lt;where&amp;gt; &amp;lt;if&amp;gt;等标签不会被解析。&lt;/p&gt;
+
+&lt;hr /&gt;
 
 &lt;p&gt;报错1：&lt;/p&gt;
 
 &lt;p&gt;org.apache.ibatis.binding.BindingException: Type interface cn.wishhust.mybatis.mappers.OrderMapper is not known to the MapperRegistry.&lt;/p&gt;
 
 &lt;p&gt;原因：
-xml文件的namespace的值对应的mapper接口写错了。没使用全名&lt;/p&gt;
+xml文件的namespace的值对应的mapper接口写错了，没使用全名。&lt;/p&gt;
 </description>
     </item>
     

@@ -58,7 +58,7 @@
     "datePublished": "2019-06-20 19:00:36 \x2b0800 CST",
     "dateModified" : "2019-06-20 19:00:36 \x2b0800 CST",
     "url" : "https:\/\/pallcard.github.io\/2019\/mybaits\/",
-    "wordCount" : "1767",
+    "wordCount" : "1769",
     "keywords" : [ "Mybaits","Java","development","总数", "刘科个人博客"]
 }
 </script>
@@ -155,7 +155,7 @@
 
 <p>整个实验使用Maven 来管理项目，编译器IDEA，github仓库 <a href="https://github.com/pallcard/mybatis" rel="nofollow noreferrer" target="_blank">https://github.com/pallcard/mybatis</a></p>
 
-<h6 id="jdbc连接数据库">JDBC连接数据库</h6>
+<h5 id="jdbc连接数据库">JDBC连接数据库</h5>
 
 <p><strong>1.引入依赖（pom.xml）</strong></p>
 
@@ -788,11 +788,15 @@ log4j.appender.A1.layout.ConversionPattern=%-d{yyyy-MM-dd HH:mm:ss,SSS} [%t] [%c
 &lt;/mappers&gt;
 </code></pre>
 
-<p><strong>4.测试</strong>
-a.映射文件的命名空间（namespace）必须是mapper接口的全路径
-b.映射文件的statement的id必须和mapper接口的方法名保持一致
-c.Statement的resultType必须和mapper接口方法的返回类型一致
-d.statement的parameterType必须和mapper接口方法的参数类型一致（不一定）</p>
+<p><strong>4.测试</strong></p>
+
+<p>a.映射文件的命名空间（namespace）必须是mapper接口的全路径</p>
+
+<p>b.映射文件的statement的id必须和mapper接口的方法名保持一致</p>
+
+<p>c.Statement的resultType必须和mapper接口方法的返回类型一致</p>
+
+<p>d.statement的parameterType必须和mapper接口方法的参数类型一致（不一定）</p>
 
 <pre><code class="language-java">public class UserMapperTest {
 
@@ -910,10 +914,11 @@ parameterType：传入的参数类型，可以省略。
 parameterType：传入的参数类型，可以省略。
 标签内部：具体的sql语句。</p>
 
-<p><strong>2.#{}和${}</strong>
-#{} 和 ${} 在预编译中的处理是不一样的。#{} 在预处理时，会把参数部分用一个占位符 ? 代替;而 ${} 则只是简单的字符串替换.<strong>优先使用 #{}, ${} 会导致 sql 注入的问题。</strong></p>
+<p><strong>2.#{}和${}</strong></p>
 
-<p>场景1：数据库有两个一模一样的表。历史表，当前表
+<p>#{} 和 ${} 在预编译中的处理是不一样的。#{} 在预处理时，会把参数部分用一个占位符 ? 代替;而 ${} 则只是简单的字符串替换.<strong>优先使用 #{}, ${} 会导致 sql 注入的问题。</strong></p>
+
+<p><strong>场景</strong>：数据库有两个一模一样的表。历史表，当前表
 查询表中的信息，有时候从历史表中去查询数据，有时候需要去新的表去查询数据。
 希望使用1个方法来完成操作。</p>
 
@@ -948,8 +953,9 @@ parameterType：传入的参数类型，可以省略。
 3. where，set
 4. foreach</p>
 
-<p><strong>1.if</strong>
-场景：查询用户，如果输入了姓名，则按姓名查询</p>
+<p><strong>1.if</strong></p>
+
+<p>场景：查询用户，如果输入了姓名，则按姓名查询</p>
 
 <pre><code class="language-java">// 接口
 List&lt;User&gt; queryUserListByName(@Param(&quot;userName&quot;) String userName);
@@ -967,8 +973,9 @@ List&lt;User&gt; queryUserListByName(@Param(&quot;userName&quot;) String userNam
 &lt;/mapper&gt;
 </code></pre>
 
-<p><strong>2.choose，when，otherwise</strong>
-场景：查询用户，如果输入了姓名则按照姓名模糊查找，否则如果输入了年龄则按照年龄查找，否则查找姓名为“ls”的用户。</p>
+<p><strong>2.choose，when，otherwise</strong></p>
+
+<p>场景：查询用户，如果输入了姓名则按照姓名模糊查找，否则如果输入了年龄则按照年龄查找，否则查找姓名为“ls”的用户。</p>
 
 <pre><code class="language-java">// 接口
 List&lt;User&gt; queryUserListByNameOrAge(@Param(&quot;userName&quot;) String userName,
@@ -999,8 +1006,9 @@ List&lt;User&gt; queryUserListByNameOrAge(@Param(&quot;userName&quot;) String us
 &lt;/mapper&gt;
 </code></pre>
 
-<p><strong>3.where 和set</strong>
-场景一：查询所有用户，如果输入了姓名按照姓名进行模糊查询，如果输入年龄，按照年龄进行查询，如果两者都输入，两个条件都要成立。</p>
+<p><strong>3.where 和set</strong></p>
+
+<p><strong>场景一</strong>：查询所有用户，如果输入了姓名按照姓名进行模糊查询，如果输入年龄，按照年龄进行查询，如果两者都输入，两个条件都要成立。</p>
 
 <pre><code class="language-java">// 接口
 List&lt;User&gt; queryUserListByNameAndAge(@Param(&quot;userName&quot;) String userName,
@@ -1024,7 +1032,7 @@ List&lt;User&gt; queryUserListByNameAndAge(@Param(&quot;userName&quot;) String u
 &lt;/mapper&gt;
 </code></pre>
 
-<p>场景二：修改用户信息，如果参数user中的某个属性为null，则不修改。</p>
+<p><strong>场景二</strong>：修改用户信息，如果参数user中的某个属性为null，则不修改。</p>
 
 <pre><code class="language-java">// 接口
 void updateUser(User user);
@@ -1048,8 +1056,9 @@ void updateUser(User user);
 &lt;/mapper&gt;
 </code></pre>
 
-<p><strong>4.foreach</strong>
-场景：按照多个id查询用户信息。</p>
+<p><strong>4.foreach</strong></p>
+
+<p>场景：按照多个id查询用户信息。</p>
 
 <pre><code class="language-java">// 接口
 List&lt;User&gt; queryUserListByIds(@Param(&quot;ids&quot;) int[] ids);
@@ -1068,9 +1077,11 @@ List&lt;User&gt; queryUserListByIds(@Param(&quot;ids&quot;) int[] ids);
 
 <h4 id="高级查询">高级查询</h4>
 
-<p><strong>一对一查询</strong>
-需求：查询订单，并查询出下单人的信息。
-<strong>Order.java</strong></p>
+<p><strong>一对一查询</strong></p>
+
+<p>需求：查询订单，并查询出下单人的信息。</p>
+
+<p><strong>Order.java</strong></p>
 
 <pre><code class="language-java">public class Order {
     private Integer id;
@@ -1126,9 +1137,9 @@ List&lt;User&gt; queryUserListByIds(@Param(&quot;ids&quot;) int[] ids);
 
 <h4 id="缓存">缓存</h4>
 
-<p><strong>一级缓存</strong>
-Mybatis的一级缓存的<strong>作用域是session</strong>，当openSession()后，如果执行相同的SQL（相同语句和参数），Mybatis不进行执行SQL，而是从缓存中命中返回。原理：
-Mybatis执行查询时首先去缓存区命中，如果命中直接返回，没有命中则执行SQL，从数据库中查询。</p>
+<p><strong>一级缓存</strong></p>
+
+<p>Mybatis的一级缓存的<strong>作用域是session</strong>，当openSession()后，如果执行相同的SQL（相同语句和参数），Mybatis不进行执行SQL，而是从缓存中命中返回。原理：Mybatis执行查询时首先去缓存区命中，如果命中直接返回，没有命中则执行SQL，从数据库中查询。</p>
 
 <p>在mybatis中，一级缓存默认是开启的，并且一直无法关闭</p>
 
@@ -1136,8 +1147,9 @@ Mybatis执行查询时首先去缓存区命中，如果命中直接返回，没�
 1、同一个session中
 2、相同的SQL和参数</p>
 
-<p><strong>二级缓存</strong>
-mybatis 的二级缓存的<strong>作用域是一个mapper的namespace</strong> ，同一个namespace中查询sql可以从缓存中命中。</p>
+<p><strong>二级缓存</strong></p>
+
+<p>mybatis 的二级缓存的<strong>作用域是一个mapper的namespace</strong> ，同一个namespace中查询sql可以从缓存中命中。</p>
 
 <pre><code class="language-java">&lt;mapper namespace=&quot;cn.wishhust.mybatis.dao.mappers.UserMapper&quot;&gt;
     &lt;cache/&gt;
@@ -1154,8 +1166,9 @@ mybatis 的二级缓存的<strong>作用域是一个mapper的namespace</strong> 
 
 <h4 id="sql语句中出现-的解决方案">sql语句中出现’&lt;’的解决方案</h4>
 
-<p><strong>方法一：</strong>
-|转义字符| 字符 |说明|
+<p><strong>方法一：</strong></p>
+
+<p>|转义字符| 字符 |说明|
 |&ndash;|&ndash;|&ndash;|
 | &amp;lt； | &lt; | 小于 |
 | &amp;gt； | &gt; | 小于 |
@@ -1165,16 +1178,19 @@ mybatis 的二级缓存的<strong>作用域是一个mapper的namespace</strong> 
 
 <p><strong>方法二：</strong></p>
 
-<![CDATA[ 符号 ]]>
+<pre><code class="language-java">&lt;![CDATA[ 符号 ]]&gt;
+</code></pre>
 
-<p>注：使用&lt;![CDATA[ ]]&gt;标记的sql语句中的<where> <if>等标签不会被解析。</p>
+<p>注：使用&lt;![CDATA[ ]]&gt;标记的sql语句中的&lt;where&gt; &lt;if&gt;等标签不会被解析。</p>
+
+<hr />
 
 <p>报错1：</p>
 
 <p>org.apache.ibatis.binding.BindingException: Type interface cn.wishhust.mybatis.mappers.OrderMapper is not known to the MapperRegistry.</p>
 
 <p>原因：
-xml文件的namespace的值对应的mapper接口写错了。没使用全名</p>
+xml文件的namespace的值对应的mapper接口写错了，没使用全名。</p>
 
     </div>
 
