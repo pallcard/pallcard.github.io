@@ -19,10 +19,13 @@
       
       <guid>https://pallcard.github.io/2019/springboot%E4%B9%8B%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6/</guid>
       <description>1.配置文件基本使用 使用.yml配置文件，在resources目录下新建application.yml文件
-server: port: 8081 #修改端口号 servlet: context-path: /lk #端口号后需额外添加字符 #以上等同于application.properties的以下写法 #server.port=8081 #server.servlet.context-path=/zed swagger: title: SpringBoot学习 description: SpringBoot学习 version: 1.0.0 name: lk url: https://pallcard.github.io email: 1250585541@qq.com  注 * 其中空格有严格的要求
-2.切换配置文件 在resources目录下新建application-dev.yml文件，application-prod.yml文件
+server: port: 8081 #修改端口号 servlet: context-path: /lk #端口号后需额外添加字符 #以上等同于application.properties的以下写法 #server.port=8081 #server.servlet.context-path=/zed swagger: title: SpringBoot学习 description: SpringBoot学习 version: 1.0.0 name: lk url: https://pallcard.github.io email: 1250585541@qq.com  注
+ 其中空格有严格的要求  2.切换配置文件 在resources目录下新建application-dev.yml文件，application-prod.yml文件
 //文件目录 resources|- application.yml application-dev.yml application-prod.yml  其中application.yml来切换配置文件
-spring: profiles: active: dev  激活文件选择 * 使用上述application.yml来设置 * 使用java -jar ***.jar &amp;ndash;spring.profiles.active=dev; * IDEA中可以如下设置 3.配置文件使用  单值注入 （.yml中值若用双引号，转义字符会转义） ```java //.yml中 person: name: zhangsan \n lisi name2: &amp;lsquo;zhangsan \n lisi&amp;rsquo; name3: &amp;ldquo;zhangsan \n lisi&amp;rdquo; age: 18 boss: false  //使用 @Value(&amp;ldquo;${person.</description>
+spring: profiles: active: dev  激活文件选择
+ 使用上述application.yml来设置
+ 使用java -jar ***.jar &amp;ndash;spring.profiles.active=dev;
+ IDEA中可以如下设置   3.配置文件使用  单值注入 （.yml中值若用双引号，转义字符会转义）  //.yml中 person: name: zhangsan \n lisi name2: &#39;zhangsan \n lisi&#39; name3: &amp;quot;zhangsan \n lisi&amp;quot; age: 18 boss: false //使用 @Value(&amp;quot;${person.</description>
     </item>
     
     <item>

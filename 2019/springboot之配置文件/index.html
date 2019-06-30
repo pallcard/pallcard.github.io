@@ -47,7 +47,7 @@
     "articleSection" : "posts",
     "name" : "SpringBoot之配置文件",
     "headline" : "SpringBoot之配置文件",
-    "description" : "1.配置文件基本使用 使用.yml配置文件，在resources目录下新建application.yml文件\nserver: port: 8081 #修改端口号 servlet: context-path: \/lk #端口号后需额外添加字符 #以上等同于application.properties的以下写法 #server.port=8081 #server.servlet.context-path=\/zed swagger: title: SpringBoot学习 description: SpringBoot学习 version: 1.0.0 name: lk url: https:\/\/pallcard.github.io email: 1250585541@qq.com  注 * 其中空格有严格的要求\n2.切换配置文件 在resources目录下新建application-dev.yml文件，application-prod.yml文件\n\/\/文件目录 resources|- application.yml application-dev.yml application-prod.yml  其中application.yml来切换配置文件\nspring: profiles: active: dev  激活文件选择 * 使用上述application.yml来设置 * 使用java -jar ***.jar \x26ndash;spring.profiles.active=dev; * IDEA中可以如下设置 3.配置文件使用  单值注入 （.yml中值若用双引号，转义字符会转义） ```java \/\/.yml中 person: name: zhangsan \\n lisi name2: \x26lsquo;zhangsan \\n lisi\x26rsquo; name3: \x26ldquo;zhangsan \\n lisi\x26rdquo; age: 18 boss: false  \/\/使用 @Value(\x26ldquo;${person.",
+    "description" : "1.配置文件基本使用 使用.yml配置文件，在resources目录下新建application.yml文件\nserver: port: 8081 #修改端口号 servlet: context-path: \/lk #端口号后需额外添加字符 #以上等同于application.properties的以下写法 #server.port=8081 #server.servlet.context-path=\/zed swagger: title: SpringBoot学习 description: SpringBoot学习 version: 1.0.0 name: lk url: https:\/\/pallcard.github.io email: 1250585541@qq.com  注\n 其中空格有严格的要求  2.切换配置文件 在resources目录下新建application-dev.yml文件，application-prod.yml文件\n\/\/文件目录 resources|- application.yml application-dev.yml application-prod.yml  其中application.yml来切换配置文件\nspring: profiles: active: dev  激活文件选择\n 使用上述application.yml来设置\n 使用java -jar ***.jar \x26ndash;spring.profiles.active=dev;\n IDEA中可以如下设置   3.配置文件使用  单值注入 （.yml中值若用双引号，转义字符会转义）  \/\/.yml中 person: name: zhangsan \\n lisi name2: \x27zhangsan \\n lisi\x27 name3: \x26quot;zhangsan \\n lisi\x26quot; age: 18 boss: false \/\/使用 @Value(\x26quot;${person.",
     "inLanguage" : "zh-CN",
     "author" : "刘科",
     "creator" : "刘科",
@@ -58,7 +58,7 @@
     "datePublished": "2019-06-08 20:21:05 \x2b0800 CST",
     "dateModified" : "2019-06-08 20:21:05 \x2b0800 CST",
     "url" : "https:\/\/pallcard.github.io\/2019\/springboot%E4%B9%8B%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6\/",
-    "wordCount" : "215",
+    "wordCount" : "202",
     "keywords" : [ "SpringBoot","总数", "刘科个人博客"]
 }
 </script>
@@ -172,8 +172,11 @@ swagger:
   email: 1250585541@qq.com
 </code></pre>
 
-<p><strong><em>注</em></strong>
-* 其中空格有严格的要求</p>
+<p><strong><em>注</em></strong></p>
+
+<ul>
+<li>其中空格有严格的要求</li>
+</ul>
 
 <h5 id="2-切换配置文件">2.切换配置文件</h5>
 
@@ -193,47 +196,54 @@ resources|-
     active: dev
 </code></pre>
 
-<p><strong><em>激活文件选择</em></strong>
-* 使用上述application.yml来设置
-* 使用java -jar ***.jar &ndash;spring.profiles.active=dev;
-* IDEA中可以如下设置
-<figure><img src="/images/ring.svg" data-sizes="auto" data-src="images/springboot001.png" alt="激活配置文件" class="lazyload"><figcaption class="image-caption">激活配置文件</figcaption></figure></p>
+<p><strong><em>激活文件选择</em></strong></p>
+
+<ul>
+<li><p>使用上述application.yml来设置</p></li>
+
+<li><p>使用java -jar ***.jar &ndash;spring.profiles.active=dev;</p></li>
+
+<li><p>IDEA中可以如下设置
+<figure><img src="/images/ring.svg" data-sizes="auto" data-src="images/springboot001.png" alt="激活配置文件" class="lazyload"><figcaption class="image-caption">激活配置文件</figcaption></figure></p></li>
+</ul>
 
 <h5 id="3-配置文件使用">3.配置文件使用</h5>
 
 <ul>
-<li>单值注入 （.yml中值若用双引号，转义字符会转义）
-```java
-//.yml中
-person:
-name: zhangsan \n lisi
-name2: &lsquo;zhangsan \n lisi&rsquo;
-name3: &ldquo;zhangsan \n lisi&rdquo;
-age: 18
-boss: false</li>
+<li>单值注入 （.yml中值若用双引号，转义字符会转义）</li>
 </ul>
 
-<p>//使用
-    @Value(&ldquo;${person.name}&rdquo;)
-    private String name;</p>
+<pre><code class="language-java">//.yml中
+person:
+  name: zhangsan \n lisi
+  name2: 'zhangsan \n lisi'
+  name3: &quot;zhangsan \n lisi&quot;
+  age: 18
+  boss: false
 
-<pre><code>@Value(&quot;${person.name2}&quot;)
-private String name2;
+//使用
+    @Value(&quot;${person.name}&quot;)
+    private String name;
+
+    @Value(&quot;${person.name2}&quot;)
+    private String name2;
 
 
-@Value(&quot;${person.name3}&quot;)
-private String name3;
+    @Value(&quot;${person.name3}&quot;)
+    private String name3;
 
-@Value(&quot;${person.age}&quot;)
-private String age;
+    @Value(&quot;${person.age}&quot;)
+    private String age;
 
-@Value(&quot;${person.boss}&quot;)
-private String boss;
+    @Value(&quot;${person.boss}&quot;)
+    private String boss;
 </code></pre>
 
-<pre><code>* 批量注入 
-```java
-//application.yml
+<ul>
+<li>批量注入</li>
+</ul>
+
+<pre><code class="language-java">//application.yml
 student:
   name: lk
   age: 23
@@ -272,22 +282,59 @@ public class Dog {
  private Student student;
 </code></pre>
 
-<p><strong><em>注</em></strong>
-* 将配置文件中配置的每一个属性的值，映射到这个组件中
-* @ConfigurationProperties：告诉SpringBoot将本类中的所有属性和配置文件中相关的配置进行绑定；
-* prefix = &ldquo;person&rdquo;：配置文件中哪个下面的所有属性进行一一映射
-* 只有这个组件是容器中的组件，才能使用容器提供的@ConfigurationProperties功能；
-* @Data是一个插件，免去了getter/setter和toString这些繁琐的东西</p>
+<p><strong><em>注</em></strong></p>
+
+<ul>
+<li>将配置文件中配置的每一个属性的值，映射到这个组件中</li>
+<li>@ConfigurationProperties：告诉SpringBoot将本类中的所有属性和配置文件中相关的配置进行绑定；</li>
+<li>prefix = &ldquo;person&rdquo;：配置文件中哪个下面的所有属性进行一一映射</li>
+<li>只有这个组件是容器中的组件，才能使用容器提供的@ConfigurationProperties功能；</li>
+<li>@Data是一个插件，免去了getter/setter和toString这些繁琐的东西</li>
+</ul>
 
 <h5 id="4-两种注入区别">4.两种注入区别</h5>
 
-<p>|   |@ConfigurationProperties   |@Value
-|&ndash;|&ndash;|&ndash;
-|功能|    批量注入配置文件中的属性|一个个指定
-|松散绑定（松散语法） |支持|    不支持
-|SpEL： #{}  |不支持    |支持
-|JSR303数据校验 |支持 |不支持
-|复杂类型封装|    支持| 不支持</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>@ConfigurationProperties</th>
+<th>@Value</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>功能</td>
+<td>批量注入配置文件中的属性</td>
+<td>一个个指定</td>
+</tr>
+
+<tr>
+<td>松散绑定（松散语法）</td>
+<td>支持</td>
+<td>不支持</td>
+</tr>
+
+<tr>
+<td>SpEL： #{}</td>
+<td>不支持</td>
+<td>支持</td>
+</tr>
+
+<tr>
+<td>JSR303数据校验</td>
+<td>支持</td>
+<td>不支持</td>
+</tr>
+
+<tr>
+<td>复杂类型封装</td>
+<td>支持</td>
+<td>不支持</td>
+</tr>
+</tbody>
+</table>
 
 <p>松散语法绑定：last_name = last-name = lastName 他们取的值都是相同的</p>
 
