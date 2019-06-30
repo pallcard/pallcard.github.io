@@ -1,6 +1,294 @@
-<div class="post-comment">
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+  <meta http-equiv="content-type" content="text/html;charset=utf-8">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noodp"/>
+  <meta name="author" content="刘科">
+  <meta name="description" content="hust研一">
+  <meta name="keywords" content="Java,博客">
+  
+  <link rel="prev" href="https://pallcard.github.io/2019/algorithm004/" />
+  <link rel="next" href="https://pallcard.github.io/2019/algorithm006/" />
+  <link rel="canonical" href="https://pallcard.github.io/2019/algorithm005/" />
+  <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+  <meta name="msapplication-TileColor" content="#da532c">
+  <meta name="theme-color" content="#ffffff">
+  <title>
+       
+       
+           算法005 | 刘科个人博客
+       
+  </title>
+  <meta name="title" content="算法005 | 刘科个人博客">
     
+  
+  <link rel="stylesheet" href="/font/iconfont.css">
+  <link rel="stylesheet" href="/css/main.min.css">
+
+
+  
+  
+ 
+
+<script type="application/ld+json">
+ "@context" : "http://schema.org",
+    "@type" : "BlogPosting",
+    "mainEntityOfPage": {
+         "@type": "WebPage",
+         "@id": "https:\/\/pallcard.github.io\/"
+    },
+    "articleSection" : "posts",
+    "name" : "算法005",
+    "headline" : "算法005",
+    "description" : "描述 根据二叉树的前序遍历和中序遍历的结果，重建出该二叉树。假设输入的前序遍历和中序遍历的结果中都不含重复的数字。\n例子 Input: preorder：{3,9,20,15,7} inorder：{9,3,15,20,7} Output: 该二叉树  思路 根据先序遍历确定根，再通过中序遍历将数组划分为两部分，分别是左子树、右子树。 故可以通过一个HashMap存储中序遍历的数组值与下标，key为值，value为下标。\n代码 class TreeNode { private TreeNode leftChild; private TreeNode rightChild; private int value; public TreeNode(int value) { this.value = value; } public TreeNode getLeftChild() { return leftChild; } public void setLeftChild(TreeNode leftChild) { this.leftChild = leftChild; } public TreeNode getRightChild() { return rightChild; } public void setRightChild(TreeNode rightChild) { this.rightChild = rightChild; } public int getValue() { return value; } public void setValue(int value) { this.",
+    "inLanguage" : "zh-CN",
+    "author" : "刘科",
+    "creator" : "刘科",
+    "publisher": "刘科",
+    "accountablePerson" : "刘科",
+    "copyrightHolder" : "刘科",
+    "copyrightYear" : "2019",
+    "datePublished": "2019-06-05 10:22:59 \x2b0800 CST",
+    "dateModified" : "2019-06-05 10:22:59 \x2b0800 CST",
+    "url" : "https:\/\/pallcard.github.io\/2019\/algorithm005\/",
+    "wordCount" : "182",
+    "keywords" : [ "Algorithm","Java","总数", "刘科个人博客"]
+}
+</script>
+
+</head>
+
+  
+
+
+  <body class="">
+    <div class="wrapper">
+        <nav class="navbar">
+    <div class="container">
+        <div class="navbar-header header-logo">
+        	<a href="javascript:void(0);" class="theme-switch"><i class="iconfont icon-xihuan"></i></a>&nbsp;<a href="https://pallcard.github.io/">刘科个人博客</a>
+        </div>
+        <div class="menu navbar-right">
+                
+                
+                <a class="menu-item" href="/posts/" title="">博客</a>
+                
+                <a class="menu-item" href="/categories/" title="">分类</a>
+                
+                <a class="menu-item" href="/tags/" title="">标签</a>
+                
+                <a class="menu-item" href="/about/" title="">关于</a>
+                
+        </div>
+    </div>
+</nav>
+<nav class="navbar-mobile" id="nav-mobile" style="display: none">
+     <div class="container">
+        <div class="navbar-header">
+            <div>  <a href="javascript:void(0);" class="theme-switch"><i class="iconfont icon-xihuan"></i></a>&nbsp;<a href="https://pallcard.github.io/">刘科个人博客</a></div>
+            <div class="menu-toggle">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
      
+          <div class="menu" id="mobile-menu">
+                
+                
+                <a class="menu-item" href="/posts/" title="">博客</a>
+                
+                <a class="menu-item" href="/categories/" title="">分类</a>
+                
+                <a class="menu-item" href="/tags/" title="">标签</a>
+                
+                <a class="menu-item" href="/about/" title="">关于</a>
+                
+        </div>
+    </div>
+</nav>
+    	 <main class="main">
+          <div class="container">
+      		
+<article class="post-warp" itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">算法005</h1>
+        <div class="post-meta">
+                Written by <a itemprop="name" href="https://pallcard.github.io/" rel="author">刘科</a> with ♥ 
+                <span class="post-time">
+                on <time datetime=2019-06-05 itemprop="datePublished">June 5, 2019</time>
+                </span>
+                in
+                <i class="iconfont icon-folder"></i>
+                <span class="post-category">
+                        <a href="https://pallcard.github.io/categories/algorithm/"> Algorithm </a>
+                        
+                </span>
+        </div>
+    </header>
+    <div class="post-content">
+        
+
+        
+
+        
+        
+     
+          
+          
+          
+
+          
+          
+          
+
+          
+
+<h5 id="描述">描述</h5>
+
+<p>根据二叉树的前序遍历和中序遍历的结果，重建出该二叉树。假设输入的前序遍历和中序遍历的结果中都不含重复的数字。</p>
+
+<h5 id="例子">例子</h5>
+
+<pre><code class="language-java">Input:
+	preorder：{3,9,20,15,7}
+	inorder：{9,3,15,20,7}
+Output:
+	该二叉树
+</code></pre>
+
+<h4 id="思路">思路</h4>
+
+<p>根据先序遍历确定根，再通过中序遍历将数组划分为两部分，分别是左子树、右子树。
+故可以通过一个HashMap存储中序遍历的数组值与下标，key为值，value为下标。</p>
+
+<h5 id="代码">代码</h5>
+
+<pre><code class="language-java">class TreeNode {
+    private TreeNode leftChild;
+    private TreeNode rightChild;
+    private int value;
+
+    public TreeNode(int value) {
+        this.value = value;
+    }
+
+    public TreeNode getLeftChild() {
+        return leftChild;
+    }
+
+    public void setLeftChild(TreeNode leftChild) {
+        this.leftChild = leftChild;
+    }
+
+    public TreeNode getRightChild() {
+        return rightChild;
+    }
+
+    public void setRightChild(TreeNode rightChild) {
+        this.rightChild = rightChild;
+    }
+
+    public int getValue() {
+        return value;
+    }
+
+    public void setValue(int value) {
+        this.value = value;
+    }
+}
+
+public class Question005 {
+	//中序遍历结果，用来对二叉树进行划分，左右子树
+    //为了方便快速的找出根结点对应的下标，来确定左右子树结点个数
+    private static HashMap&lt;Integer, Integer&gt; preorderMap = new HashMap&lt;&gt;();
+    public static void main(String[] args) {
+        int [] preorder = new int[] {3,9,20,15,7};
+        int [] inorder = new int[] {9,3,15,20,7};
+
+        for (int i = 0; i &lt; preorder.length; i++) {
+            preorderMap.put(inorder[i],i);
+        }
+        TreeNode root = reConstructBinaryTree(preorder,0, preorder.length);
+    }
+    /**
+     * pre：前序遍历数组
+     * preL：二叉树起始结点下标
+     * length：长度
+     */
+    public static TreeNode reConstructBinaryTree(int [] pre, int preL, int length) {
+        if (length == 1) {
+            return new TreeNode(pre[preL]);
+        }
+        TreeNode root = new TreeNode(pre[preL]);
+        Integer index = preorderMap.get(root.getValue());
+        int leftLength = index - preL;
+        root.setLeftChild(reConstructBinaryTree(pre,preL+1,leftLength));
+        root.setRightChild(reConstructBinaryTree(pre,index+1,length-leftLength-1));
+        return root;
+    }
+}
+</code></pre>
+
+    </div>
+
+    <div class="post-copyright">
+             
+            <p class="copyright-item">
+                <span>Author:</span>
+                <span>刘科 </span>
+                </p>
+            
+           
+             
+            <p class="copyright-item">
+                    <span>Link:</span>
+                    <a href=https://pallcard.github.io/2019/algorithm005/>https://pallcard.github.io/2019/algorithm005/</span>
+            </p>
+            
+            
+    </div>
+
+  
+    <div class="post-tags">
+        
+            <section>
+            <i class="iconfont icon-tag"></i>Tag(s): 
+            
+            <span class="tag"><a href="https://pallcard.github.io/tags/algorithm/">
+                    #Algorithm</a></span>
+            
+            <span class="tag"><a href="https://pallcard.github.io/tags/java/">
+                    #Java</a></span>
+            
+            <span class="tag"><a href="https://pallcard.github.io/tags/%E6%80%BB%E6%95%B0/">
+                    #总数</a></span>
+            
+            </section>
+        
+        <section>
+                <a href="javascript:window.history.back();">back</a></span> · 
+                <span><a href="https://pallcard.github.io/">home</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav">
+        
+        <a href="https://pallcard.github.io/2019/algorithm004/" class="prev" rel="prev" title="算法004"><i class="iconfont icon-left"></i>&nbsp;算法004</a>
+         
+        
+        <a href="https://pallcard.github.io/2019/algorithm006/" class="next" rel="next" title="算法006">算法006&nbsp;<i class="iconfont icon-right"></i></a>
+        
+    </div>
+
+	<div class="post-comment">
+		
+		 
   
   <div id="vcomments"></div>
   <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
@@ -18,4 +306,47 @@
         visitor: 'true'
     });
   </script>
-</div>
+	</div>
+</article>
+          </div>
+		   </main>
+      <footer class="footer">
+    <div class="copyright">
+        &copy;
+        
+        <span class="with-love">
+    	 <i class="iconfont icon-love"></i> 
+         </span>
+         
+            <span class="author" itemprop="copyrightHolder"><a href="https://pallcard.github.io/">刘科</a> | </span> 
+         
+
+         
+            <a href="http://www.miibeian.gov.cn/" target="_blank" rel="external nofollow">鄂ICP备19006996号-1 </a> |
+         
+		  <span>Powered by <a href="https://gohugo.io/" target="_blank" rel="external nofollow">Hugo</a> & <a href="https://github.com/liuzc/leaveit" target="_blank" rel="external nofollow">LeaveIt</a></span> 
+    </div>
+</footer>
+
+
+
+
+
+
+
+
+
+
+
+
+    
+    
+    <script src="/js/vendor_no_gallery.min.js" async=""></script>
+    
+  
+
+
+
+     </div>
+  </body>
+</html>

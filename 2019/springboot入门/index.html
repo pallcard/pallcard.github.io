@@ -1,6 +1,270 @@
-<div class="post-comment">
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+  <meta http-equiv="content-type" content="text/html;charset=utf-8">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noodp"/>
+  <meta name="author" content="刘科">
+  <meta name="description" content="hust研一">
+  <meta name="keywords" content="Java,博客">
+  
+  <link rel="prev" href="https://pallcard.github.io/2019/algorithm008/" />
+  <link rel="next" href="https://pallcard.github.io/2019/springboot%E5%90%AF%E5%8A%A8%E7%B1%BB/" />
+  <link rel="canonical" href="https://pallcard.github.io/2019/springboot%E5%85%A5%E9%97%A8/" />
+  <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+  <meta name="msapplication-TileColor" content="#da532c">
+  <meta name="theme-color" content="#ffffff">
+  <title>
+       
+       
+           SpringBoot入门 | 刘科个人博客
+       
+  </title>
+  <meta name="title" content="SpringBoot入门 | 刘科个人博客">
     
+  
+  <link rel="stylesheet" href="/font/iconfont.css">
+  <link rel="stylesheet" href="/css/main.min.css">
+
+
+  
+  
+ 
+
+<script type="application/ld+json">
+ "@context" : "http://schema.org",
+    "@type" : "BlogPosting",
+    "mainEntityOfPage": {
+         "@type": "WebPage",
+         "@id": "https:\/\/pallcard.github.io\/"
+    },
+    "articleSection" : "posts",
+    "name" : "SpringBoot入门",
+    "headline" : "SpringBoot入门",
+    "description" : "创建工程 使用IDEA，按照提示创建即可。\n修改Banner 在resources目录下创建banner.txt文件，改文件用于指定banner，文字生成banner的网址：http:\/\/patorjk.com\/software\/taag。\n${AnsiColor.BLUE} .____ ____ __. | | | |\/ _| | | | \x26lt; | |___| | \\ |_______ \\____|__ \\ \\\/ \\\/ -----版本号-----${spring-boot.version}  说明： ${AnsiColor.BLUE} 表示Banner文字的颜色 ${spring-boot.version} 当前使用的SpringBoot版本\n创建Controller类 @Controller public class HelloWorld { @RequestMapping(value = \x26quot;\/hello\x26quot;,method = RequestMethod.GET) @ResponseBody public String hello(){ return \x26quot;Hello Spring Boot\x26quot;; } }  访问：http:\/\/localhost:8080\/hello，即可以看到Hello Spring Boot 另外一种注解方式\n@RestController public class HelloWorld { @GetMapping(\x26quot;\/hello\x26quot;) public String hello(){ return \x26quot;Hello Spring Boot\x26quot;; } }  说明 * @RestController：处理http请求：等同于@Controller\x2b@ResponseBody * @GetMapping：@RequestMapping以get请求的简写",
+    "inLanguage" : "zh-CN",
+    "author" : "刘科",
+    "creator" : "刘科",
+    "publisher": "刘科",
+    "accountablePerson" : "刘科",
+    "copyrightHolder" : "刘科",
+    "copyrightYear" : "2019",
+    "datePublished": "2019-06-08 10:18:29 \x2b0800 CST",
+    "dateModified" : "2019-06-08 10:18:29 \x2b0800 CST",
+    "url" : "https:\/\/pallcard.github.io\/2019\/springboot%E5%85%A5%E9%97%A8\/",
+    "wordCount" : "96",
+    "keywords" : [ "SpringBoot","总数", "刘科个人博客"]
+}
+</script>
+
+</head>
+
+  
+
+
+  <body class="">
+    <div class="wrapper">
+        <nav class="navbar">
+    <div class="container">
+        <div class="navbar-header header-logo">
+        	<a href="javascript:void(0);" class="theme-switch"><i class="iconfont icon-xihuan"></i></a>&nbsp;<a href="https://pallcard.github.io/">刘科个人博客</a>
+        </div>
+        <div class="menu navbar-right">
+                
+                
+                <a class="menu-item" href="/posts/" title="">博客</a>
+                
+                <a class="menu-item" href="/categories/" title="">分类</a>
+                
+                <a class="menu-item" href="/tags/" title="">标签</a>
+                
+                <a class="menu-item" href="/about/" title="">关于</a>
+                
+        </div>
+    </div>
+</nav>
+<nav class="navbar-mobile" id="nav-mobile" style="display: none">
+     <div class="container">
+        <div class="navbar-header">
+            <div>  <a href="javascript:void(0);" class="theme-switch"><i class="iconfont icon-xihuan"></i></a>&nbsp;<a href="https://pallcard.github.io/">刘科个人博客</a></div>
+            <div class="menu-toggle">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
      
+          <div class="menu" id="mobile-menu">
+                
+                
+                <a class="menu-item" href="/posts/" title="">博客</a>
+                
+                <a class="menu-item" href="/categories/" title="">分类</a>
+                
+                <a class="menu-item" href="/tags/" title="">标签</a>
+                
+                <a class="menu-item" href="/about/" title="">关于</a>
+                
+        </div>
+    </div>
+</nav>
+    	 <main class="main">
+          <div class="container">
+      		
+<article class="post-warp" itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">SpringBoot入门</h1>
+        <div class="post-meta">
+                Written by <a itemprop="name" href="https://pallcard.github.io/" rel="author">刘科</a> with ♥ 
+                <span class="post-time">
+                on <time datetime=2019-06-08 itemprop="datePublished">June 8, 2019</time>
+                </span>
+                in
+                <i class="iconfont icon-folder"></i>
+                <span class="post-category">
+                        <a href="https://pallcard.github.io/categories/springboot/"> SpringBoot </a>
+                        
+                </span>
+        </div>
+    </header>
+    <div class="post-content">
+        
+
+        
+
+        
+        
+     
+          
+          
+          
+
+          
+          
+          
+
+          
+
+<h5 id="创建工程">创建工程</h5>
+
+<p>使用IDEA，按照提示创建即可。</p>
+
+<h5 id="修改banner">修改Banner</h5>
+
+<p>在resources目录下创建banner.txt文件，改文件用于指定banner，文字生成banner的网址：<a href="http://patorjk.com/software/taag。" rel="nofollow noreferrer" target="_blank">http://patorjk.com/software/taag。</a></p>
+
+<pre><code class="language-java">${AnsiColor.BLUE}
+.____     ____  __.
+|    |   |    |/ _|
+|    |   |      &lt;  
+|    |___|    |  \ 
+|_______ \____|__ \
+        \/       \/
+-----版本号-----${spring-boot.version}      
+</code></pre>
+
+<p>说明：
+${AnsiColor.BLUE}   表示Banner文字的颜色
+${spring-boot.version}  当前使用的SpringBoot版本</p>
+
+<h5 id="创建controller类">创建Controller类</h5>
+
+<pre><code class="language-java">@Controller
+public class HelloWorld {
+    @RequestMapping(value = &quot;/hello&quot;,method = RequestMethod.GET)
+    @ResponseBody
+    public String hello(){
+        return &quot;Hello Spring Boot&quot;;
+    }
+}
+</code></pre>
+
+<p>访问：<a href="http://localhost:8080/hello，即可以看到Hello" rel="nofollow noreferrer" target="_blank">http://localhost:8080/hello，即可以看到Hello</a> Spring Boot
+<strong><em>另外一种注解方式</em></strong></p>
+
+<pre><code class="language-java">@RestController
+public class HelloWorld {
+    @GetMapping(&quot;/hello&quot;)
+    public String hello(){
+        return &quot;Hello Spring Boot&quot;;
+    }
+}
+</code></pre>
+
+<p>说明
+* @RestController：处理http请求：等同于@Controller+@ResponseBody
+* @GetMapping：@RequestMapping以get请求的简写</p>
+
+<p><strong><em>url的其他形式</em></strong></p>
+
+<pre><code class="language-java">@RestController
+@RequestMapping(&quot;/test&quot;)
+public class HelloWorld {
+    @GetMapping(value={&quot;/hello&quot;,&quot;/hi&quot;})
+    public String hello(){
+        return &quot;Hello Spring Boot&quot;;
+    }
+}
+</code></pre>
+
+<p>参考：<a href="https://zed058.cn" rel="nofollow noreferrer" target="_blank">https://zed058.cn</a>
+文档：<a href="https://docs.spring.io/spring-boot/docs/2.1.4.RELEASE/reference/htmlsingle/" rel="nofollow noreferrer" target="_blank">https://docs.spring.io/spring-boot/docs/2.1.4.RELEASE/reference/htmlsingle/</a></p>
+
+    </div>
+
+    <div class="post-copyright">
+             
+            <p class="copyright-item">
+                <span>Author:</span>
+                <span>刘科 </span>
+                </p>
+            
+           
+             
+            <p class="copyright-item">
+                    <span>Link:</span>
+                    <a href=https://pallcard.github.io/2019/springboot%E5%85%A5%E9%97%A8/>https://pallcard.github.io/2019/springboot%E5%85%A5%E9%97%A8/</span>
+            </p>
+            
+            
+    </div>
+
+  
+    <div class="post-tags">
+        
+            <section>
+            <i class="iconfont icon-tag"></i>Tag(s): 
+            
+            <span class="tag"><a href="https://pallcard.github.io/tags/springboot/">
+                    #SpringBoot</a></span>
+            
+            <span class="tag"><a href="https://pallcard.github.io/tags/%E6%80%BB%E6%95%B0/">
+                    #总数</a></span>
+            
+            </section>
+        
+        <section>
+                <a href="javascript:window.history.back();">back</a></span> · 
+                <span><a href="https://pallcard.github.io/">home</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav">
+        
+        <a href="https://pallcard.github.io/2019/algorithm008/" class="prev" rel="prev" title="算法008"><i class="iconfont icon-left"></i>&nbsp;算法008</a>
+         
+        
+        <a href="https://pallcard.github.io/2019/springboot%E5%90%AF%E5%8A%A8%E7%B1%BB/" class="next" rel="next" title="SpringBoot启动类">SpringBoot启动类&nbsp;<i class="iconfont icon-right"></i></a>
+        
+    </div>
+
+	<div class="post-comment">
+		
+		 
   
   <div id="vcomments"></div>
   <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
@@ -18,4 +282,47 @@
         visitor: 'true'
     });
   </script>
-</div>
+	</div>
+</article>
+          </div>
+		   </main>
+      <footer class="footer">
+    <div class="copyright">
+        &copy;
+        
+        <span class="with-love">
+    	 <i class="iconfont icon-love"></i> 
+         </span>
+         
+            <span class="author" itemprop="copyrightHolder"><a href="https://pallcard.github.io/">刘科</a> | </span> 
+         
+
+         
+            <a href="http://www.miibeian.gov.cn/" target="_blank" rel="external nofollow">鄂ICP备19006996号-1 </a> |
+         
+		  <span>Powered by <a href="https://gohugo.io/" target="_blank" rel="external nofollow">Hugo</a> & <a href="https://github.com/liuzc/leaveit" target="_blank" rel="external nofollow">LeaveIt</a></span> 
+    </div>
+</footer>
+
+
+
+
+
+
+
+
+
+
+
+
+    
+    
+    <script src="/js/vendor_no_gallery.min.js" async=""></script>
+    
+  
+
+
+
+     </div>
+  </body>
+</html>
