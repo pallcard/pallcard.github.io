@@ -47,7 +47,7 @@
     "articleSection" : "posts",
     "name" : "SpringBoot之配置文件",
     "headline" : "SpringBoot之配置文件",
-    "description" : "1.配置文件基本使用 使用.yml配置文件，在resources目录下新建application.yml文件\nserver: port: 8081 #修改端口号 servlet: context-path: \/lk #端口号后需额外添加字符 #以上等同于application.properties的以下写法 #server.port=8081 #server.servlet.context-path=\/zed swagger: title: SpringBoot学习 description: SpringBoot学习 version: 1.0.0 name: lk url: https:\/\/pallcard.github.io email: 1250585541@qq.com  注\n 其中空格有严格的要求  2.切换配置文件 在resources目录下新建application-dev.yml文件，application-prod.yml文件\n\/\/文件目录 resources|- application.yml application-dev.yml application-prod.yml  其中application.yml来切换配置文件\nspring: profiles: active: dev  激活文件选择\n 使用上述application.yml来设置\n 使用java -jar ***.jar \x26ndash;spring.profiles.active=dev;\n IDEA中可以如下设置   3.配置文件使用  单值注入 （.yml中值若用双引号，转义字符会转义）  \/\/.yml中 person: name: zhangsan \\n lisi name2: \x27zhangsan \\n lisi\x27 name3: \x26quot;zhangsan \\n lisi\x26quot; age: 18 boss: false \/\/使用 @Value(\x26quot;${person.",
+    "description" : "1.配置文件基本使用 使用.yml配置文件，在resources目录下新建application.yml文件\nserver: port: 8081 #修改端口号 servlet: context-path: \/lk #端口号后需额外添加字符 #以上等同于application.properties的以下写法 #server.port=8081 #server.servlet.context-path=\/zed swagger: title: SpringBoot学习 description: SpringBoot学习 version: 1.0.0 name: lk url: https:\/\/pallcard.github.io email: 1250585541@qq.com  注\n 其中空格有严格的要求  2.切换配置文件 在resources目录下新建application-dev.yml文件，application-prod.yml文件\n\/\/文件目录 resources|- application.yml application-dev.yml application-prod.yml  其中application.yml来切换配置文件\nspring: profiles: active: dev  激活文件选择\n 使用上述application.yml来设置\n 使用java -jar ***.jar \x26ndash;spring.profiles.active=dev;\n IDEA中可以如下设置\n  3.配置文件使用  单值注入 （.yml中值若用双引号，转义字符会转义）  \/\/.yml中 person: name: zhangsan \\n lisi name2: \x27zhangsan \\n lisi\x27 name3: \x26quot;zhangsan \\n lisi\x26quot; age: 18 boss: false \/\/使用 @Value(\x26quot;${person.",
     "inLanguage" : "zh-CN",
     "author" : "刘科",
     "creator" : "刘科",
@@ -203,9 +203,10 @@ resources|-
 
 <li><p>使用java -jar ***.jar &ndash;spring.profiles.active=dev;</p></li>
 
-<li><p>IDEA中可以如下设置
-<figure><img src="/images/ring.svg" data-sizes="auto" data-src="images/springboot001.png" alt="激活配置文件" class="lazyload"><figcaption class="image-caption">激活配置文件</figcaption></figure></p></li>
+<li><p>IDEA中可以如下设置</p></li>
 </ul>
+
+<p><figure><img src="/images/ring.svg" data-sizes="auto" data-src="/images/springboot001.png" alt="激活配置文件" class="lazyload"><figcaption class="image-caption">激活配置文件</figcaption></figure></p>
 
 <h5 id="3-配置文件使用">3.配置文件使用</h5>
 

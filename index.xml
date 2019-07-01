@@ -6,8 +6,63 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
     <copyright>All rights reserved - 2019</copyright>
-    <lastBuildDate>Thu, 20 Jun 2019 19:00:36 +0800</lastBuildDate>
+    <lastBuildDate>Mon, 01 Jul 2019 22:26:19 +0800</lastBuildDate>
     <atom:link href="/" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>JMM例子</title>
+      <link>https://pallcard.github.io/2019/jmm%E4%BE%8B%E5%AD%90/</link>
+      <pubDate>Mon, 01 Jul 2019 22:26:19 +0800</pubDate>
+      
+      <guid>https://pallcard.github.io/2019/jmm%E4%BE%8B%E5%AD%90/</guid>
+      <description>&lt;p&gt;例子1，代码如下：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;public class demo001 {
+    private static boolean initFlag = false;
+//    private static volatile boolean initFlag = false;
+
+    public static void main(String[] args) throws InterruptedException {
+        // 线程1
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                System.out.println(&amp;quot;等待数据准备&amp;quot;);
+                while (!initFlag) {}
+                System.out.println(&amp;quot;数据准备完毕，执行程序逻辑&amp;quot;);
+            }
+        }).start();
+
+        Thread.sleep(2000);
+        // 线程2
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                System.out.println(&amp;quot;数据准备中。。。&amp;quot;);
+                initFlag = true;
+                System.out.println(&amp;quot;数据准备完成&amp;quot;);
+            }
+        }).start();
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;说明&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://pallcard.github.io/images/jmm003.png&#34; alt=&#34;initFlag无volatile关键字修饰时&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;initFlag无volatile关键字修饰时，线程1将initFlag从主内存读入到工作内存，线程1一直循环，线程2将initFlag从主内存读入到工作内存，并通过线程执行引擎对initFlag进行修改，然后写回到主内存中，但是线程1中的initFlag仍然是工作内存中的值，线程1无法感知到其他内存对该共享变量的修改，故会一直循环下去。&lt;strong&gt;缓存一致性问题&lt;/strong&gt;&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;缓存一致性问题
+* &lt;strong&gt;总线加锁（性能太低）&lt;/strong&gt;
+cpu从主内存读取数据到高速缓存，会在总线对该数据加锁，这样其他cpu无法读或写该数据，直到cpu使用完数据并释放锁。
+* &lt;strong&gt;MESI缓存一致性协议&lt;/strong&gt;
+多个cpu从主内存读取同一个数据到各自的高速缓存，当其中某个cpu修改了缓存中的数据时，该数据马上同步到主内存中，其他cpu通过&lt;strong&gt;总线嗅探机制&lt;/strong&gt;感知到变化从而将自己缓存里数据失效。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Volatile缓存可见性&lt;/strong&gt;实现原理底层实现主要是通过汇编lock前缀指令，它会锁定这块内存区域的缓存并回写到主内存，此操作被称为“缓存锁定”，缓存一致性机制会阻止同时修改被两个以上处理器缓存的内存区域数据。一个处理器的缓存回写到内存会导致其他处理器的缓存无效。&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>Mybaits</title>
@@ -1034,13 +1089,47 @@ List&amp;lt;User&amp;gt; queryUserListByIds(@Param(&amp;quot;ids&amp;quot;) int[
 
 &lt;p&gt;&lt;strong&gt;方法一：&lt;/strong&gt;&lt;/p&gt;
 
-&lt;p&gt;| 转义字符 | 字符 |说明|
-|&amp;ndash;|&amp;ndash;|&amp;ndash;|
-| &amp;amp;lt； | &amp;lt; | 小于 |
-| &amp;amp;gt； | &amp;gt; | 小于 |
-| &amp;amp;amp； | &amp;amp; | 和 |
-| &amp;amp;apos； | &amp;lsquo; | 省略号 |
-| &amp;amp;quot； | &amp;ldquo; | 引号 |&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;转义字符&lt;/th&gt;
+&lt;th&gt;字符&lt;/th&gt;
+&lt;th&gt;说明&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&amp;amp;lt；&lt;/td&gt;
+&lt;td&gt;&amp;lt;&lt;/td&gt;
+&lt;td&gt;小于&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;&amp;amp;gt；&lt;/td&gt;
+&lt;td&gt;&amp;gt;&lt;/td&gt;
+&lt;td&gt;小于&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;&amp;amp;amp；&lt;/td&gt;
+&lt;td&gt;&amp;amp;&lt;/td&gt;
+&lt;td&gt;和&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;&amp;amp;apos；&lt;/td&gt;
+&lt;td&gt;&amp;lsquo;&lt;/td&gt;
+&lt;td&gt;省略号&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;&amp;amp;quot；&lt;/td&gt;
+&lt;td&gt;&amp;ldquo;&lt;/td&gt;
+&lt;td&gt;引号&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
 
 &lt;p&gt;&lt;strong&gt;方法二：&lt;/strong&gt;&lt;/p&gt;
 
@@ -1641,9 +1730,10 @@ resources|-
 
 &lt;li&gt;&lt;p&gt;使用java -jar ***.jar &amp;ndash;spring.profiles.active=dev;&lt;/p&gt;&lt;/li&gt;
 
-&lt;li&gt;&lt;p&gt;IDEA中可以如下设置
-&lt;img src=&#34;images/springboot001.png&#34; alt=&#34;激活配置文件&#34; /&gt;&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;IDEA中可以如下设置&lt;/p&gt;&lt;/li&gt;
 &lt;/ul&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://pallcard.github.io/images/springboot001.png&#34; alt=&#34;激活配置文件&#34; /&gt;&lt;/p&gt;
 
 &lt;h5 id=&#34;3-配置文件使用&#34;&gt;3.配置文件使用&lt;/h5&gt;
 
@@ -2520,58 +2610,6 @@ public class Question004 {
             printListFromTailToHead(list.getNext());
         }
         System.out.println(list.getVal());
-    }
-}
-&lt;/code&gt;&lt;/pre&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>算法003</title>
-      <link>https://pallcard.github.io/2019/algorithm003/</link>
-      <pubDate>Tue, 04 Jun 2019 19:24:08 +0800</pubDate>
-      
-      <guid>https://pallcard.github.io/2019/algorithm003/</guid>
-      <description>
-
-&lt;h5 id=&#34;描述&#34;&gt;描述&lt;/h5&gt;
-
-&lt;p&gt;将一个字符串中的空格替换成 &amp;ldquo;%20&amp;rdquo;。&lt;/p&gt;
-
-&lt;h5 id=&#34;例子&#34;&gt;例子&lt;/h5&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;Input:
-	&amp;quot;A B&amp;quot;
-Output:
-	&amp;quot;A%20B&amp;quot;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h4 id=&#34;思路&#34;&gt;思路&lt;/h4&gt;
-
-&lt;p&gt;由于要将字符串中所用空格替换为%20，故若字符串含有一个空格，则字符串的总长度会增长2，故可以先遍历一遍字符串，若将字符串的总长度变为相应的长度，需要两个指针，分别指向原字符串长度的最后一个票p1，和新字符串的最后一个p2，若原字符串为字符，则直接赋值给p2；若原字符串为空格，则赋值%20。&lt;/p&gt;
-
-&lt;h5 id=&#34;代码&#34;&gt;代码&lt;/h5&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;public class Question003 {
-    public static void main(String[] args) {
-        StringBuilder sb = new StringBuilder(&amp;quot;A B&amp;quot;);
-        int p1 = sb.length()-1;//指向原字符串最后一个
-        for (int i = 0; i &amp;lt;= p1; i++) {
-            if(sb.charAt(i) == &#39; &#39;) {
-                sb.append(&amp;quot;  &amp;quot;);
-            }
-        }
-        int p2 = sb.length()-1;//指向新字符串最后一个
-        while (p1 &amp;gt;= 0 &amp;amp;&amp;amp; p1 &amp;lt; p2) {
-            if(sb.charAt(p1) != &#39; &#39;) {
-                sb.setCharAt(p2--,sb.charAt(p1--));
-            } else if(sb.charAt(p1--) == &#39; &#39;) {
-                sb.setCharAt(p2--, &#39;0&#39;);
-                sb.setCharAt(p2--, &#39;2&#39;);
-                sb.setCharAt(p2--, &#39;%&#39;);
-            }
-        }
-        System.out.println(sb);
     }
 }
 &lt;/code&gt;&lt;/pre&gt;

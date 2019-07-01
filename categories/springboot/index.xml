@@ -25,7 +25,8 @@ server: port: 8081 #修改端口号 servlet: context-path: /lk #端口号后需�
 spring: profiles: active: dev  激活文件选择
  使用上述application.yml来设置
  使用java -jar ***.jar &amp;ndash;spring.profiles.active=dev;
- IDEA中可以如下设置   3.配置文件使用  单值注入 （.yml中值若用双引号，转义字符会转义）  //.yml中 person: name: zhangsan \n lisi name2: &#39;zhangsan \n lisi&#39; name3: &amp;quot;zhangsan \n lisi&amp;quot; age: 18 boss: false //使用 @Value(&amp;quot;${person.</description>
+ IDEA中可以如下设置
+  3.配置文件使用  单值注入 （.yml中值若用双引号，转义字符会转义）  //.yml中 person: name: zhangsan \n lisi name2: &#39;zhangsan \n lisi&#39; name3: &amp;quot;zhangsan \n lisi&amp;quot; age: 18 boss: false //使用 @Value(&amp;quot;${person.</description>
     </item>
     
     <item>
