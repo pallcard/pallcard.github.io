@@ -7,13 +7,24 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
     <copyright>All rights reserved - 2019</copyright>
-    <lastBuildDate>Thu, 04 Jul 2019 21:12:50 +0800</lastBuildDate>
+    <lastBuildDate>Thu, 04 Jul 2019 22:28:14 +0800</lastBuildDate>
     
 	<atom:link href="https://pallcard.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
-      <title>Algorithm011</title>
+      <title>Algorithm012</title>
+      <link>https://pallcard.github.io/2019/algorithm012/</link>
+      <pubDate>Thu, 04 Jul 2019 22:28:14 +0800</pubDate>
+      
+      <guid>https://pallcard.github.io/2019/algorithm012/</guid>
+      <description>描述 矩阵中的路径 判断在一个矩阵中是否存在一条包含某字符串所有字符的路径。路径可以从矩阵中的任意一个格子开始，每一步可以在矩阵中向上下左右移动一个格子。如果一条路径经过了矩阵中的某一个格子，则该路径不能再进入该格子。
+例子 Input: Output:  思路 先将所给一维数组转化为二维数组，找到目标字符串首个字符所在位置。然后进行深度递归匹配目标字符串。
+代码 public class Demo012 { public static void main(String[] args) { char[] matrix = new char[]{&#39;b&#39;, &#39;b&#39;, &#39;c&#39;, &#39;e&#39;, &#39;s&#39;, &#39;f&#39;, &#39;c&#39;, &#39;s&#39;, &#39;a&#39;, &#39;d&#39;, &#39;e&#39;, &#39;e&#39;}; int rows = 3; int cols = 4; char [] target = new char[]{&#39;b&#39;,&#39;f&#39;,&#39;c&#39;,&#39;e&#39;}; char[][] array = new char[3][4]; int index = 0; int x = 0, y = 0; for (int i = 0; i &amp;lt; rows; i++) { for (int j = 0; j &amp;lt; cols; j++) { array[i][j] = matrix[index++]; } } boolean result = false; for (int i = 0; i &amp;lt; rows; i++) { for (int j = 0; j &amp;lt; cols; j++) { if (array[i][j] == target[0]) { result = search(array,i,j,target,1); if (result) { System.</description>
+    </item>
+    
+    <item>
+      <title>算法011</title>
       <link>https://pallcard.github.io/2019/algorithm011/</link>
       <pubDate>Thu, 04 Jul 2019 21:12:50 +0800</pubDate>
       
@@ -30,7 +41,7 @@
     </item>
     
     <item>
-      <title>Algorithm010</title>
+      <title>算法010</title>
       <link>https://pallcard.github.io/2019/algorithm010/</link>
       <pubDate>Thu, 04 Jul 2019 21:08:56 +0800</pubDate>
       
@@ -41,7 +52,7 @@
     </item>
     
     <item>
-      <title>Algorithm009</title>
+      <title>算法009</title>
       <link>https://pallcard.github.io/2019/algorithm009/</link>
       <pubDate>Thu, 04 Jul 2019 21:01:25 +0800</pubDate>
       

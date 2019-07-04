@@ -10,7 +10,7 @@
   <meta name="keywords" content="Java,博客">
   
   <link rel="prev" href="https://pallcard.github.io/2019/algorithm010/" />
-  
+  <link rel="next" href="https://pallcard.github.io/2019/algorithm012/" />
   <link rel="canonical" href="https://pallcard.github.io/2019/algorithm011/" />
   <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon" />
   <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
@@ -23,10 +23,10 @@
   <title>
        
        
-           Algorithm011 | 刘科个人博客
+           算法011 | 刘科个人博客
        
   </title>
-  <meta name="title" content="Algorithm011 | 刘科个人博客">
+  <meta name="title" content="算法011 | 刘科个人博客">
     
   
   <link rel="stylesheet" href="/font/iconfont.css">
@@ -45,8 +45,8 @@
          "@id": "https:\/\/pallcard.github.io\/"
     },
     "articleSection" : "posts",
-    "name" : "Algorithm011",
-    "headline" : "Algorithm011",
+    "name" : "算法011",
+    "headline" : "算法011",
     "description" : " 描述 旋转数组(非递减)的最小数\n把一个数组最开始的若干位搬到数组的末尾，称为旋转数组。\n例子 Input: Output:  思路 采用二分的方式来处理，\n正常情况\n4 5 6 7 1 2，分成两部分4 5 6，7 1 2；可知4 5 6为非递减数列，7 1 2为旋转数组，故结果在循环数组中，可以去掉另外一半数组；\n两种特殊情况：\n（1）1 1 1 1 0 1，num[left] == num[mid] == num[right],此时无法分区，故只能遍历\n（2）4 5 6 1 2 3，分区后两个部分均为非递减数组，则返回num[left]和num[mid\x2b1]中较小的数即可。\n代码 public class Demo011 { public static void main(String[] args) { int [] arr = new int[] {1,1,1,0,1}; System.out.println(searchMin(arr,arr.length)); } public static int searchMin(int [] array, int length) { int left = 0, right = length - 1; int mid = (left \x2b right) \/ 2; while(left \x26lt; right) { \/\/ 分区间后刚好左右都为非递减数组 if(array[left] \x26lt; array[mid] \x26amp;\x26amp; array[mid\x2b1] \x26lt; array[right]) { if (array[left] \x26gt; array[mid\x2b1]) { left = mid\x2b1; } break; } \/\/ 无法分区间情况 if (array[left] == array[mid] \x26amp;\x26amp; array[mid] == array[right]) { int minIndex = left; for (int i = left; i \x26lt;= right; i\x2b\x2b) { if (array[minIndex] \x26gt; array[i]) { minIndex = i; } } left = minIndex; break; } \/\/ 正常分区间 if (array[left] \x26lt; array[mid]) { \/\/ 左侧为非递减数组，右侧为旋转数组==\x26gt;取右侧 left = mid\x2b1; } else { \/\/ 取左侧 right = mid - 1; } } return array[left]; } }  ",
     "inLanguage" : "zh-CN",
     "author" : "刘科",
@@ -117,7 +117,7 @@
       		
 <article class="post-warp" itemscope itemtype="http://schema.org/Article">
     <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">Algorithm011</h1>
+        <h1 class="post-title" itemprop="name headline">算法011</h1>
         <div class="post-meta">
                 Written by <a itemprop="name" href="https://pallcard.github.io/" rel="author">刘科</a> with ♥ 
                 <span class="post-time">
@@ -265,8 +265,10 @@ Output:
 
     <div class="post-nav">
         
-        <a href="https://pallcard.github.io/2019/algorithm010/" class="prev" rel="prev" title="Algorithm010"><i class="iconfont icon-left"></i>&nbsp;Algorithm010</a>
+        <a href="https://pallcard.github.io/2019/algorithm010/" class="prev" rel="prev" title="算法010"><i class="iconfont icon-left"></i>&nbsp;算法010</a>
          
+        
+        <a href="https://pallcard.github.io/2019/algorithm012/" class="next" rel="next" title="Algorithm012">Algorithm012&nbsp;<i class="iconfont icon-right"></i></a>
         
     </div>
 

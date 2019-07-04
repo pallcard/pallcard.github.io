@@ -9,9 +9,9 @@
   <meta name="description" content="hust研一">
   <meta name="keywords" content="Java,博客">
   
-  <link rel="prev" href="https://pallcard.github.io/2019/jmm%E4%BE%8B%E5%AD%90/" />
-  <link rel="next" href="https://pallcard.github.io/2019/algorithm010/" />
-  <link rel="canonical" href="https://pallcard.github.io/2019/algorithm009/" />
+  <link rel="prev" href="https://pallcard.github.io/2019/algorithm011/" />
+  
+  <link rel="canonical" href="https://pallcard.github.io/2019/algorithm012/" />
   <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon" />
   <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
@@ -23,10 +23,10 @@
   <title>
        
        
-           算法009 | 刘科个人博客
+           Algorithm012 | 刘科个人博客
        
   </title>
-  <meta name="title" content="算法009 | 刘科个人博客">
+  <meta name="title" content="Algorithm012 | 刘科个人博客">
     
   
   <link rel="stylesheet" href="/font/iconfont.css">
@@ -45,9 +45,9 @@
          "@id": "https:\/\/pallcard.github.io\/"
     },
     "articleSection" : "posts",
-    "name" : "算法009",
-    "headline" : "算法009",
-    "description" : " 描述 斐波那契数列， * 应用1：矩形覆盖,n个2*1小矩形覆盖2*n的大矩形，有多少种方法 * 应用2：跳台阶,可以跳1列或者2列，跳n阶有多少种方法\n例子 Input: Output:  思路 f(n) = n; n = 0,1 f(n) = f(n-1) \x2b f(n-2); n \x26gt; 1  方法一：递归实现\n方法二：使用一个数组存放所用的数据\n方法三：发现第n项只与相邻的前两项有关，故只用存储前两项数据即可。\n代码 public class Demo009 { public static void main(String[] args) { System.out.println(fibonacci(10)); System.out.println(fibonacci2(10)); System.out.println(fibonacci3(10)); } public static int fibonacci(int n) { if (n == 0) { return 0; } else if (n == 1) { return 1; } else return fibonacci(n-1) \x2b fibonacci(n-2); } \/\/ 0 1 2 3 4 5 6 7 8 9 10 \/\/ 0 1 1 2 3 5 8 13 21 34 55 public static int fibonacci2(int n) { if (n \x26lt;= 1) { return n; } int [] fib = new int[n\x2b1]; fib[0] = 0; fib[1] = 1; for (int i = 2; i \x26lt;= n; i\x2b\x2b) { fib[i] = fib[i-1] \x2b fib[i-2]; } return fib[n]; } public static int fibonacci3(int n) { if (n \x26lt;= 1) { return n; } int temp1 = 0, temp2 = 1; int result = 0; for (int i = 2; i \x26lt;= n; i\x2b\x2b) { result = temp1 \x2b temp2; temp1 = temp2; temp2 = result; } return result; } }  ",
+    "name" : "Algorithm012",
+    "headline" : "Algorithm012",
+    "description" : "描述 矩阵中的路径 判断在一个矩阵中是否存在一条包含某字符串所有字符的路径。路径可以从矩阵中的任意一个格子开始，每一步可以在矩阵中向上下左右移动一个格子。如果一条路径经过了矩阵中的某一个格子，则该路径不能再进入该格子。\n例子 Input: Output:  思路 先将所给一维数组转化为二维数组，找到目标字符串首个字符所在位置。然后进行深度递归匹配目标字符串。\n代码 public class Demo012 { public static void main(String[] args) { char[] matrix = new char[]{\x27b\x27, \x27b\x27, \x27c\x27, \x27e\x27, \x27s\x27, \x27f\x27, \x27c\x27, \x27s\x27, \x27a\x27, \x27d\x27, \x27e\x27, \x27e\x27}; int rows = 3; int cols = 4; char [] target = new char[]{\x27b\x27,\x27f\x27,\x27c\x27,\x27e\x27}; char[][] array = new char[3][4]; int index = 0; int x = 0, y = 0; for (int i = 0; i \x26lt; rows; i\x2b\x2b) { for (int j = 0; j \x26lt; cols; j\x2b\x2b) { array[i][j] = matrix[index\x2b\x2b]; } } boolean result = false; for (int i = 0; i \x26lt; rows; i\x2b\x2b) { for (int j = 0; j \x26lt; cols; j\x2b\x2b) { if (array[i][j] == target[0]) { result = search(array,i,j,target,1); if (result) { System.",
     "inLanguage" : "zh-CN",
     "author" : "刘科",
     "creator" : "刘科",
@@ -55,10 +55,10 @@
     "accountablePerson" : "刘科",
     "copyrightHolder" : "刘科",
     "copyrightYear" : "2019",
-    "datePublished": "2019-07-04 21:01:25 \x2b0800 CST",
-    "dateModified" : "2019-07-04 21:01:25 \x2b0800 CST",
-    "url" : "https:\/\/pallcard.github.io\/2019\/algorithm009\/",
-    "wordCount" : "191",
+    "datePublished": "2019-07-04 22:28:14 \x2b0800 CST",
+    "dateModified" : "2019-07-04 22:28:14 \x2b0800 CST",
+    "url" : "https:\/\/pallcard.github.io\/2019\/algorithm012\/",
+    "wordCount" : "240",
     "keywords" : [ "Algorithm","Java","总数", "刘科个人博客"]
 }
 </script>
@@ -117,7 +117,7 @@
       		
 <article class="post-warp" itemscope itemtype="http://schema.org/Article">
     <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">算法009</h1>
+        <h1 class="post-title" itemprop="name headline">Algorithm012</h1>
         <div class="post-meta">
                 Written by <a itemprop="name" href="https://pallcard.github.io/" rel="author">刘科</a> with ♥ 
                 <span class="post-time">
@@ -151,9 +151,8 @@
 
 <h5 id="描述">描述</h5>
 
-<p>斐波那契数列，
-*  应用1：矩形覆盖,n个2*1小矩形覆盖2*n的大矩形，有多少种方法
-*  应用2：跳台阶,可以跳1列或者2列，跳n阶有多少种方法</p>
+<p>矩阵中的路径
+判断在一个矩阵中是否存在一条包含某字符串所有字符的路径。路径可以从矩阵中的任意一个格子开始，每一步可以在矩阵中向上下左右移动一个格子。如果一条路径经过了矩阵中的某一个格子，则该路径不能再进入该格子。</p>
 
 <h5 id="例子">例子</h5>
 
@@ -165,66 +164,68 @@ Output:
 
 <h4 id="思路">思路</h4>
 
-<pre><code>f(n) = n;  n = 0,1
-
-f(n) = f(n-1) + f(n-2); n &gt; 1
-</code></pre>
-
-<p>方法一：递归实现</p>
-
-<p>方法二：使用一个数组存放所用的数据</p>
-
-<p>方法三：发现第n项只与相邻的前两项有关，故只用存储前两项数据即可。</p>
+<p>先将所给一维数组转化为二维数组，找到目标字符串首个字符所在位置。然后进行深度递归匹配目标字符串。</p>
 
 <h5 id="代码">代码</h5>
 
-<pre><code class="language-java">public class Demo009 {
+<pre><code class="language-java">public class Demo012 {
 
     public static void main(String[] args) {
-        System.out.println(fibonacci(10));
-        System.out.println(fibonacci2(10));
-        System.out.println(fibonacci3(10));
-    }
+        char[] matrix = new char[]{'b', 'b', 'c', 'e', 's', 'f', 'c', 's', 'a', 'd', 'e', 'e'};
+        int rows = 3;
+        int cols = 4;
+        char [] target = new char[]{'b','f','c','e'};
 
+        char[][] array = new char[3][4];
+        int index = 0;
+        int x = 0, y = 0;
+        for (int i = 0; i &lt; rows; i++) {
+            for (int j = 0; j &lt; cols; j++) {
+                array[i][j] = matrix[index++];
 
-    public static int fibonacci(int n) {
-        if (n == 0) {
-            return 0;
-        } else if (n == 1) {
-            return 1;
-        } else
-            return  fibonacci(n-1) + fibonacci(n-2);
-    }
-
-//    0 1 2 3 4 5 6 7  8  9  10
-//    0 1 1 2 3 5 8 13 21 34 55
-    public static int fibonacci2(int n) {
-        if (n &lt;= 1) {
-            return n;
+            }
         }
-        int [] fib = new int[n+1];
-        fib[0] = 0;
-        fib[1] = 1;
-        for (int i = 2; i &lt;= n; i++) {
-            fib[i] = fib[i-1] + fib[i-2];
-        }
-        return fib[n];
-    }
 
-    public static int fibonacci3(int n) {
-        if (n &lt;= 1) {
-            return n;
+        boolean result = false;
+        for (int i = 0; i &lt; rows; i++) {
+            for (int j = 0; j &lt; cols; j++) {
+                if (array[i][j] == target[0]) {
+                    result = search(array,i,j,target,1);
+                    if (result) {
+                        System.out.println(result);
+                        return;
+                    }
+                }
+            }
         }
-        int temp1 = 0, temp2 = 1;
-        int result = 0;
-        for (int i = 2; i &lt;= n; i++) {
-            result = temp1 + temp2;
-            temp1 = temp2;
-            temp2 = result;
-        }
-        return result;
-    }
 
+        System.out.println(result);
+
+    }
+    // 左 上 右 下
+    public static int [][] direct = new int [][]
+            {{0,-1},{-1,0},{0,1},{1,0}};
+
+    public static boolean search(char[][] array, int x, int y, char [] target, int index) {
+        for (int i = 0; i &lt; 4; i++) {
+            if (x + direct[i][0] &gt;= 0
+                    &amp;&amp; x + direct[i][0] &lt; 3
+                    &amp;&amp; y + direct[i][1] &gt;= 0
+                    &amp;&amp; y + direct[i][1] &lt; 4) {
+                x += direct[i][0];
+                y += direct[i][1];
+                if (array[x][y] == target[index] &amp;&amp; target.length == index+1) {
+                    return true;
+                } else if (array[x][y] == target[index]) {
+                    return search(array,x,y,target,++index);
+                }
+                // x,y 坐标还原
+                x -= direct[i][0];
+                y -= direct[i][1];
+            }
+        }
+        return false;
+    }
 }
 </code></pre>
 
@@ -241,7 +242,7 @@ f(n) = f(n-1) + f(n-2); n &gt; 1
              
             <p class="copyright-item">
                     <span>Link:</span>
-                    <a href=https://pallcard.github.io/2019/algorithm009/>https://pallcard.github.io/2019/algorithm009/</span>
+                    <a href=https://pallcard.github.io/2019/algorithm012/>https://pallcard.github.io/2019/algorithm012/</span>
             </p>
             
             
@@ -272,10 +273,8 @@ f(n) = f(n-1) + f(n-2); n &gt; 1
 
     <div class="post-nav">
         
-        <a href="https://pallcard.github.io/2019/jmm%E4%BE%8B%E5%AD%90/" class="prev" rel="prev" title="JMM例子"><i class="iconfont icon-left"></i>&nbsp;JMM例子</a>
+        <a href="https://pallcard.github.io/2019/algorithm011/" class="prev" rel="prev" title="算法011"><i class="iconfont icon-left"></i>&nbsp;算法011</a>
          
-        
-        <a href="https://pallcard.github.io/2019/algorithm010/" class="next" rel="next" title="算法010">算法010&nbsp;<i class="iconfont icon-right"></i></a>
         
     </div>
 

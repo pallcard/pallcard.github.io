@@ -6,11 +6,101 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
     <copyright>All rights reserved - 2019</copyright>
-    <lastBuildDate>Thu, 04 Jul 2019 21:12:50 +0800</lastBuildDate>
+    <lastBuildDate>Thu, 04 Jul 2019 22:28:14 +0800</lastBuildDate>
     <atom:link href="/" rel="self" type="application/rss+xml" />
     
     <item>
-      <title>Algorithm011</title>
+      <title>Algorithm012</title>
+      <link>https://pallcard.github.io/2019/algorithm012/</link>
+      <pubDate>Thu, 04 Jul 2019 22:28:14 +0800</pubDate>
+      
+      <guid>https://pallcard.github.io/2019/algorithm012/</guid>
+      <description>
+
+&lt;h5 id=&#34;描述&#34;&gt;描述&lt;/h5&gt;
+
+&lt;p&gt;矩阵中的路径
+判断在一个矩阵中是否存在一条包含某字符串所有字符的路径。路径可以从矩阵中的任意一个格子开始，每一步可以在矩阵中向上下左右移动一个格子。如果一条路径经过了矩阵中的某一个格子，则该路径不能再进入该格子。&lt;/p&gt;
+
+&lt;h5 id=&#34;例子&#34;&gt;例子&lt;/h5&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;Input:
+	
+Output:
+	
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h4 id=&#34;思路&#34;&gt;思路&lt;/h4&gt;
+
+&lt;p&gt;先将所给一维数组转化为二维数组，找到目标字符串首个字符所在位置。然后进行深度递归匹配目标字符串。&lt;/p&gt;
+
+&lt;h5 id=&#34;代码&#34;&gt;代码&lt;/h5&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;public class Demo012 {
+
+    public static void main(String[] args) {
+        char[] matrix = new char[]{&#39;b&#39;, &#39;b&#39;, &#39;c&#39;, &#39;e&#39;, &#39;s&#39;, &#39;f&#39;, &#39;c&#39;, &#39;s&#39;, &#39;a&#39;, &#39;d&#39;, &#39;e&#39;, &#39;e&#39;};
+        int rows = 3;
+        int cols = 4;
+        char [] target = new char[]{&#39;b&#39;,&#39;f&#39;,&#39;c&#39;,&#39;e&#39;};
+
+        char[][] array = new char[3][4];
+        int index = 0;
+        int x = 0, y = 0;
+        for (int i = 0; i &amp;lt; rows; i++) {
+            for (int j = 0; j &amp;lt; cols; j++) {
+                array[i][j] = matrix[index++];
+
+            }
+        }
+
+        boolean result = false;
+        for (int i = 0; i &amp;lt; rows; i++) {
+            for (int j = 0; j &amp;lt; cols; j++) {
+                if (array[i][j] == target[0]) {
+                    result = search(array,i,j,target,1);
+                    if (result) {
+                        System.out.println(result);
+                        return;
+                    }
+                }
+            }
+        }
+
+        System.out.println(result);
+
+    }
+    // 左 上 右 下
+    public static int [][] direct = new int [][]
+            {{0,-1},{-1,0},{0,1},{1,0}};
+
+    public static boolean search(char[][] array, int x, int y, char [] target, int index) {
+        for (int i = 0; i &amp;lt; 4; i++) {
+            if (x + direct[i][0] &amp;gt;= 0
+                    &amp;amp;&amp;amp; x + direct[i][0] &amp;lt; 3
+                    &amp;amp;&amp;amp; y + direct[i][1] &amp;gt;= 0
+                    &amp;amp;&amp;amp; y + direct[i][1] &amp;lt; 4) {
+                x += direct[i][0];
+                y += direct[i][1];
+                if (array[x][y] == target[index] &amp;amp;&amp;amp; target.length == index+1) {
+                    return true;
+                } else if (array[x][y] == target[index]) {
+                    return search(array,x,y,target,++index);
+                }
+                // x,y 坐标还原
+                x -= direct[i][0];
+                y -= direct[i][1];
+            }
+        }
+        return false;
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>算法011</title>
       <link>https://pallcard.github.io/2019/algorithm011/</link>
       <pubDate>Thu, 04 Jul 2019 21:12:50 +0800</pubDate>
       
@@ -92,7 +182,7 @@ Output:
     </item>
     
     <item>
-      <title>Algorithm010</title>
+      <title>算法010</title>
       <link>https://pallcard.github.io/2019/algorithm010/</link>
       <pubDate>Thu, 04 Jul 2019 21:08:56 +0800</pubDate>
       
@@ -155,7 +245,7 @@ f(n-1) = f(n-2) + f(n-3) + ,,, + f(0)
     </item>
     
     <item>
-      <title>Algorithm009</title>
+      <title>算法009</title>
       <link>https://pallcard.github.io/2019/algorithm009/</link>
       <pubDate>Thu, 04 Jul 2019 21:01:25 +0800</pubDate>
       
@@ -302,7 +392,7 @@ cpu从主内存读取数据到高速缓存，会在总线对该数据加锁，�
 
 &lt;p&gt;&lt;img src=&#34;https://pallcard.github.io/images/jmm004.png&#34; alt=&#34;initFlag有volatile关键字修饰时&#34; /&gt;&lt;/p&gt;
 
-&lt;p&gt;例子1，代码如下：&lt;/p&gt;
+&lt;p&gt;例子2，代码如下：&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;public class Demo002 {
 
@@ -2618,58 +2708,6 @@ Output:
     }
 }
 
-&lt;/code&gt;&lt;/pre&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>算法007</title>
-      <link>https://pallcard.github.io/2019/algorithm007/</link>
-      <pubDate>Wed, 05 Jun 2019 15:40:44 +0800</pubDate>
-      
-      <guid>https://pallcard.github.io/2019/algorithm007/</guid>
-      <description>
-
-&lt;h5 id=&#34;描述&#34;&gt;描述&lt;/h5&gt;
-
-&lt;p&gt;用两个栈来实现一个队列，完成队列的 Push 和 Pop 操作。&lt;/p&gt;
-
-&lt;h5 id=&#34;例子&#34;&gt;例子&lt;/h5&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;Input:
-	
-Output:
-	
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h4 id=&#34;思路&#34;&gt;思路&lt;/h4&gt;
-
-&lt;p&gt;一个栈负责入队，另一个栈负责出队。
- *  队列push操作，直接进第一个栈
- *  队列pop操作，判断第二个栈是否为空，若空将第一个栈所有元素进栈到第二个栈中，若不为空，则第二个栈直接出栈&lt;/p&gt;
-
-&lt;h5 id=&#34;代码&#34;&gt;代码&lt;/h5&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;public class Question007 {
-    private static Stack&amp;lt;Integer&amp;gt; stack1 = new Stack&amp;lt;&amp;gt;();
-    private static Stack&amp;lt;Integer&amp;gt; stack2 = new Stack&amp;lt;&amp;gt;();
-
-    public void push(Integer item){
-        stack1.push(item);
-    }
-
-    public Integer pop() throws Exception {
-        if(stack2.isEmpty()) {
-            while (!stack1.isEmpty()){
-                stack2.push(stack1.peek());
-            }
-        }
-        if(stack2.isEmpty()) {
-            throw new Exception(&amp;quot;队列为空&amp;quot;);
-        }
-        return stack2.peek();
-    }
-}
 &lt;/code&gt;&lt;/pre&gt;
 </description>
     </item>
