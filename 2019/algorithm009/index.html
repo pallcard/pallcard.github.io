@@ -9,9 +9,9 @@
   <meta name="description" content="hust研一">
   <meta name="keywords" content="Java,博客">
   
-  <link rel="prev" href="https://pallcard.github.io/2019/algorithm007/" />
-  <link rel="next" href="https://pallcard.github.io/2019/springboot%E5%85%A5%E9%97%A8/" />
-  <link rel="canonical" href="https://pallcard.github.io/2019/algorithm008/" />
+  <link rel="prev" href="https://pallcard.github.io/2019/jmm%E4%BE%8B%E5%AD%90/" />
+  <link rel="next" href="https://pallcard.github.io/2019/algorithm010/" />
+  <link rel="canonical" href="https://pallcard.github.io/2019/algorithm009/" />
   <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon" />
   <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
@@ -23,10 +23,10 @@
   <title>
        
        
-           算法008 | 刘科个人博客
+           Algorithm009 | 刘科个人博客
        
   </title>
-  <meta name="title" content="算法008 | 刘科个人博客">
+  <meta name="title" content="Algorithm009 | 刘科个人博客">
     
   
   <link rel="stylesheet" href="/font/iconfont.css">
@@ -45,9 +45,9 @@
          "@id": "https:\/\/pallcard.github.io\/"
     },
     "articleSection" : "posts",
-    "name" : "算法008",
-    "headline" : "算法008",
-    "description" : "描述 回旋数组\n例子 Input: 3 3 Output: 1 2 3 8 9 4 7 6 5  思路 用count来计数， x,y当前坐标（行，列） last_t上次所走方向，右1 下2 左3 上4\n代码 public class Question008 { public static void main(String[] args) { Scanner sc = new Scanner(System.in); int m = sc.nextInt(); int n = sc.nextInt(); int [][] array = new int [m][n]; for (int i = 0; i \x26lt; m; i\x2b\x2b) { for (int j = 0; j \x26lt; n; j\x2b\x2b) { array[i][j] = -1; } } int x = 0, y = 0; int count = 1; \/\/ 右1 下2 左3 上4 int last_t = 1; while (count \x26lt;= m*n) { array[x][y] = count\x2b\x2b; if(last_t == 1) { if (y\x2b1\x26lt;n \x26amp;\x26amp; array[x][y\x2b1] \x26lt; 0){ y\x2b\x2b; } else { last_t = 2; if (x\x2b1 \x26lt; m \x26amp;\x26amp; array[x\x2b1][y] \x26lt; 0) { x\x2b\x2b; }else { break; } } \/\/下 } else if (last_t == 2) { if(x\x2b1 \x26lt; m \x26amp;\x26amp; array[x\x2b1][y] \x26lt; 0) { x\x2b\x2b; } else { last_t = 3; if (y-1 \x26gt;= 0 \x26amp;\x26amp; array[x][y-1] \x26lt; 0) { y--; } else { break; } } \/\/左 } else if (last_t == 3) { if(y-1 \x26gt;= 0 \x26amp;\x26amp; array[x][y-1] \x26lt; 0) { y--; } else { last_t = 4; if (x-1 \x26gt;= 0 \x26amp;\x26amp; array[x-1][y] \x26lt; 0) { x--; } else { break; } } } \/\/上 else { if(x-1 \x26gt;= 0 \x26amp;\x26amp; array[x-1][y] \x26lt; 0) { x--; } else { last_t = 1; if (y\x2b1 \x26lt; n \x26amp;\x26amp; array[x][y\x2b1] \x26lt; 0) { y\x2b\x2b; } else { break; } } } } for (int i = 0; i \x26lt; m; i\x2b\x2b) { for (int j = 0; j \x26lt; n; j\x2b\x2b) { System.",
+    "name" : "Algorithm009",
+    "headline" : "Algorithm009",
+    "description" : " 描述 斐波那契数列， * 应用1：矩形覆盖,n个2*1小矩形覆盖2*n的大矩形，有多少种方法 * 应用2：跳台阶,可以跳1列或者2列，跳n阶有多少种方法\n例子 Input: Output:  思路 f(n) = n; n = 0,1 f(n) = f(n-1) \x2b f(n-2); n \x26gt; 1  方法一：递归实现\n方法二：使用一个数组存放所用的数据\n方法三：发现第n项只与相邻的前两项有关，故只用存储前两项数据即可。\n代码 public class Demo009 { public static void main(String[] args) { System.out.println(fibonacci(10)); System.out.println(fibonacci2(10)); System.out.println(fibonacci3(10)); } public static int fibonacci(int n) { if (n == 0) { return 0; } else if (n == 1) { return 1; } else return fibonacci(n-1) \x2b fibonacci(n-2); } \/\/ 0 1 2 3 4 5 6 7 8 9 10 \/\/ 0 1 1 2 3 5 8 13 21 34 55 public static int fibonacci2(int n) { if (n \x26lt;= 1) { return n; } int [] fib = new int[n\x2b1]; fib[0] = 0; fib[1] = 1; for (int i = 2; i \x26lt;= n; i\x2b\x2b) { fib[i] = fib[i-1] \x2b fib[i-2]; } return fib[n]; } public static int fibonacci3(int n) { if (n \x26lt;= 1) { return n; } int temp1 = 0, temp2 = 1; int result = 0; for (int i = 2; i \x26lt;= n; i\x2b\x2b) { result = temp1 \x2b temp2; temp1 = temp2; temp2 = result; } return result; } }  ",
     "inLanguage" : "zh-CN",
     "author" : "刘科",
     "creator" : "刘科",
@@ -55,10 +55,10 @@
     "accountablePerson" : "刘科",
     "copyrightHolder" : "刘科",
     "copyrightYear" : "2019",
-    "datePublished": "2019-06-05 20:40:17 \x2b0800 CST",
-    "dateModified" : "2019-06-05 20:40:17 \x2b0800 CST",
-    "url" : "https:\/\/pallcard.github.io\/2019\/algorithm008\/",
-    "wordCount" : "280",
+    "datePublished": "2019-07-04 21:01:25 \x2b0800 CST",
+    "dateModified" : "2019-07-04 21:01:25 \x2b0800 CST",
+    "url" : "https:\/\/pallcard.github.io\/2019\/algorithm009\/",
+    "wordCount" : "191",
     "keywords" : [ "Algorithm","Java","总数", "刘科个人博客"]
 }
 </script>
@@ -117,11 +117,11 @@
       		
 <article class="post-warp" itemscope itemtype="http://schema.org/Article">
     <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">算法008</h1>
+        <h1 class="post-title" itemprop="name headline">Algorithm009</h1>
         <div class="post-meta">
                 Written by <a itemprop="name" href="https://pallcard.github.io/" rel="author">刘科</a> with ♥ 
                 <span class="post-time">
-                on <time datetime=2019-06-05 itemprop="datePublished">June 5, 2019</time>
+                on <time datetime=2019-07-04 itemprop="datePublished">July 4, 2019</time>
                 </span>
                 in
                 <i class="iconfont icon-folder"></i>
@@ -151,103 +151,81 @@
 
 <h5 id="描述">描述</h5>
 
-<p>回旋数组</p>
+<p>斐波那契数列，
+*  应用1：矩形覆盖,n个2*1小矩形覆盖2*n的大矩形，有多少种方法
+*  应用2：跳台阶,可以跳1列或者2列，跳n阶有多少种方法</p>
 
 <h5 id="例子">例子</h5>
 
 <pre><code class="language-java">Input:
-	3  3
+	
 Output:
-	1 2 3
-    8 9 4
-    7 6 5
+	
 </code></pre>
 
 <h4 id="思路">思路</h4>
 
-<p>用count来计数，
-  x,y当前坐标（行，列）
-  last_t上次所走方向，右1 下2 左3 上4</p>
+<pre><code>f(n) = n;  n = 0,1
+
+f(n) = f(n-1) + f(n-2); n &gt; 1
+</code></pre>
+
+<p>方法一：递归实现</p>
+
+<p>方法二：使用一个数组存放所用的数据</p>
+
+<p>方法三：发现第n项只与相邻的前两项有关，故只用存储前两项数据即可。</p>
 
 <h5 id="代码">代码</h5>
 
-<pre><code class="language-java">public class Question008 {
+<pre><code class="language-java">public class Demo009 {
+
     public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-        int m = sc.nextInt();
-        int n = sc.nextInt();
-
-        int [][] array = new int [m][n];
-        for (int i = 0; i &lt; m; i++) {
-            for (int j = 0; j &lt; n; j++) {
-                array[i][j] = -1;
-            }
-        }
-        int x = 0, y = 0;
-        int count = 1;
-        // 右1 下2 左3 上4
-        int last_t = 1;
-        while (count &lt;= m*n) {
-            array[x][y] = count++;
-            if(last_t == 1) {
-                if (y+1&lt;n &amp;&amp; array[x][y+1] &lt; 0){
-                    y++;
-                } else {
-                    last_t = 2;
-                    if (x+1 &lt; m &amp;&amp; array[x+1][y] &lt; 0) {
-                        x++;
-                    }else {
-                        break;
-                    }
-                }
-                //下
-            } else if (last_t == 2) {
-                if(x+1 &lt; m &amp;&amp; array[x+1][y] &lt; 0) {
-                    x++;
-                } else {
-                    last_t = 3;
-                    if (y-1 &gt;= 0 &amp;&amp; array[x][y-1] &lt; 0) {
-                        y--;
-                    } else {
-                        break;
-                    }
-                }
-                //左
-            } else if (last_t == 3) {
-                if(y-1 &gt;= 0 &amp;&amp; array[x][y-1] &lt; 0) {
-                    y--;
-                } else {
-                    last_t = 4;
-                    if (x-1 &gt;= 0 &amp;&amp; array[x-1][y] &lt; 0) {
-                        x--;
-                    } else {
-                        break;
-                    }
-                }
-            }
-            //上
-            else {
-                if(x-1 &gt;= 0  &amp;&amp; array[x-1][y] &lt; 0) {
-                    x--;
-                } else {
-                    last_t = 1;
-                    if (y+1 &lt; n  &amp;&amp; array[x][y+1] &lt; 0) {
-                        y++;
-                    } else {
-                        break;
-                    }
-                }
-            }
-        }
-        for (int i = 0; i &lt; m; i++) {
-            for (int j = 0; j &lt; n; j++) {
-                System.out.print(array[i][j]+&quot;\t&quot;);
-            }
-            System.out.println();
-        }
+        System.out.println(fibonacci(10));
+        System.out.println(fibonacci2(10));
+        System.out.println(fibonacci3(10));
     }
-}
 
+
+    public static int fibonacci(int n) {
+        if (n == 0) {
+            return 0;
+        } else if (n == 1) {
+            return 1;
+        } else
+            return  fibonacci(n-1) + fibonacci(n-2);
+    }
+
+//    0 1 2 3 4 5 6 7  8  9  10
+//    0 1 1 2 3 5 8 13 21 34 55
+    public static int fibonacci2(int n) {
+        if (n &lt;= 1) {
+            return n;
+        }
+        int [] fib = new int[n+1];
+        fib[0] = 0;
+        fib[1] = 1;
+        for (int i = 2; i &lt;= n; i++) {
+            fib[i] = fib[i-1] + fib[i-2];
+        }
+        return fib[n];
+    }
+
+    public static int fibonacci3(int n) {
+        if (n &lt;= 1) {
+            return n;
+        }
+        int temp1 = 0, temp2 = 1;
+        int result = 0;
+        for (int i = 2; i &lt;= n; i++) {
+            result = temp1 + temp2;
+            temp1 = temp2;
+            temp2 = result;
+        }
+        return result;
+    }
+
+}
 </code></pre>
 
     </div>
@@ -263,7 +241,7 @@ Output:
              
             <p class="copyright-item">
                     <span>Link:</span>
-                    <a href=https://pallcard.github.io/2019/algorithm008/>https://pallcard.github.io/2019/algorithm008/</span>
+                    <a href=https://pallcard.github.io/2019/algorithm009/>https://pallcard.github.io/2019/algorithm009/</span>
             </p>
             
             
@@ -294,10 +272,10 @@ Output:
 
     <div class="post-nav">
         
-        <a href="https://pallcard.github.io/2019/algorithm007/" class="prev" rel="prev" title="算法007"><i class="iconfont icon-left"></i>&nbsp;算法007</a>
+        <a href="https://pallcard.github.io/2019/jmm%E4%BE%8B%E5%AD%90/" class="prev" rel="prev" title="JMM例子"><i class="iconfont icon-left"></i>&nbsp;JMM例子</a>
          
         
-        <a href="https://pallcard.github.io/2019/springboot%E5%85%A5%E9%97%A8/" class="next" rel="next" title="SpringBoot入门">SpringBoot入门&nbsp;<i class="iconfont icon-right"></i></a>
+        <a href="https://pallcard.github.io/2019/algorithm010/" class="next" rel="next" title="Algorithm010">Algorithm010&nbsp;<i class="iconfont icon-right"></i></a>
         
     </div>
 

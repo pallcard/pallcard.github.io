@@ -21,7 +21,7 @@
       <description>例子1，代码如下：
 public class demo001 { private static boolean initFlag = false; // private static volatile boolean initFlag = false; public static void main(String[] args) throws InterruptedException { // 线程1 new Thread(new Runnable() { @Override public void run() { System.out.println(&amp;quot;等待数据准备&amp;quot;); while (!initFlag) {} System.out.println(&amp;quot;数据准备完毕，执行程序逻辑&amp;quot;); } }).start(); Thread.sleep(2000); // 线程2 new Thread(new Runnable() { @Override public void run() { System.out.println(&amp;quot;数据准备中。。。&amp;quot;); initFlag = true; System.out.println(&amp;quot;数据准备完成&amp;quot;); } }).start(); } }  说明
 initFlag无volatile关键字修饰时，线程1将initFlag从主内存读入到工作内存，线程1一直循环，线程2将initFlag从主内存读入到工作内存，并通过线程执行引擎对initFlag进行修改，然后写回到主内存中，但是线程1中的initFlag仍然是工作内存中的值，线程1无法感知到其他内存对该共享变量的修改，故会一直循环下去。缓存一致性问题
-缓存一致性问题 * 总线加锁（性能太低） cpu从主内存读取数据到高速缓存，会在总线对该数据加锁，这样其他cpu无法读或写该数据，直到cpu使用完数据并释放锁。 * MESI缓存一致性协议 多个cpu从主内存读取同一个数据到各自的高速缓存，当其中某个cpu修改了缓存中的数据时，该数据马上同步到主内存中，其他cpu通过总线嗅探机制感知到变化从而将自己缓存里数据失效。</description>
+缓存一致性问题</description>
     </item>
     
     <item>

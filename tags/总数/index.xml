@@ -7,10 +7,51 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
     <copyright>All rights reserved - 2019</copyright>
-    <lastBuildDate>Mon, 01 Jul 2019 22:26:19 +0800</lastBuildDate>
+    <lastBuildDate>Thu, 04 Jul 2019 21:12:50 +0800</lastBuildDate>
     
 	<atom:link href="https://pallcard.github.io/tags/%E6%80%BB%E6%95%B0/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Algorithm011</title>
+      <link>https://pallcard.github.io/2019/algorithm011/</link>
+      <pubDate>Thu, 04 Jul 2019 21:12:50 +0800</pubDate>
+      
+      <guid>https://pallcard.github.io/2019/algorithm011/</guid>
+      <description> 描述 旋转数组(非递减)的最小数
+把一个数组最开始的若干位搬到数组的末尾，称为旋转数组。
+例子 Input: Output:  思路 采用二分的方式来处理，
+正常情况
+4 5 6 7 1 2，分成两部分4 5 6，7 1 2；可知4 5 6为非递减数列，7 1 2为旋转数组，故结果在循环数组中，可以去掉另外一半数组；
+两种特殊情况：
+（1）1 1 1 1 0 1，num[left] == num[mid] == num[right],此时无法分区，故只能遍历
+（2）4 5 6 1 2 3，分区后两个部分均为非递减数组，则返回num[left]和num[mid+1]中较小的数即可。
+代码 public class Demo011 { public static void main(String[] args) { int [] arr = new int[] {1,1,1,0,1}; System.out.println(searchMin(arr,arr.length)); } public static int searchMin(int [] array, int length) { int left = 0, right = length - 1; int mid = (left + right) / 2; while(left &amp;lt; right) { // 分区间后刚好左右都为非递减数组 if(array[left] &amp;lt; array[mid] &amp;amp;&amp;amp; array[mid+1] &amp;lt; array[right]) { if (array[left] &amp;gt; array[mid+1]) { left = mid+1; } break; } // 无法分区间情况 if (array[left] == array[mid] &amp;amp;&amp;amp; array[mid] == array[right]) { int minIndex = left; for (int i = left; i &amp;lt;= right; i++) { if (array[minIndex] &amp;gt; array[i]) { minIndex = i; } } left = minIndex; break; } // 正常分区间 if (array[left] &amp;lt; array[mid]) { // 左侧为非递减数组，右侧为旋转数组==&amp;gt;取右侧 left = mid+1; } else { // 取左侧 right = mid - 1; } } return array[left]; } }  </description>
+    </item>
+    
+    <item>
+      <title>Algorithm010</title>
+      <link>https://pallcard.github.io/2019/algorithm010/</link>
+      <pubDate>Thu, 04 Jul 2019 21:08:56 +0800</pubDate>
+      
+      <guid>https://pallcard.github.io/2019/algorithm010/</guid>
+      <description>描述 变态跳青蛙
+青蛙可以跳1，2，3，，，n阶。问跳到n有多少种不同方法。
+例子 Input: Output:  思路 f(n) = f(n-1) + f(n-2) + ,,, + f(0) f(n-1) = f(n-2) + f(n-3) + ,,, + f(0) ==&amp;gt; f(n) = 2 * f(n-1)  代码 public class Demo010 { public static void main(String[] args) { System.out.println(jumpFloor(3)); System.out.println(jumpFloor2(3)); } // f(0) = 1 // f(1) = 1 // f(2) = 2 // f(3) = 4 public static int jumpFloor(int target) { int [] dp = new int[target]; Arrays.</description>
+    </item>
+    
+    <item>
+      <title>Algorithm009</title>
+      <link>https://pallcard.github.io/2019/algorithm009/</link>
+      <pubDate>Thu, 04 Jul 2019 21:01:25 +0800</pubDate>
+      
+      <guid>https://pallcard.github.io/2019/algorithm009/</guid>
+      <description> 描述 斐波那契数列， * 应用1：矩形覆盖,n个2*1小矩形覆盖2*n的大矩形，有多少种方法 * 应用2：跳台阶,可以跳1列或者2列，跳n阶有多少种方法
+例子 Input: Output:  思路 f(n) = n; n = 0,1 f(n) = f(n-1) + f(n-2); n &amp;gt; 1  方法一：递归实现
+方法二：使用一个数组存放所用的数据
+方法三：发现第n项只与相邻的前两项有关，故只用存储前两项数据即可。
+代码 public class Demo009 { public static void main(String[] args) { System.out.println(fibonacci(10)); System.out.println(fibonacci2(10)); System.out.println(fibonacci3(10)); } public static int fibonacci(int n) { if (n == 0) { return 0; } else if (n == 1) { return 1; } else return fibonacci(n-1) + fibonacci(n-2); } // 0 1 2 3 4 5 6 7 8 9 10 // 0 1 1 2 3 5 8 13 21 34 55 public static int fibonacci2(int n) { if (n &amp;lt;= 1) { return n; } int [] fib = new int[n+1]; fib[0] = 0; fib[1] = 1; for (int i = 2; i &amp;lt;= n; i++) { fib[i] = fib[i-1] + fib[i-2]; } return fib[n]; } public static int fibonacci3(int n) { if (n &amp;lt;= 1) { return n; } int temp1 = 0, temp2 = 1; int result = 0; for (int i = 2; i &amp;lt;= n; i++) { result = temp1 + temp2; temp1 = temp2; temp2 = result; } return result; } }  </description>
+    </item>
     
     <item>
       <title>JMM例子</title>
@@ -21,7 +62,7 @@
       <description>例子1，代码如下：
 public class demo001 { private static boolean initFlag = false; // private static volatile boolean initFlag = false; public static void main(String[] args) throws InterruptedException { // 线程1 new Thread(new Runnable() { @Override public void run() { System.out.println(&amp;quot;等待数据准备&amp;quot;); while (!initFlag) {} System.out.println(&amp;quot;数据准备完毕，执行程序逻辑&amp;quot;); } }).start(); Thread.sleep(2000); // 线程2 new Thread(new Runnable() { @Override public void run() { System.out.println(&amp;quot;数据准备中。。。&amp;quot;); initFlag = true; System.out.println(&amp;quot;数据准备完成&amp;quot;); } }).start(); } }  说明
 initFlag无volatile关键字修饰时，线程1将initFlag从主内存读入到工作内存，线程1一直循环，线程2将initFlag从主内存读入到工作内存，并通过线程执行引擎对initFlag进行修改，然后写回到主内存中，但是线程1中的initFlag仍然是工作内存中的值，线程1无法感知到其他内存对该共享变量的修改，故会一直循环下去。缓存一致性问题
-缓存一致性问题 * 总线加锁（性能太低） cpu从主内存读取数据到高速缓存，会在总线对该数据加锁，这样其他cpu无法读或写该数据，直到cpu使用完数据并释放锁。 * MESI缓存一致性协议 多个cpu从主内存读取同一个数据到各自的高速缓存，当其中某个cpu修改了缓存中的数据时，该数据马上同步到主内存中，其他cpu通过总线嗅探机制感知到变化从而将自己缓存里数据失效。</description>
+缓存一致性问题</description>
     </item>
     
     <item>
@@ -155,8 +196,9 @@ ${AnsiColor.BLUE} .____ ____ __. | | | |/ _| | | | &amp;lt; | |___| | \ |_______
       <pubDate>Wed, 05 Jun 2019 20:40:17 +0800</pubDate>
       
       <guid>https://pallcard.github.io/2019/algorithm008/</guid>
-      <description>public class Question008 { public static void main(String[] args) { Scanner sc = new Scanner(System.in); int m = sc.nextInt(); int n = sc.nextInt();
- int [][] array = new int [m][n]; for (int i = 0; i &amp;lt; m; i++) { for (int j = 0; j &amp;lt; n; j++) { array[i][j] = -1; } } int x = 0, y = 0; int count = 1; // 右1 下2 左3 上4 int last_t = 1; while (count &amp;lt;= m*n) { array[x][y] = count++; if(last_t == 1) { if (y+1&amp;lt;n &amp;amp;&amp;amp; array[x][y+1] &amp;lt; 0){ y++; } else { last_t = 2; if (x+1 &amp;lt; m &amp;amp;&amp;amp; array[x+1][y] &amp;lt; 0) { x++; }else { break; } } //下 } else if (last_t == 2) { if(x+1 &amp;lt; m &amp;amp;&amp;amp; array[x+1][y] &amp;lt; 0) { x++; } else { last_t = 3; if (y-1 &amp;gt;= 0 &amp;amp;&amp;amp; array[x][y-1] &amp;lt; 0) { y--; } else { break; } } //左 } else if (last_t == 3) { if(y-1 &amp;gt;= 0 &amp;amp;&amp;amp; array[x][y-1] &amp;lt; 0) { y--; } else { last_t = 4; if (x-1 &amp;gt;= 0 &amp;amp;&amp;amp; array[x-1][y] &amp;lt; 0) { x--; } else { break; } } } //上 else { if(x-1 &amp;gt;= 0 &amp;amp;&amp;amp; array[x-1][y] &amp;lt; 0) { x--; } else { last_t = 1; if (y+1 &amp;lt; n &amp;amp;&amp;amp; array[x][y+1] &amp;lt; 0) { y++; } else { break; } } } } for (int i = 0; i &amp;lt; m; i++) { for (int j = 0; j &amp;lt; n; j++) { System.</description>
+      <description>描述 回旋数组
+例子 Input: 3 3 Output: 1 2 3 8 9 4 7 6 5  思路 用count来计数， x,y当前坐标（行，列） last_t上次所走方向，右1 下2 左3 上4
+代码 public class Question008 { public static void main(String[] args) { Scanner sc = new Scanner(System.in); int m = sc.nextInt(); int n = sc.nextInt(); int [][] array = new int [m][n]; for (int i = 0; i &amp;lt; m; i++) { for (int j = 0; j &amp;lt; n; j++) { array[i][j] = -1; } } int x = 0, y = 0; int count = 1; // 右1 下2 左3 上4 int last_t = 1; while (count &amp;lt;= m*n) { array[x][y] = count++; if(last_t == 1) { if (y+1&amp;lt;n &amp;amp;&amp;amp; array[x][y+1] &amp;lt; 0){ y++; } else { last_t = 2; if (x+1 &amp;lt; m &amp;amp;&amp;amp; array[x+1][y] &amp;lt; 0) { x++; }else { break; } } //下 } else if (last_t == 2) { if(x+1 &amp;lt; m &amp;amp;&amp;amp; array[x+1][y] &amp;lt; 0) { x++; } else { last_t = 3; if (y-1 &amp;gt;= 0 &amp;amp;&amp;amp; array[x][y-1] &amp;lt; 0) { y--; } else { break; } } //左 } else if (last_t == 3) { if(y-1 &amp;gt;= 0 &amp;amp;&amp;amp; array[x][y-1] &amp;lt; 0) { y--; } else { last_t = 4; if (x-1 &amp;gt;= 0 &amp;amp;&amp;amp; array[x-1][y] &amp;lt; 0) { x--; } else { break; } } } //上 else { if(x-1 &amp;gt;= 0 &amp;amp;&amp;amp; array[x-1][y] &amp;lt; 0) { x--; } else { last_t = 1; if (y+1 &amp;lt; n &amp;amp;&amp;amp; array[x][y+1] &amp;lt; 0) { y++; } else { break; } } } } for (int i = 0; i &amp;lt; m; i++) { for (int j = 0; j &amp;lt; n; j++) { System.</description>
     </item>
     
     <item>

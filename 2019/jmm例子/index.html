@@ -10,7 +10,7 @@
   <meta name="keywords" content="Java,博客">
   
   <link rel="prev" href="https://pallcard.github.io/2019/mybaits/" />
-  
+  <link rel="next" href="https://pallcard.github.io/2019/algorithm009/" />
   <link rel="canonical" href="https://pallcard.github.io/2019/jmm%E4%BE%8B%E5%AD%90/" />
   <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon" />
   <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
@@ -47,7 +47,7 @@
     "articleSection" : "posts",
     "name" : "JMM例子",
     "headline" : "JMM例子",
-    "description" : "例子1，代码如下：\npublic class demo001 { private static boolean initFlag = false; \/\/ private static volatile boolean initFlag = false; public static void main(String[] args) throws InterruptedException { \/\/ 线程1 new Thread(new Runnable() { @Override public void run() { System.out.println(\x26quot;等待数据准备\x26quot;); while (!initFlag) {} System.out.println(\x26quot;数据准备完毕，执行程序逻辑\x26quot;); } }).start(); Thread.sleep(2000); \/\/ 线程2 new Thread(new Runnable() { @Override public void run() { System.out.println(\x26quot;数据准备中。。。\x26quot;); initFlag = true; System.out.println(\x26quot;数据准备完成\x26quot;); } }).start(); } }  说明\ninitFlag无volatile关键字修饰时，线程1将initFlag从主内存读入到工作内存，线程1一直循环，线程2将initFlag从主内存读入到工作内存，并通过线程执行引擎对initFlag进行修改，然后写回到主内存中，但是线程1中的initFlag仍然是工作内存中的值，线程1无法感知到其他内存对该共享变量的修改，故会一直循环下去。缓存一致性问题\n缓存一致性问题 * 总线加锁（性能太低） cpu从主内存读取数据到高速缓存，会在总线对该数据加锁，这样其他cpu无法读或写该数据，直到cpu使用完数据并释放锁。 * MESI缓存一致性协议 多个cpu从主内存读取同一个数据到各自的高速缓存，当其中某个cpu修改了缓存中的数据时，该数据马上同步到主内存中，其他cpu通过总线嗅探机制感知到变化从而将自己缓存里数据失效。",
+    "description" : "例子1，代码如下：\npublic class demo001 { private static boolean initFlag = false; \/\/ private static volatile boolean initFlag = false; public static void main(String[] args) throws InterruptedException { \/\/ 线程1 new Thread(new Runnable() { @Override public void run() { System.out.println(\x26quot;等待数据准备\x26quot;); while (!initFlag) {} System.out.println(\x26quot;数据准备完毕，执行程序逻辑\x26quot;); } }).start(); Thread.sleep(2000); \/\/ 线程2 new Thread(new Runnable() { @Override public void run() { System.out.println(\x26quot;数据准备中。。。\x26quot;); initFlag = true; System.out.println(\x26quot;数据准备完成\x26quot;); } }).start(); } }  说明\ninitFlag无volatile关键字修饰时，线程1将initFlag从主内存读入到工作内存，线程1一直循环，线程2将initFlag从主内存读入到工作内存，并通过线程执行引擎对initFlag进行修改，然后写回到主内存中，但是线程1中的initFlag仍然是工作内存中的值，线程1无法感知到其他内存对该共享变量的修改，故会一直循环下去。缓存一致性问题\n缓存一致性问题",
     "inLanguage" : "zh-CN",
     "author" : "刘科",
     "creator" : "刘科",
@@ -58,7 +58,7 @@
     "datePublished": "2019-07-01 22:26:19 \x2b0800 CST",
     "dateModified" : "2019-07-01 22:26:19 \x2b0800 CST",
     "url" : "https:\/\/pallcard.github.io\/2019\/jmm%E4%BE%8B%E5%AD%90\/",
-    "wordCount" : "76",
+    "wordCount" : "160",
     "keywords" : [ "Java","JMM","总数", "刘科个人博客"]
 }
 </script>
@@ -188,13 +188,57 @@
 
 <hr />
 
-<p>缓存一致性问题
-* <strong>总线加锁（性能太低）</strong>
-cpu从主内存读取数据到高速缓存，会在总线对该数据加锁，这样其他cpu无法读或写该数据，直到cpu使用完数据并释放锁。
-* <strong>MESI缓存一致性协议</strong>
-多个cpu从主内存读取同一个数据到各自的高速缓存，当其中某个cpu修改了缓存中的数据时，该数据马上同步到主内存中，其他cpu通过<strong>总线嗅探机制</strong>感知到变化从而将自己缓存里数据失效。</p>
+<p>缓存一致性问题</p>
+
+<ul>
+<li><p><strong>总线加锁（性能太低）</strong>
+cpu从主内存读取数据到高速缓存，会在总线对该数据加锁，这样其他cpu无法读或写该数据，直到cpu使用完数据并释放锁。</p></li>
+
+<li><p><strong>MESI缓存一致性协议</strong>
+多个cpu从主内存读取同一个数据到各自的高速缓存，当其中某个cpu修改了缓存中的数据时，该数据马上同步到主内存中，其他cpu通过<strong>总线嗅探机制</strong>感知到变化从而将自己缓存里数据失效。</p></li>
+</ul>
 
 <p><strong>Volatile缓存可见性</strong>实现原理底层实现主要是通过汇编lock前缀指令，它会锁定这块内存区域的缓存并回写到主内存，此操作被称为“缓存锁定”，缓存一致性机制会阻止同时修改被两个以上处理器缓存的内存区域数据。一个处理器的缓存回写到内存会导致其他处理器的缓存无效。</p>
+
+<p><figure><img src="/images/ring.svg" data-sizes="auto" data-src="/images/jmm004.png" alt="initFlag有volatile关键字修饰时" class="lazyload"><figcaption class="image-caption">initFlag有volatile关键字修饰时</figcaption></figure></p>
+
+<p>例子1，代码如下：</p>
+
+<pre><code class="language-java">public class Demo002 {
+
+    //volatile 不能解决原子性问题
+    public static volatile int num = 0;
+
+    public static void increase() {
+        num++; // 非原子操作
+    }
+
+    public static void main(String[] args) throws InterruptedException {
+        final Thread[] threads = new Thread[10];
+        for (int i = 0; i &lt; threads.length; i++) {
+            threads[i] = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    for (int j = 0; j &lt; 1000; j++) {
+                        increase();
+                    }
+                }
+            });
+            threads[i].start();
+        }
+        for(Thread t : threads) {
+            t.join();
+        }
+        System.out.println(num);
+    }
+}
+</code></pre>
+
+<p><strong>说明</strong></p>
+
+<p><figure><img src="/images/ring.svg" data-sizes="auto" data-src="/images/jmm005.png" alt="原子性" class="lazyload"><figcaption class="image-caption">原子性</figcaption></figure></p>
+
+<p>（说明代码中存在的问题，以两个线程为例）初始时，主内存中num=0，然后线程1和2将其读到各自的工作内存中，然后在各自的执行引擎中进行num++,此时工作内存num=1，若线程1先将num写回到主内存中，线程2的cpu通过主线嗅探机制使得其工作内存中的值失效，然后从主内存中读到num=1，但是线程2已经执行了一次num++，期望的结果应该是num=2，但是实际上结果为1。<strong>volatile不能保证数据的原子性。</strong></p>
 
     </div>
 
@@ -242,6 +286,8 @@ cpu从主内存读取数据到高速缓存，会在总线对该数据加锁，�
         
         <a href="https://pallcard.github.io/2019/mybaits/" class="prev" rel="prev" title="Mybaits"><i class="iconfont icon-left"></i>&nbsp;Mybaits</a>
          
+        
+        <a href="https://pallcard.github.io/2019/algorithm009/" class="next" rel="next" title="Algorithm009">Algorithm009&nbsp;<i class="iconfont icon-right"></i></a>
         
     </div>
 

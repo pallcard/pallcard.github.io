@@ -6,8 +6,242 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
     <copyright>All rights reserved - 2019</copyright>
-    <lastBuildDate>Mon, 01 Jul 2019 22:26:19 +0800</lastBuildDate>
+    <lastBuildDate>Thu, 04 Jul 2019 21:12:50 +0800</lastBuildDate>
     <atom:link href="/" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Algorithm011</title>
+      <link>https://pallcard.github.io/2019/algorithm011/</link>
+      <pubDate>Thu, 04 Jul 2019 21:12:50 +0800</pubDate>
+      
+      <guid>https://pallcard.github.io/2019/algorithm011/</guid>
+      <description>
+
+&lt;h5 id=&#34;描述&#34;&gt;描述&lt;/h5&gt;
+
+&lt;p&gt;旋转数组(非递减)的最小数&lt;/p&gt;
+
+&lt;p&gt;把一个数组最开始的若干位搬到数组的末尾，称为旋转数组。&lt;/p&gt;
+
+&lt;h5 id=&#34;例子&#34;&gt;例子&lt;/h5&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;Input:
+	
+Output:
+	
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h4 id=&#34;思路&#34;&gt;思路&lt;/h4&gt;
+
+&lt;p&gt;采用二分的方式来处理，&lt;/p&gt;
+
+&lt;p&gt;正常情况&lt;/p&gt;
+
+&lt;p&gt;4 5 6 7 1 2，分成两部分4 5 6，7 1 2；可知4 5 6为非递减数列，7 1 2为旋转数组，故结果在循环数组中，可以去掉另外一半数组；&lt;/p&gt;
+
+&lt;p&gt;两种特殊情况：&lt;/p&gt;
+
+&lt;p&gt;（1）1 1 1 1 0 1，num[left] == num[mid] == num[right],此时无法分区，故只能遍历&lt;/p&gt;
+
+&lt;p&gt;（2）4 5 6 1 2 3，分区后两个部分均为非递减数组，则返回num[left]和num[mid+1]中较小的数即可。&lt;/p&gt;
+
+&lt;h5 id=&#34;代码&#34;&gt;代码&lt;/h5&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;public class Demo011 {
+    public static void main(String[] args) {
+        int [] arr = new int[] {1,1,1,0,1};
+        System.out.println(searchMin(arr,arr.length));
+    }
+
+    public static int searchMin(int [] array, int length) {
+        int left = 0, right = length - 1;
+        int mid = (left + right) / 2;
+        while(left &amp;lt; right) {
+            // 分区间后刚好左右都为非递减数组
+            if(array[left] &amp;lt; array[mid] &amp;amp;&amp;amp; array[mid+1] &amp;lt; array[right]) {
+                if (array[left] &amp;gt; array[mid+1]) {
+                    left = mid+1;
+                }
+                break;
+            }
+            // 无法分区间情况
+            if (array[left] == array[mid] &amp;amp;&amp;amp; array[mid] == array[right]) {
+                int minIndex = left;
+                for (int i = left; i &amp;lt;= right; i++) {
+                    if (array[minIndex] &amp;gt; array[i]) {
+                        minIndex = i;
+                    }
+                }
+                left = minIndex;
+                break;
+            }
+            // 正常分区间
+            if (array[left] &amp;lt; array[mid]) {
+                // 左侧为非递减数组，右侧为旋转数组==&amp;gt;取右侧
+                left = mid+1;
+            } else {
+                // 取左侧
+                right = mid - 1;
+            }
+        }
+        return array[left];
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Algorithm010</title>
+      <link>https://pallcard.github.io/2019/algorithm010/</link>
+      <pubDate>Thu, 04 Jul 2019 21:08:56 +0800</pubDate>
+      
+      <guid>https://pallcard.github.io/2019/algorithm010/</guid>
+      <description>
+
+&lt;h5 id=&#34;描述&#34;&gt;描述&lt;/h5&gt;
+
+&lt;p&gt;变态跳青蛙&lt;/p&gt;
+
+&lt;p&gt;青蛙可以跳1，2，3，，，n阶。问跳到n有多少种不同方法。&lt;/p&gt;
+
+&lt;h5 id=&#34;例子&#34;&gt;例子&lt;/h5&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;Input:
+	
+Output:
+	
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h4 id=&#34;思路&#34;&gt;思路&lt;/h4&gt;
+
+&lt;pre&gt;&lt;code&gt;f(n) = f(n-1) + f(n-2) + ,,, + f(0)
+
+f(n-1) = f(n-2) + f(n-3) + ,,, + f(0)
+
+==&amp;gt;  f(n) = 2 * f(n-1)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h5 id=&#34;代码&#34;&gt;代码&lt;/h5&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;public class Demo010 {
+
+    public static void main(String[] args) {
+        System.out.println(jumpFloor(3));
+        System.out.println(jumpFloor2(3));
+    }
+
+//    f(0) = 1
+//    f(1) = 1
+//    f(2) = 2
+//    f(3) = 4
+    public static int jumpFloor(int target) {
+        int [] dp = new int[target];
+        Arrays.fill(dp,1);  // 数组所有元素置1（相当于所有元素+f(0)）
+        for (int i = 1; i &amp;lt; target; i++) {
+            for (int j = 0; j &amp;lt; i; j++) {
+                dp[i] += dp[j];
+            }
+        }
+        return dp[target-1];
+    }
+
+    public static int jumpFloor2(int target) {
+        return (int) Math.pow(2, target-1);
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Algorithm009</title>
+      <link>https://pallcard.github.io/2019/algorithm009/</link>
+      <pubDate>Thu, 04 Jul 2019 21:01:25 +0800</pubDate>
+      
+      <guid>https://pallcard.github.io/2019/algorithm009/</guid>
+      <description>
+
+&lt;h5 id=&#34;描述&#34;&gt;描述&lt;/h5&gt;
+
+&lt;p&gt;斐波那契数列，
+*  应用1：矩形覆盖,n个2*1小矩形覆盖2*n的大矩形，有多少种方法
+*  应用2：跳台阶,可以跳1列或者2列，跳n阶有多少种方法&lt;/p&gt;
+
+&lt;h5 id=&#34;例子&#34;&gt;例子&lt;/h5&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;Input:
+	
+Output:
+	
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h4 id=&#34;思路&#34;&gt;思路&lt;/h4&gt;
+
+&lt;pre&gt;&lt;code&gt;f(n) = n;  n = 0,1
+
+f(n) = f(n-1) + f(n-2); n &amp;gt; 1
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;方法一：递归实现&lt;/p&gt;
+
+&lt;p&gt;方法二：使用一个数组存放所用的数据&lt;/p&gt;
+
+&lt;p&gt;方法三：发现第n项只与相邻的前两项有关，故只用存储前两项数据即可。&lt;/p&gt;
+
+&lt;h5 id=&#34;代码&#34;&gt;代码&lt;/h5&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;public class Demo009 {
+
+    public static void main(String[] args) {
+        System.out.println(fibonacci(10));
+        System.out.println(fibonacci2(10));
+        System.out.println(fibonacci3(10));
+    }
+
+
+    public static int fibonacci(int n) {
+        if (n == 0) {
+            return 0;
+        } else if (n == 1) {
+            return 1;
+        } else
+            return  fibonacci(n-1) + fibonacci(n-2);
+    }
+
+//    0 1 2 3 4 5 6 7  8  9  10
+//    0 1 1 2 3 5 8 13 21 34 55
+    public static int fibonacci2(int n) {
+        if (n &amp;lt;= 1) {
+            return n;
+        }
+        int [] fib = new int[n+1];
+        fib[0] = 0;
+        fib[1] = 1;
+        for (int i = 2; i &amp;lt;= n; i++) {
+            fib[i] = fib[i-1] + fib[i-2];
+        }
+        return fib[n];
+    }
+
+    public static int fibonacci3(int n) {
+        if (n &amp;lt;= 1) {
+            return n;
+        }
+        int temp1 = 0, temp2 = 1;
+        int result = 0;
+        for (int i = 2; i &amp;lt;= n; i++) {
+            result = temp1 + temp2;
+            temp1 = temp2;
+            temp2 = result;
+        }
+        return result;
+    }
+
+}
+&lt;/code&gt;&lt;/pre&gt;
+</description>
+    </item>
     
     <item>
       <title>JMM例子</title>
@@ -54,13 +288,57 @@
 
 &lt;hr /&gt;
 
-&lt;p&gt;缓存一致性问题
-* &lt;strong&gt;总线加锁（性能太低）&lt;/strong&gt;
-cpu从主内存读取数据到高速缓存，会在总线对该数据加锁，这样其他cpu无法读或写该数据，直到cpu使用完数据并释放锁。
-* &lt;strong&gt;MESI缓存一致性协议&lt;/strong&gt;
-多个cpu从主内存读取同一个数据到各自的高速缓存，当其中某个cpu修改了缓存中的数据时，该数据马上同步到主内存中，其他cpu通过&lt;strong&gt;总线嗅探机制&lt;/strong&gt;感知到变化从而将自己缓存里数据失效。&lt;/p&gt;
+&lt;p&gt;缓存一致性问题&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;总线加锁（性能太低）&lt;/strong&gt;
+cpu从主内存读取数据到高速缓存，会在总线对该数据加锁，这样其他cpu无法读或写该数据，直到cpu使用完数据并释放锁。&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;MESI缓存一致性协议&lt;/strong&gt;
+多个cpu从主内存读取同一个数据到各自的高速缓存，当其中某个cpu修改了缓存中的数据时，该数据马上同步到主内存中，其他cpu通过&lt;strong&gt;总线嗅探机制&lt;/strong&gt;感知到变化从而将自己缓存里数据失效。&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
 
 &lt;p&gt;&lt;strong&gt;Volatile缓存可见性&lt;/strong&gt;实现原理底层实现主要是通过汇编lock前缀指令，它会锁定这块内存区域的缓存并回写到主内存，此操作被称为“缓存锁定”，缓存一致性机制会阻止同时修改被两个以上处理器缓存的内存区域数据。一个处理器的缓存回写到内存会导致其他处理器的缓存无效。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://pallcard.github.io/images/jmm004.png&#34; alt=&#34;initFlag有volatile关键字修饰时&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;例子1，代码如下：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;public class Demo002 {
+
+    //volatile 不能解决原子性问题
+    public static volatile int num = 0;
+
+    public static void increase() {
+        num++; // 非原子操作
+    }
+
+    public static void main(String[] args) throws InterruptedException {
+        final Thread[] threads = new Thread[10];
+        for (int i = 0; i &amp;lt; threads.length; i++) {
+            threads[i] = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    for (int j = 0; j &amp;lt; 1000; j++) {
+                        increase();
+                    }
+                }
+            });
+            threads[i].start();
+        }
+        for(Thread t : threads) {
+            t.join();
+        }
+        System.out.println(num);
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;说明&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://pallcard.github.io/images/jmm005.png&#34; alt=&#34;原子性&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;（说明代码中存在的问题，以两个线程为例）初始时，主内存中num=0，然后线程1和2将其读到各自的工作内存中，然后在各自的执行引擎中进行num++,此时工作内存num=1，若线程1先将num写回到主内存中，线程2的cpu通过主线嗅探机制使得其工作内存中的值失效，然后从主内存中读到num=1，但是线程2已经执行了一次num++，期望的结果应该是num=2，但是实际上结果为1。&lt;strong&gt;volatile不能保证数据的原子性。&lt;/strong&gt;&lt;/p&gt;
 </description>
     </item>
     
@@ -2239,84 +2517,108 @@ public class HelloWorld {
       <pubDate>Wed, 05 Jun 2019 20:40:17 +0800</pubDate>
       
       <guid>https://pallcard.github.io/2019/algorithm008/</guid>
-      <description>&lt;p&gt;public class Question008 {
+      <description>
+
+&lt;h5 id=&#34;描述&#34;&gt;描述&lt;/h5&gt;
+
+&lt;p&gt;回旋数组&lt;/p&gt;
+
+&lt;h5 id=&#34;例子&#34;&gt;例子&lt;/h5&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;Input:
+	3  3
+Output:
+	1 2 3
+    8 9 4
+    7 6 5
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h4 id=&#34;思路&#34;&gt;思路&lt;/h4&gt;
+
+&lt;p&gt;用count来计数，
+  x,y当前坐标（行，列）
+  last_t上次所走方向，右1 下2 左3 上4&lt;/p&gt;
+
+&lt;h5 id=&#34;代码&#34;&gt;代码&lt;/h5&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;public class Question008 {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
         int m = sc.nextInt();
-        int n = sc.nextInt();&lt;/p&gt;
+        int n = sc.nextInt();
 
-&lt;pre&gt;&lt;code&gt;    int [][] array = new int [m][n];
-    for (int i = 0; i &amp;lt; m; i++) {
-        for (int j = 0; j &amp;lt; n; j++) {
-            array[i][j] = -1;
-        }
-    }
-    int x = 0, y = 0;
-    int count = 1;
-    // 右1 下2 左3 上4
-    int last_t = 1;
-    while (count &amp;lt;= m*n) {
-        array[x][y] = count++;
-        if(last_t == 1) {
-            if (y+1&amp;lt;n &amp;amp;&amp;amp; array[x][y+1] &amp;lt; 0){
-                y++;
-            } else {
-                last_t = 2;
-                if (x+1 &amp;lt; m &amp;amp;&amp;amp; array[x+1][y] &amp;lt; 0) {
-                    x++;
-                }else {
-                    break;
-                }
-            }
-            //下
-        } else if (last_t == 2) {
-            if(x+1 &amp;lt; m &amp;amp;&amp;amp; array[x+1][y] &amp;lt; 0) {
-                x++;
-            } else {
-                last_t = 3;
-                if (y-1 &amp;gt;= 0 &amp;amp;&amp;amp; array[x][y-1] &amp;lt; 0) {
-                    y--;
-                } else {
-                    break;
-                }
-            }
-            //左
-        } else if (last_t == 3) {
-            if(y-1 &amp;gt;= 0 &amp;amp;&amp;amp; array[x][y-1] &amp;lt; 0) {
-                y--;
-            } else {
-                last_t = 4;
-                if (x-1 &amp;gt;= 0 &amp;amp;&amp;amp; array[x-1][y] &amp;lt; 0) {
-                    x--;
-                } else {
-                    break;
-                }
+        int [][] array = new int [m][n];
+        for (int i = 0; i &amp;lt; m; i++) {
+            for (int j = 0; j &amp;lt; n; j++) {
+                array[i][j] = -1;
             }
         }
-        //上
-        else {
-            if(x-1 &amp;gt;= 0  &amp;amp;&amp;amp; array[x-1][y] &amp;lt; 0) {
-                x--;
-            } else {
-                last_t = 1;
-                if (y+1 &amp;lt; n  &amp;amp;&amp;amp; array[x][y+1] &amp;lt; 0) {
+        int x = 0, y = 0;
+        int count = 1;
+        // 右1 下2 左3 上4
+        int last_t = 1;
+        while (count &amp;lt;= m*n) {
+            array[x][y] = count++;
+            if(last_t == 1) {
+                if (y+1&amp;lt;n &amp;amp;&amp;amp; array[x][y+1] &amp;lt; 0){
                     y++;
                 } else {
-                    break;
+                    last_t = 2;
+                    if (x+1 &amp;lt; m &amp;amp;&amp;amp; array[x+1][y] &amp;lt; 0) {
+                        x++;
+                    }else {
+                        break;
+                    }
+                }
+                //下
+            } else if (last_t == 2) {
+                if(x+1 &amp;lt; m &amp;amp;&amp;amp; array[x+1][y] &amp;lt; 0) {
+                    x++;
+                } else {
+                    last_t = 3;
+                    if (y-1 &amp;gt;= 0 &amp;amp;&amp;amp; array[x][y-1] &amp;lt; 0) {
+                        y--;
+                    } else {
+                        break;
+                    }
+                }
+                //左
+            } else if (last_t == 3) {
+                if(y-1 &amp;gt;= 0 &amp;amp;&amp;amp; array[x][y-1] &amp;lt; 0) {
+                    y--;
+                } else {
+                    last_t = 4;
+                    if (x-1 &amp;gt;= 0 &amp;amp;&amp;amp; array[x-1][y] &amp;lt; 0) {
+                        x--;
+                    } else {
+                        break;
+                    }
+                }
+            }
+            //上
+            else {
+                if(x-1 &amp;gt;= 0  &amp;amp;&amp;amp; array[x-1][y] &amp;lt; 0) {
+                    x--;
+                } else {
+                    last_t = 1;
+                    if (y+1 &amp;lt; n  &amp;amp;&amp;amp; array[x][y+1] &amp;lt; 0) {
+                        y++;
+                    } else {
+                        break;
+                    }
                 }
             }
         }
-    }
-    for (int i = 0; i &amp;lt; m; i++) {
-        for (int j = 0; j &amp;lt; n; j++) {
-            System.out.print(array[i][j]+&amp;quot;\t&amp;quot;);
+        for (int i = 0; i &amp;lt; m; i++) {
+            for (int j = 0; j &amp;lt; n; j++) {
+                System.out.print(array[i][j]+&amp;quot;\t&amp;quot;);
+            }
+            System.out.println();
         }
-        System.out.println();
     }
 }
-&lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;}&lt;/p&gt;
+&lt;/code&gt;&lt;/pre&gt;
 </description>
     </item>
     
@@ -2366,250 +2668,6 @@ Output:
             throw new Exception(&amp;quot;队列为空&amp;quot;);
         }
         return stack2.peek();
-    }
-}
-&lt;/code&gt;&lt;/pre&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>算法006</title>
-      <link>https://pallcard.github.io/2019/algorithm006/</link>
-      <pubDate>Wed, 05 Jun 2019 14:50:36 +0800</pubDate>
-      
-      <guid>https://pallcard.github.io/2019/algorithm006/</guid>
-      <description>
-
-&lt;h5 id=&#34;描述&#34;&gt;描述&lt;/h5&gt;
-
-&lt;p&gt;给定一个二叉树和其中的一个结点，请找出中序遍历顺序的下一个结点并且返回。
-注意，树中的结点不仅包含左右子结点，同时包含指向父结点的指针。&lt;/p&gt;
-
-&lt;h5 id=&#34;例子&#34;&gt;例子&lt;/h5&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;Input:
-	二叉树
-Output:
-	中序遍历顺序的下一个结点
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h4 id=&#34;思路&#34;&gt;思路&lt;/h4&gt;
-
-&lt;p&gt;中序遍历顺序的下一个结点，中序遍历是左根右，
-判断该结点是否有右孩子，
- 1.若有，则下一个结点的最左子结点
- 2.若无，则下一个结点为第一个左链指向该结点的祖先结点的结点&lt;/p&gt;
-
-&lt;h5 id=&#34;代码&#34;&gt;代码&lt;/h5&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;public class Question006 {
-
-    class TreeLinkNode {
-        int val;
-        TreeLinkNode left = null;
-        TreeLinkNode right = null;
-        TreeLinkNode next = null;
-
-        TreeLinkNode(int val) {
-            this.val = val;
-        }
-    }
-
-    public TreeLinkNode GetNext(TreeLinkNode pNode) {
-        TreeLinkNode resultNode = null;
-        if(null != pNode.right) {
-            resultNode = pNode.right;
-            while (null != resultNode.left) {
-                resultNode = resultNode.next;
-            }
-        } else {
-            TreeLinkNode temp = pNode;
-            resultNode = pNode.next;
-            while (null != resultNode &amp;amp;&amp;amp; resultNode.left != temp) {
-                temp = pNode.next;
-                resultNode = temp.next;
-            }
-        }
-        return resultNode;
-    }
-}
-&lt;/code&gt;&lt;/pre&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>算法005</title>
-      <link>https://pallcard.github.io/2019/algorithm005/</link>
-      <pubDate>Wed, 05 Jun 2019 10:22:59 +0800</pubDate>
-      
-      <guid>https://pallcard.github.io/2019/algorithm005/</guid>
-      <description>
-
-&lt;h5 id=&#34;描述&#34;&gt;描述&lt;/h5&gt;
-
-&lt;p&gt;根据二叉树的前序遍历和中序遍历的结果，重建出该二叉树。假设输入的前序遍历和中序遍历的结果中都不含重复的数字。&lt;/p&gt;
-
-&lt;h5 id=&#34;例子&#34;&gt;例子&lt;/h5&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;Input:
-	preorder：{3,9,20,15,7}
-	inorder：{9,3,15,20,7}
-Output:
-	该二叉树
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h4 id=&#34;思路&#34;&gt;思路&lt;/h4&gt;
-
-&lt;p&gt;根据先序遍历确定根，再通过中序遍历将数组划分为两部分，分别是左子树、右子树。
-故可以通过一个HashMap存储中序遍历的数组值与下标，key为值，value为下标。&lt;/p&gt;
-
-&lt;h5 id=&#34;代码&#34;&gt;代码&lt;/h5&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;class TreeNode {
-    private TreeNode leftChild;
-    private TreeNode rightChild;
-    private int value;
-
-    public TreeNode(int value) {
-        this.value = value;
-    }
-
-    public TreeNode getLeftChild() {
-        return leftChild;
-    }
-
-    public void setLeftChild(TreeNode leftChild) {
-        this.leftChild = leftChild;
-    }
-
-    public TreeNode getRightChild() {
-        return rightChild;
-    }
-
-    public void setRightChild(TreeNode rightChild) {
-        this.rightChild = rightChild;
-    }
-
-    public int getValue() {
-        return value;
-    }
-
-    public void setValue(int value) {
-        this.value = value;
-    }
-}
-
-public class Question005 {
-	//中序遍历结果，用来对二叉树进行划分，左右子树
-    //为了方便快速的找出根结点对应的下标，来确定左右子树结点个数
-    private static HashMap&amp;lt;Integer, Integer&amp;gt; preorderMap = new HashMap&amp;lt;&amp;gt;();
-    public static void main(String[] args) {
-        int [] preorder = new int[] {3,9,20,15,7};
-        int [] inorder = new int[] {9,3,15,20,7};
-
-        for (int i = 0; i &amp;lt; preorder.length; i++) {
-            preorderMap.put(inorder[i],i);
-        }
-        TreeNode root = reConstructBinaryTree(preorder,0, preorder.length);
-    }
-    /**
-     * pre：前序遍历数组
-     * preL：二叉树起始结点下标
-     * length：长度
-     */
-    public static TreeNode reConstructBinaryTree(int [] pre, int preL, int length) {
-        if (length == 1) {
-            return new TreeNode(pre[preL]);
-        }
-        TreeNode root = new TreeNode(pre[preL]);
-        Integer index = preorderMap.get(root.getValue());
-        int leftLength = index - preL;
-        root.setLeftChild(reConstructBinaryTree(pre,preL+1,leftLength));
-        root.setRightChild(reConstructBinaryTree(pre,index+1,length-leftLength-1));
-        return root;
-    }
-}
-&lt;/code&gt;&lt;/pre&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>算法004</title>
-      <link>https://pallcard.github.io/2019/algorithm004/</link>
-      <pubDate>Tue, 04 Jun 2019 19:45:58 +0800</pubDate>
-      
-      <guid>https://pallcard.github.io/2019/algorithm004/</guid>
-      <description>
-
-&lt;h5 id=&#34;描述&#34;&gt;描述&lt;/h5&gt;
-
-&lt;p&gt;从尾到头反过来打印出每个结点的值。&lt;/p&gt;
-
-&lt;h5 id=&#34;例子&#34;&gt;例子&lt;/h5&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;Input:
-	1 -&amp;gt; 2 -&amp;gt; 3
-Output:
-	3 2 1
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h4 id=&#34;思路&#34;&gt;思路&lt;/h4&gt;
-
-&lt;p&gt;方法一：递归调用
-方法二：使用栈&lt;/p&gt;
-
-&lt;h5 id=&#34;代码&#34;&gt;代码&lt;/h5&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;class Node {
-    private Node next;
-    private int val;
-
-    public Node(Node next, int val) {
-        this.next = next;
-        this.val = val;
-    }
-
-    public Node getNext() {
-        return next;
-    }
-
-    public void setNext(Node next) {
-        this.next = next;
-    }
-
-    public int getVal() {
-        return val;
-    }
-
-    public void setVal(int val) {
-        this.val = val;
-    }
-}
-
-public class Question004 {
-    public static void main(String[] args) {
-        Node node3 = new Node(null, 3);
-        Node node2 = new Node(node3, 2);
-        Node node1 = new Node(node2, 1);
-        Node node = node1;
-		//使用栈
-        Stack&amp;lt;Integer&amp;gt; stack = new Stack&amp;lt;&amp;gt;();
-        while (node != null) {
-            stack.push(node.getVal());
-            node = node.getNext();
-        }
-
-        while (!stack.empty()) {
-            System.out.println(stack.pop());
-        }
-        //递归调用
-//        printListFromTailToHead(node1);
-    }
-    public static void printListFromTailToHead(Node list) {
-        if (list.getNext() != null) {
-            printListFromTailToHead(list.getNext());
-        }
-        System.out.println(list.getVal());
     }
 }
 &lt;/code&gt;&lt;/pre&gt;
