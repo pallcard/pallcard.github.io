@@ -9,9 +9,9 @@
   <meta name="description" content="hust研一">
   <meta name="keywords" content="Java,博客">
   
-  <link rel="prev" href="https://pallcard.github.io/2019/algorithm011/" />
-  <link rel="next" href="https://pallcard.github.io/2019/algorithm013/" />
-  <link rel="canonical" href="https://pallcard.github.io/2019/algorithm012/" />
+  <link rel="prev" href="https://pallcard.github.io/2019/algorithm012/" />
+  
+  <link rel="canonical" href="https://pallcard.github.io/2019/algorithm013/" />
   <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon" />
   <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
@@ -23,10 +23,10 @@
   <title>
        
        
-           Algorithm012 | 刘科个人博客
+           Algorithm013 | 刘科个人博客
        
   </title>
-  <meta name="title" content="Algorithm012 | 刘科个人博客">
+  <meta name="title" content="Algorithm013 | 刘科个人博客">
     
   
   <link rel="stylesheet" href="/font/iconfont.css">
@@ -45,9 +45,9 @@
          "@id": "https:\/\/pallcard.github.io\/"
     },
     "articleSection" : "posts",
-    "name" : "Algorithm012",
-    "headline" : "Algorithm012",
-    "description" : "描述 矩阵中的路径 判断在一个矩阵中是否存在一条包含某字符串所有字符的路径。路径可以从矩阵中的任意一个格子开始，每一步可以在矩阵中向上下左右移动一个格子。如果一条路径经过了矩阵中的某一个格子，则该路径不能再进入该格子。\n例子 Input: Output:  思路 先将所给一维数组转化为二维数组，找到目标字符串首个字符所在位置。然后进行深度递归匹配目标字符串。\n代码 public class Demo012 { public static void main(String[] args) { char[] matrix = new char[]{\x27b\x27, \x27b\x27, \x27c\x27, \x27e\x27, \x27s\x27, \x27f\x27, \x27c\x27, \x27s\x27, \x27a\x27, \x27d\x27, \x27e\x27, \x27e\x27}; int rows = 3; int cols = 4; char [] target = new char[]{\x27b\x27,\x27f\x27,\x27c\x27,\x27e\x27}; char[][] array = new char[3][4]; int index = 0; int x = 0, y = 0; for (int i = 0; i \x26lt; rows; i\x2b\x2b) { for (int j = 0; j \x26lt; cols; j\x2b\x2b) { array[i][j] = matrix[index\x2b\x2b]; } } boolean result = false; for (int i = 0; i \x26lt; rows; i\x2b\x2b) { for (int j = 0; j \x26lt; cols; j\x2b\x2b) { if (array[i][j] == target[0]) { result = search(array,i,j,target,1); if (result) { System.",
+    "name" : "Algorithm013",
+    "headline" : "Algorithm013",
+    "description" : "描述 机器人的运动范围\n地上有一个 m 行和 n 列的方格。一个机器人从坐标 (0, 0) 的格子开始移动，每一次只能向左右上下四个方向移动一格，但是不能进入行坐标和列坐标的数位之和大于 k 的格子。\n例如，当 k 为 18 时，机器人能够进入方格 (35,37)，因为 3\x2b5\x2b3\x2b7=18。但是，它不能进入方格 (35,38)，因为 3\x2b5\x2b3\x2b8=19。请问该机器人能够达到多少个格子？\n例子 Input: m(行数) n(列数) k(阀值) Output:  思路 先将数组中的值计算按位出来存入数组，使用深度优先遍历，将经过的格子中的值置k\x2b1，使用count记录所有走过的格子。\n代码 public class Demo013 { \/\/ 左 上 右 下 public static int [][] direct = new int [][] {{0,-1},{-1,0},{0,1},{1,0}}; public static int count = 0; public static int m = 11; public static int n = 11; public static int k = 10; public static void main(String[] args) { int [][] array = new int[m][n]; for (int i = 0; i \x26lt; m; i\x2b\x2b) { for (int j = 0; j \x26lt; n; j\x2b\x2b) { int i_temp = i; int j_temp = j; \/\/ 处理数位 int i_sum = i_temp%10; int j_sum = j_temp%10; i_temp \/= 10; j_temp \/= 10; while (i_temp \x26gt; 0){ i_sum \x2b= i_temp%10; i_temp \/= 10; } while (j_temp \x26gt; 0) { j_sum \x2b= j_temp%10; j_temp \/= 10; } array[i][j] = i_sum\x2bj_sum; } } count\x2b\x2b; array[0][0] = k \x2b 1; DPsearch(array,0,0); System.",
     "inLanguage" : "zh-CN",
     "author" : "刘科",
     "creator" : "刘科",
@@ -55,10 +55,10 @@
     "accountablePerson" : "刘科",
     "copyrightHolder" : "刘科",
     "copyrightYear" : "2019",
-    "datePublished": "2019-07-04 22:28:14 \x2b0800 CST",
-    "dateModified" : "2019-07-04 22:28:14 \x2b0800 CST",
-    "url" : "https:\/\/pallcard.github.io\/2019\/algorithm012\/",
-    "wordCount" : "240",
+    "datePublished": "2019-07-05 08:22:30 \x2b0800 CST",
+    "dateModified" : "2019-07-05 08:22:30 \x2b0800 CST",
+    "url" : "https:\/\/pallcard.github.io\/2019\/algorithm013\/",
+    "wordCount" : "245",
     "keywords" : [ "Algorithm","Java","总数", "刘科个人博客"]
 }
 </script>
@@ -117,11 +117,11 @@
       		
 <article class="post-warp" itemscope itemtype="http://schema.org/Article">
     <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">Algorithm012</h1>
+        <h1 class="post-title" itemprop="name headline">Algorithm013</h1>
         <div class="post-meta">
                 Written by <a itemprop="name" href="https://pallcard.github.io/" rel="author">刘科</a> with ♥ 
                 <span class="post-time">
-                on <time datetime=2019-07-04 itemprop="datePublished">July 4, 2019</time>
+                on <time datetime=2019-07-05 itemprop="datePublished">July 5, 2019</time>
                 </span>
                 in
                 <i class="iconfont icon-folder"></i>
@@ -151,80 +151,88 @@
 
 <h5 id="描述">描述</h5>
 
-<p>矩阵中的路径
-判断在一个矩阵中是否存在一条包含某字符串所有字符的路径。路径可以从矩阵中的任意一个格子开始，每一步可以在矩阵中向上下左右移动一个格子。如果一条路径经过了矩阵中的某一个格子，则该路径不能再进入该格子。</p>
+<p>机器人的运动范围</p>
+
+<p>地上有一个 m 行和 n 列的方格。一个机器人从坐标 (0, 0) 的格子开始移动，每一次只能向左右上下四个方向移动一格，但是不能进入行坐标和列坐标的数位之和大于 k 的格子。</p>
+
+<p>例如，当 k 为 18 时，机器人能够进入方格 (35,37)，因为 3+5+3+7=18。但是，它不能进入方格 (35,38)，因为 3+5+3+8=19。请问该机器人能够达到多少个格子？</p>
 
 <h5 id="例子">例子</h5>
 
 <pre><code class="language-java">Input:
-	
+	m(行数) n(列数) k(阀值)
 Output:
 	
 </code></pre>
 
 <h4 id="思路">思路</h4>
 
-<p>先将所给一维数组转化为二维数组，找到目标字符串首个字符所在位置。然后进行深度递归匹配目标字符串。</p>
+<p>先将数组中的值计算按位出来存入数组，使用深度优先遍历，将经过的格子中的值置k+1，使用count记录所有走过的格子。</p>
 
 <h5 id="代码">代码</h5>
 
-<pre><code class="language-java">public class Demo012 {
+<pre><code class="language-java">public class Demo013 {
 
-    public static void main(String[] args) {
-        char[] matrix = new char[]{'b', 'b', 'c', 'e', 's', 'f', 'c', 's', 'a', 'd', 'e', 'e'};
-        int rows = 3;
-        int cols = 4;
-        char [] target = new char[]{'b','f','c','e'};
-
-        char[][] array = new char[3][4];
-        int index = 0;
-        int x = 0, y = 0;
-        for (int i = 0; i &lt; rows; i++) {
-            for (int j = 0; j &lt; cols; j++) {
-                array[i][j] = matrix[index++];
-
-            }
-        }
-
-        boolean result = false;
-        for (int i = 0; i &lt; rows; i++) {
-            for (int j = 0; j &lt; cols; j++) {
-                if (array[i][j] == target[0]) {
-                    result = search(array,i,j,target,1);
-                    if (result) {
-                        System.out.println(result);
-                        return;
-                    }
-                }
-            }
-        }
-
-        System.out.println(result);
-
-    }
     // 左 上 右 下
     public static int [][] direct = new int [][]
             {{0,-1},{-1,0},{0,1},{1,0}};
 
-    public static boolean search(char[][] array, int x, int y, char [] target, int index) {
+    public static int count = 0;
+    public static int m = 11;
+    public static int n = 11;
+    public static int k = 10;
+
+
+    public static void main(String[] args) {
+        int [][] array = new int[m][n];
+        for (int i = 0; i &lt; m; i++) {
+            for (int j = 0; j &lt; n; j++) {
+                int i_temp = i;
+                int j_temp = j;
+                // 处理数位
+                int i_sum = i_temp%10;
+                int j_sum = j_temp%10;
+
+                i_temp /= 10;
+                j_temp /= 10;
+                while (i_temp &gt; 0){
+                    i_sum += i_temp%10;
+                    i_temp /= 10;
+                }
+                while (j_temp &gt; 0) {
+                    j_sum += j_temp%10;
+                    j_temp /= 10;
+                }
+                array[i][j] = i_sum+j_sum;
+            }
+        }
+        count++;
+        array[0][0] = k + 1;
+        DPsearch(array,0,0);
+        System.out.println(count);
+    }
+
+    public static void DPsearch(int [][] array, int x, int y) {
         for (int i = 0; i &lt; 4; i++) {
             if (x + direct[i][0] &gt;= 0
-                    &amp;&amp; x + direct[i][0] &lt; 3
+                    &amp;&amp; x + direct[i][0] &lt; m
                     &amp;&amp; y + direct[i][1] &gt;= 0
-                    &amp;&amp; y + direct[i][1] &lt; 4) {
+                    &amp;&amp; y + direct[i][1] &lt; n) {
                 x += direct[i][0];
                 y += direct[i][1];
-                if (array[x][y] == target[index] &amp;&amp; target.length == index+1) {
-                    return true;
-                } else if (array[x][y] == target[index]) {
-                    return search(array,x,y,target,++index);
+
+                if(array[x][y] &lt;= k) {
+                    // 走过的格子失效
+                    array[x][y] = k + 1;
+                    count++;
+                    DPsearch(array,x,y);
                 }
+
                 // x,y 坐标还原
                 x -= direct[i][0];
                 y -= direct[i][1];
             }
         }
-        return false;
     }
 }
 </code></pre>
@@ -242,7 +250,7 @@ Output:
              
             <p class="copyright-item">
                     <span>Link:</span>
-                    <a href=https://pallcard.github.io/2019/algorithm012/>https://pallcard.github.io/2019/algorithm012/</span>
+                    <a href=https://pallcard.github.io/2019/algorithm013/>https://pallcard.github.io/2019/algorithm013/</span>
             </p>
             
             
@@ -273,10 +281,8 @@ Output:
 
     <div class="post-nav">
         
-        <a href="https://pallcard.github.io/2019/algorithm011/" class="prev" rel="prev" title="算法011"><i class="iconfont icon-left"></i>&nbsp;算法011</a>
+        <a href="https://pallcard.github.io/2019/algorithm012/" class="prev" rel="prev" title="Algorithm012"><i class="iconfont icon-left"></i>&nbsp;Algorithm012</a>
          
-        
-        <a href="https://pallcard.github.io/2019/algorithm013/" class="next" rel="next" title="Algorithm013">Algorithm013&nbsp;<i class="iconfont icon-right"></i></a>
         
     </div>
 

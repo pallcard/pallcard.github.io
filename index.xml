@@ -6,8 +6,106 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
     <copyright>All rights reserved - 2019</copyright>
-    <lastBuildDate>Thu, 04 Jul 2019 22:28:14 +0800</lastBuildDate>
+    <lastBuildDate>Fri, 05 Jul 2019 08:22:30 +0800</lastBuildDate>
     <atom:link href="/" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Algorithm013</title>
+      <link>https://pallcard.github.io/2019/algorithm013/</link>
+      <pubDate>Fri, 05 Jul 2019 08:22:30 +0800</pubDate>
+      
+      <guid>https://pallcard.github.io/2019/algorithm013/</guid>
+      <description>
+
+&lt;h5 id=&#34;描述&#34;&gt;描述&lt;/h5&gt;
+
+&lt;p&gt;机器人的运动范围&lt;/p&gt;
+
+&lt;p&gt;地上有一个 m 行和 n 列的方格。一个机器人从坐标 (0, 0) 的格子开始移动，每一次只能向左右上下四个方向移动一格，但是不能进入行坐标和列坐标的数位之和大于 k 的格子。&lt;/p&gt;
+
+&lt;p&gt;例如，当 k 为 18 时，机器人能够进入方格 (35,37)，因为 3+5+3+7=18。但是，它不能进入方格 (35,38)，因为 3+5+3+8=19。请问该机器人能够达到多少个格子？&lt;/p&gt;
+
+&lt;h5 id=&#34;例子&#34;&gt;例子&lt;/h5&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;Input:
+	m(行数) n(列数) k(阀值)
+Output:
+	
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h4 id=&#34;思路&#34;&gt;思路&lt;/h4&gt;
+
+&lt;p&gt;先将数组中的值计算按位出来存入数组，使用深度优先遍历，将经过的格子中的值置k+1，使用count记录所有走过的格子。&lt;/p&gt;
+
+&lt;h5 id=&#34;代码&#34;&gt;代码&lt;/h5&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;public class Demo013 {
+
+    // 左 上 右 下
+    public static int [][] direct = new int [][]
+            {{0,-1},{-1,0},{0,1},{1,0}};
+
+    public static int count = 0;
+    public static int m = 11;
+    public static int n = 11;
+    public static int k = 10;
+
+
+    public static void main(String[] args) {
+        int [][] array = new int[m][n];
+        for (int i = 0; i &amp;lt; m; i++) {
+            for (int j = 0; j &amp;lt; n; j++) {
+                int i_temp = i;
+                int j_temp = j;
+                // 处理数位
+                int i_sum = i_temp%10;
+                int j_sum = j_temp%10;
+
+                i_temp /= 10;
+                j_temp /= 10;
+                while (i_temp &amp;gt; 0){
+                    i_sum += i_temp%10;
+                    i_temp /= 10;
+                }
+                while (j_temp &amp;gt; 0) {
+                    j_sum += j_temp%10;
+                    j_temp /= 10;
+                }
+                array[i][j] = i_sum+j_sum;
+            }
+        }
+        count++;
+        array[0][0] = k + 1;
+        DPsearch(array,0,0);
+        System.out.println(count);
+    }
+
+    public static void DPsearch(int [][] array, int x, int y) {
+        for (int i = 0; i &amp;lt; 4; i++) {
+            if (x + direct[i][0] &amp;gt;= 0
+                    &amp;amp;&amp;amp; x + direct[i][0] &amp;lt; m
+                    &amp;amp;&amp;amp; y + direct[i][1] &amp;gt;= 0
+                    &amp;amp;&amp;amp; y + direct[i][1] &amp;lt; n) {
+                x += direct[i][0];
+                y += direct[i][1];
+
+                if(array[x][y] &amp;lt;= k) {
+                    // 走过的格子失效
+                    array[x][y] = k + 1;
+                    count++;
+                    DPsearch(array,x,y);
+                }
+
+                // x,y 坐标还原
+                x -= direct[i][0];
+                y -= direct[i][1];
+            }
+        }
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+</description>
+    </item>
     
     <item>
       <title>Algorithm012</title>
@@ -2598,117 +2696,6 @@ public class HelloWorld {
 
 &lt;p&gt;参考：&lt;a href=&#34;https://zed058.cn&#34; rel=&#34;nofollow noreferrer&#34; target=&#34;_blank&#34;&gt;https://zed058.cn&lt;/a&gt;
 文档：&lt;a href=&#34;https://docs.spring.io/spring-boot/docs/2.1.4.RELEASE/reference/htmlsingle/&#34; rel=&#34;nofollow noreferrer&#34; target=&#34;_blank&#34;&gt;https://docs.spring.io/spring-boot/docs/2.1.4.RELEASE/reference/htmlsingle/&lt;/a&gt;&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>算法008</title>
-      <link>https://pallcard.github.io/2019/algorithm008/</link>
-      <pubDate>Wed, 05 Jun 2019 20:40:17 +0800</pubDate>
-      
-      <guid>https://pallcard.github.io/2019/algorithm008/</guid>
-      <description>
-
-&lt;h5 id=&#34;描述&#34;&gt;描述&lt;/h5&gt;
-
-&lt;p&gt;回旋数组&lt;/p&gt;
-
-&lt;h5 id=&#34;例子&#34;&gt;例子&lt;/h5&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;Input:
-	3  3
-Output:
-	1 2 3
-    8 9 4
-    7 6 5
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h4 id=&#34;思路&#34;&gt;思路&lt;/h4&gt;
-
-&lt;p&gt;用count来计数，
-  x,y当前坐标（行，列）
-  last_t上次所走方向，右1 下2 左3 上4&lt;/p&gt;
-
-&lt;h5 id=&#34;代码&#34;&gt;代码&lt;/h5&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;public class Question008 {
-    public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-        int m = sc.nextInt();
-        int n = sc.nextInt();
-
-        int [][] array = new int [m][n];
-        for (int i = 0; i &amp;lt; m; i++) {
-            for (int j = 0; j &amp;lt; n; j++) {
-                array[i][j] = -1;
-            }
-        }
-        int x = 0, y = 0;
-        int count = 1;
-        // 右1 下2 左3 上4
-        int last_t = 1;
-        while (count &amp;lt;= m*n) {
-            array[x][y] = count++;
-            if(last_t == 1) {
-                if (y+1&amp;lt;n &amp;amp;&amp;amp; array[x][y+1] &amp;lt; 0){
-                    y++;
-                } else {
-                    last_t = 2;
-                    if (x+1 &amp;lt; m &amp;amp;&amp;amp; array[x+1][y] &amp;lt; 0) {
-                        x++;
-                    }else {
-                        break;
-                    }
-                }
-                //下
-            } else if (last_t == 2) {
-                if(x+1 &amp;lt; m &amp;amp;&amp;amp; array[x+1][y] &amp;lt; 0) {
-                    x++;
-                } else {
-                    last_t = 3;
-                    if (y-1 &amp;gt;= 0 &amp;amp;&amp;amp; array[x][y-1] &amp;lt; 0) {
-                        y--;
-                    } else {
-                        break;
-                    }
-                }
-                //左
-            } else if (last_t == 3) {
-                if(y-1 &amp;gt;= 0 &amp;amp;&amp;amp; array[x][y-1] &amp;lt; 0) {
-                    y--;
-                } else {
-                    last_t = 4;
-                    if (x-1 &amp;gt;= 0 &amp;amp;&amp;amp; array[x-1][y] &amp;lt; 0) {
-                        x--;
-                    } else {
-                        break;
-                    }
-                }
-            }
-            //上
-            else {
-                if(x-1 &amp;gt;= 0  &amp;amp;&amp;amp; array[x-1][y] &amp;lt; 0) {
-                    x--;
-                } else {
-                    last_t = 1;
-                    if (y+1 &amp;lt; n  &amp;amp;&amp;amp; array[x][y+1] &amp;lt; 0) {
-                        y++;
-                    } else {
-                        break;
-                    }
-                }
-            }
-        }
-        for (int i = 0; i &amp;lt; m; i++) {
-            for (int j = 0; j &amp;lt; n; j++) {
-                System.out.print(array[i][j]+&amp;quot;\t&amp;quot;);
-            }
-            System.out.println();
-        }
-    }
-}
-
-&lt;/code&gt;&lt;/pre&gt;
 </description>
     </item>
     

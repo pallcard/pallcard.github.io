@@ -7,10 +7,23 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
     <copyright>All rights reserved - 2019</copyright>
-    <lastBuildDate>Thu, 04 Jul 2019 22:28:14 +0800</lastBuildDate>
+    <lastBuildDate>Fri, 05 Jul 2019 08:22:30 +0800</lastBuildDate>
     
 	<atom:link href="https://pallcard.github.io/tags/%E6%80%BB%E6%95%B0/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Algorithm013</title>
+      <link>https://pallcard.github.io/2019/algorithm013/</link>
+      <pubDate>Fri, 05 Jul 2019 08:22:30 +0800</pubDate>
+      
+      <guid>https://pallcard.github.io/2019/algorithm013/</guid>
+      <description>描述 机器人的运动范围
+地上有一个 m 行和 n 列的方格。一个机器人从坐标 (0, 0) 的格子开始移动，每一次只能向左右上下四个方向移动一格，但是不能进入行坐标和列坐标的数位之和大于 k 的格子。
+例如，当 k 为 18 时，机器人能够进入方格 (35,37)，因为 3+5+3+7=18。但是，它不能进入方格 (35,38)，因为 3+5+3+8=19。请问该机器人能够达到多少个格子？
+例子 Input: m(行数) n(列数) k(阀值) Output:  思路 先将数组中的值计算按位出来存入数组，使用深度优先遍历，将经过的格子中的值置k+1，使用count记录所有走过的格子。
+代码 public class Demo013 { // 左 上 右 下 public static int [][] direct = new int [][] {{0,-1},{-1,0},{0,1},{1,0}}; public static int count = 0; public static int m = 11; public static int n = 11; public static int k = 10; public static void main(String[] args) { int [][] array = new int[m][n]; for (int i = 0; i &amp;lt; m; i++) { for (int j = 0; j &amp;lt; n; j++) { int i_temp = i; int j_temp = j; // 处理数位 int i_sum = i_temp%10; int j_sum = j_temp%10; i_temp /= 10; j_temp /= 10; while (i_temp &amp;gt; 0){ i_sum += i_temp%10; i_temp /= 10; } while (j_temp &amp;gt; 0) { j_sum += j_temp%10; j_temp /= 10; } array[i][j] = i_sum+j_sum; } } count++; array[0][0] = k + 1; DPsearch(array,0,0); System.</description>
+    </item>
     
     <item>
       <title>Algorithm012</title>
