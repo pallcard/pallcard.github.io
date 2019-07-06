@@ -47,7 +47,7 @@
     "articleSection" : "posts",
     "name" : "SpringBoot启动类",
     "headline" : "SpringBoot启动类",
-    "description" : "1.POM文件 整个项目的pom文件中（pom.xml）,可以看到该项目的parent，通过点击标签，可以进入parent中，这样可以看到项目的最终的parent。\n\x26lt;parent\x26gt; \x26lt;groupId\x26gt;org.springframework.boot\x26lt;\/groupId\x26gt; \x26lt;artifactId\x26gt;spring-boot-starter-parent\x26lt;\/artifactId\x26gt; \x26lt;version\x26gt;2.1.5.RELEASE\x26lt;\/version\x26gt; \x26lt;relativePath\/\x26gt; \x26lt;!-- lookup parent from repository --\x26gt; \x26lt;\/parent\x26gt;  2.启动器 \x26lt;dependencies\x26gt; \x26lt;dependency\x26gt; \x26lt;groupId\x26gt;org.springframework.boot\x26lt;\/groupId\x26gt; \x26lt;artifactId\x26gt;spring-boot-starter-web\x26lt;\/artifactId\x26gt; \x26lt;\/dependency\x26gt; \x26lt;dependency\x26gt; \x26lt;groupId\x26gt;org.springframework.boot\x26lt;\/groupId\x26gt; \x26lt;artifactId\x26gt;spring-boot-starter-test\x26lt;\/artifactId\x26gt; \x26lt;scope\x26gt;test\x26lt;\/scope\x26gt; \x26lt;\/dependency\x26gt; \x26lt;\/dependencies\x26gt;  注： spring-boot-starter：spring-boot场景启动器，帮我们导入了web模块正常运行所依赖的组件； SpringBoot启动器文档：https:\/\/docs.spring.io\/spring-boot\/docs\/2.1.5.RELEASE\/reference\/htmlsingle\/#using-boot-starter\n3.主程序类 @SpringBootApplication public class DemoApplication { public static void main(String[] args) { SpringApplication.run(DemoApplication.class, args); } }   @SpringBootApplication：用来标注这个类为SpringBoot的主配置类，该注解是一个组合注解。 将主配置类（@SpringBootApplication标注的类）的所在包及下面所有子包里面的所有组件扫描到Spring容器； Spring Boot在启动的时候从类路径下的META-INF\/spring.factories中获取EnableAutoConfiguration指定的值，将这些值作为自动配置类导入到容器中，自动配置类就生效，帮我们进行自动配置工作； java @Target({ElementType.TYPE}) @Retention(RetentionPolicy.RUNTIME) @Documented @Inherited @SpringBootConfiguration @EnableAutoConfiguration @ComponentScan( excludeFilters = {@Filter( type = FilterType.CUSTOM, classes = {TypeExcludeFilter.",
+    "description" : "1.POM文件 整个项目的pom文件中（pom.xml）,可以看到该项目的parent，通过点击标签，可\n\x26lt;parent\x26gt; \x26lt;groupId\x26gt;org.springframework.boot\x26lt;\/groupId\x26gt; \x26lt;artifactId\x26gt;spring-boot-starter-parent\x26lt;\/artifactId\x26gt; \x26lt;version\x26gt;2.1.5.RELEASE\x26lt;\/version\x26gt; \x26lt;relativePath\/\x26gt; \x26lt;!-- lookup parent from repository --\x26gt; \x26lt;\/parent\x26gt;  2.启动器 \x26lt;dependencies\x26gt; \x26lt;dependency\x26gt; \x26lt;groupId\x26gt;org.springframework.boot\x26lt;\/groupId\x26gt; \x26lt;artifactId\x26gt;spring-boot-starter-web\x26lt;\/artifactId\x26gt; \x26lt;\/dependency\x26gt; \x26lt;dependency\x26gt; \x26lt;groupId\x26gt;org.springframework.boot\x26lt;\/groupId\x26gt; \x26lt;artifactId\x26gt;spring-boot-starter-test\x26lt;\/artifactId\x26gt; \x26lt;scope\x26gt;test\x26lt;\/scope\x26gt; \x26lt;\/dependency\x26gt; \x26lt;\/dependencies\x26gt;  注： spring-boot-starter：spring-boot场景启动器，帮我们导入了web模块正常运行所依赖的组件； SpringBoot启动器文档：https:\/\/docs.spring.io\/spring-boot\/docs\/2.1.5.RELEASE\/reference\/htmlsingle\/#using-boot-starter\n3.主程序类 @SpringBootApplication public class DemoApplication { public static void main(String[] args) { SpringApplication.run(DemoApplication.class, args); } }   @SpringBootApplication：用来标注这个类为SpringBoot的主配置类，该注解是一个组合注解。 将主配置类（@SpringBootApplication标注的类）的所在包及下面所有子包里面的所有组件扫描到Spring容器； Spring Boot在启动的时候从类路径下的META-INF\/spring.factories中获取EnableAutoConfiguration指定的值，将这些值作为自动配置类导入到容器中，自动配置类就生效，帮我们进行自动配置工作。  @Target({ElementType.TYPE}) @Retention(RetentionPolicy.RUNTIME) @Documented @Inherited @SpringBootConfiguration @EnableAutoConfiguration @ComponentScan( excludeFilters = {@Filter( type = FilterType.CUSTOM, classes = {TypeExcludeFilter.",
     "inLanguage" : "zh-CN",
     "author" : "刘科",
     "creator" : "刘科",
@@ -58,7 +58,7 @@
     "datePublished": "2019-06-08 10:53:04 \x2b0800 CST",
     "dateModified" : "2019-06-08 10:53:04 \x2b0800 CST",
     "url" : "https:\/\/pallcard.github.io\/2019\/springboot%E5%90%AF%E5%8A%A8%E7%B1%BB\/",
-    "wordCount" : "86",
+    "wordCount" : "83",
     "keywords" : [ "SpringBoot","总数", "刘科个人博客"]
 }
 </script>
@@ -151,7 +151,7 @@
 
 <h5 id="1-pom文件">1.POM文件</h5>
 
-<p>整个项目的pom文件中（pom.xml）,可以看到该项目的parent，通过点击<artifactId>标签，可以进入parent中，这样可以看到项目的最终的parent。</p>
+<p>整个项目的pom文件中（pom.xml）,可以看到该项目的parent，通过点击<artifactId>标签，可</p>
 
 <pre><code class="language-java">&lt;parent&gt;
         &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
@@ -195,30 +195,33 @@ public class DemoApplication {
 <ul>
 <li>@SpringBootApplication：用来标注这个类为SpringBoot的主配置类，该注解是一个组合注解。</li>
 <li>将主配置类（@SpringBootApplication标注的类）的所在包及下面所有子包里面的所有组件扫描到Spring容器；</li>
-<li>Spring Boot在启动的时候从类路径下的META-INF/spring.factories中获取EnableAutoConfiguration指定的值，将这些值作为自动配置类导入到容器中，自动配置类就生效，帮我们进行自动配置工作；
-<code>java
-@Target({ElementType.TYPE})
+<li>Spring Boot在启动的时候从类路径下的META-INF/spring.factories中获取EnableAutoConfiguration指定的值，将这些值作为自动配置类导入到容器中，自动配置类就生效，帮我们进行自动配置工作。</li>
+</ul>
+
+<pre><code class="language-java">@Target({ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 @Inherited
 @SpringBootConfiguration
 @EnableAutoConfiguration
 @ComponentScan(
-excludeFilters = {@Filter(
-type = FilterType.CUSTOM,
-classes = {TypeExcludeFilter.class}
+    excludeFilters = {@Filter(
+    type = FilterType.CUSTOM,
+    classes = {TypeExcludeFilter.class}
 ), @Filter(
-type = FilterType.CUSTOM,
-classes = {AutoConfigurationExcludeFilter.class}
+    type = FilterType.CUSTOM,
+    classes = {AutoConfigurationExcludeFilter.class}
 )}
 )
 public @interface SpringBootApplication {
-</code>
-* @SpringBootConfiguration: SpringBoot的配置类，
-* @EnableAutoConfiguration：开启自动配置功能
+</code></pre>
 
-参考：<a href="https://zed058.cn" rel="nofollow noreferrer" target="_blank">https://zed058.cn</a></li>
+<ul>
+<li>@SpringBootConfiguration: SpringBoot的配置类，</li>
+<li>@EnableAutoConfiguration：开启自动配置功能</li>
 </ul>
+
+<p>参考：<a href="https://zed058.cn" rel="nofollow noreferrer" target="_blank">https://zed058.cn</a></p>
 
     </div>
 

@@ -251,23 +251,86 @@ Output:
 
 &lt;p&gt;正则表达式用于文本内容的查找和替换。在线工具&lt;a href=&#34;https://regexr.com/&#34; rel=&#34;nofollow noreferrer&#34; target=&#34;_blank&#34;&gt;https://regexr.com/&lt;/a&gt;&lt;/p&gt;
 
-&lt;p&gt;元字符
-|元字符|说明|
-|&amp;ndash;|&amp;ndash;
-| \b | 回退
-| \f | 换页符
-| \n | 换行符
-| \r | 回车符
-| \t | 制表符
-| \v | 垂直制表符
-| &lt;strong&gt;\d&lt;/strong&gt; | &lt;strong&gt;数字字符，等价于 [0-9]&lt;/strong&gt;
-| &lt;strong&gt;\w&lt;/strong&gt; | &lt;strong&gt;大小写字母，下划线和数字，等价于 [a-zA-Z0-9_]&lt;/strong&gt;
-| &lt;strong&gt;\s&lt;/strong&gt; | &lt;strong&gt;任何一个空白字符，等价于 [\f\n\r\t\v]&lt;/strong&gt;
-| \l |把下个字符转换为小写
-| \u |把下个字符转换为大写
-| \L |把\L 和\E 之间的字符全部转换为小写
-| \U |把\U 和\E 之间的字符全部转换为大写
-| \E |  结束\L 或者\U&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;元字符&lt;/th&gt;
+&lt;th&gt;说明&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;\b&lt;/td&gt;
+&lt;td&gt;回退&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;\f&lt;/td&gt;
+&lt;td&gt;换页符&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;\n&lt;/td&gt;
+&lt;td&gt;换行符&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;\r&lt;/td&gt;
+&lt;td&gt;回车符&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;\t&lt;/td&gt;
+&lt;td&gt;制表符&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;\v&lt;/td&gt;
+&lt;td&gt;垂直制表符&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;\d&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;&lt;strong&gt;数字字符，等价于 [0-9]&lt;/strong&gt;&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;\w&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;&lt;strong&gt;大小写字母，下划线和数字，等价于 [a-zA-Z0-9_]&lt;/strong&gt;&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;\s&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;&lt;strong&gt;任何一个空白字符，等价于 [\f\n\r\t\v]&lt;/strong&gt;&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;\l&lt;/td&gt;
+&lt;td&gt;把下个字符转换为小写&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;\u&lt;/td&gt;
+&lt;td&gt;把下个字符转换为大写&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;\L&lt;/td&gt;
+&lt;td&gt;把\L 和\E 之间的字符全部转换为小写&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;\U&lt;/td&gt;
+&lt;td&gt;把\U 和\E 之间的字符全部转换为大写&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;\E&lt;/td&gt;
+&lt;td&gt;结束\L 或者\U&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
 
 &lt;p&gt;说明:
 \D,\W,\S是对上述3个的取非；&lt;/p&gt;
