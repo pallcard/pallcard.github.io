@@ -10,7 +10,7 @@
   <meta name="keywords" content="Java,博客">
   
   <link rel="prev" href="https://pallcard.github.io/2019/algorithm012/" />
-  
+  <link rel="next" href="https://pallcard.github.io/2019/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F/" />
   <link rel="canonical" href="https://pallcard.github.io/2019/algorithm013/" />
   <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon" />
   <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
@@ -23,10 +23,10 @@
   <title>
        
        
-           Algorithm013 | 刘科个人博客
+           算法013 | 刘科个人博客
        
   </title>
-  <meta name="title" content="Algorithm013 | 刘科个人博客">
+  <meta name="title" content="算法013 | 刘科个人博客">
     
   
   <link rel="stylesheet" href="/font/iconfont.css">
@@ -45,8 +45,8 @@
          "@id": "https:\/\/pallcard.github.io\/"
     },
     "articleSection" : "posts",
-    "name" : "Algorithm013",
-    "headline" : "Algorithm013",
+    "name" : "算法013",
+    "headline" : "算法013",
     "description" : "描述 机器人的运动范围\n地上有一个 m 行和 n 列的方格。一个机器人从坐标 (0, 0) 的格子开始移动，每一次只能向左右上下四个方向移动一格，但是不能进入行坐标和列坐标的数位之和大于 k 的格子。\n例如，当 k 为 18 时，机器人能够进入方格 (35,37)，因为 3\x2b5\x2b3\x2b7=18。但是，它不能进入方格 (35,38)，因为 3\x2b5\x2b3\x2b8=19。请问该机器人能够达到多少个格子？\n例子 Input: m(行数) n(列数) k(阀值) Output:  思路 先将数组中的值计算按位出来存入数组，使用深度优先遍历，将经过的格子中的值置k\x2b1，使用count记录所有走过的格子。\n代码 public class Demo013 { \/\/ 左 上 右 下 public static int [][] direct = new int [][] {{0,-1},{-1,0},{0,1},{1,0}}; public static int count = 0; public static int m = 11; public static int n = 11; public static int k = 10; public static void main(String[] args) { int [][] array = new int[m][n]; for (int i = 0; i \x26lt; m; i\x2b\x2b) { for (int j = 0; j \x26lt; n; j\x2b\x2b) { int i_temp = i; int j_temp = j; \/\/ 处理数位 int i_sum = i_temp%10; int j_sum = j_temp%10; i_temp \/= 10; j_temp \/= 10; while (i_temp \x26gt; 0){ i_sum \x2b= i_temp%10; i_temp \/= 10; } while (j_temp \x26gt; 0) { j_sum \x2b= j_temp%10; j_temp \/= 10; } array[i][j] = i_sum\x2bj_sum; } } count\x2b\x2b; array[0][0] = k \x2b 1; DPsearch(array,0,0); System.",
     "inLanguage" : "zh-CN",
     "author" : "刘科",
@@ -117,7 +117,7 @@
       		
 <article class="post-warp" itemscope itemtype="http://schema.org/Article">
     <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">Algorithm013</h1>
+        <h1 class="post-title" itemprop="name headline">算法013</h1>
         <div class="post-meta">
                 Written by <a itemprop="name" href="https://pallcard.github.io/" rel="author">刘科</a> with ♥ 
                 <span class="post-time">
@@ -281,8 +281,10 @@ Output:
 
     <div class="post-nav">
         
-        <a href="https://pallcard.github.io/2019/algorithm012/" class="prev" rel="prev" title="Algorithm012"><i class="iconfont icon-left"></i>&nbsp;Algorithm012</a>
+        <a href="https://pallcard.github.io/2019/algorithm012/" class="prev" rel="prev" title="算法012"><i class="iconfont icon-left"></i>&nbsp;算法012</a>
          
+        
+        <a href="https://pallcard.github.io/2019/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F/" class="next" rel="next" title="正则表达式">正则表达式&nbsp;<i class="iconfont icon-right"></i></a>
         
     </div>
 

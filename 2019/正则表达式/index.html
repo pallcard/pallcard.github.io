@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+  <meta http-equiv="content-type" content="text/html;charset=utf-8">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noodp"/>
+  <meta name="author" content="刘科">
+  <meta name="description" content="hust研一">
+  <meta name="keywords" content="Java,博客">
+  
+  <link rel="prev" href="https://pallcard.github.io/2019/algorithm013/" />
+  
+  <link rel="canonical" href="https://pallcard.github.io/2019/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F/" />
+  <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+  <meta name="msapplication-TileColor" content="#da532c">
+  <meta name="theme-color" content="#ffffff">
+  <title>
+       
+       
+           正则表达式 | 刘科个人博客
+       
+  </title>
+  <meta name="title" content="正则表达式 | 刘科个人博客">
+    
+  
+  <link rel="stylesheet" href="/font/iconfont.css">
+  <link rel="stylesheet" href="/css/main.min.css">
+
+
+  
+  
+ 
+
+<script type="application/ld+json">
+ "@context" : "http://schema.org",
+    "@type" : "BlogPosting",
+    "mainEntityOfPage": {
+         "@type": "WebPage",
+         "@id": "https:\/\/pallcard.github.io\/"
+    },
+    "articleSection" : "posts",
+    "name" : "正则表达式",
+    "headline" : "正则表达式",
+    "description" : "一、简介 正则表达式用于文本内容的查找和替换。在线工具https:\/\/regexr.com\/\n元字符 |元字符|说明| |\x26ndash;|\x26ndash; | \\b | 回退 | \\f | 换页符 | \\n | 换行符 | \\r | 回车符 | \\t | 制表符 | \\v | 垂直制表符 | \\d | 数字字符，等价于 [0-9] | \\w | 大小写字母，下划线和数字，等价于 [a-zA-Z0-9_] | \\s | 任何一个空白字符，等价于 [\\f\\n\\r\\t\\v] | \\l |把下个字符转换为小写 | \\u |把下个字符转换为大写 | \\L |把\\L 和\\E 之间的字符全部转换为小写 | \\U |把\\U 和\\E 之间的字符全部转换为大写 | \\E | 结束\\L 或者\\U\n说明: \\D,\\W,\\S是对上述3个的取非；\n二、匹配单个字符 .可以用来匹配任意单个字符，但是在绝大多数实现里面，不能匹配换行符；",
+    "inLanguage" : "zh-CN",
+    "author" : "刘科",
+    "creator" : "刘科",
+    "publisher": "刘科",
+    "accountablePerson" : "刘科",
+    "copyrightHolder" : "刘科",
+    "copyrightYear" : "2019",
+    "datePublished": "2019-07-06 09:10:02 \x2b0800 CST",
+    "dateModified" : "2019-07-06 09:10:02 \x2b0800 CST",
+    "url" : "https:\/\/pallcard.github.io\/2019\/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F\/",
+    "wordCount" : "256",
+    "keywords" : [ "Java","总数", "刘科个人博客"]
+}
+</script>
+
+</head>
+
+  
+
+
+  <body class="">
+    <div class="wrapper">
+        <nav class="navbar">
+    <div class="container">
+        <div class="navbar-header header-logo">
+        	<a href="javascript:void(0);" class="theme-switch"><i class="iconfont icon-xihuan"></i></a>&nbsp;<a href="https://pallcard.github.io/">刘科个人博客</a>
+        </div>
+        <div class="menu navbar-right">
+                
+                
+                <a class="menu-item" href="/posts/" title="">博客</a>
+                
+                <a class="menu-item" href="/categories/" title="">分类</a>
+                
+                <a class="menu-item" href="/tags/" title="">标签</a>
+                
+                <a class="menu-item" href="/about/" title="">关于</a>
+                
+        </div>
+    </div>
+</nav>
+<nav class="navbar-mobile" id="nav-mobile" style="display: none">
+     <div class="container">
+        <div class="navbar-header">
+            <div>  <a href="javascript:void(0);" class="theme-switch"><i class="iconfont icon-xihuan"></i></a>&nbsp;<a href="https://pallcard.github.io/">刘科个人博客</a></div>
+            <div class="menu-toggle">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+     
+          <div class="menu" id="mobile-menu">
+                
+                
+                <a class="menu-item" href="/posts/" title="">博客</a>
+                
+                <a class="menu-item" href="/categories/" title="">分类</a>
+                
+                <a class="menu-item" href="/tags/" title="">标签</a>
+                
+                <a class="menu-item" href="/about/" title="">关于</a>
+                
+        </div>
+    </div>
+</nav>
+    	 <main class="main">
+          <div class="container">
+      		
+<article class="post-warp" itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">正则表达式</h1>
+        <div class="post-meta">
+                Written by <a itemprop="name" href="https://pallcard.github.io/" rel="author">刘科</a> with ♥ 
+                <span class="post-time">
+                on <time datetime=2019-07-06 itemprop="datePublished">July 6, 2019</time>
+                </span>
+                in
+                <i class="iconfont icon-folder"></i>
+                <span class="post-category">
+                        <a href="https://pallcard.github.io/categories/java/"> Java </a>
+                        
+                </span>
+        </div>
+    </header>
+    <div class="post-content">
+        
+
+        
+
+        
+        
+     
+          
+          
+          
+
+          
+          
+          
+
+          
+
+<h3 id="一-简介">一、简介</h3>
+
+<p>正则表达式用于文本内容的查找和替换。在线工具<a href="https://regexr.com/" rel="nofollow noreferrer" target="_blank">https://regexr.com/</a></p>
+
+<p>元字符
+|元字符|说明|
+|&ndash;|&ndash;
+| \b | 回退
+| \f | 换页符
+| \n | 换行符
+| \r | 回车符
+| \t | 制表符
+| \v | 垂直制表符
+| <strong>\d</strong> | <strong>数字字符，等价于 [0-9]</strong>
+| <strong>\w</strong> | <strong>大小写字母，下划线和数字，等价于 [a-zA-Z0-9_]</strong>
+| <strong>\s</strong> | <strong>任何一个空白字符，等价于 [\f\n\r\t\v]</strong>
+| \l |把下个字符转换为小写
+| \u |把下个字符转换为大写
+| \L |把\L 和\E 之间的字符全部转换为小写
+| \U |把\U 和\E 之间的字符全部转换为大写
+| \E |  结束\L 或者\U</p>
+
+<p>说明:
+\D,\W,\S是对上述3个的取非；</p>
+
+<h3 id="二-匹配单个字符">二、匹配单个字符</h3>
+
+<p>.可以用来<strong>匹配任意单个字符</strong>，但是在绝大多数实现里面，不能匹配换行符；</p>
+
+<p>. 是<strong>元字符</strong>，表示它有特殊的含义，而不是字符本身的含义。若要匹配.使用\.</p>
+
+<h3 id="三-匹配一组字符">三、匹配一组字符</h3>
+
+<p>[]定义<strong>一个字符集合</strong>；
+0-9、a-z 定义了一个字符区间，区间使用 ASCII 码来确定，字符区间在 [ ] 中使用。</p>
+
+<p>- 只有在 [ ] 之间才是元字符，在 [ ] 之外就是一个普通字符；</p>
+
+<p>^ 在 [ ] 中是取非操作。</p>
+
+<h3 id="四-重复匹配">四、重复匹配</h3>
+
+<ul>
+<li>+ 匹配 1 个或者多个字符</li>
+<li>* 匹配 0 个或者多个</li>
+<li>? 匹配 0 个或者 1 个</li>
+<li>{n} 匹配 n 个字符</li>
+<li>{m, n} 匹配 m~n 个字符</li>
+<li>{m,} 至少匹配 m 个字符</li>
+</ul>
+
+<p><strong>注：</strong>和 + 都是贪婪型元字符，会匹配尽可能多的内容。在后面加 ? 可以转换为懒惰型元字符，例如 *?、+? 和 {m, n}?</p>
+
+<pre><code>regexr:
+(1)    a.+c
+(2)    a.+?c
+target:
+    abcabcabccc
+第一个正则会匹配到abcabcabccc，有1个匹配
+第二个正则会匹配到abc abc abc，有3个匹配
+</code></pre>
+
+<h3 id="五-位置匹配">五、位置匹配</h3>
+
+<h4 id="单词边界">单词边界</h4>
+
+<p>\b 可以匹配一个单词的边界，边界是指位于 \w 和 \W 之间的位置；\B 匹配一个不是单词边界的位置。</p>
+
+<pre><code>regexr:
+    \Babc\b
+target:
+    aabc
+    aabc1
+第一个目标串可以匹配到abc
+第一个目标串不能匹配
+说明abc前面要有字母、数字或下划线，abc后面不能有字母、数字或下划线
+</code></pre>
+
+<h4 id="字符串边界">字符串边界</h4>
+
+<p>^ 匹配整个字符串的开头，$ 匹配结尾。</p>
+
+<p><strong>^ 元字符在字符集合中用作求非，在字符集合外用作匹配字符串的开头。</strong></p>
+
+<p>分行匹配模式（multiline）下，换行被当做字符串的边界。</p>
+
+<pre><code>regexr:
+    ^\s*\/\/.*$
+target:
+    // 注释
+    
+说明匹配代码中以 // 开始的注释行
+</code></pre>
+
+<h3 id="六-子表达式">六、子表达式</h3>
+
+<p>使用 ( ) 定义一个子表达式。子表达式的内容可以当成一个独立元素，即可以将它看成一个字符，并且使用 * 等元字符。可以嵌套。</p>
+
+<pre><code>regexr:
+    (ab){2,}
+target:
+    ababab
+说明:匹配2个以上ab组成的字符串
+
+regexr:
+    (19|20)/d{2}
+target:
+    1900
+说明：匹配19或20后面两个数的字字符串
+
+例子：匹配IP地址
+IP地址每部分都是0-255，
+将其划分为一下5个部分
+0-9
+10-99
+100-199
+200-249
+250-255
+故0-255的正则是 ((\d)|([1-9]\d)|(1\d{2})|(2[0-4]\d)|(25[0-5]))
+
+regexr:
+    (((\d)|([1-9]\d)|(1\d{2})|(2[0-4]\d)|(25[0-5]))\.){3}((\d)|([1-9]\d)|(1\d{2})|(2[0-4]\d)|(25[0-5]))
+target:
+    1.1.1.1
+</code></pre>
+
+<h3 id="七-回溯引用">七、回溯引用</h3>
+
+<p>回溯引用使用 <strong>\n</strong> (n为数字) 来引用某个子表达式，其中 n 代表的是子表达式的序号，从 1 开始。它和子表达式匹配的内容一致，比如子表达式匹配到 abc，那么回溯引用部分也需要匹配 abc 。</p>
+
+<pre><code>regexr:
+    &lt;(h[1-6])&gt;\w*?&lt;\/\1&gt;
+target:
+    &lt;h1&gt;x&lt;/h1&gt;
+说明：匹配html中标题元素
+</code></pre>
+
+<h3 id="八-前后查找">八、前后查找</h3>
+
+<p>向前查找用 ?= 来定义，它规定了尾部匹配的内容，这个匹配的内容在 ?= 之后定义。所谓向前查找，就是规定了一个匹配的内容，然后以这个内容为尾部向前面查找需要匹配的内容。</p>
+
+<pre><code>regexr:
+    \w+(?=@)
+target:
+    abc@qq.com
+说明：查找出邮件地址 @ 字符前面的部分。
+</code></pre>
+
+<h3 id="九-在java中使用">九、在Java中使用</h3>
+
+<pre><code class="language-java">public class Test {
+    public static void main(String[] args) {
+        String str = &quot;&lt;h1&gt;test&lt;/h1&gt;&quot;;
+        boolean result = str.matches(&quot;&lt;(h[1-6])&gt;\\w*?&lt;\\/\\1&gt;&quot;);
+        System.out.println(result);
+    }
+}
+</code></pre>
+
+    </div>
+
+    <div class="post-copyright">
+             
+            <p class="copyright-item">
+                <span>Author:</span>
+                <span>刘科 </span>
+                </p>
+            
+           
+             
+            <p class="copyright-item">
+                    <span>Link:</span>
+                    <a href=https://pallcard.github.io/2019/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F/>https://pallcard.github.io/2019/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F/</span>
+            </p>
+            
+            
+    </div>
+
+  
+    <div class="post-tags">
+        
+            <section>
+            <i class="iconfont icon-tag"></i>Tag(s): 
+            
+            <span class="tag"><a href="https://pallcard.github.io/tags/java/">
+                    #Java</a></span>
+            
+            <span class="tag"><a href="https://pallcard.github.io/tags/%E6%80%BB%E6%95%B0/">
+                    #总数</a></span>
+            
+            </section>
+        
+        <section>
+                <a href="javascript:window.history.back();">back</a></span> · 
+                <span><a href="https://pallcard.github.io/">home</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav">
+        
+        <a href="https://pallcard.github.io/2019/algorithm013/" class="prev" rel="prev" title="算法013"><i class="iconfont icon-left"></i>&nbsp;算法013</a>
+         
+        
+    </div>
+
+	<div class="post-comment">
+		
+		 
+  
+  <div id="vcomments"></div>
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src='//unpkg.com/valine/dist/Valine.min.js'></script>
+
+  <script type="text/javascript">
+    new Valine({
+        el: '#vcomments' ,
+        appId: 'ktil0uKcyLbDdCRFBVDz0eD9-gzGzoHsz',
+        appKey: 'KiYDkJXdqJW2VgrxmVshT2iA',
+        notify: 'false', 
+        verify: 'false', 
+        avatar:'mm', 
+        placeholder: '说点什么吧...',
+        visitor: 'true'
+    });
+  </script>
+	</div>
+</article>
+          </div>
+		   </main>
+      <footer class="footer">
+    <div class="copyright">
+        &copy;
+        
+        <span class="with-love">
+    	 <i class="iconfont icon-love"></i> 
+         </span>
+         
+            <span class="author" itemprop="copyrightHolder"><a href="https://pallcard.github.io/">刘科</a> | </span> 
+         
+
+         
+            <a href="http://www.miibeian.gov.cn/" target="_blank" rel="external nofollow">鄂ICP备19006996号-1 </a> |
+         
+		  <span>Powered by <a href="https://gohugo.io/" target="_blank" rel="external nofollow">Hugo</a> & <a href="https://github.com/liuzc/leaveit" target="_blank" rel="external nofollow">LeaveIt</a></span> 
+    </div>
+</footer>
+
+
+
+
+
+
+
+
+
+
+
+
+    
+    
+    <script src="/js/vendor_no_gallery.min.js" async=""></script>
+    
+  
+
+
+
+     </div>
+  </body>
+</html>
