@@ -6,8 +6,238 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
     <copyright>All rights reserved - 2019</copyright>
-    <lastBuildDate>Sat, 06 Jul 2019 09:10:02 +0800</lastBuildDate>
+    <lastBuildDate>Sat, 06 Jul 2019 17:35:19 +0800</lastBuildDate>
     <atom:link href="/" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>算法016</title>
+      <link>https://pallcard.github.io/2019/algorithm016/</link>
+      <pubDate>Sat, 06 Jul 2019 17:35:19 +0800</pubDate>
+      
+      <guid>https://pallcard.github.io/2019/algorithm016/</guid>
+      <description>
+
+&lt;h5 id=&#34;描述&#34;&gt;描述&lt;/h5&gt;
+
+&lt;p&gt;正则表达式匹配问题&lt;/p&gt;
+
+&lt;p&gt;请实现一个函数用来匹配包括 &amp;lsquo;.&amp;rsquo; 和 &amp;lsquo;&lt;em&gt;&amp;rsquo; 的正则表达式。模式中的字符 &amp;lsquo;.&amp;rsquo; 表示任意一个字符，而 &amp;lsquo;&lt;/em&gt;&amp;rsquo; 表示它前面的字符可以出现任意次（包含 0 次）。&lt;/p&gt;
+
+&lt;p&gt;. 一个任意字符&lt;/p&gt;
+
+&lt;p&gt;* 表示*前字符出现（0-？）字符&lt;/p&gt;
+
+&lt;p&gt;aaa
+ab*ac*a  a.a&lt;/p&gt;
+
+&lt;h5 id=&#34;例子&#34;&gt;例子&lt;/h5&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;Input:
+	
+Output:
+	
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h4 id=&#34;思路&#34;&gt;思路&lt;/h4&gt;
+
+&lt;p&gt;采用两个下标，分别记录目标串与模式串。
+循环模式串，若为.，则下标加1；
+若为模式串与目标串字符相同，则下标加1，否则看模式串下一个字符算法为*；&lt;/p&gt;
+
+&lt;h5 id=&#34;代码&#34;&gt;代码&lt;/h5&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;public class Demo016 {
+    public static void main(String[] args) {
+        String string = &amp;quot;aaa&amp;quot;;
+        String pattern = &amp;quot;ab*a&amp;quot;;
+
+        int index = 0;
+        int i = 0;
+        boolean result = true;
+
+        for (i = 0; i &amp;lt; pattern.length(); i++) {
+            if (index &amp;gt;= string.length()) {
+                result = false;
+                break;
+            }
+            if (pattern.charAt(i) == &#39;.&#39;) {
+                index++;
+                continue;
+            }
+            if(pattern.charAt(i) == string.charAt(index)) {
+                index++;
+            } else if(pattern.charAt(i+1) != &#39;*&#39;) {
+                result = false;
+                break;
+            } else if (pattern.charAt(i+1) == &#39;*&#39;) {
+                i++;
+            }
+        }
+        if(index != string.length() || i != pattern.length()) {
+            result = false;
+        }
+        System.out.println(result);
+    }
+}
+
+&lt;/code&gt;&lt;/pre&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>算法015</title>
+      <link>https://pallcard.github.io/2019/algorithm015/</link>
+      <pubDate>Sat, 06 Jul 2019 17:32:45 +0800</pubDate>
+      
+      <guid>https://pallcard.github.io/2019/algorithm015/</guid>
+      <description>
+
+&lt;h5 id=&#34;描述&#34;&gt;描述&lt;/h5&gt;
+
+&lt;p&gt;二进制中1的个数&lt;/p&gt;
+
+&lt;p&gt;输入一个整数，输出该数二进制表示中1的个数&lt;/p&gt;
+
+&lt;h5 id=&#34;例子&#34;&gt;例子&lt;/h5&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;Input:
+	
+Output:
+	
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h4 id=&#34;思路&#34;&gt;思路&lt;/h4&gt;
+
+&lt;p&gt;n&amp;amp;(n-1)会去除掉n的位级表示中的最低的一位&lt;/p&gt;
+
+&lt;h5 id=&#34;代码&#34;&gt;代码&lt;/h5&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;public class Demo015 {
+
+    public static int numberOf1(int n) {
+        int count = 0;
+
+        if (n == 0) {
+            return 0;
+        }
+
+        while (n != 0) {
+            count++;
+            n &amp;amp;= (n-1);
+        }
+        return count;
+    }
+
+    public static void main(String[] args) {
+        System.out.println(numberOf1(10));
+        System.out.println(Integer.bitCount(10));
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>算法014</title>
+      <link>https://pallcard.github.io/2019/algorithm014/</link>
+      <pubDate>Sat, 06 Jul 2019 17:24:14 +0800</pubDate>
+      
+      <guid>https://pallcard.github.io/2019/algorithm014/</guid>
+      <description>
+
+&lt;h5 id=&#34;描述&#34;&gt;描述&lt;/h5&gt;
+
+&lt;p&gt;剪绳子&lt;/p&gt;
+
+&lt;p&gt;把一根绳子剪成多段（&amp;gt;1），并使得所得到每段绳子的长度之积最大。&lt;/p&gt;
+
+&lt;h5 id=&#34;例子&#34;&gt;例子&lt;/h5&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;Input:
+	n(绳长)
+Output:
+	
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h4 id=&#34;思路&#34;&gt;思路&lt;/h4&gt;
+
+&lt;p&gt;方法一：
+&lt;strong&gt;贪婪算法&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;使得所得到的绳子中&lt;strong&gt;3&lt;/strong&gt;的数量最多，1的数量最少（没有）&lt;/p&gt;
+
+&lt;p&gt;方法二：
+&lt;strong&gt;动态规划&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;定义 f(n) : 最大乘积，f(n) = max{f(i)*f(n-i)}&lt;/p&gt;
+
+&lt;h5 id=&#34;代码&#34;&gt;代码&lt;/h5&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;public class Demo014 {
+
+    // 贪婪算法
+    public static int maxLength(int n) {
+        if (n &amp;lt; 2) {
+            return 0;
+        } else if (n == 2) {
+            return 1;
+        } else if (n == 3) {
+            return 2;
+        } else {
+            if (n%3==1){
+                return (int) Math.pow(3, n/3-1)*4;
+            } else if(n%3==0) {
+                return (int) Math.pow(3, n/3);
+            } else {
+                return (int) Math.pow(3, n/3)*2;
+            }
+        }
+    }
+
+    // 动态规划
+    // 定义 f(n) : 最大乘积
+    // f(n) = max{f(i)*f(n-i)}
+    public static int dp(int n) {
+        if (n &amp;lt; 2) {
+            return 0;
+        } else if (n == 2) {
+            return 1;
+        } else if (n == 3) {
+            return 2;
+        } else {
+            int [] dp = new int [n+1];
+            // 分割绳子长度1，2，3，具体动态规划从4开始计算
+            // dp[i]数组,绳子长度为i时，乘积最大值
+            dp[1] = 1;
+            dp[2] = 2;
+            dp[3] = 3;
+            int max = 0;
+            // 存放中间值
+            int temp = 0;
+            for (int i = 4; i &amp;lt;= n; i++) {
+                max = 0;
+                // i/2 对于绳子i的切分，j*(i-j) 与 (i-j)*j结果一样
+                for (int j = 1; j &amp;lt;= i / 2; j++) {
+                    temp = dp[j] * dp[i-j];
+                    if (temp &amp;gt; max) {
+                        max = temp;
+                    }
+                }
+                dp[i] = max;
+            }
+            return dp[n];
+        }
+    }
+
+    public static void main(String[] args) {
+        System.out.println(maxLength(11));
+        System.out.println(dp(11));
+    }
+}
+
+&lt;/code&gt;&lt;/pre&gt;
+</description>
+    </item>
     
     <item>
       <title>正则表达式</title>
@@ -2502,294 +2732,6 @@ public class Dog {
 &lt;p&gt;松散语法绑定：last_name = last-name = lastName 他们取的值都是相同的&lt;/p&gt;
 
 &lt;p&gt;参考：&lt;a href=&#34;https://zed058.cn&#34; rel=&#34;nofollow noreferrer&#34; target=&#34;_blank&#34;&gt;https://zed058.cn&lt;/a&gt;&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>SpringBoot之Swagger</title>
-      <link>https://pallcard.github.io/2019/springboot%E4%B9%8Bswagger/</link>
-      <pubDate>Sat, 08 Jun 2019 17:49:19 +0800</pubDate>
-      
-      <guid>https://pallcard.github.io/2019/springboot%E4%B9%8Bswagger/</guid>
-      <description>
-
-&lt;h5 id=&#34;swagger框架&#34;&gt;Swagger框架&lt;/h5&gt;
-
-&lt;p&gt;描述和测试API接口,自动生成API接口文档。&lt;/p&gt;
-
-&lt;h6 id=&#34;1-添加依赖&#34;&gt;1.添加依赖&lt;/h6&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;&amp;lt;dependency&amp;gt;
-    &amp;lt;groupId&amp;gt;io.springfox&amp;lt;/groupId&amp;gt;
-    &amp;lt;artifactId&amp;gt;springfox-swagger2&amp;lt;/artifactId&amp;gt;
-    &amp;lt;version&amp;gt;2.9.2&amp;lt;/version&amp;gt;
-&amp;lt;/dependency&amp;gt;
-&amp;lt;dependency&amp;gt;
-    &amp;lt;groupId&amp;gt;io.springfox&amp;lt;/groupId&amp;gt;
-    &amp;lt;artifactId&amp;gt;springfox-swagger-ui&amp;lt;/artifactId&amp;gt;
-    &amp;lt;version&amp;gt;2.9.2&amp;lt;/version&amp;gt;
-&amp;lt;/dependency&amp;gt;
-
-&amp;lt;!--lombok依赖--&amp;gt;
-&amp;lt;dependency&amp;gt;
-    &amp;lt;groupId&amp;gt;org.projectlombok&amp;lt;/groupId&amp;gt;
-    &amp;lt;artifactId&amp;gt;lombok&amp;lt;/artifactId&amp;gt;
-    &amp;lt;version&amp;gt;1.18.8&amp;lt;/version&amp;gt;
-    &amp;lt;scope&amp;gt;provided&amp;lt;/scope&amp;gt;
-&amp;lt;/dependency&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h6 id=&#34;2-swagger配置&#34;&gt;2.Swagger配置&lt;/h6&gt;
-
-&lt;p&gt;在resources目录下新建application.yml文件，添加如下配置&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;swagger:
-  title: SpringBoot学习
-  description: SpringBoot学习
-  version: 1.0.0
-  name: lk
-  url: https://pallcard.github.io
-  email: 1250585541@qq.com
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;新建SwaggerConfig文件&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;@Configuration
-@EnableWebMvc
-@EnableSwagger2
-@ConfigurationProperties(prefix = &amp;quot;swagger&amp;quot;)
-@Data //lombok
-@ComponentScan(basePackages = {&amp;quot;cn.wishhust.demo.controller&amp;quot;})
-public class SwaggerConfig {
-
-    private String title;
-    private String description;
-    private String version;
-
-    private String name;
-    private String url;
-    private String email;
-
-    @Bean
-    public Docket customDocket() {
-        return new Docket(DocumentationType.SWAGGER_2).apiInfo(apiInfo());
-    }
-
-    private ApiInfo apiInfo() {
-        Contact contact = new Contact(name, url, email);
-        return new ApiInfoBuilder()
-                .title(title)
-                .description(description)
-                .contact(contact)
-                .version(version)
-                .build();
-    }
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;MVC配置:过滤网页静态资源&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;@Configuration
-class WebMvcConfig implements WebMvcConfigurer {
-
-    public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler(&amp;quot;swagger-ui.html&amp;quot;)
-                .addResourceLocations(&amp;quot;classpath:/META-INF/resources/&amp;quot;);
-
-        registry.addResourceHandler(&amp;quot;/webjars/**&amp;quot;)
-                .addResourceLocations(&amp;quot;classpath:/META-INF/resources/webjars/&amp;quot;);
-    }
-    
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h6 id=&#34;3-使用&#34;&gt;3.使用&lt;/h6&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;@RestController
-@RequestMapping(&amp;quot;/test&amp;quot;)
-@Api(value = &amp;quot;测试&amp;quot;)
-public class HelloWorld {
-
-    Logger log = LoggerFactory.getLogger(HelloWorld.class);
-    
-    @GetMapping(value={&amp;quot;/hello&amp;quot;})
-    @ApiOperation(value = &amp;quot;hello&amp;quot;)
-//    @ApiImplicitParam
-    public String hello(){
-        return &amp;quot;Hello Spring Boot&amp;quot;;
-    }
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;参考：&lt;a href=&#34;https://zed058.cn&#34; rel=&#34;nofollow noreferrer&#34; target=&#34;_blank&#34;&gt;https://zed058.cn&lt;/a&gt;&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>SpringBoot传递参数</title>
-      <link>https://pallcard.github.io/2019/springboot%E4%BC%A0%E9%80%92%E5%8F%82%E6%95%B0/</link>
-      <pubDate>Sat, 08 Jun 2019 17:08:34 +0800</pubDate>
-      
-      <guid>https://pallcard.github.io/2019/springboot%E4%BC%A0%E9%80%92%E5%8F%82%E6%95%B0/</guid>
-      <description>
-
-&lt;h5 id=&#34;url传参&#34;&gt;url传参&lt;/h5&gt;
-
-&lt;h6 id=&#34;1-get方式&#34;&gt;1.get方式&lt;/h6&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt; 	// 访问：http://localhost:8080/test/get/xxx
-    @GetMapping(&amp;quot;/get/{name}&amp;quot;)
-    public String get(@PathVariable(&amp;quot;name&amp;quot;) String name2){
-        System.out.println(&amp;quot;name: &amp;quot;+ name2);
-        return &amp;quot;Hi &amp;quot;+ name2;
-    }
-
-    // 访问：http://localhost:8080/test/get2?name=yyy
-    @GetMapping(&amp;quot;/get2&amp;quot;)
-    // 请求参数名字与方法中的形参一致，可以省略@RequestParam
-    // public String get2(String name2) {
-    public String get2(@RequestParam(&amp;quot;name&amp;quot;) String name2) {
-        System.out.println(&amp;quot;name: &amp;quot;+ name2);
-        return &amp;quot;Hi &amp;quot;+ name2;
-    }
-
-    @GetMapping(&amp;quot;/get3&amp;quot;)
-    //给一个默认值或者required = false
-    public String get3(@RequestParam(value = &amp;quot;name&amp;quot;, defaultValue = &amp;quot;admin&amp;quot;) String name) {
-        System.out.println(&amp;quot;name: &amp;quot;+ name);
-        return &amp;quot;Hi &amp;quot;+ name;
-    }
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h6 id=&#34;2-post方式&#34;&gt;2.post方式&lt;/h6&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;    @PostMapping(&amp;quot;/post&amp;quot;)
-    //@RequestParam同get
-    public String post(@RequestParam(&amp;quot;username&amp;quot;) String name, Integer age){
-        log.info(&amp;quot;name=&amp;quot; + name+&amp;quot;, age=&amp;quot; + age);
-        return &amp;quot;name=&amp;quot; + name+&amp;quot;, age=&amp;quot; + age;
-    }
-    
-    @PostMapping(&amp;quot;post2&amp;quot;)
-    public String post2(HttpServletRequest request) {
-        ServletInputStream is = null;
-        StringBuilder sb = null;
-        try {
-            is = request.getInputStream();
-            sb = new StringBuilder();
-            byte[] buf = new byte[1024];
-            int len = 0;
-            while ((len = is.read(buf)) != -1){
-                sb.append(new String(buf,0,len));
-            }
-            System.out.println(sb.toString());
-            return sb.toString();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                if (is != null) {
-                    is.close();
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        return sb.toString();
-    }
-
-    @PostMapping(&amp;quot;/post3&amp;quot;)
-    public String post3(@RequestBody User user) {
-        log.info(user.toString());
-        return null;
-    }
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;strong&gt;&lt;em&gt;注&lt;/em&gt;&lt;/strong&gt;
-* 把json作为参数传递,要用【RequestBody】&lt;/p&gt;
-
-&lt;p&gt;参考：&lt;a href=&#34;https://zed058.cn&#34; rel=&#34;nofollow noreferrer&#34; target=&#34;_blank&#34;&gt;https://zed058.cn&lt;/a&gt;&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>SpringBoot启动类</title>
-      <link>https://pallcard.github.io/2019/springboot%E5%90%AF%E5%8A%A8%E7%B1%BB/</link>
-      <pubDate>Sat, 08 Jun 2019 10:53:04 +0800</pubDate>
-      
-      <guid>https://pallcard.github.io/2019/springboot%E5%90%AF%E5%8A%A8%E7%B1%BB/</guid>
-      <description>
-
-&lt;h5 id=&#34;1-pom文件&#34;&gt;1.POM文件&lt;/h5&gt;
-
-&lt;p&gt;整个项目的pom文件中（pom.xml）,可以看到该项目的parent，通过点击&lt;artifactId&gt;标签，可以进入parent中，这样可以看到项目的最终的parent。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;&amp;lt;parent&amp;gt;
-        &amp;lt;groupId&amp;gt;org.springframework.boot&amp;lt;/groupId&amp;gt;
-        &amp;lt;artifactId&amp;gt;spring-boot-starter-parent&amp;lt;/artifactId&amp;gt;
-        &amp;lt;version&amp;gt;2.1.5.RELEASE&amp;lt;/version&amp;gt;
-        &amp;lt;relativePath/&amp;gt; &amp;lt;!-- lookup parent from repository --&amp;gt;
-    &amp;lt;/parent&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h5 id=&#34;2-启动器&#34;&gt;2.启动器&lt;/h5&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;&amp;lt;dependencies&amp;gt;
-        &amp;lt;dependency&amp;gt;
-            &amp;lt;groupId&amp;gt;org.springframework.boot&amp;lt;/groupId&amp;gt;
-            &amp;lt;artifactId&amp;gt;spring-boot-starter-web&amp;lt;/artifactId&amp;gt;
-        &amp;lt;/dependency&amp;gt;
-        &amp;lt;dependency&amp;gt;
-            &amp;lt;groupId&amp;gt;org.springframework.boot&amp;lt;/groupId&amp;gt;
-            &amp;lt;artifactId&amp;gt;spring-boot-starter-test&amp;lt;/artifactId&amp;gt;
-            &amp;lt;scope&amp;gt;test&amp;lt;/scope&amp;gt;
-        &amp;lt;/dependency&amp;gt;
-    &amp;lt;/dependencies&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;strong&gt;&lt;em&gt;注：&lt;/em&gt;&lt;/strong&gt;
-spring-boot-starter：spring-boot场景启动器，帮我们导入了web模块正常运行所依赖的组件；
-SpringBoot启动器文档：&lt;a href=&#34;https://docs.spring.io/spring-boot/docs/2.1.5.RELEASE/reference/htmlsingle/#using-boot-starter&#34; rel=&#34;nofollow noreferrer&#34; target=&#34;_blank&#34;&gt;https://docs.spring.io/spring-boot/docs/2.1.5.RELEASE/reference/htmlsingle/#using-boot-starter&lt;/a&gt;&lt;/p&gt;
-
-&lt;h5 id=&#34;3-主程序类&#34;&gt;3.主程序类&lt;/h5&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;@SpringBootApplication
-public class DemoApplication {
-
-    public static void main(String[] args) {
-        SpringApplication.run(DemoApplication.class, args);
-    }
-
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;ul&gt;
-&lt;li&gt;@SpringBootApplication：用来标注这个类为SpringBoot的主配置类，该注解是一个组合注解。&lt;/li&gt;
-&lt;li&gt;将主配置类（@SpringBootApplication标注的类）的所在包及下面所有子包里面的所有组件扫描到Spring容器；&lt;/li&gt;
-&lt;li&gt;Spring Boot在启动的时候从类路径下的META-INF/spring.factories中获取EnableAutoConfiguration指定的值，将这些值作为自动配置类导入到容器中，自动配置类就生效，帮我们进行自动配置工作；
-&lt;code&gt;java
-@Target({ElementType.TYPE})
-@Retention(RetentionPolicy.RUNTIME)
-@Documented
-@Inherited
-@SpringBootConfiguration
-@EnableAutoConfiguration
-@ComponentScan(
-excludeFilters = {@Filter(
-type = FilterType.CUSTOM,
-classes = {TypeExcludeFilter.class}
-), @Filter(
-type = FilterType.CUSTOM,
-classes = {AutoConfigurationExcludeFilter.class}
-)}
-)
-public @interface SpringBootApplication {
-&lt;/code&gt;
-* @SpringBootConfiguration: SpringBoot的配置类，
-* @EnableAutoConfiguration：开启自动配置功能
-
-参考：&lt;a href=&#34;https://zed058.cn&#34; rel=&#34;nofollow noreferrer&#34; target=&#34;_blank&#34;&gt;https://zed058.cn&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
 </description>
     </item>
     

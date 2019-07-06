@@ -7,10 +7,52 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
     <copyright>All rights reserved - 2019</copyright>
-    <lastBuildDate>Fri, 05 Jul 2019 08:22:30 +0800</lastBuildDate>
+    <lastBuildDate>Sat, 06 Jul 2019 17:35:19 +0800</lastBuildDate>
     
 	<atom:link href="https://pallcard.github.io/categories/algorithm/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>算法016</title>
+      <link>https://pallcard.github.io/2019/algorithm016/</link>
+      <pubDate>Sat, 06 Jul 2019 17:35:19 +0800</pubDate>
+      
+      <guid>https://pallcard.github.io/2019/algorithm016/</guid>
+      <description>描述 正则表达式匹配问题
+请实现一个函数用来匹配包括 &amp;lsquo;.&amp;rsquo; 和 &amp;lsquo;&amp;rsquo; 的正则表达式。模式中的字符 &amp;lsquo;.&amp;rsquo; 表示任意一个字符，而 &amp;lsquo;&amp;rsquo; 表示它前面的字符可以出现任意次（包含 0 次）。
+. 一个任意字符
+* 表示*前字符出现（0-？）字符
+aaa ab*ac*a a.a
+例子 Input: Output:  思路 采用两个下标，分别记录目标串与模式串。 循环模式串，若为.，则下标加1； 若为模式串与目标串字符相同，则下标加1，否则看模式串下一个字符算法为*；
+代码 public class Demo016 { public static void main(String[] args) { String string = &amp;quot;aaa&amp;quot;; String pattern = &amp;quot;ab*a&amp;quot;; int index = 0; int i = 0; boolean result = true; for (i = 0; i &amp;lt; pattern.length(); i++) { if (index &amp;gt;= string.</description>
+    </item>
+    
+    <item>
+      <title>算法015</title>
+      <link>https://pallcard.github.io/2019/algorithm015/</link>
+      <pubDate>Sat, 06 Jul 2019 17:32:45 +0800</pubDate>
+      
+      <guid>https://pallcard.github.io/2019/algorithm015/</guid>
+      <description> 描述 二进制中1的个数
+输入一个整数，输出该数二进制表示中1的个数
+例子 Input: Output:  思路 n&amp;amp;(n-1)会去除掉n的位级表示中的最低的一位
+代码 public class Demo015 { public static int numberOf1(int n) { int count = 0; if (n == 0) { return 0; } while (n != 0) { count++; n &amp;amp;= (n-1); } return count; } public static void main(String[] args) { System.out.println(numberOf1(10)); System.out.println(Integer.bitCount(10)); } }  </description>
+    </item>
+    
+    <item>
+      <title>算法014</title>
+      <link>https://pallcard.github.io/2019/algorithm014/</link>
+      <pubDate>Sat, 06 Jul 2019 17:24:14 +0800</pubDate>
+      
+      <guid>https://pallcard.github.io/2019/algorithm014/</guid>
+      <description>描述 剪绳子
+把一根绳子剪成多段（&amp;gt;1），并使得所得到每段绳子的长度之积最大。
+例子 Input: n(绳长) Output:  思路 方法一： 贪婪算法
+使得所得到的绳子中3的数量最多，1的数量最少（没有）
+方法二： 动态规划
+定义 f(n) : 最大乘积，f(n) = max{f(i)*f(n-i)}
+代码 public class Demo014 { // 贪婪算法 public static int maxLength(int n) { if (n &amp;lt; 2) { return 0; } else if (n == 2) { return 1; } else if (n == 3) { return 2; } else { if (n%3==1){ return (int) Math.pow(3, n/3-1)*4; } else if(n%3==0) { return (int) Math.</description>
+    </item>
     
     <item>
       <title>算法013</title>
