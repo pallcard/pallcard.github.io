@@ -58,7 +58,7 @@
     "datePublished": "2019-07-06 23:15:44 \x2b0800 CST",
     "dateModified" : "2019-07-06 23:15:44 \x2b0800 CST",
     "url" : "https:\/\/pallcard.github.io\/2019\/%E5%8F%8D%E5%B0%84\/",
-    "wordCount" : "250",
+    "wordCount" : "246",
     "keywords" : [ "Java","总数", "刘科个人博客"]
 }
 </script>
@@ -223,16 +223,16 @@ System.out.println(strClass instanceof Object);
 
 <h4 id="3-创建实例">3. 创建实例</h4>
 
-<pre><code class="language-java">    // 创建实例
-    // 1. newInstance()
-    String string = (String) strClass.newInstance();
-    System.out.println(string);
+<pre><code class="language-java">// 创建实例
+// 1. newInstance()
+String string = (String) strClass.newInstance();
+System.out.println(string);
 
-    // 2. 先通过Class对象获取指定Constructor对象，再调用Constructor对象的newInstance()方法来创建实例。
-    // 这种方法可以指定构造器的实例。
-    Constructor constructor = strClass.getConstructor(String.class);
-    String string2 = (String) constructor.newInstance(&quot;23333&quot;);
-    System.out.println(string2);
+// 2. 先通过Class对象获取指定Constructor对象，再调用Constructor对象的newInstance()方法来创建实例。
+// 这种方法可以指定构造器的实例。
+Constructor constructor = strClass.getConstructor(String.class);
+String string2 = (String) constructor.newInstance(&quot;23333&quot;);
+System.out.println(string2);
 </code></pre>
 
 <p><strong>说明</strong></p>
@@ -297,11 +297,17 @@ class MethodClass {
 
 </code></pre>
 
-<p><strong>说明</strong>
-* getDeclaredMethods()方法返回类或接口声明的所有方法，包括公共、保护、默认（包）访问和私有方法，但不包括继承的方法。
-* getDeclaredMethod()方法可以获取特定的私有方法，
-* getMethods()方法返回某个类的所有公用（public）方法，包括其继承类的公用方法。
-* getMethod()方法返回一个特定的方法，其中第一个参数为方法名称，后面的参数为方法的参数对应Class的对象。</p>
+<p><strong>说明</strong></p>
+
+<ul>
+<li><p>getDeclaredMethods()方法返回类或接口声明的所有方法，包括公共、保护、默认（包）访问和私有方法，但不包括继承的方法。</p></li>
+
+<li><p>getDeclaredMethod()方法可以获取特定的私有方法。</p></li>
+
+<li><p>getMethods()方法返回某个类的所有公用（public）方法，包括其继承类的公用方法。</p></li>
+
+<li><p>getMethod()方法返回一个特定的方法，其中第一个参数为方法名称，后面的参数为方法的参数对应Class的对象。</p></li>
+</ul>
 
     </div>
 

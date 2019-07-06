@@ -91,16 +91,16 @@ System.out.println(strClass instanceof Object);
 
 &lt;h4 id=&#34;3-创建实例&#34;&gt;3. 创建实例&lt;/h4&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;    // 创建实例
-    // 1. newInstance()
-    String string = (String) strClass.newInstance();
-    System.out.println(string);
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;// 创建实例
+// 1. newInstance()
+String string = (String) strClass.newInstance();
+System.out.println(string);
 
-    // 2. 先通过Class对象获取指定Constructor对象，再调用Constructor对象的newInstance()方法来创建实例。
-    // 这种方法可以指定构造器的实例。
-    Constructor constructor = strClass.getConstructor(String.class);
-    String string2 = (String) constructor.newInstance(&amp;quot;23333&amp;quot;);
-    System.out.println(string2);
+// 2. 先通过Class对象获取指定Constructor对象，再调用Constructor对象的newInstance()方法来创建实例。
+// 这种方法可以指定构造器的实例。
+Constructor constructor = strClass.getConstructor(String.class);
+String string2 = (String) constructor.newInstance(&amp;quot;23333&amp;quot;);
+System.out.println(string2);
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;&lt;strong&gt;说明&lt;/strong&gt;&lt;/p&gt;
@@ -165,11 +165,17 @@ class MethodClass {
 
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;&lt;strong&gt;说明&lt;/strong&gt;
-* getDeclaredMethods()方法返回类或接口声明的所有方法，包括公共、保护、默认（包）访问和私有方法，但不包括继承的方法。
-* getDeclaredMethod()方法可以获取特定的私有方法，
-* getMethods()方法返回某个类的所有公用（public）方法，包括其继承类的公用方法。
-* getMethod()方法返回一个特定的方法，其中第一个参数为方法名称，后面的参数为方法的参数对应Class的对象。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;说明&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;getDeclaredMethods()方法返回类或接口声明的所有方法，包括公共、保护、默认（包）访问和私有方法，但不包括继承的方法。&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;getDeclaredMethod()方法可以获取特定的私有方法。&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;getMethods()方法返回某个类的所有公用（public）方法，包括其继承类的公用方法。&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;getMethod()方法返回一个特定的方法，其中第一个参数为方法名称，后面的参数为方法的参数对应Class的对象。&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
 </description>
     </item>
     
@@ -542,14 +548,14 @@ target:
 
 &lt;p&gt;\b 可以匹配一个单词的边界，边界是指位于 \w 和 \W 之间的位置；\B 匹配一个不是单词边界的位置。&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;regexr:
-    \Babc\b
-target:
-    aabc
-    aabc1
-第一个目标串可以匹配到abc
-第一个目标串不能匹配
-说明abc前面要有字母、数字或下划线，abc后面不能有字母、数字或下划线
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;    regexr:
+        \Babc\b
+    target:
+        aabc
+        aabc1
+    第一个目标串可以匹配到abc
+    第一个目标串不能匹配
+    说明abc前面要有字母、数字或下划线，abc后面不能有字母、数字或下划线
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;h4 id=&#34;字符串边界&#34;&gt;字符串边界&lt;/h4&gt;
@@ -560,66 +566,66 @@ target:
 
 &lt;p&gt;分行匹配模式（multiline）下，换行被当做字符串的边界。&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;regexr:
-    ^\s*\/\/.*$
-target:
-    // 注释
-    
-说明匹配代码中以 // 开始的注释行
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;    regexr:
+        ^\s*\/\/.*$
+    target:
+        // 注释
+        
+    说明匹配代码中以 // 开始的注释行
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;h3 id=&#34;六-子表达式&#34;&gt;六、子表达式&lt;/h3&gt;
 
 &lt;p&gt;使用 ( ) 定义一个子表达式。子表达式的内容可以当成一个独立元素，即可以将它看成一个字符，并且使用 * 等元字符。可以嵌套。&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;regexr:
-    (ab){2,}
-target:
-    ababab
-说明:匹配2个以上ab组成的字符串
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;    regexr:
+        (ab){2,}
+    target:
+        ababab
+    说明:匹配2个以上ab组成的字符串
 
-regexr:
-    (19|20)/d{2}
-target:
-    1900
-说明：匹配19或20后面两个数的字字符串
+    regexr:
+        (19|20)/d{2}
+    target:
+        1900
+    说明：匹配19或20后面两个数的字字符串
 
-例子：匹配IP地址
-IP地址每部分都是0-255，
-将其划分为一下5个部分
-0-9
-10-99
-100-199
-200-249
-250-255
-故0-255的正则是 ((\d)|([1-9]\d)|(1\d{2})|(2[0-4]\d)|(25[0-5]))
+    例子：匹配IP地址
+    IP地址每部分都是0-255，
+    将其划分为一下5个部分
+    0-9
+    10-99
+    100-199
+    200-249
+    250-255
+    故0-255的正则是 ((\d)|([1-9]\d)|(1\d{2})|(2[0-4]\d)|(25[0-5]))
 
-regexr:
-    (((\d)|([1-9]\d)|(1\d{2})|(2[0-4]\d)|(25[0-5]))\.){3}((\d)|([1-9]\d)|(1\d{2})|(2[0-4]\d)|(25[0-5]))
-target:
-    1.1.1.1
+    regexr:
+        (((\d)|([1-9]\d)|(1\d{2})|(2[0-4]\d)|(25[0-5]))\.){3}((\d)|([1-9]\d)|(1\d{2})|(2[0-4]\d)|(25[0-5]))
+    target:
+        1.1.1.1
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;h3 id=&#34;七-回溯引用&#34;&gt;七、回溯引用&lt;/h3&gt;
 
 &lt;p&gt;回溯引用使用 &lt;strong&gt;\n&lt;/strong&gt; (n为数字) 来引用某个子表达式，其中 n 代表的是子表达式的序号，从 1 开始。它和子表达式匹配的内容一致，比如子表达式匹配到 abc，那么回溯引用部分也需要匹配 abc 。&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;regexr:
-    &amp;lt;(h[1-6])&amp;gt;\w*?&amp;lt;\/\1&amp;gt;
-target:
-    &amp;lt;h1&amp;gt;x&amp;lt;/h1&amp;gt;
-说明：匹配html中标题元素
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;    regexr:
+        &amp;lt;(h[1-6])&amp;gt;\w*?&amp;lt;\/\1&amp;gt;
+    target:
+        &amp;lt;h1&amp;gt;x&amp;lt;/h1&amp;gt;
+    说明：匹配html中标题元素
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;h3 id=&#34;八-前后查找&#34;&gt;八、前后查找&lt;/h3&gt;
 
 &lt;p&gt;向前查找用 ?= 来定义，它规定了尾部匹配的内容，这个匹配的内容在 ?= 之后定义。所谓向前查找，就是规定了一个匹配的内容，然后以这个内容为尾部向前面查找需要匹配的内容。&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;regexr:
-    \w+(?=@)
-target:
-    abc@qq.com
-说明：查找出邮件地址 @ 字符前面的部分。
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;    regexr:
+        \w+(?=@)
+    target:
+        abc@qq.com
+    说明：查找出邮件地址 @ 字符前面的部分。
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;h3 id=&#34;九-在java中使用&#34;&gt;九、在Java中使用&lt;/h3&gt;
