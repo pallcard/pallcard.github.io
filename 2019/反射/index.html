@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+  <meta http-equiv="content-type" content="text/html;charset=utf-8">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noodp"/>
+  <meta name="author" content="刘科">
+  <meta name="description" content="hust研一">
+  <meta name="keywords" content="Java,博客">
+  
+  <link rel="prev" href="https://pallcard.github.io/2019/algorithm016/" />
+  
+  <link rel="canonical" href="https://pallcard.github.io/2019/%E5%8F%8D%E5%B0%84/" />
+  <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+  <meta name="msapplication-TileColor" content="#da532c">
+  <meta name="theme-color" content="#ffffff">
+  <title>
+       
+       
+           反射 | 刘科个人博客
+       
+  </title>
+  <meta name="title" content="反射 | 刘科个人博客">
+    
+  
+  <link rel="stylesheet" href="/font/iconfont.css">
+  <link rel="stylesheet" href="/css/main.min.css">
+
+
+  
+  
+ 
+
+<script type="application/ld+json">
+ "@context" : "http://schema.org",
+    "@type" : "BlogPosting",
+    "mainEntityOfPage": {
+         "@type": "WebPage",
+         "@id": "https:\/\/pallcard.github.io\/"
+    },
+    "articleSection" : "posts",
+    "name" : "反射",
+    "headline" : "反射",
+    "description" : "一、定义 反射（reflection）是java的特征之一，它允许允许中的Java程序获取自身的信息，并且可以操作累或对象的内部属性。\n二、基本运用 反射可以用于判断任意对象所属的类，获得 Class 对象，构造任意一个对象以及调用一个对象。反射相关的类一般都在 java.lang.relfect 包里。\n1. 获取Class对象 public class Demo01 { public static void main(String[] args) throws Exception{ String str = new String(); \/\/ 1.通过对象的getClass方法获得 Class strClass = str.getClass(); System.out.println(strClass.getName()); \/\/ 2.通过class属性获得 \/\/ 任何数据类型（包括基本数据类型）都有一个“静态”的class属性 Class strClass2 = String.class; System.out.println(strClass2.getName()); System.out.println(strClass2 == strClass); \/\/ 3.使用Class类的forName静态方法 \/\/ 注意此字符串必须是真实路径，就是带包名的类路径，包名.类名 try{ Class strClass3 = Class.forName(\x26quot;java.lang.String\x26quot;); System.out.println(strClass3 == strClass2); } catch (Exception e) { e.printStackTrace(); } System.out.println(strClass.isInstance(\x26quot;test\x26quot;)); System.out.println(strClass instanceof Object); } } \/\/ 结果： java.",
+    "inLanguage" : "zh-CN",
+    "author" : "刘科",
+    "creator" : "刘科",
+    "publisher": "刘科",
+    "accountablePerson" : "刘科",
+    "copyrightHolder" : "刘科",
+    "copyrightYear" : "2019",
+    "datePublished": "2019-07-06 23:15:44 \x2b0800 CST",
+    "dateModified" : "2019-07-06 23:15:44 \x2b0800 CST",
+    "url" : "https:\/\/pallcard.github.io\/2019\/%E5%8F%8D%E5%B0%84\/",
+    "wordCount" : "250",
+    "keywords" : [ "Java","总数", "刘科个人博客"]
+}
+</script>
+
+</head>
+
+  
+
+
+  <body class="">
+    <div class="wrapper">
+        <nav class="navbar">
+    <div class="container">
+        <div class="navbar-header header-logo">
+        	<a href="javascript:void(0);" class="theme-switch"><i class="iconfont icon-xihuan"></i></a>&nbsp;<a href="https://pallcard.github.io/">刘科个人博客</a>
+        </div>
+        <div class="menu navbar-right">
+                
+                
+                <a class="menu-item" href="/posts/" title="">博客</a>
+                
+                <a class="menu-item" href="/categories/" title="">分类</a>
+                
+                <a class="menu-item" href="/tags/" title="">标签</a>
+                
+                <a class="menu-item" href="/about/" title="">关于</a>
+                
+        </div>
+    </div>
+</nav>
+<nav class="navbar-mobile" id="nav-mobile" style="display: none">
+     <div class="container">
+        <div class="navbar-header">
+            <div>  <a href="javascript:void(0);" class="theme-switch"><i class="iconfont icon-xihuan"></i></a>&nbsp;<a href="https://pallcard.github.io/">刘科个人博客</a></div>
+            <div class="menu-toggle">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+     
+          <div class="menu" id="mobile-menu">
+                
+                
+                <a class="menu-item" href="/posts/" title="">博客</a>
+                
+                <a class="menu-item" href="/categories/" title="">分类</a>
+                
+                <a class="menu-item" href="/tags/" title="">标签</a>
+                
+                <a class="menu-item" href="/about/" title="">关于</a>
+                
+        </div>
+    </div>
+</nav>
+    	 <main class="main">
+          <div class="container">
+      		
+<article class="post-warp" itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">反射</h1>
+        <div class="post-meta">
+                Written by <a itemprop="name" href="https://pallcard.github.io/" rel="author">刘科</a> with ♥ 
+                <span class="post-time">
+                on <time datetime=2019-07-06 itemprop="datePublished">July 6, 2019</time>
+                </span>
+                in
+                <i class="iconfont icon-folder"></i>
+                <span class="post-category">
+                        <a href="https://pallcard.github.io/categories/java/"> Java </a>
+                        
+                </span>
+        </div>
+    </header>
+    <div class="post-content">
+        
+
+        
+
+        
+        
+     
+          
+          
+          
+
+          
+          
+          
+
+          
+
+<h3 id="一-定义">一、定义</h3>
+
+<p>反射（reflection）是java的特征之一，它允许允许中的Java程序获取自身的信息，并且可以操作累或对象的内部属性。</p>
+
+<h3 id="二-基本运用">二、基本运用</h3>
+
+<p>反射可以用于判断任意对象所属的类，获得 Class 对象，构造任意一个对象以及调用一个对象。反射相关的类一般都在 java.lang.relfect 包里。</p>
+
+<h4 id="1-获取class对象">1. 获取Class对象</h4>
+
+<pre><code class="language-java">public class Demo01 {
+    public static void main(String[] args) throws Exception{
+        String str = new String();
+        // 1.通过对象的getClass方法获得
+        Class strClass = str.getClass();
+        System.out.println(strClass.getName());
+
+        // 2.通过class属性获得
+        // 任何数据类型（包括基本数据类型）都有一个“静态”的class属性
+        Class strClass2 = String.class;
+        System.out.println(strClass2.getName());
+        System.out.println(strClass2 == strClass);
+
+        // 3.使用Class类的forName静态方法
+        // 注意此字符串必须是真实路径，就是带包名的类路径，包名.类名
+        try{
+            Class strClass3 = Class.forName(&quot;java.lang.String&quot;);
+            System.out.println(strClass3 == strClass2);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        System.out.println(strClass.isInstance(&quot;test&quot;));
+
+        System.out.println(strClass instanceof Object);
+
+    }
+
+}
+
+// 结果：
+java.lang.String
+java.lang.String
+true
+true
+true
+true
+
+</code></pre>
+
+<p><strong>说明</strong></p>
+
+<p>获取Class对象的三种方法：</p>
+
+<ul>
+<li><p>调用某个对象的getClass方法；</p></li>
+
+<li><p>直接获取某个类型的class属性：</p></li>
+
+<li><p>使用Class类的forName静态方法。</p></li>
+</ul>
+
+<p><strong>注意：在运行期间，一个类，只有一个Class对象产生。</strong></p>
+
+<h4 id="2-判断是否为某个类的实例">2. 判断是否为某个类的实例</h4>
+
+<p>一般使用instanceof关键字判断是否为某个类的实例，也可以使用反射中Class对象的isInstance()方法（native方法）判断是否为某个类的实例，</p>
+
+<pre><code class="language-java">System.out.println(strClass.isInstance(&quot;test&quot;));
+System.out.println(strClass instanceof Object);
+</code></pre>
+
+<h4 id="3-创建实例">3. 创建实例</h4>
+
+<pre><code class="language-java">    // 创建实例
+    // 1. newInstance()
+    String string = (String) strClass.newInstance();
+    System.out.println(string);
+
+    // 2. 先通过Class对象获取指定Constructor对象，再调用Constructor对象的newInstance()方法来创建实例。
+    // 这种方法可以指定构造器的实例。
+    Constructor constructor = strClass.getConstructor(String.class);
+    String string2 = (String) constructor.newInstance(&quot;23333&quot;);
+    System.out.println(string2);
+</code></pre>
+
+<p><strong>说明</strong></p>
+
+<ul>
+<li>使用Class对象的newInstance()方法来创建Class对象对应类的实例。</li>
+<li>先通过Class对象获取指定Constructor对象，再调用Constructor对象的newInstance()方法来创建实例。</li>
+</ul>
+
+<h4 id="4-获取方法">4. 获取方法</h4>
+
+<pre><code class="language-java">public class Demo02 {
+
+    public static void main(String[] args) throws Exception {
+        Class&lt;?&gt; clazz = MethodClass.class;
+
+        // 创建类实例
+        Object obj = clazz.newInstance();
+
+
+        // 获取所有共有方法, 包括继承
+        Method[] methods = clazz.getMethods();
+        for (Method m : methods) {
+            System.out.println(m);
+        }
+
+        System.out.println(&quot;----------&quot;);
+        // 获取所有私有方法，不包括继承
+        Method[] declaredMethods = clazz.getDeclaredMethods();
+        for (Method dm : declaredMethods) {
+            System.out.println(dm);
+        }
+
+        System.out.println(&quot;----------&quot;);
+        // 获取指定方法
+        Method add = clazz.getMethod(&quot;add&quot;, int.class, int.class);
+        // 调用方法 （要先创建实例对象）
+        Object r = add.invoke(obj, 1, 1);
+        System.out.println(r);
+        System.out.println(add);
+
+        System.out.println(&quot;----------&quot;);
+        // 获取指定方法(私有)
+        Method sub = clazz.getDeclaredMethod(&quot;sub&quot;, int.class, int.class);
+        sub.setAccessible(true);
+        Object result = sub.invoke(obj,12, 2);
+        System.out.println(result);
+
+    }
+
+
+}
+
+class MethodClass {
+    public int add(int a, int b) {
+        return a + b;
+    }
+    private int sub(int a, int b){
+        return a - b;
+    }
+}
+
+</code></pre>
+
+<p><strong>说明</strong>
+* getDeclaredMethods()方法返回类或接口声明的所有方法，包括公共、保护、默认（包）访问和私有方法，但不包括继承的方法。
+* getDeclaredMethod()方法可以获取特定的私有方法，
+* getMethods()方法返回某个类的所有公用（public）方法，包括其继承类的公用方法。
+* getMethod()方法返回一个特定的方法，其中第一个参数为方法名称，后面的参数为方法的参数对应Class的对象。</p>
+
+    </div>
+
+    <div class="post-copyright">
+             
+            <p class="copyright-item">
+                <span>Author:</span>
+                <span>刘科 </span>
+                </p>
+            
+           
+             
+            <p class="copyright-item">
+                    <span>Link:</span>
+                    <a href=https://pallcard.github.io/2019/%E5%8F%8D%E5%B0%84/>https://pallcard.github.io/2019/%E5%8F%8D%E5%B0%84/</span>
+            </p>
+            
+            
+    </div>
+
+  
+    <div class="post-tags">
+        
+            <section>
+            <i class="iconfont icon-tag"></i>Tag(s): 
+            
+            <span class="tag"><a href="https://pallcard.github.io/tags/java/">
+                    #Java</a></span>
+            
+            <span class="tag"><a href="https://pallcard.github.io/tags/%E6%80%BB%E6%95%B0/">
+                    #总数</a></span>
+            
+            </section>
+        
+        <section>
+                <a href="javascript:window.history.back();">back</a></span> · 
+                <span><a href="https://pallcard.github.io/">home</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav">
+        
+        <a href="https://pallcard.github.io/2019/algorithm016/" class="prev" rel="prev" title="算法016"><i class="iconfont icon-left"></i>&nbsp;算法016</a>
+         
+        
+    </div>
+
+	<div class="post-comment">
+		
+		 
+  
+  <div id="vcomments"></div>
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src='//unpkg.com/valine/dist/Valine.min.js'></script>
+
+  <script type="text/javascript">
+    new Valine({
+        el: '#vcomments' ,
+        appId: 'ktil0uKcyLbDdCRFBVDz0eD9-gzGzoHsz',
+        appKey: 'KiYDkJXdqJW2VgrxmVshT2iA',
+        notify: 'false', 
+        verify: 'false', 
+        avatar:'mm', 
+        placeholder: '说点什么吧...',
+        visitor: 'true'
+    });
+  </script>
+	</div>
+</article>
+          </div>
+		   </main>
+      <footer class="footer">
+    <div class="copyright">
+        &copy;
+        
+        <span class="with-love">
+    	 <i class="iconfont icon-love"></i> 
+         </span>
+         
+            <span class="author" itemprop="copyrightHolder"><a href="https://pallcard.github.io/">刘科</a> | </span> 
+         
+
+         
+            <a href="http://www.miibeian.gov.cn/" target="_blank" rel="external nofollow">鄂ICP备19006996号-1 </a> |
+         
+		  <span>Powered by <a href="https://gohugo.io/" target="_blank" rel="external nofollow">Hugo</a> & <a href="https://github.com/liuzc/leaveit" target="_blank" rel="external nofollow">LeaveIt</a></span> 
+    </div>
+</footer>
+
+
+
+
+
+
+
+
+
+
+
+
+    
+    
+    <script src="/js/vendor_no_gallery.min.js" async=""></script>
+    
+  
+
+
+
+     </div>
+  </body>
+</html>
