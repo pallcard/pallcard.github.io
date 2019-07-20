@@ -34,7 +34,7 @@
 
 &lt;p&gt;兼容关系
 |- |X|S
-|&amp;ndash;|&amp;ndash;|&amp;ndash;
+|&amp;mdash;|&amp;mdash;|&amp;mdash;
 |&lt;strong&gt;X&lt;/strong&gt;|×|×
 |&lt;strong&gt;S&lt;/strong&gt;|×|√&lt;/p&gt;
 
@@ -51,12 +51,51 @@
 
 &lt;p&gt;兼容关系(特别说明，以下是&lt;strong&gt;表锁&lt;/strong&gt;直接的兼容关系)&lt;/p&gt;
 
-&lt;p&gt;|-|X|IX|S|IS
-|&amp;ndash;|&amp;ndash;|&amp;ndash;|&amp;ndash;|&amp;ndash;
-|&lt;strong&gt;X&lt;/strong&gt;|×|×|×|×
-|&lt;strong&gt;IX&lt;/strong&gt;|×|√|×|√
-|&lt;strong&gt;S&lt;/strong&gt;|×|×|√|√
-|&lt;strong&gt;IS&lt;/strong&gt;|×|√|√|√&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;-&lt;/th&gt;
+&lt;th&gt;X&lt;/th&gt;
+&lt;th&gt;IX&lt;/th&gt;
+&lt;th&gt;S&lt;/th&gt;
+&lt;th&gt;IS&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;X&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;×&lt;/td&gt;
+&lt;td&gt;×&lt;/td&gt;
+&lt;td&gt;×&lt;/td&gt;
+&lt;td&gt;×&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;IX&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;×&lt;/td&gt;
+&lt;td&gt;√&lt;/td&gt;
+&lt;td&gt;×&lt;/td&gt;
+&lt;td&gt;√&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;S&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;×&lt;/td&gt;
+&lt;td&gt;×&lt;/td&gt;
+&lt;td&gt;√&lt;/td&gt;
+&lt;td&gt;√&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;IS&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;×&lt;/td&gt;
+&lt;td&gt;√&lt;/td&gt;
+&lt;td&gt;√&lt;/td&gt;
+&lt;td&gt;√&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
 
 &lt;p&gt;说明：
 * 意向锁不会与行级的共享 / 排他锁互斥。IX，IS是表级锁，不会和行级的X，S锁发生冲突。只会和表级的X，S发生冲突。&lt;/p&gt;
@@ -65,7 +104,7 @@
 
 &lt;p&gt;用户表user：
 |id| name
-|&amp;ndash;|&amp;ndash;
+|&amp;mdash;|&amp;mdash;
 |1|zhangsan
 |2|lisi
 |3|wangwu&lt;/p&gt;
