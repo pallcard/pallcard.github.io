@@ -6,8 +6,85 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
     <copyright>All rights reserved - 2019</copyright>
-    <lastBuildDate>Sat, 06 Jul 2019 23:15:44 +0800</lastBuildDate>
+    <lastBuildDate>Sat, 20 Jul 2019 22:31:59 +0800</lastBuildDate>
     <atom:link href="/" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>意向锁</title>
+      <link>https://pallcard.github.io/2019/%E6%84%8F%E5%90%91%E9%94%81/</link>
+      <pubDate>Sat, 20 Jul 2019 22:31:59 +0800</pubDate>
+      
+      <guid>https://pallcard.github.io/2019/%E6%84%8F%E5%90%91%E9%94%81/</guid>
+      <description>
+
+&lt;h3 id=&#34;封锁粒度&#34;&gt;封锁粒度&lt;/h3&gt;
+
+&lt;p&gt;一般有两种封锁粒度：&lt;strong&gt;行级锁以及表级锁&lt;/strong&gt;。应该尽量只锁定需要修改的那部分数据，而不是所有的资源。锁定的数据量越少，发生锁争用的可能就越小，系统的并发程度就越高。&lt;/p&gt;
+
+&lt;h3 id=&#34;读写锁&#34;&gt;读写锁&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;排它锁（Exclusive），简写为 X 锁，又称写锁。&lt;/li&gt;
+&lt;li&gt;共享锁（Shared），简写为 S 锁，又称读锁。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;规定：
+* 一个事务对数据对象 A 加了 X 锁，就可以对 A 进行读取和更新。加锁期间其它事务不能对 A 加任何锁。
+* 一个事务对数据对象 A 加了 S 锁，可以对 A 进行读取操作，但是不能进行更新操作。加锁期间其它事务能对 A 加 S 锁，但是不能加 X 锁。&lt;/p&gt;
+
+&lt;p&gt;兼容关系
+|- |X|S
+|&amp;ndash;|&amp;ndash;|&amp;ndash;
+|&lt;strong&gt;X&lt;/strong&gt;|×|×
+|&lt;strong&gt;S&lt;/strong&gt;|×|√&lt;/p&gt;
+
+&lt;h3 id=&#34;意向锁&#34;&gt;意向锁&lt;/h3&gt;
+
+&lt;p&gt;使用意向锁（Intention Locks）可以更容易地支持多粒度封锁。&lt;strong&gt;意向锁是一种不与行级锁冲突表级锁&lt;/strong&gt;。&lt;/p&gt;
+
+&lt;p&gt;规定：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;一个事务在获得某个数据行对象的 S 锁之前，必须先获得表的 IS 锁或者更强的锁；&lt;/li&gt;
+&lt;li&gt;一个事务在获得某个数据行对象的 X 锁之前，必须先获得表的 IX 锁。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;兼容关系(特别说明，以下是&lt;strong&gt;表锁&lt;/strong&gt;直接的兼容关系)&lt;/p&gt;
+
+&lt;p&gt;|-|X|IX|S|IS
+|&amp;ndash;|&amp;ndash;|&amp;ndash;|&amp;ndash;|&amp;ndash;
+|&lt;strong&gt;X&lt;/strong&gt;|×|×|×|×
+|&lt;strong&gt;IX&lt;/strong&gt;|×|√|×|√
+|&lt;strong&gt;S&lt;/strong&gt;|×|×|√|√
+|&lt;strong&gt;IS&lt;/strong&gt;|×|√|√|√&lt;/p&gt;
+
+&lt;p&gt;说明：
+* 意向锁不会与行级的共享 / 排他锁互斥。IX，IS是表级锁，不会和行级的X，S锁发生冲突。只会和表级的X，S发生冲突。&lt;/p&gt;
+
+&lt;h3 id=&#34;举例&#34;&gt;举例&lt;/h3&gt;
+
+&lt;p&gt;用户表user：
+|id| name
+|&amp;ndash;|&amp;ndash;
+|1|zhangsan
+|2|lisi
+|3|wangwu&lt;/p&gt;
+
+&lt;p&gt;事务A，更新id为2的用户名
+1. 获取user表上的IX锁；
+2. 获取id=2数据行的X锁。&lt;/p&gt;
+
+&lt;p&gt;事务B，查询user表
+1. 检查到user表上用IX锁；
+2. 事务B加锁请求阻塞。&lt;/p&gt;
+
+&lt;p&gt;事务C，更新id为1的用户名
+1. 获取user表的IX锁；
+2. 检测到user表有IX锁；
+3. 意向锁不排斥，故事务C获得IX锁；
+4. id=1不存在其他行级锁，获取行级X锁。&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>反射</title>
@@ -548,14 +625,14 @@ target:
 
 &lt;p&gt;\b 可以匹配一个单词的边界，边界是指位于 \w 和 \W 之间的位置；\B 匹配一个不是单词边界的位置。&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;    regexr:
-        \Babc\b
-    target:
-        aabc
-        aabc1
-    第一个目标串可以匹配到abc
-    第一个目标串不能匹配
-    说明abc前面要有字母、数字或下划线，abc后面不能有字母、数字或下划线
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;regexr:
+    \Babc\b
+target:
+    aabc
+    aabc1
+第一个目标串可以匹配到abc
+第一个目标串不能匹配
+说明abc前面要有字母、数字或下划线，abc后面不能有字母、数字或下划线
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;h4 id=&#34;字符串边界&#34;&gt;字符串边界&lt;/h4&gt;
@@ -566,66 +643,66 @@ target:
 
 &lt;p&gt;分行匹配模式（multiline）下，换行被当做字符串的边界。&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;    regexr:
-        ^\s*\/\/.*$
-    target:
-        // 注释
-        
-    说明匹配代码中以 // 开始的注释行
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;regexr:
+    ^\s*\/\/.*$
+target:
+    // 注释
+    
+说明匹配代码中以 // 开始的注释行
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;h3 id=&#34;六-子表达式&#34;&gt;六、子表达式&lt;/h3&gt;
 
 &lt;p&gt;使用 ( ) 定义一个子表达式。子表达式的内容可以当成一个独立元素，即可以将它看成一个字符，并且使用 * 等元字符。可以嵌套。&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;    regexr:
-        (ab){2,}
-    target:
-        ababab
-    说明:匹配2个以上ab组成的字符串
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;regexr:
+    (ab){2,}
+target:
+    ababab
+说明:匹配2个以上ab组成的字符串
 
-    regexr:
-        (19|20)/d{2}
-    target:
-        1900
-    说明：匹配19或20后面两个数的字字符串
+regexr:
+    (19|20)/d{2}
+target:
+    1900
+说明：匹配19或20后面两个数的字字符串
 
-    例子：匹配IP地址
-    IP地址每部分都是0-255，
-    将其划分为一下5个部分
-    0-9
-    10-99
-    100-199
-    200-249
-    250-255
-    故0-255的正则是 ((\d)|([1-9]\d)|(1\d{2})|(2[0-4]\d)|(25[0-5]))
+例子：匹配IP地址
+IP地址每部分都是0-255，
+将其划分为一下5个部分
+0-9
+10-99
+100-199
+200-249
+250-255
+故0-255的正则是 ((\d)|([1-9]\d)|(1\d{2})|(2[0-4]\d)|(25[0-5]))
 
-    regexr:
-        (((\d)|([1-9]\d)|(1\d{2})|(2[0-4]\d)|(25[0-5]))\.){3}((\d)|([1-9]\d)|(1\d{2})|(2[0-4]\d)|(25[0-5]))
-    target:
-        1.1.1.1
+regexr:
+    (((\d)|([1-9]\d)|(1\d{2})|(2[0-4]\d)|(25[0-5]))\.){3}((\d)|([1-9]\d)|(1\d{2})|(2[0-4]\d)|(25[0-5]))
+target:
+    1.1.1.1
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;h3 id=&#34;七-回溯引用&#34;&gt;七、回溯引用&lt;/h3&gt;
 
 &lt;p&gt;回溯引用使用 &lt;strong&gt;\n&lt;/strong&gt; (n为数字) 来引用某个子表达式，其中 n 代表的是子表达式的序号，从 1 开始。它和子表达式匹配的内容一致，比如子表达式匹配到 abc，那么回溯引用部分也需要匹配 abc 。&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;    regexr:
-        &amp;lt;(h[1-6])&amp;gt;\w*?&amp;lt;\/\1&amp;gt;
-    target:
-        &amp;lt;h1&amp;gt;x&amp;lt;/h1&amp;gt;
-    说明：匹配html中标题元素
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;regexr:
+    &amp;lt;(h[1-6])&amp;gt;\w*?&amp;lt;\/\1&amp;gt;
+target:
+    &amp;lt;h1&amp;gt;x&amp;lt;/h1&amp;gt;
+说明：匹配html中标题元素
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;h3 id=&#34;八-前后查找&#34;&gt;八、前后查找&lt;/h3&gt;
 
 &lt;p&gt;向前查找用 ?= 来定义，它规定了尾部匹配的内容，这个匹配的内容在 ?= 之后定义。所谓向前查找，就是规定了一个匹配的内容，然后以这个内容为尾部向前面查找需要匹配的内容。&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;    regexr:
-        \w+(?=@)
-    target:
-        abc@qq.com
-    说明：查找出邮件地址 @ 字符前面的部分。
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;regexr:
+    \w+(?=@)
+target:
+    abc@qq.com
+说明：查找出邮件地址 @ 字符前面的部分。
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;h3 id=&#34;九-在java中使用&#34;&gt;九、在Java中使用&lt;/h3&gt;
@@ -2560,211 +2637,6 @@ vim mod_fastdfs.conf
 &lt;p&gt;&lt;img src=&#34;https://pallcard.github.io/images/fastdfs004.png&#34; alt=&#34;部署结构图&#34; /&gt;
 参考：&lt;a href=&#34;https://www.cnblogs.com/chiangchou/p/fastdfs.html&#34; rel=&#34;nofollow noreferrer&#34; target=&#34;_blank&#34;&gt;https://www.cnblogs.com/chiangchou/p/fastdfs.html&lt;/a&gt;
            &lt;a href=&#34;https://www.cnblogs.com/chiangchou/p/fastdfs.html&#34; rel=&#34;nofollow noreferrer&#34; target=&#34;_blank&#34;&gt;https://www.cnblogs.com/chiangchou/p/fastdfs.html&lt;/a&gt;&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>初试部署项目到腾讯云（环境的安装）</title>
-      <link>https://pallcard.github.io/2019/%E5%88%9D%E8%AF%95%E9%83%A8%E7%BD%B2%E9%A1%B9%E7%9B%AE%E5%88%B0%E8%85%BE%E8%AE%AF%E4%BA%91%E7%8E%AF%E5%A2%83%E7%9A%84%E5%AE%89%E8%A3%85/</link>
-      <pubDate>Sat, 15 Jun 2019 19:32:56 +0800</pubDate>
-      
-      <guid>https://pallcard.github.io/2019/%E5%88%9D%E8%AF%95%E9%83%A8%E7%BD%B2%E9%A1%B9%E7%9B%AE%E5%88%B0%E8%85%BE%E8%AE%AF%E4%BA%91%E7%8E%AF%E5%A2%83%E7%9A%84%E5%AE%89%E8%A3%85/</guid>
-      <description>
-
-&lt;h4 id=&#34;linux常用命令&#34;&gt;linux常用命令&lt;/h4&gt;
-
-&lt;ul&gt;
-&lt;li&gt;ls：查看该目录下文件&lt;/li&gt;
-&lt;li&gt;pwd：查看文件目录&lt;/li&gt;
-&lt;li&gt;rm -f 文件名：删除文件&lt;/li&gt;
-&lt;li&gt;/usr/local/mysql/bin/mysql -u root -p 登录mysql&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h4 id=&#34;第一步-jdk的安装&#34;&gt;第一步：jdk的安装&lt;/h4&gt;
-
-&lt;p&gt;下载jdk后，解压报错（原因是选择接受协议的问题），输入如下命令：&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;wget --no-check-certificate --no-cookies --header &amp;quot;Cookie: oraclelicense=accept-securebackup-cookie&amp;quot; https://download.oracle.com/otn-pub/java/jdk/8u201-b09/42970487e3af4f5aa5bca3f542482c60/jdk-8u201-linux-x64.tar.gz
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;解压jdk压缩包，使用命令 tar -zxvf 文件名&lt;/p&gt;
-
-&lt;p&gt;然后配置环境变量，主要编辑以下两个文件&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;vi /etc/environment 
-vi /etc/profile
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;最后使用java -version查看版本信息&lt;/p&gt;
-
-&lt;h4 id=&#34;第二步-mysql的安装&#34;&gt;第二步：mysql的安装&lt;/h4&gt;
-
-&lt;p&gt;&lt;strong&gt;&lt;em&gt;1.下载mysql ，以5.7为例&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;sudo wget https://cdn.mysql.com//Downloads/MySQL-5.7/mysql-5.7.25-linux-glibc2.12-x86_64.tar.gz
-# 解压  
-tar -zxvf mysql-5.7.25-linux-glibc2.12-x86_64.tar.gz
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;strong&gt;&lt;em&gt;2.移动 文件到 /usr/local/&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;重命名 mv 文件名 mysql&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;&lt;em&gt;3.新建data目录 mkdir data&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;&lt;em&gt;4.新建mysql用户、mysql用户组&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;mysql用户组&lt;/strong&gt;&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;groupadd mysql
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;strong&gt;mysql用户&lt;/strong&gt;&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;useradd mysql -g mysql
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;strong&gt;&lt;em&gt;5.将/usr/local/mysql的所有者及所属组改为mysql&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;chown -R mysql.mysql /usr/local/mysql
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;strong&gt;&lt;em&gt;6.配置，初始化&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;/usr/local/mysql/bin/mysqld --defaults-file=/etc/my.cnf --user=mysql --basedir=/usr/local/mysql --datadir=/usr/local/mysql/data --initialize
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;执行后出错，libnuma原因，执行如下命令，后再初始化&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;yum install -y numactl
-vim /etc/my.cnf
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;my.cnf中改为&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;[mysqld]
-datadir=/usr/local/mysql/data
-basedir=/usr/local/mysql
-socket=/tmp/mysql.sock
-user=mysql
-port=3306
-character-set-server=utf8
-# 取消密码验证
-skip-grant-tables
-# Disabling symbolic-links is recommended to prevent assorted security risks
-symbolic-links=0
-# skip-grant-tables
-[mysqld_safe]
-log-error=/var/log/mysqld.log
-pid-file=/var/run/mysqld/mysqld.pid
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;strong&gt;&lt;em&gt;7.开启服务&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;将mysql加入服务
-cp /usr/local/mysql/support-files/mysql.server /etc/init.d/mysql
-# 开机自启
-chkconfig mysql on
-# 开启
-service mysql start
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;strong&gt;&lt;em&gt;8.设置密码&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;# 登录（由于/etc/my.cnf中设置了取消密码验证，所以此处密码任意）
-
-/usr/local/mysql/bin/mysql -u root -p
-
-# 操作mysql数据库
-
-&amp;gt;&amp;gt;use mysql;
-
-# 修改密码
-
-&amp;gt;&amp;gt;update user set authentication_string=password(&#39;你的密码&#39;) where user=&#39;root&#39;;
-
-&amp;gt;&amp;gt;flush privileges;
-
-&amp;gt;&amp;gt;exit;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;strong&gt;&lt;em&gt;9.将/etc/my.cnf中的skip-grant-tables删除，至此mysql安装完成&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;注: mysql 远程连接问题&lt;/strong&gt;&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;use mysql
-
-select host,user from user;
-
-update user set host=&#39;%&#39; where user =&amp;quot;root&amp;quot;;
-
-# 刷新权限
-flush privileges;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h4 id=&#34;第三步-redis的安装&#34;&gt;第三步：redis的安装&lt;/h4&gt;
-
-&lt;p&gt;&lt;strong&gt;&lt;em&gt;1.下载 解压&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;wget http://download.redis.io/releases/redis-4.0.10.tar.gz
-
-tar -xzf redis-4.0.10.tar.gz
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;strong&gt;&lt;em&gt;2.编译&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;cd redis-4.0.10
-make
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;注：若执行make出错，可能是c++未装，使用命令 yum -y install gcc-c++&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;&lt;em&gt;3.配置远程访问&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;进入redis目录，vi redis.conf 修改配置文件&lt;/p&gt;
-
-&lt;p&gt;注释绑定的本机地址
-​​&lt;img src=&#34;https://pallcard.github.io/images/linux001.png&#34; alt=&#34;在这里插入图片描述&#34; /&gt;
-设置redis-service为后台服务
-将&amp;rdquo;daemonize no&amp;rdquo;改为&amp;rdquo;daemonize yes&amp;rdquo;
-​​​​​​​​&lt;img src=&#34;https://pallcard.github.io/images/linux002.png&#34; alt=&#34;在这里插入图片描述&#34; /&gt;
-设置redis-cli连接redis服务器的密码
-&lt;img src=&#34;https://pallcard.github.io/images/linux003.png&#34; alt=&#34;在这里插入图片描述&#34; /&gt;&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;# 启动redis（进入redis目录）
-./src/redis-server redis.conf
-# 查看进程
-ps -ef | grep redis
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h5 id=&#34;第四步-nginx的安装&#34;&gt;第四步：nginx的安装&lt;/h5&gt;
-
-&lt;p&gt;准备(安装pcre和zlib最新版本):&lt;/p&gt;
-
-&lt;p&gt;1.pcre:&lt;a href=&#34;https://ftp.pcre.org/pub/pcre/&#34; rel=&#34;nofollow noreferrer&#34; target=&#34;_blank&#34;&gt;https://ftp.pcre.org/pub/pcre/&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;2.zlib:&lt;a href=&#34;http://www.zlib.net/&#34; rel=&#34;nofollow noreferrer&#34; target=&#34;_blank&#34;&gt;http://www.zlib.net/&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;3.nginx：&lt;a href=&#34;https://nginx.org/en/download.html&#34; rel=&#34;nofollow noreferrer&#34; target=&#34;_blank&#34;&gt;https://nginx.org/en/download.html&lt;/a&gt;&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;wget 下载地址
-tar -xvzf 文件名
-cd 文件目录
-./configure
-make &amp;amp;&amp;amp; make install
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;strong&gt;注&lt;/strong&gt;：在阿里云添加安全组规则&lt;/p&gt;
-
-&lt;p&gt;参考博客：&lt;/p&gt;
-
-&lt;p&gt;主要参考：&lt;a href=&#34;https://www.jianshu.com/p/9cac6c9df0e0&#34; rel=&#34;nofollow noreferrer&#34; target=&#34;_blank&#34;&gt;https://www.jianshu.com/p/9cac6c9df0e0&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;mysql：&lt;a href=&#34;https://www.cnblogs.com/hl15/p/9541479.html&#34; rel=&#34;nofollow noreferrer&#34; target=&#34;_blank&#34;&gt;https://www.cnblogs.com/hl15/p/9541479.html&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;redis：&lt;a href=&#34;https://www.cnblogs.com/wangchunniu1314/p/6339416.html&#34; rel=&#34;nofollow noreferrer&#34; target=&#34;_blank&#34;&gt;https://www.cnblogs.com/wangchunniu1314/p/6339416.html&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;make出错：&lt;a href=&#34;https://blog.csdn.net/weixin_40493969/article/details/81150469&#34; rel=&#34;nofollow noreferrer&#34; target=&#34;_blank&#34;&gt;https://blog.csdn.net/weixin_40493969/article/details/81150469&lt;/a&gt;&lt;/p&gt;
 </description>
     </item>
     

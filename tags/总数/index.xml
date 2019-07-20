@@ -7,10 +7,26 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
     <copyright>All rights reserved - 2019</copyright>
-    <lastBuildDate>Sat, 06 Jul 2019 23:15:44 +0800</lastBuildDate>
+    <lastBuildDate>Sat, 20 Jul 2019 22:31:59 +0800</lastBuildDate>
     
 	<atom:link href="https://pallcard.github.io/tags/%E6%80%BB%E6%95%B0/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>意向锁</title>
+      <link>https://pallcard.github.io/2019/%E6%84%8F%E5%90%91%E9%94%81/</link>
+      <pubDate>Sat, 20 Jul 2019 22:31:59 +0800</pubDate>
+      
+      <guid>https://pallcard.github.io/2019/%E6%84%8F%E5%90%91%E9%94%81/</guid>
+      <description>封锁粒度 一般有两种封锁粒度：行级锁以及表级锁。应该尽量只锁定需要修改的那部分数据，而不是所有的资源。锁定的数据量越少，发生锁争用的可能就越小，系统的并发程度就越高。
+读写锁  排它锁（Exclusive），简写为 X 锁，又称写锁。 共享锁（Shared），简写为 S 锁，又称读锁。  规定： * 一个事务对数据对象 A 加了 X 锁，就可以对 A 进行读取和更新。加锁期间其它事务不能对 A 加任何锁。 * 一个事务对数据对象 A 加了 S 锁，可以对 A 进行读取操作，但是不能进行更新操作。加锁期间其它事务能对 A 加 S 锁，但是不能加 X 锁。
+兼容关系 |- |X|S |&amp;ndash;|&amp;ndash;|&amp;ndash; |X|×|× |S|×|√
+意向锁 使用意向锁（Intention Locks）可以更容易地支持多粒度封锁。意向锁是一种不与行级锁冲突表级锁。
+规定：
+ 一个事务在获得某个数据行对象的 S 锁之前，必须先获得表的 IS 锁或者更强的锁； 一个事务在获得某个数据行对象的 X 锁之前，必须先获得表的 IX 锁。  兼容关系(特别说明，以下是表锁直接的兼容关系)
+|-|X|IX|S|IS |&amp;ndash;|&amp;ndash;|&amp;ndash;|&amp;ndash;|&amp;ndash; |X|×|×|×|× |IX|×|√|×|√ |S|×|×|√|√ |IS|×|√|√|√
+说明： * 意向锁不会与行级的共享 / 排他锁互斥。IX，IS是表级锁，不会和行级的X，S锁发生冲突。只会和表级的X，S发生冲突。</description>
+    </item>
     
     <item>
       <title>反射</title>
