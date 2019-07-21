@@ -28,15 +28,38 @@
 &lt;li&gt;共享锁（Shared），简写为 S 锁，又称读锁。&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;规定：
-* 一个事务对数据对象 A 加了 X 锁，就可以对 A 进行读取和更新。加锁期间其它事务不能对 A 加任何锁。
-* 一个事务对数据对象 A 加了 S 锁，可以对 A 进行读取操作，但是不能进行更新操作。加锁期间其它事务能对 A 加 S 锁，但是不能加 X 锁。&lt;/p&gt;
+&lt;p&gt;规定：&lt;/p&gt;
 
-&lt;p&gt;兼容关系
-|- |X|S
-|&amp;mdash;|&amp;mdash;|&amp;mdash;
-|&lt;strong&gt;X&lt;/strong&gt;|×|×
-|&lt;strong&gt;S&lt;/strong&gt;|×|√&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;一个事务对数据对象 A 加了 X 锁，就可以对 A 进行读取和更新。加锁期间其它事务不能对 A 加任何锁。&lt;/li&gt;
+&lt;li&gt;一个事务对数据对象 A 加了 S 锁，可以对 A 进行读取操作，但是不能进行更新操作。加锁期间其它事务能对 A 加 S 锁，但是不能加 X 锁。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;兼容关系&lt;/p&gt;
+
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;-&lt;/th&gt;
+&lt;th&gt;X&lt;/th&gt;
+&lt;th&gt;S&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;X&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;×&lt;/td&gt;
+&lt;td&gt;×&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;S&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;×&lt;/td&gt;
+&lt;td&gt;√&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
 
 &lt;h3 id=&#34;意向锁&#34;&gt;意向锁&lt;/h3&gt;
 
@@ -97,8 +120,11 @@
 &lt;/tbody&gt;
 &lt;/table&gt;
 
-&lt;p&gt;说明：
-* 意向锁不会与行级的共享 / 排他锁互斥。IX，IS是表级锁，不会和行级的X，S锁发生冲突。只会和表级的X，S发生冲突。&lt;/p&gt;
+&lt;p&gt;说明：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;意向锁不会与行级的共享 / 排他锁互斥。IX，IS是表级锁，不会和行级的X，S锁发生冲突。只会和表级的X，S发生冲突。&lt;/li&gt;
+&lt;/ul&gt;
 
 &lt;h3 id=&#34;举例&#34;&gt;举例&lt;/h3&gt;
 
