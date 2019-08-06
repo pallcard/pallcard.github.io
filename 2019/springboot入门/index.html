@@ -47,7 +47,7 @@
     "articleSection" : "posts",
     "name" : "SpringBoot入门",
     "headline" : "SpringBoot入门",
-    "description" : "创建工程 使用IDEA，按照提示创建即可。\n修改Banner 在resources目录下创建banner.txt文件，改文件用于指定banner，文字生成banner的网址：http:\/\/patorjk.com\/software\/taag。\n${AnsiColor.BLUE} .____ ____ __. | | | |\/ _| | | | \x26lt; | |___| | \\ |_______ \\____|__ \\ \\\/ \\\/ -----版本号-----${spring-boot.version}  说明： ${AnsiColor.BLUE} 表示Banner文字的颜色 ${spring-boot.version} 当前使用的SpringBoot版本\n创建Controller类 @Controller public class HelloWorld { @RequestMapping(value = \x26quot;\/hello\x26quot;,method = RequestMethod.GET) @ResponseBody public String hello(){ return \x26quot;Hello Spring Boot\x26quot;; } }  访问：http:\/\/localhost:8080\/hello，即可以看到Hello Spring Boot 另外一种注解方式\n@RestController public class HelloWorld { @GetMapping(\x26quot;\/hello\x26quot;) public String hello(){ return \x26quot;Hello Spring Boot\x26quot;; } }  说明 * @RestController：处理http请求：等同于@Controller\x2b@ResponseBody * @GetMapping：@RequestMapping以get请求的简写",
+    "description" : "创建工程 使用IDEA，按照提示创建即可。\n修改Banner 在resources目录下创建banner.txt文件，改文件用于指定banner，文字生成banner的网址：http:\/\/patorjk.com\/software\/taag。\n${AnsiColor.BLUE} .____ ____ __. | | | |\/ _| | | | \x26lt; | |___| | \\ |_______ \\____|__ \\ \\\/ \\\/ -----版本号-----${spring-boot.version}  说明： ${AnsiColor.BLUE} 表示Banner文字的颜色 ${spring-boot.version} 当前使用的SpringBoot版本\n创建Controller类 @Controller public class HelloWorld { @RequestMapping(value = \x26quot;\/hello\x26quot;,method = RequestMethod.GET) @ResponseBody public String hello(){ return \x26quot;Hello Spring Boot\x26quot;; } }  访问：http:\/\/localhost:8080\/hello，即可以看到Hello Spring Boot\n另外一种注解方式\n@RestController public class HelloWorld { @GetMapping(\x26quot;\/hello\x26quot;) public String hello(){ return \x26quot;Hello Spring Boot\x26quot;; } }  说明 * @RestController：处理http请求：等同于@Controller\x2b@ResponseBody * @GetMapping：@RequestMapping以get请求的简写",
     "inLanguage" : "zh-CN",
     "author" : "刘科",
     "creator" : "刘科",
@@ -149,11 +149,11 @@
 
           
 
-<h5 id="创建工程">创建工程</h5>
+<h3 id="创建工程">创建工程</h3>
 
 <p>使用IDEA，按照提示创建即可。</p>
 
-<h5 id="修改banner">修改Banner</h5>
+<h3 id="修改banner">修改Banner</h3>
 
 <p>在resources目录下创建banner.txt文件，改文件用于指定banner，文字生成banner的网址：<a href="http://patorjk.com/software/taag。" rel="nofollow noreferrer" target="_blank">http://patorjk.com/software/taag。</a></p>
 
@@ -171,7 +171,7 @@
 ${AnsiColor.BLUE}   表示Banner文字的颜色
 ${spring-boot.version}  当前使用的SpringBoot版本</p>
 
-<h5 id="创建controller类">创建Controller类</h5>
+<h3 id="创建controller类">创建Controller类</h3>
 
 <pre><code class="language-java">@Controller
 public class HelloWorld {
@@ -183,8 +183,9 @@ public class HelloWorld {
 }
 </code></pre>
 
-<p>访问：<a href="http://localhost:8080/hello，即可以看到Hello" rel="nofollow noreferrer" target="_blank">http://localhost:8080/hello，即可以看到Hello</a> Spring Boot
-<strong><em>另外一种注解方式</em></strong></p>
+<p>访问：<a href="http://localhost:8080/hello，即可以看到Hello" rel="nofollow noreferrer" target="_blank">http://localhost:8080/hello，即可以看到Hello</a> Spring Boot</p>
+
+<p><strong>另外一种注解方式</strong></p>
 
 <pre><code class="language-java">@RestController
 public class HelloWorld {
@@ -199,7 +200,7 @@ public class HelloWorld {
 * @RestController：处理http请求：等同于@Controller+@ResponseBody
 * @GetMapping：@RequestMapping以get请求的简写</p>
 
-<p><strong><em>url的其他形式</em></strong></p>
+<p><strong>url的其他形式</strong></p>
 
 <pre><code class="language-java">@RestController
 @RequestMapping(&quot;/test&quot;)

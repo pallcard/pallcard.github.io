@@ -58,7 +58,7 @@
     "datePublished": "2019-05-31 17:15:52 \x2b0800 CST",
     "dateModified" : "2019-05-31 17:15:52 \x2b0800 CST",
     "url" : "https:\/\/pallcard.github.io\/2019\/%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F\/",
-    "wordCount" : "118",
+    "wordCount" : "116",
     "keywords" : [ "Java","设计模式","总数", "刘科个人博客"]
 }
 </script>
@@ -151,7 +151,7 @@
 
 <p>通过单例模式可以保证系统中，应用该模式的一个类只有一个实例。即一个类只有一个对象实例。</p>
 
-<h4 id="1-懒汉式">1.懒汉式</h4>
+<h3 id="1-懒汉式">1.懒汉式</h3>
 
 <pre><code class="language-java">public class Singleton1 {
     private static Singleton1 singleton1 = null;
@@ -165,7 +165,7 @@
 }
 </code></pre>
 
-<h4 id="2-饿汉式">2.饿汉式</h4>
+<h3 id="2-饿汉式">2.饿汉式</h3>
 
 <pre><code class="language-java">public class Singleton2 {
     private static Singleton2 singleton2 = new Singleton2();
@@ -176,7 +176,7 @@
 }
 </code></pre>
 
-<h4 id="3-懒汉式改">3.懒汉式改</h4>
+<h3 id="3-懒汉式改">3.懒汉式改</h3>
 
 <pre><code class="language-java">//序列化
 public class Singleton3 implements Serializable {
@@ -204,9 +204,13 @@ public class Singleton3 implements Serializable {
 }
 </code></pre>
 
-<p>说明：
-1. 外层singleton3 == null，为了避免每次都加锁，避免了一定的加锁的开销；
-2. 把类的构造函数定义为私有private，外部便无法通过new生成对象。</p>
+<p>说明：</p>
+
+<ol>
+<li><p>外层singleton3 == null，为了避免每次都加锁，避免了一定的加锁的开销；</p></li>
+
+<li><p>把类的构造函数定义为私有private，外部便无法通过new生成对象。</p></li>
+</ol>
 
     </div>
 

@@ -58,7 +58,7 @@
     "datePublished": "2019-06-08 20:21:05 \x2b0800 CST",
     "dateModified" : "2019-06-08 20:21:05 \x2b0800 CST",
     "url" : "https:\/\/pallcard.github.io\/2019\/springboot%E4%B9%8B%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6\/",
-    "wordCount" : "202",
+    "wordCount" : "203",
     "keywords" : [ "SpringBoot","总数", "刘科个人博客"]
 }
 </script>
@@ -151,7 +151,7 @@
 
           
 
-<h5 id="1-配置文件基本使用">1.配置文件基本使用</h5>
+<h3 id="1-配置文件基本使用">1.配置文件基本使用</h3>
 
 <p>使用.yml配置文件，在resources目录下新建application.yml文件</p>
 
@@ -172,13 +172,13 @@ swagger:
   email: 1250585541@qq.com
 </code></pre>
 
-<p><strong><em>注</em></strong></p>
+<p><strong>注</strong></p>
 
 <ul>
 <li>其中空格有严格的要求</li>
 </ul>
 
-<h5 id="2-切换配置文件">2.切换配置文件</h5>
+<h3 id="2-切换配置文件">2.切换配置文件</h3>
 
 <p>在resources目录下新建application-dev.yml文件，application-prod.yml文件</p>
 
@@ -196,7 +196,7 @@ resources|-
     active: dev
 </code></pre>
 
-<p><strong><em>激活文件选择</em></strong></p>
+<p><strong>激活文件选择</strong></p>
 
 <ul>
 <li><p>使用上述application.yml来设置</p></li>
@@ -208,7 +208,7 @@ resources|-
 
 <p><figure><img src="/images/ring.svg" data-sizes="auto" data-src="/images/springboot001.png" alt="激活配置文件" class="lazyload"><figcaption class="image-caption">激活配置文件</figcaption></figure></p>
 
-<h5 id="3-配置文件使用">3.配置文件使用</h5>
+<h3 id="3-配置文件使用">3.配置文件使用</h3>
 
 <ul>
 <li>单值注入 （.yml中值若用双引号，转义字符会转义）</li>
@@ -290,10 +290,11 @@ public class Dog {
 <li>@ConfigurationProperties：告诉SpringBoot将本类中的所有属性和配置文件中相关的配置进行绑定；</li>
 <li>prefix = &ldquo;person&rdquo;：配置文件中哪个下面的所有属性进行一一映射</li>
 <li>只有这个组件是容器中的组件，才能使用容器提供的@ConfigurationProperties功能；</li>
-<li>@Data是一个插件，免去了getter/setter和toString这些繁琐的东西</li>
+<li>@Data是一个插件，免去了getter/
+setter和toString这些繁琐的东西</li>
 </ul>
 
-<h5 id="4-两种注入区别">4.两种注入区别</h5>
+<h3 id="4-两种注入区别">4.两种注入区别</h3>
 
 <table>
 <thead>

@@ -149,14 +149,14 @@
 
           
 
-<h4 id="dbms分类">DBMS分类</h4>
+<h3 id="dbms分类">DBMS分类</h3>
 
 <ol>
 <li>基于共享文件系统的DBMS，例如：Microsoft Access</li>
 <li>基于客户机—服务器的DBMS，例如：MySql，Oracle，SQL Server</li>
 </ol>
 
-<h4 id="连接mysql">连接mysql</h4>
+<h3 id="连接mysql">连接mysql</h3>
 
 <p>格式：</p>
 
@@ -164,7 +164,7 @@
 例如：/usr/local/mysql/bin/mysql -u root -p
 </code></pre>
 
-<h4 id="选择数据库">选择数据库</h4>
+<h3 id="选择数据库">选择数据库</h3>
 
 <p>最初连接mysql时，没有任何数据库可供使用，需要使用use来选择一个数据库</p>
 
@@ -172,7 +172,7 @@
 例如：USE mysql
 </code></pre>
 
-<h4 id="显示数据库一些信息">显示数据库一些信息</h4>
+<h3 id="显示数据库一些信息">显示数据库一些信息</h3>
 
 <pre><code class="language-java">SHOW DATABASES;   //显示所有数据库
 SHOW TABLES;       //显示当前数据库中所有表
@@ -183,31 +183,31 @@ SHOW GRANTS;  //显示授权用户权限
 SHOW ERRORS和SHOW WARNINGS；//用来显示服务器错误或警告消息
 </code></pre>
 
-<h4 id="检索数据">检索数据</h4>
+<h3 id="检索数据">检索数据</h3>
 
 <p>许多SQL开发人员喜欢对所有SQL关键字使用大写，而对所有 列和表名使用小写，这样做使代码更易于阅读和调试。</p>
 
-<h5 id="select">select</h5>
+<h4 id="select">select</h4>
 
 <pre><code class="language-java">SELECT DISTINCT yyy FROM xxx LIMIT 5; //检索xxx表中yyy列(DISTINCT去重，不多于5)
 SELECT * FROM xxx LIMIT 5, 5; //从第5行开始5行，下标0
 </code></pre>
 
-<p><strong><em>注</em></strong>
+<p><strong>注</strong>
 DITINCT会作用于所有的列，不会部分使用</p>
 
-<h5 id="order-by">order by</h5>
+<h4 id="order-by">order by</h4>
 
 <pre><code class="language-java">select * from xxx order by yyy;  
 </code></pre>
 
-<p><strong><em>注</em></strong>
+<p><strong>注</strong>
 1.默认升序，降序使用DESC
 2.可以指定多列，先按第一列排，再按照第二列，。。。
 3.在多个列上降序排序 如果想在多个列上进行降序排序，必须 对每个列指定DESC关键字。
 4. limit要在order by之后</p>
 
-<h5 id="where">where</h5>
+<h4 id="where">where</h4>
 
 <pre><code class="language-java">select * from xxx where yyy=&quot;&quot;;
 例：
@@ -216,25 +216,28 @@ SELECT * FROM news WHERE title BETWEEN &quot;新闻1&quot; AND &quot;新闻5&quo
 SELECT * FROM news WHERE creator_id IS NULL LIMIT 10;
 </code></pre>
 
-<p><strong><em>注</em></strong>
-1.在SELECT语句中，数据根据WHERE子句中指定的搜索条件进行过滤
-2.order by位于where之后</p>
+<p><strong>注</strong></p>
 
-<h5 id="and-or-in">AND OR IN</h5>
+<p>1.在SELECT语句中，数据根据WHERE子句中指定的搜索条件进行过滤</p>
+
+<p>2.order by位于where之后</p>
+
+<h4 id="and-or-in">AND OR IN</h4>
 
 <pre><code class="language-java">SELECT * FROM news WHERE title BETWEEN &quot;新闻3&quot; AND &quot;新闻6&quot; OR id &lt; 3;
 例如：IN的使用
 SELECT * FROM news WHERE title NOT IN (&quot;新闻1&quot;,&quot;新闻2&quot;,&quot;新闻3&quot;,&quot;新闻10&quot;);
 </code></pre>
 
-<p><strong><em>注</em></strong></p>
+<p><strong>注</strong></p>
 
 <ol>
-<li>SQL（像多数语言一样）在处理OR操作符前，优先处理AND操 作符。<strong><em>使用圆括号明确地分组相应的操作符</em></strong>，圆括号具有较AND或OR操作符高的计算次序
-2.IN在WHERE子句中用来指定要匹配值的清单的关键字，功能与OR 相当。</li>
+<li>SQL（像多数语言一样）在处理OR操作符前，优先处理AND操 作符。<strong>使用圆括号明确地分组相应的操作符</strong>，圆括号具有较AND或OR操作符高的计算次序</li>
 </ol>
 
-<h5 id="通配符">通配符</h5>
+<p>2.IN在WHERE子句中用来指定要匹配值的清单的关键字，功能与OR 相当。</p>
+
+<h3 id="通配符">通配符</h3>
 
 <pre><code class="language-java">SELECT * FROM news WHERE title LIKE &quot;新闻1%&quot;
 SELECT * FROM news WHERE title LIKE &quot;新闻_&quot;
@@ -245,7 +248,7 @@ SELECT * FROM news WHERE title LIKE &quot;新闻_&quot;
 <li>_匹配单个字符</li>
 </ol>
 
-<h5 id="正则表达式">正则表达式</h5>
+<h3 id="正则表达式">正则表达式</h3>
 
 <pre><code class="language-java">SELECT * FROM news WHERE title REGEXP &quot;新闻1|新闻2&quot;;
 </code></pre>
@@ -311,9 +314,9 @@ SELECT * FROM news WHERE title LIKE &quot;新闻_&quot;
 </tbody>
 </table>
 
-<h4 id="计算字段">计算字段</h4>
+<h3 id="计算字段">计算字段</h3>
 
-<h5 id="拼接">拼接</h5>
+<h4 id="拼接">拼接</h4>
 
 <p>拼接（concatenate） 将值联结到一起构成单个值。</p>
 
@@ -324,7 +327,7 @@ SELECT * FROM news WHERE title LIKE &quot;新闻_&quot;
 as 别名
 计算+ - * /</p>
 
-<h5 id="函数">函数</h5>
+<h4 id="函数">函数</h4>
 
 <h5 id="聚集函数">聚集函数</h5>
 
@@ -364,20 +367,20 @@ as 别名
 </tbody>
 </table>
 
-<p><strong><em>注</em></strong>
+<p><strong>注</strong>
 聚集函数中使用 DISTINCT</p>
 
 <pre><code class="language-java">SELECT COUNT(DISTINCT title) FROM news;
 </code></pre>
 
-<h5 id="分组">分组</h5>
+<h3 id="分组">分组</h3>
 
-<p><strong><em>格式</em></strong></p>
+<p><strong>格式</strong></p>
 
 <pre><code class="language-java">SELECT type, COUNT(*) AS num FROM news GROUP BY type;
 </code></pre>
 
-<p><strong><em>筛选</em></strong></p>
+<p><strong>筛选</strong></p>
 
 <pre><code class="language-java">SELECT *, COUNT(title) AS num FROM news GROUP BY TYPE HAVING num &gt; 2;
 </code></pre>
@@ -436,12 +439,12 @@ as 别名
 </tbody>
 </table>
 
-<h5 id="子查询">子查询</h5>
+<h3 id="子查询">子查询</h3>
 
 <pre><code class="language-java">SELECT * FROM theme WHERE id IN (SELECT id FROM news WHERE create_time &gt; &quot;2019-01-12&quot;);
 </code></pre>
 
-<h4 id="联结">联结</h4>
+<h3 id="联结">联结</h3>
 
 <p>1.内部联结</p>
 
@@ -459,7 +462,7 @@ SELECT * FROM movie_arrange INNER JOIN films ON movie_arrange.id = films.id;
 SELECT * FROM movie_arrange LEFT OUTER JOIN films ON movie_arrange.id = films.id;
 </code></pre>
 
-<h4 id="组合查询">组合查询</h4>
+<h3 id="组合查询">组合查询</h3>
 
 <p>MySQL也允许执行多个查询（多条SELECT语句），并将结果作为单个 查询结果集返回。这些组合查询通常称为并（union）或复合查询</p>
 
@@ -468,10 +471,10 @@ UNION
 SELECT id, name FROM films
 </code></pre>
 
-<p><strong><em>注</em></strong>
+<p><strong>注</strong>
 UNION 会自动取消重复行，如果想返回所有匹配行，可使用UNION ALL</p>
 
-<h4 id="全文搜索">全文搜索</h4>
+<h3 id="全文搜索">全文搜索</h3>
 
 <p>为了进行全文本搜索，必须索引被搜索的列，而且要随着数据的改 变不断地重新索引。</p>
 
@@ -488,32 +491,32 @@ AGAINST ('database' IN NATURAL LANGUAGE MODE);
 <p>参考：
 <a href="https://blog.csdn.net/bbirdsky/article/details/45368897" rel="nofollow noreferrer" target="_blank">https://blog.csdn.net/bbirdsky/article/details/45368897</a></p>
 
-<h4 id="插入-更新-删除">插入 更新 删除</h4>
+<h3 id="插入-更新-删除">插入 更新 删除</h3>
 
-<p><strong><em>插入</em></strong></p>
+<p><strong>插入</strong></p>
 
 <pre><code class="language-java">INSERT INTO articles (title,body) VALUES
 ('How To Use MySQL Well','After you went...'),
  ('MySQL Tutorial','DBMS stands for DataBase ...');
 </code></pre>
 
-<p><strong><em>更新</em></strong></p>
+<p><strong>更新</strong></p>
 
 <pre><code class="language-java">UPDATE articles SET title = 'def' WHERE id = 1;
 </code></pre>
 
-<p><strong><em>删除</em></strong></p>
+<p><strong>删除</strong></p>
 
 <pre><code class="language-java">DELETE FROM articles WHERE id = 7;
 </code></pre>
 
-<p><strong><em>注</em></strong></p>
+<p><strong>注</strong></p>
 
 <p>如果省略了WHERE子句，则UPDATE或DELETE将被应用到表中 所有的行</p>
 
-<h4 id="表操作">表操作</h4>
+<h3 id="表操作">表操作</h3>
 
-<p><strong><em>创建表</em></strong></p>
+<p><strong>创建表</strong></p>
 
 <pre><code class="language-java">CREATE TABLE articles (
      id INT UNSIGNED AUTO_INCREMENT NOT NULL PRIMARY KEY,
@@ -523,18 +526,18 @@ AGAINST ('database' IN NATURAL LANGUAGE MODE);
 ) ENGINE=INNODB;
 </code></pre>
 
-<p><strong><em>更新表</em></strong></p>
+<p><strong>更新表</strong></p>
 
 <pre><code class="language-java">ALTER TABLE articles ADD score CHAR(2);
 ALTER TABLE articles DROP score;
 </code></pre>
 
-<p><strong><em>删除表</em></strong></p>
+<p><strong>删除表</strong></p>
 
 <pre><code class="language-java">DROP TABLE articles
 </code></pre>
 
-<p><strong><em>重命名表</em></strong></p>
+<p><strong>重命名表</strong></p>
 
 <pre><code class="language-java">RENAME TABLE articles TO articles2;
 </code></pre>
