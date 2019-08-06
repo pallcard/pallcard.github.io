@@ -58,7 +58,7 @@
     "datePublished": "2019-07-20 22:31:59 \x2b0800 CST",
     "dateModified" : "2019-07-20 22:31:59 \x2b0800 CST",
     "url" : "https:\/\/pallcard.github.io\/2019\/%E6%84%8F%E5%90%91%E9%94%81\/",
-    "wordCount" : "116",
+    "wordCount" : "108",
     "keywords" : [ "数据库","总数", "刘科个人博客"]
 }
 </script>
@@ -288,19 +288,33 @@
 </tbody>
 </table>
 
-<p>事务A，更新id为2的用户名
-1. 获取user表上的IX锁；
-2. 获取id=2数据行的X锁。</p>
+<p>事务A，更新id为2的用户名</p>
 
-<p>事务B，查询user表
-1. 检查到user表上用IX锁；
-2. 事务B加锁请求阻塞。</p>
+<ol>
+<li><p>获取user表上的IX锁；</p></li>
 
-<p>事务C，更新id为1的用户名
-1. 获取user表的IX锁；
-2. 检测到user表有IX锁；
-3. 意向锁不排斥，故事务C获得IX锁；
-4. id=1不存在其他行级锁，获取行级X锁。</p>
+<li><p>获取id=2数据行的X锁。</p></li>
+</ol>
+
+<p>事务B，查询user表</p>
+
+<ol>
+<li><p>检查到user表上用IX锁；</p></li>
+
+<li><p>事务B加锁请求阻塞。</p></li>
+</ol>
+
+<p>事务C，更新id为1的用户名</p>
+
+<ol>
+<li><p>获取user表的IX锁；</p></li>
+
+<li><p>检测到user表有IX锁；</p></li>
+
+<li><p>意向锁不排斥，故事务C获得IX锁；</p></li>
+
+<li><p>id=1不存在其他行级锁，获取行级X锁。</p></li>
+</ol>
 
 <p>说明：若无意向锁，则对于事务B，将要查询表中的行来确定是否存在其他行级锁。</p>
 

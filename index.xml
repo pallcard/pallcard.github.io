@@ -586,19 +586,33 @@ CustomProperties addCustomProperties(){
 &lt;/tbody&gt;
 &lt;/table&gt;
 
-&lt;p&gt;事务A，更新id为2的用户名
-1. 获取user表上的IX锁；
-2. 获取id=2数据行的X锁。&lt;/p&gt;
+&lt;p&gt;事务A，更新id为2的用户名&lt;/p&gt;
 
-&lt;p&gt;事务B，查询user表
-1. 检查到user表上用IX锁；
-2. 事务B加锁请求阻塞。&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;获取user表上的IX锁；&lt;/p&gt;&lt;/li&gt;
 
-&lt;p&gt;事务C，更新id为1的用户名
-1. 获取user表的IX锁；
-2. 检测到user表有IX锁；
-3. 意向锁不排斥，故事务C获得IX锁；
-4. id=1不存在其他行级锁，获取行级X锁。&lt;/p&gt;
+&lt;li&gt;&lt;p&gt;获取id=2数据行的X锁。&lt;/p&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;事务B，查询user表&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;检查到user表上用IX锁；&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;事务B加锁请求阻塞。&lt;/p&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;事务C，更新id为1的用户名&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;获取user表的IX锁；&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;检测到user表有IX锁；&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;意向锁不排斥，故事务C获得IX锁；&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;id=1不存在其他行级锁，获取行级X锁。&lt;/p&gt;&lt;/li&gt;
+&lt;/ol&gt;
 
 &lt;p&gt;说明：若无意向锁，则对于事务B，将要查询表中的行来确定是否存在其他行级锁。&lt;/p&gt;
 </description>
