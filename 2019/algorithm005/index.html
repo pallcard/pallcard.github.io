@@ -149,11 +149,11 @@
 
           
 
-<h5 id="描述">描述</h5>
+<h3 id="描述">描述</h3>
 
 <p>根据二叉树的前序遍历和中序遍历的结果，重建出该二叉树。假设输入的前序遍历和中序遍历的结果中都不含重复的数字。</p>
 
-<h5 id="例子">例子</h5>
+<h3 id="例子">例子</h3>
 
 <pre><code class="language-java">Input:
 	preorder：{3,9,20,15,7}
@@ -162,12 +162,12 @@ Output:
 	该二叉树
 </code></pre>
 
-<h4 id="思路">思路</h4>
+<h3 id="思路">思路</h3>
 
 <p>根据先序遍历确定根，再通过中序遍历将数组划分为两部分，分别是左子树、右子树。
 故可以通过一个HashMap存储中序遍历的数组值与下标，key为值，value为下标。</p>
 
-<h5 id="代码">代码</h5>
+<h3 id="代码">代码</h3>
 
 <pre><code class="language-java">class TreeNode {
     private TreeNode leftChild;

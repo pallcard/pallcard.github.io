@@ -47,7 +47,7 @@
     "articleSection" : "posts",
     "name" : "算法006",
     "headline" : "算法006",
-    "description" : "描述 给定一个二叉树和其中的一个结点，请找出中序遍历顺序的下一个结点并且返回。 注意，树中的结点不仅包含左右子结点，同时包含指向父结点的指针。\n例子 Input: 二叉树 Output: 中序遍历顺序的下一个结点  思路 中序遍历顺序的下一个结点，中序遍历是左根右， 判断该结点是否有右孩子， 1.若有，则下一个结点的最左子结点 2.若无，则下一个结点为第一个左链指向该结点的祖先结点的结点\n代码 public class Question006 { class TreeLinkNode { int val; TreeLinkNode left = null; TreeLinkNode right = null; TreeLinkNode next = null; TreeLinkNode(int val) { this.val = val; } } public TreeLinkNode GetNext(TreeLinkNode pNode) { TreeLinkNode resultNode = null; if(null != pNode.right) { resultNode = pNode.right; while (null != resultNode.left) { resultNode = resultNode.next; } } else { TreeLinkNode temp = pNode; resultNode = pNode.",
+    "description" : "描述 给定一个二叉树和其中的一个结点，请找出中序遍历顺序的下一个结点并且返回。 注意，树中的结点不仅包含左右子结点，同时包含指向父结点的指针。\n例子 Input: 二叉树 Output: 中序遍历顺序的下一个结点  思路 中序遍历顺序的下一个结点，中序遍历是左根右， 判断该结点是否有右孩子，\n 若有，则下一个结点的最左子结点 若无，则下一个结点为第一个左链指向该结点的祖先结点的结点  代码 public class Question006 { class TreeLinkNode { int val; TreeLinkNode left = null; TreeLinkNode right = null; TreeLinkNode next = null; TreeLinkNode(int val) { this.val = val; } } public TreeLinkNode GetNext(TreeLinkNode pNode) { TreeLinkNode resultNode = null; if(null != pNode.right) { resultNode = pNode.right; while (null != resultNode.left) { resultNode = resultNode.",
     "inLanguage" : "zh-CN",
     "author" : "刘科",
     "creator" : "刘科",
@@ -149,12 +149,12 @@
 
           
 
-<h5 id="描述">描述</h5>
+<h3 id="描述">描述</h3>
 
 <p>给定一个二叉树和其中的一个结点，请找出中序遍历顺序的下一个结点并且返回。
 注意，树中的结点不仅包含左右子结点，同时包含指向父结点的指针。</p>
 
-<h5 id="例子">例子</h5>
+<h3 id="例子">例子</h3>
 
 <pre><code class="language-java">Input:
 	二叉树
@@ -162,14 +162,17 @@ Output:
 	中序遍历顺序的下一个结点
 </code></pre>
 
-<h4 id="思路">思路</h4>
+<h3 id="思路">思路</h3>
 
 <p>中序遍历顺序的下一个结点，中序遍历是左根右，
-判断该结点是否有右孩子，
- 1.若有，则下一个结点的最左子结点
- 2.若无，则下一个结点为第一个左链指向该结点的祖先结点的结点</p>
+判断该结点是否有右孩子，</p>
 
-<h5 id="代码">代码</h5>
+<ol>
+<li>若有，则下一个结点的最左子结点</li>
+<li>若无，则下一个结点为第一个左链指向该结点的祖先结点的结点</li>
+</ol>
+
+<h3 id="代码">代码</h3>
 
 <pre><code class="language-java">public class Question006 {
 

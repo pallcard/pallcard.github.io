@@ -41,11 +41,10 @@
       
       <guid>https://pallcard.github.io/2019/algorithm016/</guid>
       <description>描述 正则表达式匹配问题
-请实现一个函数用来匹配包括 &amp;lsquo;.&amp;rsquo; 和 &amp;lsquo;&amp;rsquo; 的正则表达式。模式中的字符 &amp;lsquo;.&amp;rsquo; 表示任意一个字符，而 &amp;lsquo;&amp;rsquo; 表示它前面的字符可以出现任意次（包含 0 次）。
+请实现一个函数用来匹配包括 &amp;lsquo;.&amp;rsquo; 和 &amp;lsquo;*&amp;rsquo; 的正则表达式。模式中的字符 &amp;lsquo;.&amp;rsquo; 表示任意一个字符，而 &amp;lsquo;*&amp;rsquo; 表示它前面的字符可以出现任意次（包含 0 次）。
 . 一个任意字符
 * 表示*前字符出现（0-？）字符
-aaa ab*ac*a a.a
-例子 Input: Output:  思路 采用两个下标，分别记录目标串与模式串。 循环模式串，若为.，则下标加1； 若为模式串与目标串字符相同，则下标加1，否则看模式串下一个字符算法为*；
+例子 aaa 以下两模式串均可匹配 ab*ac*a a.a  思路 采用两个下标，分别记录目标串与模式串。 循环模式串，若为.，则下标加1； 若为模式串与目标串字符相同，则下标加1，否则看模式串下一个字符算法为*；
 代码 public class Demo016 { public static void main(String[] args) { String string = &amp;quot;aaa&amp;quot;; String pattern = &amp;quot;ab*a&amp;quot;; int index = 0; int i = 0; boolean result = true; for (i = 0; i &amp;lt; pattern.length(); i++) { if (index &amp;gt;= string.</description>
     </item>
     
@@ -205,8 +204,8 @@ public class JDBCTest { public static void main(String[] args) throws Exception 
       
       <guid>https://pallcard.github.io/2019/algorithm006/</guid>
       <description>描述 给定一个二叉树和其中的一个结点，请找出中序遍历顺序的下一个结点并且返回。 注意，树中的结点不仅包含左右子结点，同时包含指向父结点的指针。
-例子 Input: 二叉树 Output: 中序遍历顺序的下一个结点  思路 中序遍历顺序的下一个结点，中序遍历是左根右， 判断该结点是否有右孩子， 1.若有，则下一个结点的最左子结点 2.若无，则下一个结点为第一个左链指向该结点的祖先结点的结点
-代码 public class Question006 { class TreeLinkNode { int val; TreeLinkNode left = null; TreeLinkNode right = null; TreeLinkNode next = null; TreeLinkNode(int val) { this.val = val; } } public TreeLinkNode GetNext(TreeLinkNode pNode) { TreeLinkNode resultNode = null; if(null != pNode.right) { resultNode = pNode.right; while (null != resultNode.left) { resultNode = resultNode.next; } } else { TreeLinkNode temp = pNode; resultNode = pNode.</description>
+例子 Input: 二叉树 Output: 中序遍历顺序的下一个结点  思路 中序遍历顺序的下一个结点，中序遍历是左根右， 判断该结点是否有右孩子，
+ 若有，则下一个结点的最左子结点 若无，则下一个结点为第一个左链指向该结点的祖先结点的结点  代码 public class Question006 { class TreeLinkNode { int val; TreeLinkNode left = null; TreeLinkNode right = null; TreeLinkNode next = null; TreeLinkNode(int val) { this.val = val; } } public TreeLinkNode GetNext(TreeLinkNode pNode) { TreeLinkNode resultNode = null; if(null != pNode.right) { resultNode = pNode.right; while (null != resultNode.left) { resultNode = resultNode.</description>
     </item>
     
     <item>

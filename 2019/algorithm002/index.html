@@ -149,12 +149,12 @@
 
           
 
-<h5 id="描述">描述</h5>
+<h3 id="描述">描述</h3>
 
 <p>给定一个二维数组，其每一行从左到右递增排序，从上到下也是递增排序。
 给定一个数，判断这个数是否在该二维数组中。</p>
 
-<h5 id="例子">例子</h5>
+<h3 id="例子">例子</h3>
 
 <pre><code class="language-java">Input:
 	数组：
@@ -170,11 +170,11 @@ Output:
 	2
 </code></pre>
 
-<h4 id="思路">思路</h4>
+<h3 id="思路">思路</h3>
 
 <p>由于每一行从左到右递增排序，从上到下也是递增排序，故可以从右上角开始遍历，若大于目标值，列减1；若小于目标值，行加1；若等于则成功找到。</p>
 
-<h5 id="代码">代码</h5>
+<h3 id="代码">代码</h3>
 
 <pre><code class="language-java">public class Question002 {
     public static void main(String[] args) {

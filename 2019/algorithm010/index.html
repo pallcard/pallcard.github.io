@@ -149,13 +149,13 @@
 
           
 
-<h5 id="描述">描述</h5>
+<h3 id="描述">描述</h3>
 
 <p>变态跳青蛙</p>
 
 <p>青蛙可以跳1，2，3，，，n阶。问跳到n有多少种不同方法。</p>
 
-<h5 id="例子">例子</h5>
+<h3 id="例子">例子</h3>
 
 <pre><code class="language-java">Input:
 	
@@ -163,7 +163,7 @@ Output:
 	
 </code></pre>
 
-<h4 id="思路">思路</h4>
+<h3 id="思路">思路</h3>
 
 <pre><code>f(n) = f(n-1) + f(n-2) + ,,, + f(0)
 
@@ -172,7 +172,7 @@ f(n-1) = f(n-2) + f(n-3) + ,,, + f(0)
 ==&gt;  f(n) = 2 * f(n-1)
 </code></pre>
 
-<h5 id="代码">代码</h5>
+<h3 id="代码">代码</h3>
 
 <pre><code class="language-java">public class Demo010 {
 

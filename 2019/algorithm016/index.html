@@ -47,7 +47,7 @@
     "articleSection" : "posts",
     "name" : "算法016",
     "headline" : "算法016",
-    "description" : "描述 正则表达式匹配问题\n请实现一个函数用来匹配包括 \x26lsquo;.\x26rsquo; 和 \x26lsquo;\x26rsquo; 的正则表达式。模式中的字符 \x26lsquo;.\x26rsquo; 表示任意一个字符，而 \x26lsquo;\x26rsquo; 表示它前面的字符可以出现任意次（包含 0 次）。\n. 一个任意字符\n* 表示*前字符出现（0-？）字符\naaa ab*ac*a a.a\n例子 Input: Output:  思路 采用两个下标，分别记录目标串与模式串。 循环模式串，若为.，则下标加1； 若为模式串与目标串字符相同，则下标加1，否则看模式串下一个字符算法为*；\n代码 public class Demo016 { public static void main(String[] args) { String string = \x26quot;aaa\x26quot;; String pattern = \x26quot;ab*a\x26quot;; int index = 0; int i = 0; boolean result = true; for (i = 0; i \x26lt; pattern.length(); i\x2b\x2b) { if (index \x26gt;= string.",
+    "description" : "描述 正则表达式匹配问题\n请实现一个函数用来匹配包括 \x26lsquo;.\x26rsquo; 和 \x26lsquo;*\x26rsquo; 的正则表达式。模式中的字符 \x26lsquo;.\x26rsquo; 表示任意一个字符，而 \x26lsquo;*\x26rsquo; 表示它前面的字符可以出现任意次（包含 0 次）。\n. 一个任意字符\n* 表示*前字符出现（0-？）字符\n例子 aaa 以下两模式串均可匹配 ab*ac*a a.a  思路 采用两个下标，分别记录目标串与模式串。 循环模式串，若为.，则下标加1； 若为模式串与目标串字符相同，则下标加1，否则看模式串下一个字符算法为*；\n代码 public class Demo016 { public static void main(String[] args) { String string = \x26quot;aaa\x26quot;; String pattern = \x26quot;ab*a\x26quot;; int index = 0; int i = 0; boolean result = true; for (i = 0; i \x26lt; pattern.length(); i\x2b\x2b) { if (index \x26gt;= string.",
     "inLanguage" : "zh-CN",
     "author" : "刘科",
     "creator" : "刘科",
@@ -58,7 +58,7 @@
     "datePublished": "2019-07-06 17:35:19 \x2b0800 CST",
     "dateModified" : "2019-07-06 17:35:19 \x2b0800 CST",
     "url" : "https:\/\/pallcard.github.io\/2019\/algorithm016\/",
-    "wordCount" : "125",
+    "wordCount" : "124",
     "keywords" : [ "Algorithm","Java","总数", "刘科个人博客"]
 }
 </script>
@@ -149,34 +149,31 @@
 
           
 
-<h5 id="描述">描述</h5>
+<h3 id="描述">描述</h3>
 
 <p>正则表达式匹配问题</p>
 
-<p>请实现一个函数用来匹配包括 &lsquo;.&rsquo; 和 &lsquo;<em>&rsquo; 的正则表达式。模式中的字符 &lsquo;.&rsquo; 表示任意一个字符，而 &lsquo;</em>&rsquo; 表示它前面的字符可以出现任意次（包含 0 次）。</p>
+<p>请实现一个函数用来匹配包括 &lsquo;.&rsquo; 和 &lsquo;*&rsquo; 的正则表达式。模式中的字符 &lsquo;.&rsquo; 表示任意一个字符，而 &lsquo;*&rsquo; 表示它前面的字符可以出现任意次（包含 0 次）。</p>
 
 <p>. 一个任意字符</p>
 
 <p>* 表示*前字符出现（0-？）字符</p>
 
-<p>aaa
-ab*ac*a  a.a</p>
+<h3 id="例子">例子</h3>
 
-<h5 id="例子">例子</h5>
+<pre><code class="language-java">aaa 以下两模式串均可匹配
 
-<pre><code class="language-java">Input:
-	
-Output:
+ab*ac*a  a.a
 	
 </code></pre>
 
-<h4 id="思路">思路</h4>
+<h3 id="思路">思路</h3>
 
 <p>采用两个下标，分别记录目标串与模式串。
 循环模式串，若为.，则下标加1；
 若为模式串与目标串字符相同，则下标加1，否则看模式串下一个字符算法为*；</p>
 
-<h5 id="代码">代码</h5>
+<h3 id="代码">代码</h3>
 
 <pre><code class="language-java">public class Demo016 {
     public static void main(String[] args) {

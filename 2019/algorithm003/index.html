@@ -153,7 +153,7 @@
 
 <p>将一个字符串中的空格替换成 &ldquo;%20&rdquo;。</p>
 
-<h5 id="例子">例子</h5>
+<h3 id="例子">例子</h3>
 
 <pre><code class="language-java">Input:
 	&quot;A B&quot;
@@ -161,11 +161,11 @@ Output:
 	&quot;A%20B&quot;
 </code></pre>
 
-<h4 id="思路">思路</h4>
+<h3 id="思路">思路</h3>
 
 <p>由于要将字符串中所用空格替换为%20，故若字符串含有一个空格，则字符串的总长度会增长2，故可以先遍历一遍字符串，若将字符串的总长度变为相应的长度，需要两个指针，分别指向原字符串长度的最后一个票p1，和新字符串的最后一个p2，若原字符串为字符，则直接赋值给p2；若原字符串为空格，则赋值%20。</p>
 
-<h5 id="代码">代码</h5>
+<h3 id="代码">代码</h3>
 
 <pre><code class="language-java">public class Question003 {
     public static void main(String[] args) {

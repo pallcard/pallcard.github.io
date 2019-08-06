@@ -796,34 +796,31 @@ class MethodClass {
       <guid>https://pallcard.github.io/2019/algorithm016/</guid>
       <description>
 
-&lt;h5 id=&#34;描述&#34;&gt;描述&lt;/h5&gt;
+&lt;h3 id=&#34;描述&#34;&gt;描述&lt;/h3&gt;
 
 &lt;p&gt;正则表达式匹配问题&lt;/p&gt;
 
-&lt;p&gt;请实现一个函数用来匹配包括 &amp;lsquo;.&amp;rsquo; 和 &amp;lsquo;&lt;em&gt;&amp;rsquo; 的正则表达式。模式中的字符 &amp;lsquo;.&amp;rsquo; 表示任意一个字符，而 &amp;lsquo;&lt;/em&gt;&amp;rsquo; 表示它前面的字符可以出现任意次（包含 0 次）。&lt;/p&gt;
+&lt;p&gt;请实现一个函数用来匹配包括 &amp;lsquo;.&amp;rsquo; 和 &amp;lsquo;*&amp;rsquo; 的正则表达式。模式中的字符 &amp;lsquo;.&amp;rsquo; 表示任意一个字符，而 &amp;lsquo;*&amp;rsquo; 表示它前面的字符可以出现任意次（包含 0 次）。&lt;/p&gt;
 
 &lt;p&gt;. 一个任意字符&lt;/p&gt;
 
 &lt;p&gt;* 表示*前字符出现（0-？）字符&lt;/p&gt;
 
-&lt;p&gt;aaa
-ab*ac*a  a.a&lt;/p&gt;
+&lt;h3 id=&#34;例子&#34;&gt;例子&lt;/h3&gt;
 
-&lt;h5 id=&#34;例子&#34;&gt;例子&lt;/h5&gt;
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;aaa 以下两模式串均可匹配
 
-&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;Input:
-	
-Output:
+ab*ac*a  a.a
 	
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;h4 id=&#34;思路&#34;&gt;思路&lt;/h4&gt;
+&lt;h3 id=&#34;思路&#34;&gt;思路&lt;/h3&gt;
 
 &lt;p&gt;采用两个下标，分别记录目标串与模式串。
 循环模式串，若为.，则下标加1；
 若为模式串与目标串字符相同，则下标加1，否则看模式串下一个字符算法为*；&lt;/p&gt;
 
-&lt;h5 id=&#34;代码&#34;&gt;代码&lt;/h5&gt;
+&lt;h3 id=&#34;代码&#34;&gt;代码&lt;/h3&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;public class Demo016 {
     public static void main(String[] args) {
@@ -871,13 +868,13 @@ Output:
       <guid>https://pallcard.github.io/2019/algorithm015/</guid>
       <description>
 
-&lt;h5 id=&#34;描述&#34;&gt;描述&lt;/h5&gt;
+&lt;h3 id=&#34;描述&#34;&gt;描述&lt;/h3&gt;
 
 &lt;p&gt;二进制中1的个数&lt;/p&gt;
 
 &lt;p&gt;输入一个整数，输出该数二进制表示中1的个数&lt;/p&gt;
 
-&lt;h5 id=&#34;例子&#34;&gt;例子&lt;/h5&gt;
+&lt;h3 id=&#34;例子&#34;&gt;例子&lt;/h3&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;Input:
 	
@@ -885,11 +882,11 @@ Output:
 	
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;h4 id=&#34;思路&#34;&gt;思路&lt;/h4&gt;
+&lt;h3 id=&#34;思路&#34;&gt;思路&lt;/h3&gt;
 
 &lt;p&gt;n&amp;amp;(n-1)会去除掉n的位级表示中的最低的一位&lt;/p&gt;
 
-&lt;h5 id=&#34;代码&#34;&gt;代码&lt;/h5&gt;
+&lt;h3 id=&#34;代码&#34;&gt;代码&lt;/h3&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;public class Demo015 {
 
@@ -1266,7 +1263,7 @@ target:
 
 &lt;p&gt;例如，当 k 为 18 时，机器人能够进入方格 (35,37)，因为 3+5+3+7=18。但是，它不能进入方格 (35,38)，因为 3+5+3+8=19。请问该机器人能够达到多少个格子？&lt;/p&gt;
 
-&lt;h5 id=&#34;例子&#34;&gt;例子&lt;/h5&gt;
+&lt;h3 id=&#34;例子&#34;&gt;例子&lt;/h3&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;Input:
 	m(行数) n(列数) k(阀值)
@@ -1274,11 +1271,11 @@ Output:
 	
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;h4 id=&#34;思路&#34;&gt;思路&lt;/h4&gt;
+&lt;h3 id=&#34;思路&#34;&gt;思路&lt;/h3&gt;
 
 &lt;p&gt;先将数组中的值计算按位出来存入数组，使用深度优先遍历，将经过的格子中的值置k+1，使用count记录所有走过的格子。&lt;/p&gt;
 
-&lt;h5 id=&#34;代码&#34;&gt;代码&lt;/h5&gt;
+&lt;h3 id=&#34;代码&#34;&gt;代码&lt;/h3&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;public class Demo013 {
 
@@ -1356,12 +1353,12 @@ Output:
       <guid>https://pallcard.github.io/2019/algorithm012/</guid>
       <description>
 
-&lt;h5 id=&#34;描述&#34;&gt;描述&lt;/h5&gt;
+&lt;h3 id=&#34;描述&#34;&gt;描述&lt;/h3&gt;
 
 &lt;p&gt;矩阵中的路径
 判断在一个矩阵中是否存在一条包含某字符串所有字符的路径。路径可以从矩阵中的任意一个格子开始，每一步可以在矩阵中向上下左右移动一个格子。如果一条路径经过了矩阵中的某一个格子，则该路径不能再进入该格子。&lt;/p&gt;
 
-&lt;h5 id=&#34;例子&#34;&gt;例子&lt;/h5&gt;
+&lt;h3 id=&#34;例子&#34;&gt;例子&lt;/h3&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;Input:
 	
@@ -1369,11 +1366,11 @@ Output:
 	
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;h4 id=&#34;思路&#34;&gt;思路&lt;/h4&gt;
+&lt;h3 id=&#34;思路&#34;&gt;思路&lt;/h3&gt;
 
 &lt;p&gt;先将所给一维数组转化为二维数组，找到目标字符串首个字符所在位置。然后进行深度递归匹配目标字符串。&lt;/p&gt;
 
-&lt;h5 id=&#34;代码&#34;&gt;代码&lt;/h5&gt;
+&lt;h3 id=&#34;代码&#34;&gt;代码&lt;/h3&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;public class Demo012 {
 
@@ -1446,13 +1443,13 @@ Output:
       <guid>https://pallcard.github.io/2019/algorithm011/</guid>
       <description>
 
-&lt;h5 id=&#34;描述&#34;&gt;描述&lt;/h5&gt;
+&lt;h3 id=&#34;描述&#34;&gt;描述&lt;/h3&gt;
 
 &lt;p&gt;旋转数组(非递减)的最小数&lt;/p&gt;
 
 &lt;p&gt;把一个数组最开始的若干位搬到数组的末尾，称为旋转数组。&lt;/p&gt;
 
-&lt;h5 id=&#34;例子&#34;&gt;例子&lt;/h5&gt;
+&lt;h3 id=&#34;例子&#34;&gt;例子&lt;/h3&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;Input:
 	
@@ -1460,7 +1457,7 @@ Output:
 	
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;h4 id=&#34;思路&#34;&gt;思路&lt;/h4&gt;
+&lt;h3 id=&#34;思路&#34;&gt;思路&lt;/h3&gt;
 
 &lt;p&gt;采用二分的方式来处理，&lt;/p&gt;
 
@@ -1474,7 +1471,7 @@ Output:
 
 &lt;p&gt;（2）4 5 6 1 2 3，分区后两个部分均为非递减数组，则返回num[left]和num[mid+1]中较小的数即可。&lt;/p&gt;
 
-&lt;h5 id=&#34;代码&#34;&gt;代码&lt;/h5&gt;
+&lt;h3 id=&#34;代码&#34;&gt;代码&lt;/h3&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;public class Demo011 {
     public static void main(String[] args) {
@@ -1528,13 +1525,13 @@ Output:
       <guid>https://pallcard.github.io/2019/algorithm010/</guid>
       <description>
 
-&lt;h5 id=&#34;描述&#34;&gt;描述&lt;/h5&gt;
+&lt;h3 id=&#34;描述&#34;&gt;描述&lt;/h3&gt;
 
 &lt;p&gt;变态跳青蛙&lt;/p&gt;
 
 &lt;p&gt;青蛙可以跳1，2，3，，，n阶。问跳到n有多少种不同方法。&lt;/p&gt;
 
-&lt;h5 id=&#34;例子&#34;&gt;例子&lt;/h5&gt;
+&lt;h3 id=&#34;例子&#34;&gt;例子&lt;/h3&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;Input:
 	
@@ -1542,7 +1539,7 @@ Output:
 	
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;h4 id=&#34;思路&#34;&gt;思路&lt;/h4&gt;
+&lt;h3 id=&#34;思路&#34;&gt;思路&lt;/h3&gt;
 
 &lt;pre&gt;&lt;code&gt;f(n) = f(n-1) + f(n-2) + ,,, + f(0)
 
@@ -1551,7 +1548,7 @@ f(n-1) = f(n-2) + f(n-3) + ,,, + f(0)
 ==&amp;gt;  f(n) = 2 * f(n-1)
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;h5 id=&#34;代码&#34;&gt;代码&lt;/h5&gt;
+&lt;h3 id=&#34;代码&#34;&gt;代码&lt;/h3&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;public class Demo010 {
 
@@ -1591,13 +1588,13 @@ f(n-1) = f(n-2) + f(n-3) + ,,, + f(0)
       <guid>https://pallcard.github.io/2019/algorithm009/</guid>
       <description>
 
-&lt;h5 id=&#34;描述&#34;&gt;描述&lt;/h5&gt;
+&lt;h3 id=&#34;描述&#34;&gt;描述&lt;/h3&gt;
 
 &lt;p&gt;斐波那契数列，
 *  应用1：矩形覆盖,n个2*1小矩形覆盖2*n的大矩形，有多少种方法
 *  应用2：跳台阶,可以跳1列或者2列，跳n阶有多少种方法&lt;/p&gt;
 
-&lt;h5 id=&#34;例子&#34;&gt;例子&lt;/h5&gt;
+&lt;h3 id=&#34;例子&#34;&gt;例子&lt;/h3&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;Input:
 	
@@ -1605,7 +1602,7 @@ Output:
 	
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;h4 id=&#34;思路&#34;&gt;思路&lt;/h4&gt;
+&lt;h3 id=&#34;思路&#34;&gt;思路&lt;/h3&gt;
 
 &lt;pre&gt;&lt;code&gt;f(n) = n;  n = 0,1
 
