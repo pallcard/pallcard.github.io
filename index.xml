@@ -6,8 +6,438 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
     <copyright>All rights reserved - 2019</copyright>
-    <lastBuildDate>Sat, 20 Jul 2019 22:31:59 +0800</lastBuildDate>
+    <lastBuildDate>Tue, 06 Aug 2019 22:10:05 +0800</lastBuildDate>
     <atom:link href="/" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>装饰者模式</title>
+      <link>https://pallcard.github.io/2019/%E8%A3%85%E9%A5%B0%E8%80%85%E6%A8%A1%E5%BC%8F/</link>
+      <pubDate>Tue, 06 Aug 2019 22:10:05 +0800</pubDate>
+      
+      <guid>https://pallcard.github.io/2019/%E8%A3%85%E9%A5%B0%E8%80%85%E6%A8%A1%E5%BC%8F/</guid>
+      <description>
+
+&lt;h2 id=&#34;装饰者模式&#34;&gt;装饰者模式&lt;/h2&gt;
+
+&lt;p&gt;在不改变原类文件以及不使用继承的情况下，动态地将责任附加到对象上，从而实现动态拓展一个对象的功能。它是通过创建一个包装对象，也就是装饰来包裹真实的对象。&lt;/p&gt;
+
+&lt;h2 id=&#34;举例说明&#34;&gt;举例说明&lt;/h2&gt;
+
+&lt;p&gt;包含四个部分
+1. 抽象组件 &amp;mdash;-&amp;gt; IDrink
+2. 具体组件 &amp;mdash;-&amp;gt; Coffee
+3. 抽象装饰 &amp;mdash;-&amp;gt; DrinkDecorator
+4. 具体装饰 &amp;mdash;-&amp;gt; Milk, Ice&lt;/p&gt;
+
+&lt;h3 id=&#34;抽象主键-idrink&#34;&gt;抽象主键 IDrink&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;public interface IDrink {
+    double cost();
+    String describe();
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;具体组件-coffee&#34;&gt;具体组件 Coffee&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;public class Coffee implements IDrink{
+    @Override
+    public double cost() {
+        return 10;
+    }
+
+    @Override
+    public String describe() {
+        return &amp;quot;coffer&amp;quot;;
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;抽象装饰-drinkdecorator&#34;&gt;抽象装饰 DrinkDecorator&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;public abstract class DrinkDecorator implements IDrink {
+    protected IDrink drink;
+
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;抽象装饰-milk&#34;&gt;抽象装饰 Milk&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;public class Milk extends DrinkDecorator{
+
+    public Milk(IDrink drink) {
+        this.drink = drink;
+    }
+
+
+    @Override
+    public double cost() {
+        return 1 + this.drink.cost();
+    }
+
+    @Override
+    public String describe() {
+        return  this.drink.describe() + &amp;quot; with milk&amp;quot;;
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;说明：&lt;/p&gt;
+
+&lt;p&gt;主要使用类的组合来实现对于一个类进行动态的增加功能。具体组件和抽象装饰都实现了抽象组件，具体组件又是抽象组件的子类，当调用时，可以要修饰的对象传递给修饰类，这样就可以对抽象对类进行功能对增强。&lt;/p&gt;
+
+&lt;h2 id=&#34;使用动态代理对coffer类进行增强&#34;&gt;使用动态代理对coffer类进行增强&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;
+public class CoffeeProxyFactory implements InvocationHandler {
+
+    private Object target;
+
+    public CoffeeProxyFactory(Object target) {
+        this.target = target;
+    }
+
+    public Object getInstance() {
+        return Proxy.newProxyInstance(target.getClass().getClassLoader(), target.getClass().getInterfaces(), this);
+    }
+
+    @Override
+    public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+        Object invoke;
+
+        if (&amp;quot;describe&amp;quot;.equals(method.getName())) {
+            invoke = method.invoke(target, args);
+            invoke += &amp;quot; with milk&amp;quot;;
+            return invoke;
+        } else {
+            invoke = method.invoke(target, args);
+//            invoke = 1 + (Integer) invoke;
+            return invoke;
+        }
+
+    }
+}
+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;测试&#34;&gt;测试&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;public class Test {
+    public static void main(String[] args) {
+        IDrink drink = new Coffee();
+        drink = new Milk(drink);
+        drink = new Ice(drink);
+        System.out.println(drink.cost());
+        System.out.println(drink.describe());
+
+        System.out.println(&amp;quot;+++++++++++++++&amp;quot;);
+        System.out.println(&amp;quot;动态代理&amp;quot;);
+        System.out.println(&amp;quot;+++++++++++++++&amp;quot;);
+        IDrink iDrink = new Coffee();
+        IDrink drinkProxy =  (IDrink) new CoffeeProxyFactory(iDrink).getInstance();
+        System.out.println(drinkProxy.cost());
+        System.out.println(drinkProxy.describe());
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;比较&#34;&gt;比较&lt;/h2&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;装饰器模式可以在不增加新的装饰类的情况下对已有的功能进行组合而得到新的功能，但得修改客户端代码才能使用新的功能。动态代理则是增加一个新的类来实现功能，哪怕这个功能是对已有功能的组合，但可以不用修改客户端代码。&lt;strong&gt;a.增不增加新类。b.是否需要更改客户端代码&lt;/strong&gt;。&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;代理模式主要是控制对某个特定对象访问，而装饰模式主要是为了给对象添加行为。&lt;/p&gt;&lt;/li&gt;
+&lt;/ol&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>SpringBoot注解</title>
+      <link>https://pallcard.github.io/2019/springboot%E6%B3%A8%E8%A7%A3/</link>
+      <pubDate>Tue, 06 Aug 2019 20:08:00 +0800</pubDate>
+      
+      <guid>https://pallcard.github.io/2019/springboot%E6%B3%A8%E8%A7%A3/</guid>
+      <description>
+
+&lt;h2 id=&#34;spring-web-mvc&#34;&gt;Spring Web MVC&lt;/h2&gt;
+
+&lt;h3 id=&#34;requestmapping&#34;&gt;@RequestMapping&lt;/h3&gt;
+
+&lt;p&gt;主要用途是将web请求与请求处理类中的方法进行映射。&lt;/p&gt;
+
+&lt;p&gt;属性：&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;value:映射的请求URL或者其别名&lt;/li&gt;
+&lt;li&gt;method:兼容HTTP的方法名&lt;/li&gt;
+&lt;li&gt;params:根据HTTP参数的存在、缺省或值对请求进行过滤&lt;/li&gt;
+&lt;li&gt;header:根据HTTP Header的存在、缺省或值对请求进行过滤&lt;/li&gt;
+&lt;li&gt;consume:设定在HTTP请求正文中允许使用的媒体类型&lt;/li&gt;
+&lt;li&gt;product:在HTTP响应体中允许使用的媒体类型&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;一般主要使用前3个属性。改注解也可以对类进行标记，这样类中的处理方法在映射请求路径时，会自动将类上@RequestMapping设置的value拼接到方法中映射路径之前。例如：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;@Controller
+@RequestMapping(value=&amp;quot;/demo&amp;quot;)
+public class Demo {
+	@RequestMapping(value=&amp;quot;/test&amp;quot;, method=RequestMethod.GET)
+	public String test() {
+		return &amp;quot;test&amp;quot;;
+	}
+}
+// 说明：请求路径为 /demo/test时，调用test()方法处理
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;requestbody&#34;&gt;@RequestBody&lt;/h3&gt;
+
+&lt;p&gt;在处理请求方法的参数列表中使用，它可以将请求主体中的参数绑定到一个对象中，请求主体参数是通过HttpMessageConverter传递的，根据请求主体中的参数名与对象的属性名进行匹配并绑定值。还可以通过 &lt;strong&gt;@Valid&lt;/strong&gt; 注解对请求主体中的参数进行校验。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;@RestController
+@RequestMapping(&amp;quot;/api/v1&amp;quot;)
+public class UserController {
+
+	@PostMapping(&amp;quot;/Login&amp;quot;)
+    public IJSONResult Login(@RequestBody Users user) throws Exception {
+		...
+	}
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;requestparam&#34;&gt;@RequestParam&lt;/h3&gt;
+
+&lt;p&gt;用于将方法的参数与Web请求的传递的参数进行绑定。使用@RequestParam可以轻松的访问HTTP请求参数的值。该注解的其他属性配置与@PathVariable的配置相同，特别的，如果传递的参数为空，还可以通过defaultValue设置一个默认值。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;@GetMapping(/users)
+public Role getUserRole(@RequestParam(name=&amp;quot;id&amp;quot;, defaultValue=&amp;quot;0&amp;quot;) long id) {
+	...
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;pathvariable&#34;&gt;@PathVariable&lt;/h3&gt;
+
+&lt;p&gt;将方法中的参数绑定到请求URI中的模板变量上。可以通过@RequestMapping注解来指定URI的模板变量，然后使用@PathVariable注解将方法中的参数绑定到模板变量上。特别地，@PathVariable注解允许我们使用value或name属性来给参数取一个别名。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;@GetMapping(&amp;quot;/users/{id}&amp;quot;)
+public Role getUserRole(@PathVariable(name=&amp;quot;id&amp;quot;) long id) {
+	...
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;responsebody&#34;&gt;@ResponseBody&lt;/h3&gt;
+
+&lt;p&gt;@ResponseBody会自动将控制器中方法的返回值写入到HTTP响应中。特别的，@ResponseBody注解只能用在被@Controller注解标记的类中。如果在被@RestController标记的类中，则方法不需要使用@ResponseBody注解进行标注。@RestController相当于是@Controller和@ResponseBody的组合注解。&lt;/p&gt;
+
+&lt;h3 id=&#34;getmapping&#34;&gt;@GetMapping&lt;/h3&gt;
+
+&lt;p&gt;用于处理HTTP GET请求，并将请求映射到具体的处理方法中。具体来说，@GetMapping是一个组合注解，它相当于是@RequestMapping(method=RequestMethod.GET)的快捷方式。&lt;strong&gt;@PostMapping @PutMapping @DeleteMapping @PatchMapping&lt;/strong&gt;这几个注解与其类似，用于处理不同的请求。&lt;/p&gt;
+
+&lt;h3 id=&#34;controller&#34;&gt;@Controller&lt;/h3&gt;
+
+&lt;p&gt;@Controller是@Component注解的一个延伸，Spring会自动扫描并配置被该注解标注的类。此注解用于标注Spring MVC的控制器。 &lt;strong&gt;一般直接使用@RestController&lt;/strong&gt;。&lt;/p&gt;
+
+&lt;h3 id=&#34;restcontroller&#34;&gt;@RestController&lt;/h3&gt;
+
+&lt;p&gt;@RestController是在Spring 4.0开始引入的，这是一个特定的控制器注解。此注解相当于@Controller和@ResponseBody的快捷方式。当使用此注解时，不需要再在方法上使用@ResponseBody注解。&lt;/p&gt;
+
+&lt;h3 id=&#34;exceptionhandler&#34;&gt;@ExceptionHandler&lt;/h3&gt;
+
+&lt;p&gt;用于标注处理特定类型异常类所抛出异常的方法。当控制器中的方法抛出异常时，Spring会自动捕获异常，并将捕获的异常信息传递给被@ExceptionHandler标注的方法。&lt;/p&gt;
+
+&lt;h3 id=&#34;responsestatus&#34;&gt;@ResponseStatus&lt;/h3&gt;
+
+&lt;p&gt;可以标注请求处理方法。使用此注解，可以指定响应所需要的HTTP STATUS。特别地，我们可以使用HttpStauts类对该注解的value属性进行赋值。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;@ResponseStatus(HttpStatus.BAD_REQUEST)
+@ExceptionHandler(UserNotFoundExceptin.class)
+public RespnseEntity&amp;lt;Object&amp;gt; userNotFoundExceptionHandler(UserNotFoundException ex, WebRequest request) {
+	UserErrorDetail detail = new UserErrorDetail(new Date(), ex.getMessage(), request.getDescription(false));
+
+	return new ResponseEntity&amp;lt;&amp;gt;(detail, HttpStatus.NOT_FOUND);
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;controlleradvice&#34;&gt;@ControllerAdvice&lt;/h3&gt;
+
+&lt;p&gt;@ControllerAdvice是@Component注解的一个延伸注解，Spring会自动扫描并检测被@ControllerAdvice所标注的类。@ControllerAdvice需要和@ExceptionHandler、@InitBinder以及@ModelAttribute注解搭配使用，主要是用来处理控制器所抛出的异常信息。首先，我们需要定义一个被@ControllerAdvice所标注的类，在该类中，定义一个用于处理具体异常的方法，并使用@ExceptionHandler注解进行标记。此外，在有必要的时候，可以使用@InitBinder在类中进行全局的配置，还可以使用@ModelAttribute配置与视图相关的参数。使用@ControllerAdvice注解，就可以快速的创建统一的，自定义的异常处理类。&lt;/p&gt;
+
+&lt;h3 id=&#34;modelattribute&#34;&gt;@ModelAttribute&lt;/h3&gt;
+
+&lt;p&gt;通过此注解，可以通过模型索引名称来访问已经存在于控制器中的model。与@PathVariable和@RequestParam注解一样，如果参数名与模型具有相同的名字，则不必指定索引名称。如果使用@ModelAttribute对方法进行标注，Spring会将方法的返回值绑定到具体的Model上。在Spring调用具体的处理方法之前，被@ModelAttribute注解标注的所有方法都将被执行。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;@PostMapping(&amp;quot;/users&amp;quot;)
+public void createUser(@ModelAttribute User user) {
+	...
+}
+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;crossorigin&#34;&gt;@CrossOrigin&lt;/h3&gt;
+
+&lt;p&gt;将为请求处理类或请求处理方法提供跨域调用支持。如果我们将此注解标注类，那么类中的所有方法都将获得支持跨域的能力。使用此注解的好处是可以微调跨域行为。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;@CrossOrigin
+@PostMapping(&amp;quot;/users&amp;quot;)
+public void createUser(@ModelAttribute User user) {
+	...
+}
+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;initbinder&#34;&gt;@InitBinder&lt;/h3&gt;
+
+&lt;p&gt;用于标注初始化WebDataBinider的方法，该方法用于对Http请求传递的表单数据进行处理，如时间格式化、字符串处理等。&lt;/p&gt;
+
+&lt;h2 id=&#34;spring-bean&#34;&gt;Spring Bean&lt;/h2&gt;
+
+&lt;h3 id=&#34;componentscan&#34;&gt;@ComponentScan&lt;/h3&gt;
+
+&lt;p&gt;用于配置Spring需要扫描的被组件注解注释的类所在的包。可以通过配置其basePackages属性或者value属性来配置需要扫描的包路径。value属性是basePackages的别名。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;@Configuration
+@ComponentScan(basePackages=&amp;quot;cn.wishhust.domain&amp;quot;)
+public class componnetCofig(){
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;component&#34;&gt;@Component&lt;/h3&gt;
+
+&lt;p&gt;用于标注一个普通的组件类，它没有明确的业务范围，只是通知Spring被此注解的类需要被纳入到Spring Bean容器中并进行管理。&lt;/p&gt;
+
+&lt;h3 id=&#34;service&#34;&gt;@Service&lt;/h3&gt;
+
+&lt;p&gt;是@Component的一个延伸（特例），它用于标注业务逻辑类。与@Component注解一样，被此注解标注的类，会自动被Spring所管理。&lt;/p&gt;
+
+&lt;h3 id=&#34;repository&#34;&gt;@Repository&lt;/h3&gt;
+
+&lt;p&gt;是@Component注解的延伸，与@Component注解一样，被此注解标注的类会被Spring自动管理起来，@Repository注解用于标注DAO层的数据持久化类。&lt;/p&gt;
+
+&lt;h2 id=&#34;spring-di-scope&#34;&gt;Spring DI &amp;amp; Scope&lt;/h2&gt;
+
+&lt;h3 id=&#34;dependson&#34;&gt;@DependsOn&lt;/h3&gt;
+
+&lt;p&gt;可以配置Spring IoC容器在初始化一个Bean之前，先初始化其他的Bean对象。&lt;/p&gt;
+
+&lt;h3 id=&#34;bean&#34;&gt;@Bean&lt;/h3&gt;
+
+&lt;p&gt;主要的作用是告知Spring，被此注解所标注的类将需要纳入到Bean管理工厂中。&lt;/p&gt;
+
+&lt;h3 id=&#34;scope&#34;&gt;@Scope&lt;/h3&gt;
+
+&lt;p&gt;@Scope注解可以用来定义@Component标注的类的作用范围以及@Bean所标记的类的作用范围。@Scope所限定的作用范围有：singleton、prototype、request、session、globalSession或者其他的自定义范围。&lt;/p&gt;
+
+&lt;p&gt;当@Scope的作用范围设置成Singleton时，被此注解所标注的类只会被Spring IoC容器初始化一次。在默认情况下，Spring IoC容器所初始化的类实例都为singleton。&lt;/p&gt;
+
+&lt;h2 id=&#34;容器配置注解&#34;&gt;容器配置注解&lt;/h2&gt;
+
+&lt;h3 id=&#34;autowired&#34;&gt;@Autowired&lt;/h3&gt;
+
+&lt;p&gt;@Autowired注解用于标记Spring将要解析和注入的依赖项。此注解可以作用在构造函数、字段和setter方法上。&lt;/p&gt;
+
+&lt;h3 id=&#34;primary&#34;&gt;@Primary&lt;/h3&gt;
+
+&lt;p&gt;当系统中需要配置多个具有相同类型的bean时，@Primary可以定义这些Bean的优先级。&lt;/p&gt;
+
+&lt;h3 id=&#34;qualifier&#34;&gt;@Qualifier&lt;/h3&gt;
+
+&lt;p&gt;当系统中存在同一类型的多个Bean时，@Autowired在进行依赖注入的时候就不知道该选择哪一个实现类进行注入。此时，我们可以使用@Qualifier注解来微调，帮助@Autowired选择正确的依赖项。&lt;/p&gt;
+
+&lt;h2 id=&#34;spring-boot注解&#34;&gt;Spring Boot注解&lt;/h2&gt;
+
+&lt;h3 id=&#34;springbootapplication&#34;&gt;@SpringBootApplication&lt;/h3&gt;
+
+&lt;p&gt;@SpringBootApplication注解是一个快捷的配置注解，在被它标注的类中，可以定义一个或多个Bean，并自动触发自动配置Bean和自动扫描组件。此注解相当于@Configuration、@EnableAutoConfiguration和@ComponentScan的组合。在Spring Boot应用程序的主类中，就使用了此注解。示例代码如下：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;@SpringBootApplication
+public class Application{
+ public static void main(String [] args){
+   SpringApplication.run(Application.class,args);
+ }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;enableautoconfiguration&#34;&gt;@EnableAutoConfiguration&lt;/h3&gt;
+
+&lt;p&gt;@EnableAutoConfiguration注解用于通知Spring，根据当前类路径下引入的依赖包，自动配置与这些依赖包相关的配置项。&lt;/p&gt;
+
+&lt;p&gt;@ConditionalOnClass与@ConditionalOnMissingClass&lt;/p&gt;
+
+&lt;p&gt;这两个注解属于类条件注解，它们根据是否存在某个类作为判断依据来决定是否要执行某些配置。下面是一个简单的示例代码：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;@Configuration
+@ConditionalOnClass(DataSource.class)
+class MySQLAutoConfiguration {
+ //...
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;conditionalonbean与-conditionalonmissingbean&#34;&gt;@ConditionalOnBean与@ConditionalOnMissingBean&lt;/h3&gt;
+
+&lt;p&gt;这两个注解属于对象条件注解，根据是否存在某个对象作为依据来决定是否要执行某些配置方法。示例代码如下：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;@Bean
+@ConditionalOnBean(name=&amp;quot;dataSource&amp;quot;)
+LocalContainerEntityManagerFactoryBean entityManagerFactory(){
+ //...
+}
+@Bean
+@ConditionalOnMissingBean
+public MyBean myBean(){
+ //...
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;conditionalonproperty&#34;&gt;@ConditionalOnProperty&lt;/h3&gt;
+
+&lt;p&gt;@ConditionalOnProperty注解会根据Spring配置文件中的配置项是否满足配置要求，从而决定是否要执行被其标注的方法。示例代码如下：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;@Bean
+@ConditionalOnProperty(name=&amp;quot;alipay&amp;quot;,havingValue=&amp;quot;on&amp;quot;)
+Alipay alipay(){
+ return new Alipay();
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;conditionalonresource&#34;&gt;@ConditionalOnResource&lt;/h3&gt;
+
+&lt;p&gt;此注解用于检测当某个配置文件存在使，则触发被其标注的方法，下面是使用此注解的代码示例：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;@ConditionalOnResource(resources = &amp;quot;classpath:website.properties&amp;quot;)
+Properties addWebsiteProperties(){
+ //...
+}
+@ConditionalOnWebApplication与@ConditionalOnNotWebApplication
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;这两个注解用于判断当前的应用程序是否是Web应用程序。如果当前应用是Web应用程序，则使用Spring WebApplicationContext,并定义其会话的生命周期。下面是一个简单的示例：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;@ConditionalOnWebApplication
+HealthCheckController healthCheckController(){
+ //...
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;conditionalexpression&#34;&gt;@ConditionalExpression&lt;/h3&gt;
+
+&lt;p&gt;此注解可以让我们控制更细粒度的基于表达式的配置条件限制。当表达式满足某个条件或者表达式为真的时候，将会执行被此注解标注的方法。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;@Bean
+@ConditionalException(&amp;quot;${localstore} &amp;amp;&amp;amp; ${local == &#39;true&#39;}&amp;quot;)
+LocalFileStore store(){
+ //...
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;conditional&#34;&gt;@Conditional&lt;/h3&gt;
+
+&lt;p&gt;@Conditional注解可以控制更为复杂的配置条件。在Spring内置的条件控制注解不满足应用需求的时候，可以使用此注解定义自定义的控制条件，以达到自定义的要求。下面是使用该注解的简单示例：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;@Conditioanl(CustomConditioanl.class)
+CustomProperties addCustomProperties(){
+ //...
+}
+&lt;/code&gt;&lt;/pre&gt;
+</description>
+    </item>
     
     <item>
       <title>意向锁</title>
@@ -128,12 +558,33 @@
 
 &lt;h3 id=&#34;举例&#34;&gt;举例&lt;/h3&gt;
 
-&lt;p&gt;用户表user：
-|id| name
-|&amp;mdash;|&amp;mdash;
-|1|zhangsan
-|2|lisi
-|3|wangwu&lt;/p&gt;
+&lt;p&gt;用户表user：&lt;/p&gt;
+
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;id&lt;/th&gt;
+&lt;th&gt;name&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;1&lt;/td&gt;
+&lt;td&gt;zhangsan&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;2&lt;/td&gt;
+&lt;td&gt;lisi&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;3&lt;/td&gt;
+&lt;td&gt;wangwu&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
 
 &lt;p&gt;事务A，更新id为2的用户名
 1. 获取user表上的IX锁；
@@ -2388,322 +2839,6 @@ List&amp;lt;User&amp;gt; queryUserListByIds(@Param(&amp;quot;ids&amp;quot;) int[
 
 &lt;p&gt;原因：
 xml文件的namespace的值对应的mapper接口写错了，没使用全名。&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>Nginx问题</title>
-      <link>https://pallcard.github.io/2019/nginx%E9%97%AE%E9%A2%98/</link>
-      <pubDate>Wed, 19 Jun 2019 19:12:01 +0800</pubDate>
-      
-      <guid>https://pallcard.github.io/2019/nginx%E9%97%AE%E9%A2%98/</guid>
-      <description>&lt;p&gt;&lt;strong&gt;常用命令&lt;/strong&gt;&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;/usr/local/webserver/nginx/sbin/nginx -s reload            # 重新载入配置文件
-/usr/local/webserver/nginx/sbin/nginx -s reopen            # 重启 Nginx
-/usr/local/webserver/nginx/sbin/nginx -s stop              # 停止 Nginx
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;strong&gt;错误信息1&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;后期添加配置文件后，重新运行报错，（云服务器为centos，最初按照时直接用的默认安装）&lt;/p&gt;
-
-&lt;p&gt;错误信息：./configure: error: SSL modules require the OpenSSL library.&lt;/p&gt;
-
-&lt;p&gt;解决办法：&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;# 安装 
-yum -y install openssl openssl-devel
-
-yum -y install openssl openssl-devel
-
-./configure --prefix=/usr/local/nginx --with-http_ssl_module
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;strong&gt;错误信息2&lt;/strong&gt;&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;# 防火墙问题（也可能是安全组设置的问题）
-
-# 关闭防火墙命令：
-systemctl stop firewalld.service
-
-# 开启防火墙：
-systemctl start firewalld.service
-
-# 关闭开机自启动：
-systemctl disable firewalld.service
-
-# 开启开机启动：
-systemctl enable firewalld.service
-
-# 开放80
-
-firewall-cmd --zone=public --add-port=80/tcp --permanent （--permanent永久生效，没有此参数重启后失效）
-
-# 开放1000-2000
-
-firewall-cmd --zone=public --add-port=1000-2000/tcp --permanent 
-
-# 查看指定端口被哪个进程占用的情况
-
-netstat -tunlp|grep 端口号
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;strong&gt;错误信息3&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;linux下启动nginx报错libpcre.so.0&lt;/p&gt;
-
-&lt;p&gt;解决办法：&lt;/p&gt;
-
-&lt;p&gt;命令查找nginx动态关联的lib包&lt;/p&gt;
-
-&lt;p&gt;ldd $(which /usr/local/nginx/sbin/nginx)&lt;/p&gt;
-
-&lt;p&gt;使用关联命令，重新关联&lt;/p&gt;
-
-&lt;p&gt;ln -s /usr/local/lib/libpcre.so.0 /lib64&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;错误信息4&lt;/strong&gt;
-nginx: [error] invalid PID number ; in /usr/local/nginx/logs/nginx.pid&lt;/p&gt;
-
-&lt;p&gt;解决办法：&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;p&gt;第一步：执行命令  killall -9 nginx   杀掉nginx 进程&lt;/p&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;第二步：执行命令  /usr/local/nginx/sbin/nginx -c /usr/local/nginx/conf/nginx.conf  &lt;/p&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;第三步：重新加载配置文件，执行命令  ./nginx -s reload &lt;/p&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;strong&gt;错误信息5&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;配置ssl报错&lt;/p&gt;
-
-&lt;p&gt;nginx: [emerg] unknown directive &amp;ldquo;ssl&amp;rdquo; in /usr/local/nginx/conf/nginx.conf:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;# 到解压的nginx目录下
-./configure --with-http_ssl_module
-# nginx之前添加了fastdfs-nginx-module
-# ./configure --with-http_ssl_module --add-module=../fastdfs-nginx-module-master/src
-make # 不能执行make install 会覆盖
-# 把原来nginx备份
-cp /usr/local/nginx/sbin/nginx /usr/local/nginx/sbin/nginx.bak
-# 把新的nginx覆盖旧的
-cp objs/nginx /usr/local/nginx/sbin/nginx
-# 出现错误时cp: cannot create regular file ‘/usr/local/nginx/sbin/nginx’: Text file busy ，使用以下命令解决
-# cp -rfp objs/nginx /usr/local/nginx/sbin/nginx
-# 测试nginx是否正确
-/usr/local/nginx/sbin/nginx -t
-# 重启nginx
-/usr/local/nginx/sbin/nginx -s reload
-&lt;/code&gt;&lt;/pre&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>FastDFS</title>
-      <link>https://pallcard.github.io/2019/fastdfs/</link>
-      <pubDate>Sat, 15 Jun 2019 19:43:24 +0800</pubDate>
-      
-      <guid>https://pallcard.github.io/2019/fastdfs/</guid>
-      <description>
-
-&lt;h4 id=&#34;1-fastdfs-理论&#34;&gt;1. FastDFS 理论&lt;/h4&gt;
-
-&lt;p&gt;FastDFS 是一个开源的高性能分布式文件系统（DFS）。 它的主要功能包括：文件存储，文件同步和文件访问，以及高容量和负载平衡。主要解决了海量数据存储问题，特别适合以中小文件（建议范围：4KB &amp;lt; file_size &amp;lt;500MB）为载体的在线服务。
-FastDFS 系统有三个角色：跟踪服务器(Tracker Server)、存储服务器(Storage Server)和客户端(Client)。&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;tracker server&lt;/strong&gt;
-跟踪服务器，主要做调度工作，起负载均衡的作用。负责管理所有的storage server和group，每个storage在启动后会连接tracker，告诉tracker自己所属的group，并保持周期性心跳，tracker根据storage的心跳信息，建立映射表，tracke管理的元数据很少（tracker上的元数据都是由storage汇报产生），并且直接存在内存中，本身不需要持久化任何数据。tracker之间是对等的，因此扩展tracker是很容易的，直接增加tracker服务，同时修改storage的配置，增加新增的tarcker服务的地址和端口，重启即可。所有的tracker都会接受storage的心跳信息，以生成元数据信息。&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;storage server&lt;/strong&gt;
-存储服务器（又称：存储节点或数据服务器），顾名思义是用来保存文件的和文件属性的。以group为单位，每个group内可以包含多台storage server，数据互为备份，存储容量空间以group中storage server容量最小的为准。以group为单位组织存储能够方便的进行应用隔离、负责均衡和副本数定制；确定是group的容量受单机容量的限制。group内机器故障，需要依赖group内其他机器重新同步数据来恢复数据（更换坏盘，重启fdfs_storaged即可）。storage存储依赖本地文件系统，storage课配置多个数据存储目录，磁盘不做raid，直接分别挂在到多个目录，将这些目录配置为storage的数据目录即可。&lt;/p&gt;
-
-&lt;p&gt;storage接收写请求的时候，会根据配置好的规则，选择其中一个存储目录来存储文件；为了避免单个目录下的文件过多，storage第一次启动的时候，会在每个数据存储目录创建2级子目录，每级256，总共65536个目录，新写的文件会以hash的方式路由到其中一个子目录下，然后将文件数据直接作为一个本地文件存储。&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;client&lt;/strong&gt;
-客户端，作为业务请求的发起方，通过专有接口，使用TCP/IP协议与跟踪器服务器或存储节点进行数据交互。
-&lt;img src=&#34;https://pallcard.github.io/images/fastdfs001.png&#34; alt=&#34;文件上传&#34; /&gt;&lt;/p&gt;
-
-&lt;h5 id=&#34;文件上传&#34;&gt;文件上传&lt;/h5&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://pallcard.github.io/images/fastdfs002.png&#34; alt=&#34;在这里插入图片描述&#34; /&gt;
-&lt;strong&gt;生成file id&lt;/strong&gt;
-选择存储目录之后，storage会生成一个file_id，采用base64编码，包含有：storage server ip，文件创建时间，文件大小，文件CRC32校验码和随机数。每个存储目录下有两个256*256个子目录，storage会按文件file_id进行两次hash，路由到其中一个子目录，然后将文件以file_id为名字存储。
-文件路径如下：
-group0/M00/00/00/rBAAAl0EkICAIiBOAAABowgL3Pk888.png
-* 组名：group0
-* 磁盘： M00
-* 目录：00/00
-* 文件名：rBAAAl0EkICAIiBOAAABowgL3Pk888.png&lt;/p&gt;
-
-&lt;p&gt;文件索引信息包括：&lt;strong&gt;组名，虚拟磁盘路径，数据两级目录，文件名&lt;/strong&gt;。&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;组名：文件上传后所在的存储组名称，在文件上传成功后有存储服务器返回，需要客户端自行保存。&lt;/li&gt;
-&lt;li&gt;虚拟磁盘路径：存储服务器配置的虚拟路径，与磁盘选项store_path*对应。&lt;/li&gt;
-&lt;li&gt;数据两级目录：存储服务器在每个虚拟磁盘路径下创建的两级目录，用于存储数据文件。&lt;/li&gt;
-&lt;li&gt;文件名：与文件上传时不同。是由存储服务器根据特定信息生成，文件名包含：源存储服务器IP地址、文件创建时间戳、文件大小、随机数和文件拓展名等信息。&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h5 id=&#34;文件下载&#34;&gt;文件下载&lt;/h5&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://pallcard.github.io/images/fastdfs003.png&#34; alt=&#34;文件下载&#34; /&gt;&lt;/p&gt;
-
-&lt;h4 id=&#34;2-安装fastdfs环境&#34;&gt;2.安装FastDFS环境&lt;/h4&gt;
-
-&lt;h5 id=&#34;下载安装-libfastcommon&#34;&gt;下载安装 libfastcommon&lt;/h5&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;yum -y install libevent
-# 下载libfastcommon
-wget https://github.com/happyfish100/libfastcommon/archive/V1.0.7.tar.gz
-# 解压
-tar -zxvf V1.0.7.tar.gz
-# 编译、安装
-cd libfastcommon-1.0.7
- ./make.sh
- ./make.sh install
- cd /usr/lib64
- ll libfast* 
- # 复制libfastcommon.so 到 usr/lib
- cp libfastcommon.so /usr/lib
- cd /usr/lib
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h5 id=&#34;下载安装fastdfs&#34;&gt;下载安装FastDFS&lt;/h5&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;# 下载FastDFS
-wget https://github.com/happyfish100/fastdfs/archive/V5.05.tar.gz
-# 解压FastDFS
-tar -zxvf V5.05.tar.gz
-# 编译、安装
-cd fastdfs-5.05
- ./make.sh
- ./make.sh install
- 
-# 配置tracker
-cd /usr/bin
-ll fdfs*
-cd /etc/fdfs/
-# 进入 fastdfs-5.05/conf目录
-cp * /etc/fdfs/
-vim tracker.conf
-# 修改 base_path=/fastdfs/tracker
-cd /
-mkdir /fastdfs/tracker -p
-cd fastdfs/
-mkdir storage
-mkdir client
-cd /usr/bin
-fdfs_trackerd /etc/fdfs/tracker.conf
-fdfs_trackerd /etc/fdfs/tracker.conf restart
-
-# 配置storage
-vim storage.conf
-# 修改 base_path=/fastdfs/storage
-#     store_path0=/fastdfs/storage
-#     tracker_server=203.195.238.249:22122
-cd /usr/bin
-fdfs_storaged /etc/fdfs/storage.conf restart
-
-# 配置client
-vim client.conf
-# 修改 base_path=/fastdfs/client
-#     tracker_server=203.195.238.249:22122
-# 测试 (先放一张图片到/root/test/headImg.jpg)
-fdfs_test /etc/fdfs/client.conf upload /root/test/headImg.jpg
-# 返回路径http://203.195.238.249/group1/M00/00/00/rBAAAl0EX5WAQtpGAACGZ5UrSuI275_big.jpg
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h5 id=&#34;目录结构&#34;&gt;目录结构&lt;/h5&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;|--- /
-	|---fastdfs
-		|---client
-		|---storage
-			|---data
-				|---存储的文件 256*256个目录
-			|---logs
-		|---tracker
-			|---data
-			|---logs
-		|---tmp
-	|---usr
-		|---lib
-			|---libfastcommon.so
-		|---lib64
-			|---libfastcommon.so
-		|---bin
-			|---fdfs* 命令工具
-	|---etc
-		|---fdfs
-			|---client.conf
-			|---tracker.conf
-			|---storage.conf
-			|---mod_fastdfs.conf
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h5 id=&#34;安装nginx&#34;&gt;安装nginx&lt;/h5&gt;
-
-&lt;p&gt;1.安装nginx
-2.修改配置文件，加入如下配置&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;	server  {
-        listen       88;
-        server_name  localhost;
-       
-        location /group1/M00 {
-           alias /fastdfs/storage/data;
-		}
-    }
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;3.即可根据服务器的80端口访问到图片&lt;/p&gt;
-
-&lt;h5 id=&#34;fastdfs-nginx-module&#34;&gt;fastdfs-nginx-module&lt;/h5&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;# 下载
-wget wget https://github.com/happyfish100/fastdfs-nginx-module/archive/5e5f3566bbfa57418b5506aaefbe107a42c9fcb1.zip
-# 解压
-unzip 5e5f3566bbfa57418b5506aaefbe107a42c9fcb1.zip
-# 重命名
-mv fastdfs-nginx-module-5e5f3566bbfa57418b5506aaefbe107a42c9fcb1  fastdfs-nginx-module-master
-# 先停掉nginx服务
-/usr/local/nginx/sbin/nginx -s stop
-# 进入之前安装nginx的解压包的位置
-cd nginx-1.14.2
-# 添加fastdfs-nginx-module模块
-./configure --add-module=../fastdfs-nginx-module-master/src
-# 重新编译、安装
-make &amp;amp;&amp;amp; make install
-# 复制fastdfs-nginx-module 源码中的配置文件到/etc/fdfs 目录
-cp mod_fastdfs.conf /etc/fdfs
-cd /etc/fdfs
-mkdir /fastdfs/tmp
-vim mod_fastdfs.conf
-# 修改 store_path0=/fastdfs/storage
-#     tracker_server=203.195.238.249:22122
-#     base_path=/fastdfs/tmp
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;修改nginx的配置文件&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;	server  {
-        listen       88;
-        server_name  localhost;
-       
-        location /group1/M00 {
-            ngx_fastdfs_module;
-		}
-    }
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h5 id=&#34;部署结构图&#34;&gt;部署结构图&lt;/h5&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://pallcard.github.io/images/fastdfs004.png&#34; alt=&#34;部署结构图&#34; /&gt;
-参考：&lt;a href=&#34;https://www.cnblogs.com/chiangchou/p/fastdfs.html&#34; rel=&#34;nofollow noreferrer&#34; target=&#34;_blank&#34;&gt;https://www.cnblogs.com/chiangchou/p/fastdfs.html&lt;/a&gt;
-           &lt;a href=&#34;https://www.cnblogs.com/chiangchou/p/fastdfs.html&#34; rel=&#34;nofollow noreferrer&#34; target=&#34;_blank&#34;&gt;https://www.cnblogs.com/chiangchou/p/fastdfs.html&lt;/a&gt;&lt;/p&gt;
 </description>
     </item>
     

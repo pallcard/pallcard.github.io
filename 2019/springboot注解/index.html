@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+  <meta http-equiv="content-type" content="text/html;charset=utf-8">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noodp"/>
+  <meta name="author" content="刘科">
+  <meta name="description" content="hust研一">
+  <meta name="keywords" content="Java,博客">
+  
+  <link rel="prev" href="https://pallcard.github.io/2019/%E6%84%8F%E5%90%91%E9%94%81/" />
+  <link rel="next" href="https://pallcard.github.io/2019/%E8%A3%85%E9%A5%B0%E8%80%85%E6%A8%A1%E5%BC%8F/" />
+  <link rel="canonical" href="https://pallcard.github.io/2019/springboot%E6%B3%A8%E8%A7%A3/" />
+  <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+  <meta name="msapplication-TileColor" content="#da532c">
+  <meta name="theme-color" content="#ffffff">
+  <title>
+       
+       
+           SpringBoot注解 | 刘科个人博客
+       
+  </title>
+  <meta name="title" content="SpringBoot注解 | 刘科个人博客">
+    
+  
+  <link rel="stylesheet" href="/font/iconfont.css">
+  <link rel="stylesheet" href="/css/main.min.css">
+
+
+  
+  
+ 
+
+<script type="application/ld+json">
+ "@context" : "http://schema.org",
+    "@type" : "BlogPosting",
+    "mainEntityOfPage": {
+         "@type": "WebPage",
+         "@id": "https:\/\/pallcard.github.io\/"
+    },
+    "articleSection" : "posts",
+    "name" : "SpringBoot注解",
+    "headline" : "SpringBoot注解",
+    "description" : "Spring Web MVC @RequestMapping 主要用途是将web请求与请求处理类中的方法进行映射。\n属性：\n value:映射的请求URL或者其别名 method:兼容HTTP的方法名 params:根据HTTP参数的存在、缺省或值对请求进行过滤 header:根据HTTP Header的存在、缺省或值对请求进行过滤 consume:设定在HTTP请求正文中允许使用的媒体类型 product:在HTTP响应体中允许使用的媒体类型  一般主要使用前3个属性。改注解也可以对类进行标记，这样类中的处理方法在映射请求路径时，会自动将类上@RequestMapping设置的value拼接到方法中映射路径之前。例如：\n@Controller @RequestMapping(value=\x26quot;\/demo\x26quot;) public class Demo { @RequestMapping(value=\x26quot;\/test\x26quot;, method=RequestMethod.GET) public String test() { return \x26quot;test\x26quot;; } } \/\/ 说明：请求路径为 \/demo\/test时，调用test()方法处理  @RequestBody 在处理请求方法的参数列表中使用，它可以将请求主体中的参数绑定到一个对象中，请求主体参数是通过HttpMessageConverter传递的，根据请求主体中的参数名与对象的属性名进行匹配并绑定值。还可以通过 @Valid 注解对请求主体中的参数进行校验。\n@RestController @RequestMapping(\x26quot;\/api\/v1\x26quot;) public class UserController { @PostMapping(\x26quot;\/Login\x26quot;) public IJSONResult Login(@RequestBody Users user) throws Exception { ... } }  @RequestParam 用于将方法的参数与Web请求的传递的参数进行绑定。使用@RequestParam可以轻松的访问HTTP请求参数的值。该注解的其他属性配置与@PathVariable的配置相同，特别的，如果传递的参数为空，还可以通过defaultValue设置一个默认值。\n@GetMapping(\/users) public Role getUserRole(@RequestParam(name=\x26quot;id\x26quot;, defaultValue=\x26quot;0\x26quot;) long id) { .",
+    "inLanguage" : "zh-CN",
+    "author" : "刘科",
+    "creator" : "刘科",
+    "publisher": "刘科",
+    "accountablePerson" : "刘科",
+    "copyrightHolder" : "刘科",
+    "copyrightYear" : "2019",
+    "datePublished": "2019-08-06 20:08:00 \x2b0800 CST",
+    "dateModified" : "2019-08-06 20:08:00 \x2b0800 CST",
+    "url" : "https:\/\/pallcard.github.io\/2019\/springboot%E6%B3%A8%E8%A7%A3\/",
+    "wordCount" : "275",
+    "keywords" : [ "SpringBoot","总数", "刘科个人博客"]
+}
+</script>
+
+</head>
+
+  
+
+
+  <body class="">
+    <div class="wrapper">
+        <nav class="navbar">
+    <div class="container">
+        <div class="navbar-header header-logo">
+        	<a href="javascript:void(0);" class="theme-switch"><i class="iconfont icon-xihuan"></i></a>&nbsp;<a href="https://pallcard.github.io/">刘科个人博客</a>
+        </div>
+        <div class="menu navbar-right">
+                
+                
+                <a class="menu-item" href="/posts/" title="">博客</a>
+                
+                <a class="menu-item" href="/categories/" title="">分类</a>
+                
+                <a class="menu-item" href="/tags/" title="">标签</a>
+                
+                <a class="menu-item" href="/about/" title="">关于</a>
+                
+        </div>
+    </div>
+</nav>
+<nav class="navbar-mobile" id="nav-mobile" style="display: none">
+     <div class="container">
+        <div class="navbar-header">
+            <div>  <a href="javascript:void(0);" class="theme-switch"><i class="iconfont icon-xihuan"></i></a>&nbsp;<a href="https://pallcard.github.io/">刘科个人博客</a></div>
+            <div class="menu-toggle">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+     
+          <div class="menu" id="mobile-menu">
+                
+                
+                <a class="menu-item" href="/posts/" title="">博客</a>
+                
+                <a class="menu-item" href="/categories/" title="">分类</a>
+                
+                <a class="menu-item" href="/tags/" title="">标签</a>
+                
+                <a class="menu-item" href="/about/" title="">关于</a>
+                
+        </div>
+    </div>
+</nav>
+    	 <main class="main">
+          <div class="container">
+      		
+<article class="post-warp" itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">SpringBoot注解</h1>
+        <div class="post-meta">
+                Written by <a itemprop="name" href="https://pallcard.github.io/" rel="author">刘科</a> with ♥ 
+                <span class="post-time">
+                on <time datetime=2019-08-06 itemprop="datePublished">August 6, 2019</time>
+                </span>
+                in
+                <i class="iconfont icon-folder"></i>
+                <span class="post-category">
+                        <a href="https://pallcard.github.io/categories/springboot/"> SpringBoot </a>
+                        
+                </span>
+        </div>
+    </header>
+    <div class="post-content">
+        
+
+        
+
+        
+        
+     
+          
+          
+          
+
+          
+          
+          
+
+          
+
+<h2 id="spring-web-mvc">Spring Web MVC</h2>
+
+<h3 id="requestmapping">@RequestMapping</h3>
+
+<p>主要用途是将web请求与请求处理类中的方法进行映射。</p>
+
+<p>属性：</p>
+
+<ol>
+<li>value:映射的请求URL或者其别名</li>
+<li>method:兼容HTTP的方法名</li>
+<li>params:根据HTTP参数的存在、缺省或值对请求进行过滤</li>
+<li>header:根据HTTP Header的存在、缺省或值对请求进行过滤</li>
+<li>consume:设定在HTTP请求正文中允许使用的媒体类型</li>
+<li>product:在HTTP响应体中允许使用的媒体类型</li>
+</ol>
+
+<p>一般主要使用前3个属性。改注解也可以对类进行标记，这样类中的处理方法在映射请求路径时，会自动将类上@RequestMapping设置的value拼接到方法中映射路径之前。例如：</p>
+
+<pre><code class="language-java">@Controller
+@RequestMapping(value=&quot;/demo&quot;)
+public class Demo {
+	@RequestMapping(value=&quot;/test&quot;, method=RequestMethod.GET)
+	public String test() {
+		return &quot;test&quot;;
+	}
+}
+// 说明：请求路径为 /demo/test时，调用test()方法处理
+</code></pre>
+
+<h3 id="requestbody">@RequestBody</h3>
+
+<p>在处理请求方法的参数列表中使用，它可以将请求主体中的参数绑定到一个对象中，请求主体参数是通过HttpMessageConverter传递的，根据请求主体中的参数名与对象的属性名进行匹配并绑定值。还可以通过 <strong>@Valid</strong> 注解对请求主体中的参数进行校验。</p>
+
+<pre><code class="language-java">@RestController
+@RequestMapping(&quot;/api/v1&quot;)
+public class UserController {
+
+	@PostMapping(&quot;/Login&quot;)
+    public IJSONResult Login(@RequestBody Users user) throws Exception {
+		...
+	}
+}
+</code></pre>
+
+<h3 id="requestparam">@RequestParam</h3>
+
+<p>用于将方法的参数与Web请求的传递的参数进行绑定。使用@RequestParam可以轻松的访问HTTP请求参数的值。该注解的其他属性配置与@PathVariable的配置相同，特别的，如果传递的参数为空，还可以通过defaultValue设置一个默认值。</p>
+
+<pre><code class="language-java">@GetMapping(/users)
+public Role getUserRole(@RequestParam(name=&quot;id&quot;, defaultValue=&quot;0&quot;) long id) {
+	...
+}
+</code></pre>
+
+<h3 id="pathvariable">@PathVariable</h3>
+
+<p>将方法中的参数绑定到请求URI中的模板变量上。可以通过@RequestMapping注解来指定URI的模板变量，然后使用@PathVariable注解将方法中的参数绑定到模板变量上。特别地，@PathVariable注解允许我们使用value或name属性来给参数取一个别名。</p>
+
+<pre><code class="language-java">@GetMapping(&quot;/users/{id}&quot;)
+public Role getUserRole(@PathVariable(name=&quot;id&quot;) long id) {
+	...
+}
+</code></pre>
+
+<h3 id="responsebody">@ResponseBody</h3>
+
+<p>@ResponseBody会自动将控制器中方法的返回值写入到HTTP响应中。特别的，@ResponseBody注解只能用在被@Controller注解标记的类中。如果在被@RestController标记的类中，则方法不需要使用@ResponseBody注解进行标注。@RestController相当于是@Controller和@ResponseBody的组合注解。</p>
+
+<h3 id="getmapping">@GetMapping</h3>
+
+<p>用于处理HTTP GET请求，并将请求映射到具体的处理方法中。具体来说，@GetMapping是一个组合注解，它相当于是@RequestMapping(method=RequestMethod.GET)的快捷方式。<strong>@PostMapping @PutMapping @DeleteMapping @PatchMapping</strong>这几个注解与其类似，用于处理不同的请求。</p>
+
+<h3 id="controller">@Controller</h3>
+
+<p>@Controller是@Component注解的一个延伸，Spring会自动扫描并配置被该注解标注的类。此注解用于标注Spring MVC的控制器。 <strong>一般直接使用@RestController</strong>。</p>
+
+<h3 id="restcontroller">@RestController</h3>
+
+<p>@RestController是在Spring 4.0开始引入的，这是一个特定的控制器注解。此注解相当于@Controller和@ResponseBody的快捷方式。当使用此注解时，不需要再在方法上使用@ResponseBody注解。</p>
+
+<h3 id="exceptionhandler">@ExceptionHandler</h3>
+
+<p>用于标注处理特定类型异常类所抛出异常的方法。当控制器中的方法抛出异常时，Spring会自动捕获异常，并将捕获的异常信息传递给被@ExceptionHandler标注的方法。</p>
+
+<h3 id="responsestatus">@ResponseStatus</h3>
+
+<p>可以标注请求处理方法。使用此注解，可以指定响应所需要的HTTP STATUS。特别地，我们可以使用HttpStauts类对该注解的value属性进行赋值。</p>
+
+<pre><code class="language-java">@ResponseStatus(HttpStatus.BAD_REQUEST)
+@ExceptionHandler(UserNotFoundExceptin.class)
+public RespnseEntity&lt;Object&gt; userNotFoundExceptionHandler(UserNotFoundException ex, WebRequest request) {
+	UserErrorDetail detail = new UserErrorDetail(new Date(), ex.getMessage(), request.getDescription(false));
+
+	return new ResponseEntity&lt;&gt;(detail, HttpStatus.NOT_FOUND);
+}
+</code></pre>
+
+<h3 id="controlleradvice">@ControllerAdvice</h3>
+
+<p>@ControllerAdvice是@Component注解的一个延伸注解，Spring会自动扫描并检测被@ControllerAdvice所标注的类。@ControllerAdvice需要和@ExceptionHandler、@InitBinder以及@ModelAttribute注解搭配使用，主要是用来处理控制器所抛出的异常信息。首先，我们需要定义一个被@ControllerAdvice所标注的类，在该类中，定义一个用于处理具体异常的方法，并使用@ExceptionHandler注解进行标记。此外，在有必要的时候，可以使用@InitBinder在类中进行全局的配置，还可以使用@ModelAttribute配置与视图相关的参数。使用@ControllerAdvice注解，就可以快速的创建统一的，自定义的异常处理类。</p>
+
+<h3 id="modelattribute">@ModelAttribute</h3>
+
+<p>通过此注解，可以通过模型索引名称来访问已经存在于控制器中的model。与@PathVariable和@RequestParam注解一样，如果参数名与模型具有相同的名字，则不必指定索引名称。如果使用@ModelAttribute对方法进行标注，Spring会将方法的返回值绑定到具体的Model上。在Spring调用具体的处理方法之前，被@ModelAttribute注解标注的所有方法都将被执行。</p>
+
+<pre><code class="language-java">@PostMapping(&quot;/users&quot;)
+public void createUser(@ModelAttribute User user) {
+	...
+}
+
+</code></pre>
+
+<h3 id="crossorigin">@CrossOrigin</h3>
+
+<p>将为请求处理类或请求处理方法提供跨域调用支持。如果我们将此注解标注类，那么类中的所有方法都将获得支持跨域的能力。使用此注解的好处是可以微调跨域行为。</p>
+
+<pre><code class="language-java">@CrossOrigin
+@PostMapping(&quot;/users&quot;)
+public void createUser(@ModelAttribute User user) {
+	...
+}
+
+</code></pre>
+
+<h3 id="initbinder">@InitBinder</h3>
+
+<p>用于标注初始化WebDataBinider的方法，该方法用于对Http请求传递的表单数据进行处理，如时间格式化、字符串处理等。</p>
+
+<h2 id="spring-bean">Spring Bean</h2>
+
+<h3 id="componentscan">@ComponentScan</h3>
+
+<p>用于配置Spring需要扫描的被组件注解注释的类所在的包。可以通过配置其basePackages属性或者value属性来配置需要扫描的包路径。value属性是basePackages的别名。</p>
+
+<pre><code class="language-java">@Configuration
+@ComponentScan(basePackages=&quot;cn.wishhust.domain&quot;)
+public class componnetCofig(){
+}
+</code></pre>
+
+<h3 id="component">@Component</h3>
+
+<p>用于标注一个普通的组件类，它没有明确的业务范围，只是通知Spring被此注解的类需要被纳入到Spring Bean容器中并进行管理。</p>
+
+<h3 id="service">@Service</h3>
+
+<p>是@Component的一个延伸（特例），它用于标注业务逻辑类。与@Component注解一样，被此注解标注的类，会自动被Spring所管理。</p>
+
+<h3 id="repository">@Repository</h3>
+
+<p>是@Component注解的延伸，与@Component注解一样，被此注解标注的类会被Spring自动管理起来，@Repository注解用于标注DAO层的数据持久化类。</p>
+
+<h2 id="spring-di-scope">Spring DI &amp; Scope</h2>
+
+<h3 id="dependson">@DependsOn</h3>
+
+<p>可以配置Spring IoC容器在初始化一个Bean之前，先初始化其他的Bean对象。</p>
+
+<h3 id="bean">@Bean</h3>
+
+<p>主要的作用是告知Spring，被此注解所标注的类将需要纳入到Bean管理工厂中。</p>
+
+<h3 id="scope">@Scope</h3>
+
+<p>@Scope注解可以用来定义@Component标注的类的作用范围以及@Bean所标记的类的作用范围。@Scope所限定的作用范围有：singleton、prototype、request、session、globalSession或者其他的自定义范围。</p>
+
+<p>当@Scope的作用范围设置成Singleton时，被此注解所标注的类只会被Spring IoC容器初始化一次。在默认情况下，Spring IoC容器所初始化的类实例都为singleton。</p>
+
+<h2 id="容器配置注解">容器配置注解</h2>
+
+<h3 id="autowired">@Autowired</h3>
+
+<p>@Autowired注解用于标记Spring将要解析和注入的依赖项。此注解可以作用在构造函数、字段和setter方法上。</p>
+
+<h3 id="primary">@Primary</h3>
+
+<p>当系统中需要配置多个具有相同类型的bean时，@Primary可以定义这些Bean的优先级。</p>
+
+<h3 id="qualifier">@Qualifier</h3>
+
+<p>当系统中存在同一类型的多个Bean时，@Autowired在进行依赖注入的时候就不知道该选择哪一个实现类进行注入。此时，我们可以使用@Qualifier注解来微调，帮助@Autowired选择正确的依赖项。</p>
+
+<h2 id="spring-boot注解">Spring Boot注解</h2>
+
+<h3 id="springbootapplication">@SpringBootApplication</h3>
+
+<p>@SpringBootApplication注解是一个快捷的配置注解，在被它标注的类中，可以定义一个或多个Bean，并自动触发自动配置Bean和自动扫描组件。此注解相当于@Configuration、@EnableAutoConfiguration和@ComponentScan的组合。在Spring Boot应用程序的主类中，就使用了此注解。示例代码如下：</p>
+
+<pre><code class="language-java">@SpringBootApplication
+public class Application{
+ public static void main(String [] args){
+   SpringApplication.run(Application.class,args);
+ }
+}
+</code></pre>
+
+<h3 id="enableautoconfiguration">@EnableAutoConfiguration</h3>
+
+<p>@EnableAutoConfiguration注解用于通知Spring，根据当前类路径下引入的依赖包，自动配置与这些依赖包相关的配置项。</p>
+
+<p>@ConditionalOnClass与@ConditionalOnMissingClass</p>
+
+<p>这两个注解属于类条件注解，它们根据是否存在某个类作为判断依据来决定是否要执行某些配置。下面是一个简单的示例代码：</p>
+
+<pre><code class="language-java">@Configuration
+@ConditionalOnClass(DataSource.class)
+class MySQLAutoConfiguration {
+ //...
+}
+</code></pre>
+
+<h3 id="conditionalonbean与-conditionalonmissingbean">@ConditionalOnBean与@ConditionalOnMissingBean</h3>
+
+<p>这两个注解属于对象条件注解，根据是否存在某个对象作为依据来决定是否要执行某些配置方法。示例代码如下：</p>
+
+<pre><code class="language-java">@Bean
+@ConditionalOnBean(name=&quot;dataSource&quot;)
+LocalContainerEntityManagerFactoryBean entityManagerFactory(){
+ //...
+}
+@Bean
+@ConditionalOnMissingBean
+public MyBean myBean(){
+ //...
+}
+</code></pre>
+
+<h3 id="conditionalonproperty">@ConditionalOnProperty</h3>
+
+<p>@ConditionalOnProperty注解会根据Spring配置文件中的配置项是否满足配置要求，从而决定是否要执行被其标注的方法。示例代码如下：</p>
+
+<pre><code class="language-java">@Bean
+@ConditionalOnProperty(name=&quot;alipay&quot;,havingValue=&quot;on&quot;)
+Alipay alipay(){
+ return new Alipay();
+}
+</code></pre>
+
+<h3 id="conditionalonresource">@ConditionalOnResource</h3>
+
+<p>此注解用于检测当某个配置文件存在使，则触发被其标注的方法，下面是使用此注解的代码示例：</p>
+
+<pre><code class="language-java">@ConditionalOnResource(resources = &quot;classpath:website.properties&quot;)
+Properties addWebsiteProperties(){
+ //...
+}
+@ConditionalOnWebApplication与@ConditionalOnNotWebApplication
+</code></pre>
+
+<p>这两个注解用于判断当前的应用程序是否是Web应用程序。如果当前应用是Web应用程序，则使用Spring WebApplicationContext,并定义其会话的生命周期。下面是一个简单的示例：</p>
+
+<pre><code class="language-java">@ConditionalOnWebApplication
+HealthCheckController healthCheckController(){
+ //...
+}
+</code></pre>
+
+<h3 id="conditionalexpression">@ConditionalExpression</h3>
+
+<p>此注解可以让我们控制更细粒度的基于表达式的配置条件限制。当表达式满足某个条件或者表达式为真的时候，将会执行被此注解标注的方法。</p>
+
+<pre><code class="language-java">@Bean
+@ConditionalException(&quot;${localstore} &amp;&amp; ${local == 'true'}&quot;)
+LocalFileStore store(){
+ //...
+}
+</code></pre>
+
+<h3 id="conditional">@Conditional</h3>
+
+<p>@Conditional注解可以控制更为复杂的配置条件。在Spring内置的条件控制注解不满足应用需求的时候，可以使用此注解定义自定义的控制条件，以达到自定义的要求。下面是使用该注解的简单示例：</p>
+
+<pre><code class="language-java">@Conditioanl(CustomConditioanl.class)
+CustomProperties addCustomProperties(){
+ //...
+}
+</code></pre>
+
+    </div>
+
+    <div class="post-copyright">
+             
+            <p class="copyright-item">
+                <span>Author:</span>
+                <span>刘科 </span>
+                </p>
+            
+           
+             
+            <p class="copyright-item">
+                    <span>Link:</span>
+                    <a href=https://pallcard.github.io/2019/springboot%E6%B3%A8%E8%A7%A3/>https://pallcard.github.io/2019/springboot%E6%B3%A8%E8%A7%A3/</span>
+            </p>
+            
+            
+    </div>
+
+  
+    <div class="post-tags">
+        
+            <section>
+            <i class="iconfont icon-tag"></i>Tag(s): 
+            
+            <span class="tag"><a href="https://pallcard.github.io/tags/springboot/">
+                    #SpringBoot</a></span>
+            
+            <span class="tag"><a href="https://pallcard.github.io/tags/%E6%80%BB%E6%95%B0/">
+                    #总数</a></span>
+            
+            </section>
+        
+        <section>
+                <a href="javascript:window.history.back();">back</a></span> · 
+                <span><a href="https://pallcard.github.io/">home</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav">
+        
+        <a href="https://pallcard.github.io/2019/%E6%84%8F%E5%90%91%E9%94%81/" class="prev" rel="prev" title="意向锁"><i class="iconfont icon-left"></i>&nbsp;意向锁</a>
+         
+        
+        <a href="https://pallcard.github.io/2019/%E8%A3%85%E9%A5%B0%E8%80%85%E6%A8%A1%E5%BC%8F/" class="next" rel="next" title="装饰者模式">装饰者模式&nbsp;<i class="iconfont icon-right"></i></a>
+        
+    </div>
+
+	<div class="post-comment">
+		
+		 
+  
+  <div id="vcomments"></div>
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src='//unpkg.com/valine/dist/Valine.min.js'></script>
+
+  <script type="text/javascript">
+    new Valine({
+        el: '#vcomments' ,
+        appId: 'ktil0uKcyLbDdCRFBVDz0eD9-gzGzoHsz',
+        appKey: 'KiYDkJXdqJW2VgrxmVshT2iA',
+        notify: 'false', 
+        verify: 'false', 
+        avatar:'mm', 
+        placeholder: '说点什么吧...',
+        visitor: 'true'
+    });
+  </script>
+	</div>
+</article>
+          </div>
+		   </main>
+      <footer class="footer">
+    <div class="copyright">
+        &copy;
+        
+        <span class="with-love">
+    	 <i class="iconfont icon-love"></i> 
+         </span>
+         
+            <span class="author" itemprop="copyrightHolder"><a href="https://pallcard.github.io/">刘科</a> | </span> 
+         
+
+         
+            <a href="http://www.miibeian.gov.cn/" target="_blank" rel="external nofollow">鄂ICP备19006996号-1 </a> |
+         
+		  <span>Powered by <a href="https://gohugo.io/" target="_blank" rel="external nofollow">Hugo</a> & <a href="https://github.com/liuzc/leaveit" target="_blank" rel="external nofollow">LeaveIt</a></span> 
+    </div>
+</footer>
+
+
+
+
+
+
+
+
+
+
+
+
+    
+    
+    <script src="/js/vendor_no_gallery.min.js" async=""></script>
+    
+  
+
+
+
+     </div>
+  </body>
+</html>

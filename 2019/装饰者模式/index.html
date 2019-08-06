@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+  <meta http-equiv="content-type" content="text/html;charset=utf-8">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noodp"/>
+  <meta name="author" content="刘科">
+  <meta name="description" content="hust研一">
+  <meta name="keywords" content="Java,博客">
+  
+  <link rel="prev" href="https://pallcard.github.io/2019/springboot%E6%B3%A8%E8%A7%A3/" />
+  
+  <link rel="canonical" href="https://pallcard.github.io/2019/%E8%A3%85%E9%A5%B0%E8%80%85%E6%A8%A1%E5%BC%8F/" />
+  <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+  <meta name="msapplication-TileColor" content="#da532c">
+  <meta name="theme-color" content="#ffffff">
+  <title>
+       
+       
+           装饰者模式 | 刘科个人博客
+       
+  </title>
+  <meta name="title" content="装饰者模式 | 刘科个人博客">
+    
+  
+  <link rel="stylesheet" href="/font/iconfont.css">
+  <link rel="stylesheet" href="/css/main.min.css">
+
+
+  
+  
+ 
+
+<script type="application/ld+json">
+ "@context" : "http://schema.org",
+    "@type" : "BlogPosting",
+    "mainEntityOfPage": {
+         "@type": "WebPage",
+         "@id": "https:\/\/pallcard.github.io\/"
+    },
+    "articleSection" : "posts",
+    "name" : "装饰者模式",
+    "headline" : "装饰者模式",
+    "description" : "装饰者模式 在不改变原类文件以及不使用继承的情况下，动态地将责任附加到对象上，从而实现动态拓展一个对象的功能。它是通过创建一个包装对象，也就是装饰来包裹真实的对象。\n举例说明 包含四个部分 1. 抽象组件 \x26mdash;-\x26gt; IDrink 2. 具体组件 \x26mdash;-\x26gt; Coffee 3. 抽象装饰 \x26mdash;-\x26gt; DrinkDecorator 4. 具体装饰 \x26mdash;-\x26gt; Milk, Ice\n抽象主键 IDrink public interface IDrink { double cost(); String describe(); }  具体组件 Coffee public class Coffee implements IDrink{ @Override public double cost() { return 10; } @Override public String describe() { return \x26quot;coffer\x26quot;; } }  抽象装饰 DrinkDecorator public abstract class DrinkDecorator implements IDrink { protected IDrink drink; }  抽象装饰 Milk public class Milk extends DrinkDecorator{ public Milk(IDrink drink) { this.",
+    "inLanguage" : "zh-CN",
+    "author" : "刘科",
+    "creator" : "刘科",
+    "publisher": "刘科",
+    "accountablePerson" : "刘科",
+    "copyrightHolder" : "刘科",
+    "copyrightYear" : "2019",
+    "datePublished": "2019-08-06 22:10:05 \x2b0800 CST",
+    "dateModified" : "2019-08-06 22:10:05 \x2b0800 CST",
+    "url" : "https:\/\/pallcard.github.io\/2019\/%E8%A3%85%E9%A5%B0%E8%80%85%E6%A8%A1%E5%BC%8F\/",
+    "wordCount" : "230",
+    "keywords" : [ "Java","设计模式","总数", "刘科个人博客"]
+}
+</script>
+
+</head>
+
+  
+
+
+  <body class="">
+    <div class="wrapper">
+        <nav class="navbar">
+    <div class="container">
+        <div class="navbar-header header-logo">
+        	<a href="javascript:void(0);" class="theme-switch"><i class="iconfont icon-xihuan"></i></a>&nbsp;<a href="https://pallcard.github.io/">刘科个人博客</a>
+        </div>
+        <div class="menu navbar-right">
+                
+                
+                <a class="menu-item" href="/posts/" title="">博客</a>
+                
+                <a class="menu-item" href="/categories/" title="">分类</a>
+                
+                <a class="menu-item" href="/tags/" title="">标签</a>
+                
+                <a class="menu-item" href="/about/" title="">关于</a>
+                
+        </div>
+    </div>
+</nav>
+<nav class="navbar-mobile" id="nav-mobile" style="display: none">
+     <div class="container">
+        <div class="navbar-header">
+            <div>  <a href="javascript:void(0);" class="theme-switch"><i class="iconfont icon-xihuan"></i></a>&nbsp;<a href="https://pallcard.github.io/">刘科个人博客</a></div>
+            <div class="menu-toggle">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+     
+          <div class="menu" id="mobile-menu">
+                
+                
+                <a class="menu-item" href="/posts/" title="">博客</a>
+                
+                <a class="menu-item" href="/categories/" title="">分类</a>
+                
+                <a class="menu-item" href="/tags/" title="">标签</a>
+                
+                <a class="menu-item" href="/about/" title="">关于</a>
+                
+        </div>
+    </div>
+</nav>
+    	 <main class="main">
+          <div class="container">
+      		
+<article class="post-warp" itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">装饰者模式</h1>
+        <div class="post-meta">
+                Written by <a itemprop="name" href="https://pallcard.github.io/" rel="author">刘科</a> with ♥ 
+                <span class="post-time">
+                on <time datetime=2019-08-06 itemprop="datePublished">August 6, 2019</time>
+                </span>
+                in
+                <i class="iconfont icon-folder"></i>
+                <span class="post-category">
+                        <a href="https://pallcard.github.io/categories/java/"> Java </a>
+                        
+                </span>
+        </div>
+    </header>
+    <div class="post-content">
+        
+
+        
+
+        
+        
+     
+          
+          
+          
+
+          
+          
+          
+
+          
+
+<h2 id="装饰者模式">装饰者模式</h2>
+
+<p>在不改变原类文件以及不使用继承的情况下，动态地将责任附加到对象上，从而实现动态拓展一个对象的功能。它是通过创建一个包装对象，也就是装饰来包裹真实的对象。</p>
+
+<h2 id="举例说明">举例说明</h2>
+
+<p>包含四个部分
+1. 抽象组件 &mdash;-&gt; IDrink
+2. 具体组件 &mdash;-&gt; Coffee
+3. 抽象装饰 &mdash;-&gt; DrinkDecorator
+4. 具体装饰 &mdash;-&gt; Milk, Ice</p>
+
+<h3 id="抽象主键-idrink">抽象主键 IDrink</h3>
+
+<pre><code class="language-java">public interface IDrink {
+    double cost();
+    String describe();
+}
+</code></pre>
+
+<h3 id="具体组件-coffee">具体组件 Coffee</h3>
+
+<pre><code class="language-java">public class Coffee implements IDrink{
+    @Override
+    public double cost() {
+        return 10;
+    }
+
+    @Override
+    public String describe() {
+        return &quot;coffer&quot;;
+    }
+}
+</code></pre>
+
+<h3 id="抽象装饰-drinkdecorator">抽象装饰 DrinkDecorator</h3>
+
+<pre><code class="language-java">public abstract class DrinkDecorator implements IDrink {
+    protected IDrink drink;
+
+}
+</code></pre>
+
+<h3 id="抽象装饰-milk">抽象装饰 Milk</h3>
+
+<pre><code class="language-java">public class Milk extends DrinkDecorator{
+
+    public Milk(IDrink drink) {
+        this.drink = drink;
+    }
+
+
+    @Override
+    public double cost() {
+        return 1 + this.drink.cost();
+    }
+
+    @Override
+    public String describe() {
+        return  this.drink.describe() + &quot; with milk&quot;;
+    }
+}
+</code></pre>
+
+<p>说明：</p>
+
+<p>主要使用类的组合来实现对于一个类进行动态的增加功能。具体组件和抽象装饰都实现了抽象组件，具体组件又是抽象组件的子类，当调用时，可以要修饰的对象传递给修饰类，这样就可以对抽象对类进行功能对增强。</p>
+
+<h2 id="使用动态代理对coffer类进行增强">使用动态代理对coffer类进行增强</h2>
+
+<pre><code class="language-java">
+public class CoffeeProxyFactory implements InvocationHandler {
+
+    private Object target;
+
+    public CoffeeProxyFactory(Object target) {
+        this.target = target;
+    }
+
+    public Object getInstance() {
+        return Proxy.newProxyInstance(target.getClass().getClassLoader(), target.getClass().getInterfaces(), this);
+    }
+
+    @Override
+    public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+        Object invoke;
+
+        if (&quot;describe&quot;.equals(method.getName())) {
+            invoke = method.invoke(target, args);
+            invoke += &quot; with milk&quot;;
+            return invoke;
+        } else {
+            invoke = method.invoke(target, args);
+//            invoke = 1 + (Integer) invoke;
+            return invoke;
+        }
+
+    }
+}
+
+</code></pre>
+
+<h3 id="测试">测试</h3>
+
+<pre><code class="language-java">public class Test {
+    public static void main(String[] args) {
+        IDrink drink = new Coffee();
+        drink = new Milk(drink);
+        drink = new Ice(drink);
+        System.out.println(drink.cost());
+        System.out.println(drink.describe());
+
+        System.out.println(&quot;+++++++++++++++&quot;);
+        System.out.println(&quot;动态代理&quot;);
+        System.out.println(&quot;+++++++++++++++&quot;);
+        IDrink iDrink = new Coffee();
+        IDrink drinkProxy =  (IDrink) new CoffeeProxyFactory(iDrink).getInstance();
+        System.out.println(drinkProxy.cost());
+        System.out.println(drinkProxy.describe());
+    }
+}
+</code></pre>
+
+<h2 id="比较">比较</h2>
+
+<ol>
+<li><p>装饰器模式可以在不增加新的装饰类的情况下对已有的功能进行组合而得到新的功能，但得修改客户端代码才能使用新的功能。动态代理则是增加一个新的类来实现功能，哪怕这个功能是对已有功能的组合，但可以不用修改客户端代码。<strong>a.增不增加新类。b.是否需要更改客户端代码</strong>。</p></li>
+
+<li><p>代理模式主要是控制对某个特定对象访问，而装饰模式主要是为了给对象添加行为。</p></li>
+</ol>
+
+    </div>
+
+    <div class="post-copyright">
+             
+            <p class="copyright-item">
+                <span>Author:</span>
+                <span>刘科 </span>
+                </p>
+            
+           
+             
+            <p class="copyright-item">
+                    <span>Link:</span>
+                    <a href=https://pallcard.github.io/2019/%E8%A3%85%E9%A5%B0%E8%80%85%E6%A8%A1%E5%BC%8F/>https://pallcard.github.io/2019/%E8%A3%85%E9%A5%B0%E8%80%85%E6%A8%A1%E5%BC%8F/</span>
+            </p>
+            
+            
+    </div>
+
+  
+    <div class="post-tags">
+        
+            <section>
+            <i class="iconfont icon-tag"></i>Tag(s): 
+            
+            <span class="tag"><a href="https://pallcard.github.io/tags/java/">
+                    #Java</a></span>
+            
+            <span class="tag"><a href="https://pallcard.github.io/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/">
+                    #设计模式</a></span>
+            
+            <span class="tag"><a href="https://pallcard.github.io/tags/%E6%80%BB%E6%95%B0/">
+                    #总数</a></span>
+            
+            </section>
+        
+        <section>
+                <a href="javascript:window.history.back();">back</a></span> · 
+                <span><a href="https://pallcard.github.io/">home</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav">
+        
+        <a href="https://pallcard.github.io/2019/springboot%E6%B3%A8%E8%A7%A3/" class="prev" rel="prev" title="SpringBoot注解"><i class="iconfont icon-left"></i>&nbsp;SpringBoot注解</a>
+         
+        
+    </div>
+
+	<div class="post-comment">
+		
+		 
+  
+  <div id="vcomments"></div>
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src='//unpkg.com/valine/dist/Valine.min.js'></script>
+
+  <script type="text/javascript">
+    new Valine({
+        el: '#vcomments' ,
+        appId: 'ktil0uKcyLbDdCRFBVDz0eD9-gzGzoHsz',
+        appKey: 'KiYDkJXdqJW2VgrxmVshT2iA',
+        notify: 'false', 
+        verify: 'false', 
+        avatar:'mm', 
+        placeholder: '说点什么吧...',
+        visitor: 'true'
+    });
+  </script>
+	</div>
+</article>
+          </div>
+		   </main>
+      <footer class="footer">
+    <div class="copyright">
+        &copy;
+        
+        <span class="with-love">
+    	 <i class="iconfont icon-love"></i> 
+         </span>
+         
+            <span class="author" itemprop="copyrightHolder"><a href="https://pallcard.github.io/">刘科</a> | </span> 
+         
+
+         
+            <a href="http://www.miibeian.gov.cn/" target="_blank" rel="external nofollow">鄂ICP备19006996号-1 </a> |
+         
+		  <span>Powered by <a href="https://gohugo.io/" target="_blank" rel="external nofollow">Hugo</a> & <a href="https://github.com/liuzc/leaveit" target="_blank" rel="external nofollow">LeaveIt</a></span> 
+    </div>
+</footer>
+
+
+
+
+
+
+
+
+
+
+
+
+    
+    
+    <script src="/js/vendor_no_gallery.min.js" async=""></script>
+    
+  
+
+
+
+     </div>
+  </body>
+</html>

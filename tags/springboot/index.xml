@@ -7,10 +7,24 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
     <copyright>All rights reserved - 2019</copyright>
-    <lastBuildDate>Sat, 08 Jun 2019 20:21:05 +0800</lastBuildDate>
+    <lastBuildDate>Tue, 06 Aug 2019 20:08:00 +0800</lastBuildDate>
     
 	<atom:link href="https://pallcard.github.io/tags/springboot/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>SpringBoot注解</title>
+      <link>https://pallcard.github.io/2019/springboot%E6%B3%A8%E8%A7%A3/</link>
+      <pubDate>Tue, 06 Aug 2019 20:08:00 +0800</pubDate>
+      
+      <guid>https://pallcard.github.io/2019/springboot%E6%B3%A8%E8%A7%A3/</guid>
+      <description>Spring Web MVC @RequestMapping 主要用途是将web请求与请求处理类中的方法进行映射。
+属性：
+ value:映射的请求URL或者其别名 method:兼容HTTP的方法名 params:根据HTTP参数的存在、缺省或值对请求进行过滤 header:根据HTTP Header的存在、缺省或值对请求进行过滤 consume:设定在HTTP请求正文中允许使用的媒体类型 product:在HTTP响应体中允许使用的媒体类型  一般主要使用前3个属性。改注解也可以对类进行标记，这样类中的处理方法在映射请求路径时，会自动将类上@RequestMapping设置的value拼接到方法中映射路径之前。例如：
+@Controller @RequestMapping(value=&amp;quot;/demo&amp;quot;) public class Demo { @RequestMapping(value=&amp;quot;/test&amp;quot;, method=RequestMethod.GET) public String test() { return &amp;quot;test&amp;quot;; } } // 说明：请求路径为 /demo/test时，调用test()方法处理  @RequestBody 在处理请求方法的参数列表中使用，它可以将请求主体中的参数绑定到一个对象中，请求主体参数是通过HttpMessageConverter传递的，根据请求主体中的参数名与对象的属性名进行匹配并绑定值。还可以通过 @Valid 注解对请求主体中的参数进行校验。
+@RestController @RequestMapping(&amp;quot;/api/v1&amp;quot;) public class UserController { @PostMapping(&amp;quot;/Login&amp;quot;) public IJSONResult Login(@RequestBody Users user) throws Exception { ... } }  @RequestParam 用于将方法的参数与Web请求的传递的参数进行绑定。使用@RequestParam可以轻松的访问HTTP请求参数的值。该注解的其他属性配置与@PathVariable的配置相同，特别的，如果传递的参数为空，还可以通过defaultValue设置一个默认值。
+@GetMapping(/users) public Role getUserRole(@RequestParam(name=&amp;quot;id&amp;quot;, defaultValue=&amp;quot;0&amp;quot;) long id) { .</description>
+    </item>
     
     <item>
       <title>SpringBoot之配置文件</title>
