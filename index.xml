@@ -6,8 +6,470 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
     <copyright>All rights reserved - 2019</copyright>
-    <lastBuildDate>Tue, 06 Aug 2019 22:10:05 +0800</lastBuildDate>
+    <lastBuildDate>Wed, 07 Aug 2019 23:22:27 +0800</lastBuildDate>
     <atom:link href="/" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Java并发工具包</title>
+      <link>https://pallcard.github.io/2019/java%E5%B9%B6%E5%8F%91%E5%B7%A5%E5%85%B7%E5%8C%85/</link>
+      <pubDate>Wed, 07 Aug 2019 23:22:27 +0800</pubDate>
+      
+      <guid>https://pallcard.github.io/2019/java%E5%B9%B6%E5%8F%91%E5%B7%A5%E5%85%B7%E5%8C%85/</guid>
+      <description>
+
+&lt;h3 id=&#34;引言&#34;&gt;引言&lt;/h3&gt;
+
+&lt;p&gt;JDK并发包中提供了CountDownLatch、CyclicBarrier、Semaphore工具类来实现并发流程的控制。
+Exchanger提供了线程间交换数据的方法。&lt;/p&gt;
+
+&lt;h3 id=&#34;join-方法&#34;&gt;join()方法&lt;/h3&gt;
+
+&lt;p&gt;需求：实现主程序要等待其他线程完成后，在继续执行。很容易想到使用join()方法来实现。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;public class JoinCountDownLatchTest {
+    public static void main(String[] args) throws InterruptedException {
+        Thread thread1 = new Thread(() -&amp;gt; {
+            System.out.println(&amp;quot;执行1&amp;quot;);
+        });
+        Thread thread2 = new Thread(() -&amp;gt; {
+            System.out.println(&amp;quot;执行2&amp;quot;);
+        });
+
+        thread1.start();
+        thread2.start();
+
+        thread1.join();
+        thread2.join();
+        System.out.println(&amp;quot;主线程&amp;quot;);
+    }
+}
+
+/* 输出结果：
+执行1
+执行2
+主线程
+*/
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;join()原理是不停的检查join线程是否存活，直到join线程都中止，线程才会this.notifyAll()。&lt;/p&gt;
+
+&lt;h3 id=&#34;countdownlatch类&#34;&gt;CountDownLatch类&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;public class CountDownLatchTest {
+
+    public static void main(String[] args) throws InterruptedException {
+
+        CountDownLatch countDownLatch = new CountDownLatch(2);
+        Thread thread1 = new Thread(() -&amp;gt; {
+            System.out.println(&amp;quot;执行1&amp;quot;);
+            countDownLatch.countDown();
+        });
+
+        Thread thread2 = new Thread(() -&amp;gt; {
+            System.out.println(&amp;quot;执行2&amp;quot;);
+            countDownLatch.countDown();  
+        });
+        thread1.start();
+        thread2.start();
+
+        countDownLatch.await(10, TimeUnit.MILLISECONDS);
+
+        System.out.println(&amp;quot;主线程&amp;quot;);
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;说明：&lt;/p&gt;
+
+&lt;p&gt;CountDownLatch类的构造函数需要传入数字N，表示你想等待N个点（N个线程或N个步骤）。上述代码中，
+传入的N为2，则表示主线程要等待两个点后，才会继续执行主程序，在此之前程序会一直阻塞在countDownLatch.await()方法这，
+（上述程序的await方法带一个指定时间，只会阻塞到指定时间）。其中调用countDown()函数时，N会减1，当N=0时，
+结束阻塞。&lt;/p&gt;
+
+&lt;p&gt;若将上述类中的方法该成如下代码，则执行1，执行2会在主线程之前打印，但是等待i不一定会在主线程之前打印，
+想要实现，需要将构造中的N改为3，在for循环后面调用countDown()方法。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;    public static void main(String[] args) throws InterruptedException {
+        CountDownLatch countDownLatch = new CountDownLatch(2);
+        Thread thread1 = new Thread(() -&amp;gt; {
+            System.out.println(&amp;quot;执行1&amp;quot;);
+            countDownLatch.countDown();
+        });
+
+        Thread thread2 = new Thread(() -&amp;gt; {
+            System.out.println(&amp;quot;执行2&amp;quot;);
+            countDownLatch.countDown();
+            for(int i = 0; i &amp;lt; 1000; i++) {
+                System.out.println(&amp;quot;等待&amp;quot;+ (i+1));
+            }
+//            countDownLatch.countDown();
+        });
+        thread1.start();
+        thread2.start();
+
+        countDownLatch.await();
+
+        System.out.println(&amp;quot;主线程&amp;quot;);
+    }
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;cyclicbarrier类&#34;&gt;CyclicBarrier类&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;public class CyclicBarrierTest {
+    public static void main(String[] args) throws InterruptedException {
+
+        CyclicBarrier cyclicBarrier = new CyclicBarrier(3);
+        // 若将3改为4，程序会一直等待，没有4个线程到达屏障
+//        CyclicBarrier cyclicBarrier = new CyclicBarrier(4);
+
+        // 若将3改为4，程序会一直等待，没有4个线程到达屏障, 优先执行当任务也不会执行
+        CyclicBarrier cyclicBarrier2 = new CyclicBarrier(3, new Runnable() {
+            @Override
+            public void run() {
+                System.out.println(&amp;quot;优先执行&amp;quot;);
+            }
+        });
+
+        Thread thread1 = new Thread(() -&amp;gt; {
+            for (int i = 0; i &amp;lt; 10; i++) {
+                System.out.println(&amp;quot;到达屏障前&amp;quot;);
+            }
+            try {
+                cyclicBarrier.await();
+                cyclicBarrier2.await();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            System.out.println(&amp;quot;执行1&amp;quot;);
+        });
+
+        Thread thread2 = new Thread(() -&amp;gt; {
+            try {
+                cyclicBarrier.await();
+                cyclicBarrier2.await();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            System.out.println(&amp;quot;执行2&amp;quot;);
+        });
+
+        thread1.start();
+        thread2.start();
+
+        try {
+            cyclicBarrier.await();
+            cyclicBarrier2.await();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        Thread.sleep(1000);
+
+        System.out.println(&amp;quot;主线程&amp;quot;);
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;CyclicBarrier让一组线程到达一个屏障时被阻塞，例如，上述代码若将屏障数设置为4，则只会打印到达屏障前，
+然后就会3个线程都会被阻塞。在CyclicBarrier的构造函数中也可以添加一个任务，到线程数达到屏障要求时，线程
+继续执行，并且构造函数中的会优先执行。&lt;/p&gt;
+
+&lt;h4 id=&#34;实例&#34;&gt;实例&lt;/h4&gt;
+
+&lt;p&gt;计算银行的账单流水，使用多个线程进行计算，然后进行汇总。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;public class BankWaterService implements Runnable{
+
+    // 4个屏障处理完成，执行当前类当run方法
+    private CyclicBarrier cyclicBarrier = new CyclicBarrier(4, this);
+
+    private Executor executor = Executors.newFixedThreadPool(4);
+
+    private ConcurrentHashMap&amp;lt;String, Integer&amp;gt; sheetBankWaterCount = new ConcurrentHashMap&amp;lt;&amp;gt;();
+
+    @Override
+    public void run() {
+        int result = 0;
+        for(Map.Entry&amp;lt;String, Integer&amp;gt; sheet : sheetBankWaterCount.entrySet()) {
+            result += sheet.getValue();
+        }
+
+        sheetBankWaterCount.put(&amp;quot;result&amp;quot;, result);
+        System.out.println(result);
+    }
+
+    private void count(){
+        for (int i = 0; i &amp;lt; 4; i++) {
+            executor.execute(()-&amp;gt;{
+                sheetBankWaterCount.put(Thread.currentThread().getName(), 1);
+                System.out.println(Thread.currentThread().getName() + 1);
+                try {
+                    cyclicBarrier.await();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                } catch (BrokenBarrierException e) {
+                    e.printStackTrace();
+                }
+            });
+        }
+
+    }
+
+    public static void main(String[] args) {
+        BankWaterService bankWaterService = new BankWaterService();
+        bankWaterService.count();
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;说明：&lt;/p&gt;
+
+&lt;p&gt;首先屏障设置为4，优先执行的任务传入this，表示当4个线程到达后会优先执行类中的run()方法。对于4个线程
+到计算完自己的流水后到达屏障阻塞，到4个线程都计算完毕后，会优先执行本类中的run()方法，从而完成了对于
+流水的统计。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;注：&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;CyclicBarrier的计数器可以使用reset()方法重置，这正好解释了Cyclic循环的意思。&lt;/p&gt;
+
+&lt;h3 id=&#34;semaphore类&#34;&gt;Semaphore类&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;public class SemaphoreTest {
+
+    private static final int THREAD_COUNT = 30;
+
+    private static ExecutorService threadPool = Executors.newFixedThreadPool(THREAD_COUNT);
+
+    private static Semaphore s = new Semaphore(10);
+
+    public static void main(String[] args) {
+        for (int i = 0; i &amp;lt; THREAD_COUNT; i++) {
+            threadPool.execute(()-&amp;gt;{
+                try {
+                    s.acquire();
+                    System.out.println(&amp;quot;save data&amp;quot;);
+                    s.release();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            });
+        }
+        threadPool.shutdown();
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Semaphore类可以控制同时访问特定资源的线程数量。例如上述代码有30个线程，但是只能有10个线程来访问数据库（打印save data）。&lt;/p&gt;
+
+&lt;h3 id=&#34;exchanger类&#34;&gt;Exchanger类&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;public class ExchangerTest {
+
+    private static final Exchanger&amp;lt;String&amp;gt; exgr = new Exchanger&amp;lt;&amp;gt;();
+
+    private static ExecutorService threadPool = Executors.newFixedThreadPool(2);
+
+    public static void main(String[] args) {
+
+        threadPool.execute(()-&amp;gt;{
+            String A = &amp;quot;流水A&amp;quot;;
+            try {
+                String B = exgr.exchange(A + Thread.currentThread().getName());
+                System.out.println(Thread.currentThread().getName()+A.equals(B)+ &amp;quot; A: &amp;quot; + A + &amp;quot; B: &amp;quot; + B);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        });
+
+        threadPool.execute(()-&amp;gt;{
+            String B = &amp;quot;流水B&amp;quot;;
+            try {
+                String A = exgr.exchange(B+ Thread.currentThread().getName());
+                System.out.println(Thread.currentThread().getName()+A.equals(B)+ &amp;quot; A: &amp;quot; + A + &amp;quot; B: &amp;quot; + B);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        });
+
+        threadPool.shutdown();
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;可以控制两个线程交换彼此数据。如果两个线程有一个exchange()方法没有执行，则会一直等待。exchange()方法里也可以设置最大等待时间。&lt;/p&gt;
+
+&lt;p&gt;参考：java并发编程艺术&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Volatile和synchronized</title>
+      <link>https://pallcard.github.io/2019/volatile%E5%92%8Csynchronized/</link>
+      <pubDate>Wed, 07 Aug 2019 21:20:13 +0800</pubDate>
+      
+      <guid>https://pallcard.github.io/2019/volatile%E5%92%8Csynchronized/</guid>
+      <description>
+
+&lt;h3 id=&#34;volatile&#34;&gt;volatile&lt;/h3&gt;
+
+&lt;p&gt;volatile是轻量级的synchronized，它可以在并发中保证共享变量的可见性&lt;/p&gt;
+
+&lt;h4 id=&#34;原理&#34;&gt;原理&lt;/h4&gt;
+
+&lt;p&gt;volatile变量进行写操作时，JVM会向处理器发送一条Lock前缀的指令，将这个变量所在的缓存行写回到系统内存中。
+为了保证缓存一致性，每个处理器会通过嗅探在总线上传播的数据来检查自己缓存的值是不是过期了，当处理器发现自己
+缓存行对应的内存地址被修改了，就会将当前处理器的缓存行失效，当处理器要对这个数据进行操作时，就会重新从系统内存
+中把数据读取到缓存中。&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;Lock前缀指令会引起处理器缓存回写到内存。&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;一个处理器到缓存回写到内存回导致其他处理器缓存失效。（处理器使用嗅探技术保证它到内部缓存、系统内存和其他处理器
+缓存到数据在总线上保持一致）&lt;/p&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h3 id=&#34;synchronized&#34;&gt;synchronized&lt;/h3&gt;
+
+&lt;h4 id=&#34;介绍&#34;&gt;介绍&lt;/h4&gt;
+
+&lt;p&gt;synchronized用到锁是存储在对象头里面的，对象头由 MarkWord、类型指针、数组长度（对象为数组时）。&lt;/p&gt;
+
+&lt;p&gt;初始&lt;/p&gt;
+
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;锁状态&lt;/th&gt;
+&lt;th&gt;25bit&lt;/th&gt;
+&lt;th&gt;4bit&lt;/th&gt;
+&lt;th&gt;1bit&lt;/th&gt;
+&lt;th&gt;2bit&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;无锁&lt;/td&gt;
+&lt;td&gt;对象hashCode&lt;/td&gt;
+&lt;td&gt;对象分代年龄&lt;/td&gt;
+&lt;td&gt;0&lt;/td&gt;
+&lt;td&gt;01&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;轻量级锁&lt;/td&gt;
+&lt;td&gt;指向栈中指针&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;00&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;重量级锁&lt;/td&gt;
+&lt;td&gt;指向互斥量（重量级锁）指针&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;10&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;GC标记&lt;/td&gt;
+&lt;td&gt;空&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;11&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;偏向锁&lt;/td&gt;
+&lt;td&gt;线程ID(23bit) Epoch(2bit)&lt;/td&gt;
+&lt;td&gt;对象分代年龄&lt;/td&gt;
+&lt;td&gt;1&lt;/td&gt;
+&lt;td&gt;01&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;p&gt;Monitor类型对象，重量级锁状态下，MarkWork里指针指向的对象。&lt;/p&gt;
+
+&lt;h4 id=&#34;synchronized-1&#34;&gt;synchronized&lt;/h4&gt;
+
+&lt;p&gt;用来修饰方法（静态方法、实例方法）、代码块
+synchronized加锁是指竞争获取对象头MarkWord重量级锁下指向Monitor类型对象，jdk1.6后进行了锁优化&lt;/p&gt;
+
+&lt;h4 id=&#34;原理-1&#34;&gt;原理&lt;/h4&gt;
+
+&lt;p&gt;jdk1.6前，进入synchronized修饰的方法或代码块前要先获取重量级锁（对象头里面指向Monitor类型的对象）&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;静态方法 获取类的Class对象对应的Monitor对象&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;实例方法 获取类的实例对象对应的Monitor对象&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;代码块 修饰的代码块自己指定&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;synchronized修饰的代码块，编译阶段回在方法前后生成monitorenter、monitorexit指令&lt;/p&gt;
+
+&lt;p&gt;每个对象都有一个Monitor对象，线程通过执行monitorenter指令获取Monitor对象的拥有权。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;如果拥有当前Monitor对象的线程数为0，则执行_count++,当前线程称为Monitor对象的拥有者&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;如果当前线程已经拥有此Monitor对象，则将_count++&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;如果其他线程有此Monitor对象，则当前线程阻塞直到Monitor计数_count==0,然后重新竞争获取锁&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h4 id=&#34;获取重量锁&#34;&gt;获取重量锁&lt;/h4&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;当线程执行到monitorenter指令，会进入ObjectMonitor对象的_EntryList队列，通过CAS会将_owner指针指向当前线程，同时_count++，&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;当前线程执行monitorexit指令，会释放持有的Monitor对象，并将_owner置为null同时_count&amp;ndash;&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;如果调用wait()，同上，但是会进入_WaitSet队列,等待被唤醒。(看到没：wait状态的线程在唤醒之后，还得需要获取锁④，然后执行完毕)&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;锁优化：_owner指向当前线程调用的函数涉及到了特权指令Mutex Lock导致用户态线程和内核态线程之间进行切换，切换过程影响效率&lt;/p&gt;
+
+&lt;h4 id=&#34;获取偏向锁&#34;&gt;获取偏向锁&lt;/h4&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;原因:大部分情况下不会存在线程竞争，而且只会有&lt;strong&gt;同一个线程进入临界区&lt;/strong&gt;，为了减少同一线程获取锁带来的消耗，所以当进入临界区前不会先去获取重量锁，而是先获取偏向锁。&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;膨胀成轻量级锁：偏向锁主要是为了解决同一个线程进入临界区，当有超过一个线程竞争偏向锁，就会膨胀为轻量级锁。&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;获取偏向锁过程：
+先判断是否能开启偏向锁，如果可以 =&amp;gt; 将偏向锁偏向线程ID用CAS(相对于轻量级锁获取和释放都需要CAS操作费时，偏向锁只有这一次)修改为当前线程ID。&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h4 id=&#34;获取轻量锁&#34;&gt;获取轻量锁&lt;/h4&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;原因:在多个线程都会尝试进入临界区的情况下，&lt;strong&gt;多个线程只会交替进入临界区&lt;/strong&gt;，不会存在锁竞争，为了减少重量级锁系统调用造成的消耗。&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;膨胀成重量级锁：当多个线程同一时间都尝试获取锁，则会膨胀为重量级锁。&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;获取轻量级锁获取过程：
+如果当前无锁并且不可偏向，会尝试获取轻量级锁，将MarkWord拷贝到当前线程的栈帧中的LockRecord，然后通过CAS更新MarkWord内容为指向当前线程LockRecord的指针。&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;和偏向锁的区别：偏向锁是同一个线程多次获取锁，轻量级锁是多个线程交替获取锁。相同点是假定都不存在锁竞争。&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h4 id=&#34;自旋锁&#34;&gt;自旋锁&lt;/h4&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;原因： 还是大部分情况下，线程持有锁的时间很短，当一个线程获取锁了以后，其他线程尝试获取锁就会进入阻塞状态，挂起-&amp;gt;恢复都需要在用户态和内核态之间进行切换。此时如果让后来的线程进行自旋一段时间(for循环)，在获取锁，可能就会获取，也就避免了转入内核态。
+JDK1.6引入了自适应的自旋锁，即根据具体情况结合前面旋转的次数决定此次需要旋转的次数。&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;优点：如果线程占用锁的时间比较短则自旋操作很有效，避免进入内核态&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;缺点:如果线程占用锁的时间比较长则自旋操作白白耗费CPU资源，倒不如挂起。&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;参考：java并发编程艺术&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>装饰者模式</title>
@@ -23,11 +485,17 @@
 
 &lt;h2 id=&#34;举例说明&#34;&gt;举例说明&lt;/h2&gt;
 
-&lt;p&gt;包含四个部分
-1. 抽象组件 &amp;mdash;-&amp;gt; IDrink
-2. 具体组件 &amp;mdash;-&amp;gt; Coffee
-3. 抽象装饰 &amp;mdash;-&amp;gt; DrinkDecorator
-4. 具体装饰 &amp;mdash;-&amp;gt; Milk, Ice&lt;/p&gt;
+&lt;p&gt;包含四个部分&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;抽象组件 &amp;mdash;-&amp;gt; IDrink&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;具体组件 &amp;mdash;-&amp;gt; Coffee&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;抽象装饰 &amp;mdash;-&amp;gt; DrinkDecorator&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;具体装饰 &amp;mdash;-&amp;gt; Milk, Ice&lt;/p&gt;&lt;/li&gt;
+&lt;/ol&gt;
 
 &lt;h3 id=&#34;抽象主键-idrink&#34;&gt;抽象主键 IDrink&lt;/h3&gt;
 
@@ -1666,1190 +2134,6 @@ f(n) = f(n-1) + f(n-2); n &amp;gt; 1
 
 }
 &lt;/code&gt;&lt;/pre&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>JMM例子</title>
-      <link>https://pallcard.github.io/2019/jmm%E4%BE%8B%E5%AD%90/</link>
-      <pubDate>Mon, 01 Jul 2019 22:26:19 +0800</pubDate>
-      
-      <guid>https://pallcard.github.io/2019/jmm%E4%BE%8B%E5%AD%90/</guid>
-      <description>&lt;p&gt;例子1，代码如下：&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;public class demo001 {
-    private static boolean initFlag = false;
-//    private static volatile boolean initFlag = false;
-
-    public static void main(String[] args) throws InterruptedException {
-        // 线程1
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                System.out.println(&amp;quot;等待数据准备&amp;quot;);
-                while (!initFlag) {}
-                System.out.println(&amp;quot;数据准备完毕，执行程序逻辑&amp;quot;);
-            }
-        }).start();
-
-        Thread.sleep(2000);
-        // 线程2
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                System.out.println(&amp;quot;数据准备中。。。&amp;quot;);
-                initFlag = true;
-                System.out.println(&amp;quot;数据准备完成&amp;quot;);
-            }
-        }).start();
-    }
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;strong&gt;说明&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://pallcard.github.io/images/jmm003.png&#34; alt=&#34;initFlag无volatile关键字修饰时&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;initFlag无volatile关键字修饰时，线程1将initFlag从主内存读入到工作内存，线程1一直循环，线程2将initFlag从主内存读入到工作内存，并通过线程执行引擎对initFlag进行修改，然后写回到主内存中，但是线程1中的initFlag仍然是工作内存中的值，线程1无法感知到其他内存对该共享变量的修改，故会一直循环下去。&lt;strong&gt;缓存一致性问题&lt;/strong&gt;&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;p&gt;缓存一致性问题&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;p&gt;&lt;strong&gt;总线加锁（性能太低）&lt;/strong&gt;
-cpu从主内存读取数据到高速缓存，会在总线对该数据加锁，这样其他cpu无法读或写该数据，直到cpu使用完数据并释放锁。&lt;/p&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;&lt;strong&gt;MESI缓存一致性协议&lt;/strong&gt;
-多个cpu从主内存读取同一个数据到各自的高速缓存，当其中某个cpu修改了缓存中的数据时，该数据马上同步到主内存中，其他cpu通过&lt;strong&gt;总线嗅探机制&lt;/strong&gt;感知到变化从而将自己缓存里数据失效。&lt;/p&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;strong&gt;Volatile缓存可见性&lt;/strong&gt;实现原理底层实现主要是通过汇编lock前缀指令，它会锁定这块内存区域的缓存并回写到主内存，此操作被称为“缓存锁定”，缓存一致性机制会阻止同时修改被两个以上处理器缓存的内存区域数据。一个处理器的缓存回写到内存会导致其他处理器的缓存无效。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://pallcard.github.io/images/jmm004.png&#34; alt=&#34;initFlag有volatile关键字修饰时&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;例子2，代码如下：&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;public class Demo002 {
-
-    //volatile 不能解决原子性问题
-    public static volatile int num = 0;
-
-    public static void increase() {
-        num++; // 非原子操作
-    }
-
-    public static void main(String[] args) throws InterruptedException {
-        final Thread[] threads = new Thread[10];
-        for (int i = 0; i &amp;lt; threads.length; i++) {
-            threads[i] = new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    for (int j = 0; j &amp;lt; 1000; j++) {
-                        increase();
-                    }
-                }
-            });
-            threads[i].start();
-        }
-        for(Thread t : threads) {
-            t.join();
-        }
-        System.out.println(num);
-    }
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;strong&gt;说明&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://pallcard.github.io/images/jmm005.png&#34; alt=&#34;原子性&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;（说明代码中存在的问题，以两个线程为例）初始时，主内存中num=0，然后线程1和2将其读到各自的工作内存中，然后在各自的执行引擎中进行num++,此时工作内存num=1，若线程1先将num写回到主内存中，线程2的cpu通过主线嗅探机制使得其工作内存中的值失效，然后从主内存中读到num=1，但是线程2已经执行了一次num++，期望的结果应该是num=2，但是实际上结果为1。&lt;strong&gt;volatile不能保证数据的原子性。&lt;/strong&gt;&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>Mybaits</title>
-      <link>https://pallcard.github.io/2019/mybaits/</link>
-      <pubDate>Thu, 20 Jun 2019 19:00:36 +0800</pubDate>
-      
-      <guid>https://pallcard.github.io/2019/mybaits/</guid>
-      <description>
-
-&lt;h4 id=&#34;前言&#34;&gt;前言&lt;/h4&gt;
-
-&lt;p&gt;整个实验使用Maven 来管理项目，编译器IDEA，github仓库 &lt;a href=&#34;https://github.com/pallcard/mybatis&#34; rel=&#34;nofollow noreferrer&#34; target=&#34;_blank&#34;&gt;https://github.com/pallcard/mybatis&lt;/a&gt;&lt;/p&gt;
-
-&lt;h5 id=&#34;jdbc连接数据库&#34;&gt;JDBC连接数据库&lt;/h5&gt;
-
-&lt;p&gt;&lt;strong&gt;1.引入依赖（pom.xml）&lt;/strong&gt;&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;&amp;lt;dependencies&amp;gt;
-	&amp;lt;dependency&amp;gt;
-	    &amp;lt;groupId&amp;gt;mysql&amp;lt;/groupId&amp;gt;
-	    &amp;lt;artifactId&amp;gt;mysql-connector-java&amp;lt;/artifactId&amp;gt;
-	    &amp;lt;version&amp;gt;5.1.32&amp;lt;/version&amp;gt;
-	&amp;lt;/dependency&amp;gt;
-&amp;lt;/dependencies&amp;gt;	
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;strong&gt;说明：（pom.xml）&lt;/strong&gt;
-Maven 项目默认编译项目为JDK 1.5，通过引入以下依赖来指定Maven 编译版本&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;&amp;lt;build&amp;gt;
-	  &amp;lt;plugins&amp;gt;
-	        &amp;lt;plugin&amp;gt;
-	            &amp;lt;groupId&amp;gt;org.apache.maven.plugins&amp;lt;/groupId&amp;gt;
-	            &amp;lt;artifactId&amp;gt;maven-compiler-plugin&amp;lt;/artifactId&amp;gt;
-	            &amp;lt;version&amp;gt;3.1&amp;lt;/version&amp;gt;
-	            &amp;lt;configuration&amp;gt;
-	                &amp;lt;source&amp;gt;1.8&amp;lt;/source&amp;gt;
-	                &amp;lt;target&amp;gt;1.8&amp;lt;/target&amp;gt;
-	            &amp;lt;/configuration&amp;gt;
-	        &amp;lt;/plugin&amp;gt;
-	  &amp;lt;/plugins&amp;gt;
-&amp;lt;/build&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;strong&gt;2.JDBC测试类JDBCTest.java&lt;/strong&gt;&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;public class JDBCTest {
-    public static void main(String[] args) throws Exception {
-        Connection connection = null;
-        PreparedStatement prepareStatement = null;
-        ResultSet rs = null;
-
-        try {
-            // 加载驱动(每次加载驱动，驱动名硬编码)
-            Class.forName(&amp;quot;com.mysql.jdbc.Driver&amp;quot;);
-            // 获取连接(每次获取连接，连接信息硬编码)
-            String url = &amp;quot;jdbc:mysql://127.0.0.1:3306/mybatis_demo&amp;quot;;
-            String user = &amp;quot;root&amp;quot;;
-            String password = &amp;quot;&amp;quot;;
-            connection = DriverManager.getConnection(url, user, password);
-            // 获取statement，preparedStatement （sql和java代码耦合）
-            String sql = &amp;quot;select * from tb_user where id=?&amp;quot;;
-            prepareStatement = connection.prepareStatement(sql);
-            // 设置参数（参数类型手动判断、设置）
-            prepareStatement.setLong(1, 1l);
-            // 执行查询
-            rs = prepareStatement.executeQuery();
-            // 处理结果集（结果集中数据类型、下标、列名要手动判断）
-            while (rs.next()) {
-                System.out.println(rs.getString(&amp;quot;user_name&amp;quot;));
-                System.out.println(rs.getString(&amp;quot;name&amp;quot;));
-                System.out.println(rs.getInt(&amp;quot;age&amp;quot;));
-                System.out.println(rs.getDate(&amp;quot;birthday&amp;quot;));
-            }
-        } finally {
-            //（每次都要打开或关闭连接，浪费资源）
-            // 关闭连接，释放资源
-            if (rs != null) {
-                rs.close();
-            }
-            if (prepareStatement != null) {
-                prepareStatement.close();
-            }
-            if (connection != null) {
-                connection.close();
-            }
-        }
-    }
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h4 id=&#34;mybaits整体架构&#34;&gt;Mybaits整体架构&lt;/h4&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://img-blog.csdnimg.cn/20190620231844983.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3N1cGVyZmljaWFsS25vd2xlZGdl,size_16,color_FFFFFF,t_70&#34; alt=&#34;Mybaits整体架构&#34; /&gt;&lt;/p&gt;
-
-&lt;h4 id=&#34;mybaits快速入门&#34;&gt;Mybaits快速入门&lt;/h4&gt;
-
-&lt;p&gt;&lt;strong&gt;1.引入依赖（pom.xml）&lt;/strong&gt;&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;&amp;lt;!--mybatis--&amp;gt;
-&amp;lt;dependency&amp;gt;
-     &amp;lt;groupId&amp;gt;org.mybatis&amp;lt;/groupId&amp;gt;
-     &amp;lt;artifactId&amp;gt;mybatis&amp;lt;/artifactId&amp;gt;
-     &amp;lt;version&amp;gt;3.2.8&amp;lt;/version&amp;gt;
- &amp;lt;/dependency&amp;gt;
-&amp;lt;!--引入日志依赖包--&amp;gt;
-&amp;lt;dependency&amp;gt;
-    &amp;lt;groupId&amp;gt;org.slf4j&amp;lt;/groupId&amp;gt;
-    &amp;lt;artifactId&amp;gt;slf4j-log4j12&amp;lt;/artifactId&amp;gt;
-    &amp;lt;version&amp;gt;1.7.5&amp;lt;/version&amp;gt;
-&amp;lt;/dependency&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;strong&gt;2.User.java&lt;/strong&gt;&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;public class User {
-    private int id;
-    private String userName;
-    private String password;
-    private String name;
-    private Integer age;
-    private Integer sex;
-    private Date birthday;
-    private String created;
-    private String updated;
-	// get、set、toString省
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;strong&gt;添加log4j.properties&lt;/strong&gt;&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;log4j.rootLogger=DEBUG,A1
-log4j.logger.org.apache=DEBUG
-log4j.appender.A1=org.apache.log4j.ConsoleAppender
-log4j.appender.A1.layout=org.apache.log4j.PatternLayout
-log4j.appender.A1.layout.ConversionPattern=%-d{yyyy-MM-dd HH:mm:ss,SSS} [%t] [%c]-[%p] %m%n
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;strong&gt;3.全局配置文件（mybatis-config.xml）&lt;/strong&gt;&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;&amp;lt;?xml version=&amp;quot;1.0&amp;quot; encoding=&amp;quot;UTF-8&amp;quot; ?&amp;gt;
-&amp;lt;!DOCTYPE configuration
-        PUBLIC &amp;quot;-//mybatis.org//DTD Config 3.0//EN&amp;quot;
-        &amp;quot;http://mybatis.org/dtd/mybatis-3-config.dtd&amp;quot;&amp;gt;
-&amp;lt;!-- 根标签 --&amp;gt;
-&amp;lt;configuration&amp;gt;
-    &amp;lt;properties&amp;gt;
-        &amp;lt;property name=&amp;quot;driver&amp;quot; value=&amp;quot;com.mysql.jdbc.Driver&amp;quot;/&amp;gt;
-        &amp;lt;property name=&amp;quot;url&amp;quot; value=&amp;quot;jdbc:mysql://127.0.0.1:3306/mybatis_demo?useUnicode=true&amp;amp;amp;characterEncoding=utf-8&amp;amp;amp;allowMultiQueries=true&amp;quot;/&amp;gt;
-        &amp;lt;property name=&amp;quot;username&amp;quot; value=&amp;quot;root&amp;quot;/&amp;gt;
-        &amp;lt;property name=&amp;quot;password&amp;quot; value=&amp;quot;&amp;quot;/&amp;gt;
-    &amp;lt;/properties&amp;gt;
-
-    &amp;lt;!-- 环境，可以配置多个，default：指定采用哪个环境 --&amp;gt;
-    &amp;lt;environments default=&amp;quot;test&amp;quot;&amp;gt;
-        &amp;lt;!-- id：唯一标识 --&amp;gt;
-        &amp;lt;environment id=&amp;quot;test&amp;quot;&amp;gt;
-            &amp;lt;!-- 事务管理器，JDBC类型的事务管理器 --&amp;gt;
-            &amp;lt;transactionManager type=&amp;quot;JDBC&amp;quot; /&amp;gt;
-            &amp;lt;!-- 数据源，池类型的数据源 --&amp;gt;
-            &amp;lt;dataSource type=&amp;quot;POOLED&amp;quot;&amp;gt;
-                &amp;lt;property name=&amp;quot;driver&amp;quot; value=&amp;quot;com.mysql.jdbc.Driver&amp;quot; /&amp;gt;
-                &amp;lt;property name=&amp;quot;url&amp;quot; value=&amp;quot;jdbc:mysql://127.0.0.1:3306/mybatis_demo?useUnicode=true&amp;amp;amp;characterEncoding=utf-8&amp;amp;amp;allowMultiQueries=true&amp;quot; /&amp;gt;
-                &amp;lt;property name=&amp;quot;username&amp;quot; value=&amp;quot;root&amp;quot; /&amp;gt;
-                &amp;lt;property name=&amp;quot;password&amp;quot; value=&amp;quot;&amp;quot; /&amp;gt;
-            &amp;lt;/dataSource&amp;gt;
-        &amp;lt;/environment&amp;gt;
-        &amp;lt;environment id=&amp;quot;development&amp;quot;&amp;gt;
-            &amp;lt;!-- 事务管理器，JDBC类型的事务管理器 --&amp;gt;
-            &amp;lt;transactionManager type=&amp;quot;JDBC&amp;quot; /&amp;gt;
-            &amp;lt;!-- 数据源，池类型的数据源 --&amp;gt;
-            &amp;lt;dataSource type=&amp;quot;POOLED&amp;quot;&amp;gt;
-                &amp;lt;property name=&amp;quot;driver&amp;quot; value=&amp;quot;${driver}&amp;quot; /&amp;gt; &amp;lt;!-- 配置了properties，所以可以直接引用 --&amp;gt;
-                &amp;lt;property name=&amp;quot;url&amp;quot; value=&amp;quot;${url}&amp;quot; /&amp;gt;
-                &amp;lt;property name=&amp;quot;username&amp;quot; value=&amp;quot;${username}&amp;quot; /&amp;gt;
-                &amp;lt;property name=&amp;quot;password&amp;quot; value=&amp;quot;${password}&amp;quot; /&amp;gt;
-            &amp;lt;/dataSource&amp;gt;
-        &amp;lt;/environment&amp;gt;
-    &amp;lt;/environments&amp;gt;
-    &amp;lt;mappers&amp;gt;
-        &amp;lt;mapper resource=&amp;quot;mappers/UserMapper.xml&amp;quot; /&amp;gt;
-    &amp;lt;/mappers&amp;gt;
-&amp;lt;/configuration&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;strong&gt;4.配置Map.xml（UserMapper.xml）&lt;/strong&gt;&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;&amp;lt;?xml version=&amp;quot;1.0&amp;quot; encoding=&amp;quot;UTF-8&amp;quot; ?&amp;gt;
-&amp;lt;!DOCTYPE mapper
-        PUBLIC &amp;quot;-//mybatis.org//DTD Mapper 3.0//EN&amp;quot;
-        &amp;quot;http://mybatis.org/dtd/mybatis-3-mapper.dtd&amp;quot;&amp;gt;
-&amp;lt;!-- mappers:根标签，namespace：命名空间，随便写，一般保证命名空间唯一 --&amp;gt;
-&amp;lt;mapper namespace=&amp;quot;UserMapper&amp;quot;&amp;gt;
-    &amp;lt;!-- statement，内容：sql语句。id：唯一标识，随便写，在同一个命名空间下保持唯一
-       resultType：sql语句查询结果集的封装类型,tb_user即为数据库中的表
-     --&amp;gt;
-    &amp;lt;select id=&amp;quot;selectUser&amp;quot; resultType=&amp;quot;cn.wishhust.mybatis.first.User&amp;quot;&amp;gt;
-      select * from tb_user where id = #{id};
-   &amp;lt;/select&amp;gt;
-&amp;lt;/mapper&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;strong&gt;5.MybatisTest.java&lt;/strong&gt;&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;public class MybatisTest {
-    public static void main(String[] args) throws Exception {
-        // 指定全局配置文件
-        String resource = &amp;quot;mybatis-config.xml&amp;quot;;
-        // 读取配置文件
-        InputStream inputStream = Resources.getResourceAsStream(resource);
-        // 构建sqlSessionFactory
-        SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(inputStream);
-        // 获取sqlSession
-        SqlSession sqlSession = sqlSessionFactory.openSession();
-        try {
-            // 操作CRUD，第一个参数：指定statement，规则：命名空间+“.”+statementId
-            // 第二个参数：指定传入sql的参数：这里是用户id
-            User user = sqlSession.selectOne(&amp;quot;UserMapper.selectUser&amp;quot;, 1);
-            System.out.println(user);
-        } finally {
-            sqlSession.close();
-        }
-    }
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;strong&gt;6.Mybatis步骤&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;1)配置mybatis-config.xml 全局的配置文件 (1、数据源，2、外部的mapper)&lt;/p&gt;
-
-&lt;p&gt;2)创建SqlSessionFactory&lt;/p&gt;
-
-&lt;p&gt;3)通过SqlSessionFactory创建SqlSession对象&lt;/p&gt;
-
-&lt;p&gt;4)通过SqlSession操作数据库 CRUD&lt;/p&gt;
-
-&lt;p&gt;5)调用session.commit()提交事务&lt;/p&gt;
-
-&lt;p&gt;6)调用session.close()关闭会话&lt;/p&gt;
-
-&lt;h4 id=&#34;mybatis实现crud&#34;&gt;Mybatis实现CRUD&lt;/h4&gt;
-
-&lt;p&gt;&lt;strong&gt;1.UserDao接口&lt;/strong&gt;&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;public interface UserDao {
-    /**
-     * 根据id查询用户信息
-     *
-     * @param id
-     * @return
-     */
-    public User queryUserById(int id);
-
-    /**
-     * 查询所有用户信息
-     *
-     * @return
-     */
-    public List&amp;lt;User&amp;gt; queryUserAll();
-
-    /**
-     * 新增用户
-     *
-     * @param user
-     */
-    public void insertUser(User user);
-
-    /**
-     * 更新用户信息
-     *
-     * @param user
-     */
-    public void updateUser(User user);
-
-    /**
-     * 根据id删除用户信息
-     *
-     * @param id
-     */
-    public void deleteUser(int id);
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;strong&gt;2.UserDaoImpl&lt;/strong&gt;&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;public class UserDaoImpl implements UserDao {
-    public SqlSession sqlSession;
-
-    public UserDaoImpl(SqlSession sqlSession) {
-        this.sqlSession = sqlSession;
-    }
-
-    @Override
-    public User queryUserById(int id) {
-        return this.sqlSession.selectOne(&amp;quot;UserDao.queryUserById&amp;quot;, id);
-    }
-
-    @Override
-    public List&amp;lt;User&amp;gt; queryUserAll() {
-        return this.sqlSession.selectList(&amp;quot;UserDao.queryUserAll&amp;quot;);
-    }
-
-    @Override
-    public void insertUser(User user) {
-        this.sqlSession.insert(&amp;quot;UserDao.insertUser&amp;quot;, user);
-    }
-
-    @Override
-    public void updateUser(User user) {
-        this.sqlSession.update(&amp;quot;UserDao.updateUser&amp;quot;, user);
-    }
-
-    @Override
-    public void deleteUser(int id) {
-        this.sqlSession.delete(&amp;quot;UserDao.deleteUser&amp;quot;, id);
-    }
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;strong&gt;3.UserDaoMapper.xml&lt;/strong&gt;&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;&amp;lt;?xml version=&amp;quot;1.0&amp;quot; encoding=&amp;quot;UTF-8&amp;quot; ?&amp;gt;
-&amp;lt;!DOCTYPE mapper
-        PUBLIC &amp;quot;-//mybatis.org//DTD Mapper 3.0//EN&amp;quot;
-        &amp;quot;http://mybatis.org/dtd/mybatis-3-mapper.dtd&amp;quot;&amp;gt;
-&amp;lt;!-- mapper:根标签，namespace：命名空间，随便写，一般保证命名空间唯一 --&amp;gt;
-&amp;lt;mapper namespace=&amp;quot;UserDao&amp;quot;&amp;gt;
-    &amp;lt;!-- statement，内容：sql语句。id：唯一标识，随便写，在同一个命名空间下保持唯一
-       resultType：sql语句查询结果集的封装类型,tb_user即为数据库中的表
-     --&amp;gt;
-    &amp;lt;!--&amp;lt;select id=&amp;quot;queryUserById&amp;quot; resultType=&amp;quot;com.zpc.mybatis.pojo.User&amp;quot;&amp;gt;--&amp;gt;
-    &amp;lt;!--select * from tb_user where id = #{id}--&amp;gt;
-    &amp;lt;!--&amp;lt;/select&amp;gt;--&amp;gt;
-
-    &amp;lt;!--使用别名--&amp;gt;
-    &amp;lt;select id=&amp;quot;queryUserById&amp;quot; resultType=&amp;quot;cn.wishhust.mybatis.pojo.User&amp;quot;&amp;gt;
-      select
-       tuser.id as id,
-       tuser.user_name as userName,
-       tuser.password as password,
-       tuser.name as name,
-       tuser.age as age,
-       tuser.birthday as birthday,
-       tuser.sex as sex,
-       tuser.created as created,
-       tuser.updated as updated
-       from
-       tb_user tuser
-       where tuser.id = #{id};
-   &amp;lt;/select&amp;gt;
-
-    &amp;lt;select id=&amp;quot;queryUserAll&amp;quot; resultType=&amp;quot;cn.wishhust.mybatis.pojo.User&amp;quot;&amp;gt;
-        select * from tb_user;
-    &amp;lt;/select&amp;gt;
-
-    &amp;lt;!--插入数据--&amp;gt;
-    &amp;lt;insert id=&amp;quot;insertUser&amp;quot; parameterType=&amp;quot;cn.wishhust.mybatis.pojo.User&amp;quot;&amp;gt;
-        INSERT INTO tb_user (
-        user_name,
-        password,
-        name,
-        age,
-        sex,
-        birthday,
-        created,
-        updated
-        )
-        VALUES
-        (
-        #{userName},
-        #{password},
-        #{name},
-        #{age},
-        #{sex},
-        #{birthday},
-        now(),
-        now()
-        );
-    &amp;lt;/insert&amp;gt;
-
-    &amp;lt;update id=&amp;quot;updateUser&amp;quot; parameterType=&amp;quot;cn.wishhust.mybatis.pojo.User&amp;quot;&amp;gt;
-        UPDATE tb_user
-        &amp;lt;trim prefix=&amp;quot;set&amp;quot; suffixOverrides=&amp;quot;,&amp;quot;&amp;gt;
-            &amp;lt;if test=&amp;quot;userName!=null&amp;quot;&amp;gt;user_name = #{userName},&amp;lt;/if&amp;gt;
-            &amp;lt;if test=&amp;quot;password!=null&amp;quot;&amp;gt;password = #{password},&amp;lt;/if&amp;gt;
-            &amp;lt;if test=&amp;quot;name!=null&amp;quot;&amp;gt;name = #{name},&amp;lt;/if&amp;gt;
-            &amp;lt;if test=&amp;quot;age!=null&amp;quot;&amp;gt;age = #{age},&amp;lt;/if&amp;gt;
-            &amp;lt;if test=&amp;quot;sex!=null&amp;quot;&amp;gt;sex = #{sex},&amp;lt;/if&amp;gt;
-            &amp;lt;if test=&amp;quot;birthday!=null&amp;quot;&amp;gt;birthday = #{birthday},&amp;lt;/if&amp;gt;
-            updated = now(),
-        &amp;lt;/trim&amp;gt;
-        WHERE
-        (id = #{id});
-    &amp;lt;/update&amp;gt;
-
-    &amp;lt;delete id=&amp;quot;deleteUser&amp;quot;&amp;gt;
-        delete from tb_user where id=#{id}
-    &amp;lt;/delete&amp;gt;
-&amp;lt;/mapper&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;strong&gt;4.mybatis-config.xml&lt;/strong&gt;&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;&amp;lt;mappers&amp;gt;
-    &amp;lt;mapper resource=&amp;quot;mappers/UserMapper.xml&amp;quot; /&amp;gt;
-    &amp;lt;mapper resource=&amp;quot;mappers/UserDaoMapper.xml&amp;quot; /&amp;gt;
-&amp;lt;/mappers&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;strong&gt;5.测试&lt;/strong&gt;
-引入依赖&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;&amp;lt;!--junit--&amp;gt;
-&amp;lt;dependency&amp;gt;
-  &amp;lt;groupId&amp;gt;junit&amp;lt;/groupId&amp;gt;
-  &amp;lt;artifactId&amp;gt;junit&amp;lt;/artifactId&amp;gt;
-  &amp;lt;version&amp;gt;4.12&amp;lt;/version&amp;gt;
-&amp;lt;/dependency&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;UserDaoTest .java(&lt;strong&gt;测试类的生成可以在UserDao上Alt+enter，选择创建测试类&lt;/strong&gt;)&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;public class UserDaoTest {
-
-    public UserDao userDao;
-    public SqlSession sqlSession;
-
-    @Before
-    public void setUp() throws Exception {
-        // mybatis-config.xml
-        String resource = &amp;quot;mybatis-config.xml&amp;quot;;
-        // 读取配置文件
-        InputStream is = Resources.getResourceAsStream(resource);
-        // 构建SqlSessionFactory
-        SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(is);
-        // 获取sqlSession
-        sqlSession = sqlSessionFactory.openSession();
-        this.userDao = new UserDaoImpl(sqlSession);
-    }
-
-    @Test
-    public void queryUserById() {
-        System.out.println(this.userDao.queryUserById(1));
-    }
-
-    @Test
-    public void queryUserAll() {
-        List&amp;lt;User&amp;gt; userList = this.userDao.queryUserAll();
-        for (User user : userList) {
-            System.out.println(user);
-        }
-    }
-
-    @Test
-    public void insertUser() {
-        User user = new User();
-        user.setAge(16);
-        user.setBirthday(new Date(&amp;quot;1990/09/02&amp;quot;));
-        user.setName(&amp;quot;大鹏&amp;quot;);
-        user.setPassword(&amp;quot;123456&amp;quot;);
-        user.setSex(1);
-        user.setUserName(&amp;quot;evan&amp;quot;);
-        this.userDao.insertUser(user);
-        this.sqlSession.commit();
-
-    }
-
-    @Test
-    public void updateUser() {
-        User user = new User();
-        user.setBirthday(new Date());
-        user.setName(&amp;quot;www&amp;quot;);
-        user.setPassword(&amp;quot;654321&amp;quot;);
-        user.setSex(1);
-        user.setUserName(&amp;quot;www&amp;quot;);
-        user.setId(1);
-        this.userDao.updateUser(user);
-        this.sqlSession.commit();
-
-    }
-
-    @Test
-    public void deleteUser() {
-        this.userDao.deleteUser(4);
-        this.sqlSession.commit();
-    }
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h4 id=&#34;动态代理mapper实现类&#34;&gt;动态代理Mapper实现类&lt;/h4&gt;
-
-&lt;p&gt;&lt;strong&gt;1.UserMapper&lt;/strong&gt;（对应原UserDao）&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;public interface UserMapper {
-    /**
-     * 登录（直接使用注解指定传入参数名称）
-     * @param userName
-     * @param password
-     * @return
-     */
-    public User login(@Param(&amp;quot;userName&amp;quot;) String userName, @Param(&amp;quot;password&amp;quot;) String password);
-
-    /**
-     * 根据表名查询用户信息（直接使用注解指定传入参数名称）
-     * @param tableName
-     * @return
-     */
-    public List&amp;lt;User&amp;gt; queryUserByTableName(@Param(&amp;quot;tableName&amp;quot;) String tableName);
-
-    /**
-     * 根据Id查询用户信息
-     * @param id
-     * @return
-     */
-    public User queryUserById(int id);
-
-    /**
-     * 查询所有用户信息
-     * @return
-     */
-    public List&amp;lt;User&amp;gt; queryUserAll();
-
-    /**
-     * 新增用户信息
-     * @param user
-     */
-    public void insertUser(User user);
-
-    /**
-     * 根据id更新用户信息
-     * @param user
-     */
-    public void updateUser(User user);
-
-    /**
-     * 根据id删除用户信息
-     * @param id
-     */
-    public void deleteUserById(int id);
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;strong&gt;2.UserMapper.xml&lt;/strong&gt;
-&lt;strong&gt;&lt;em&gt;mapper:根标签，namespace：命名空间，为了使用接口动态代理，这里必须是接口的全路径名&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;&amp;lt;?xml version=&amp;quot;1.0&amp;quot; encoding=&amp;quot;UTF-8&amp;quot; ?&amp;gt;
-&amp;lt;!DOCTYPE mapper
-        PUBLIC &amp;quot;-//mybatis.org//DTD Mapper 3.0//EN&amp;quot;
-        &amp;quot;http://mybatis.org/dtd/mybatis-3-mapper.dtd&amp;quot;&amp;gt;
-&amp;lt;!-- mapper:根标签，namespace：命名空间，随便写，一般保证命名空间唯一 ，为了使用接口动态代理，这里必须是接口的全路径名--&amp;gt;
-&amp;lt;mapper namespace=&amp;quot;cn.wishhust.mybatis.mappers.UserMapper&amp;quot;&amp;gt;
-    &amp;lt;!--
-       1.#{},预编译的方式preparedstatement，使用占位符替换，防止sql注入，一个参数的时候，任意参数名可以接收
-       2.${},普通的Statement，字符串直接拼接，不可以防止sql注入，一个参数的时候，必须使用${value}接收参数
-     --&amp;gt;
-    &amp;lt;select id=&amp;quot;queryUserByTableName&amp;quot; resultType=&amp;quot;cn.wishhust.mybatis.pojo.User&amp;quot;&amp;gt;
-        select * from ${tableName}
-    &amp;lt;/select&amp;gt;
-
-    &amp;lt;select id=&amp;quot;login&amp;quot; resultType=&amp;quot;cn.wishhust.mybatis.pojo.User&amp;quot;&amp;gt;
-        select * from tb_user where user_name = #{userName} and password = #{password}
-    &amp;lt;/select&amp;gt;
-
-    &amp;lt;!-- statement，内容：sql语句。
-       id：唯一标识，随便写，在同一个命名空间下保持唯一，使用动态代理之后要求和方法名保持一致
-       resultType：sql语句查询结果集的封装类型，使用动态代理之后和方法的返回类型一致；resultMap：二选一
-       parameterType：参数的类型，使用动态代理之后和方法的参数类型一致
-     --&amp;gt;
-    &amp;lt;select id=&amp;quot;queryUserById&amp;quot; resultType=&amp;quot;cn.wishhust.mybatis.pojo.User&amp;quot;&amp;gt;
-        select * from tb_user where id = #{id}
-    &amp;lt;/select&amp;gt;
-    &amp;lt;select id=&amp;quot;queryUserAll&amp;quot; resultType=&amp;quot;cn.wishhust.mybatis.pojo.User&amp;quot;&amp;gt;
-        select * from tb_user
-    &amp;lt;/select&amp;gt;
-    &amp;lt;!-- 新增的Statement
-       id：唯一标识，随便写，在同一个命名空间下保持唯一，使用动态代理之后要求和方法名保持一致
-       parameterType：参数的类型，使用动态代理之后和方法的参数类型一致
-       useGeneratedKeys:开启主键回写
-       keyColumn：指定数据库的主键
-       keyProperty：主键对应的pojo属性名
-     --&amp;gt;
-    &amp;lt;insert id=&amp;quot;insertUser&amp;quot; useGeneratedKeys=&amp;quot;true&amp;quot; keyColumn=&amp;quot;id&amp;quot; keyProperty=&amp;quot;id&amp;quot;
-            parameterType=&amp;quot;cn.wishhust.mybatis.pojo.User&amp;quot;&amp;gt;
-        INSERT INTO tb_user (
-            id,
-            user_name,
-            password,
-            name,
-            age,
-            sex,
-            birthday,
-            created,
-            updated
-        )
-        VALUES
-        (
-            null,
-            #{userName},
-            #{password},
-            #{name},
-            #{age},
-            #{sex},
-            #{birthday},
-            NOW(),
-            NOW()
-        );
-    &amp;lt;/insert&amp;gt;
-    &amp;lt;!--
-       更新的statement
-       id：唯一标识，随便写，在同一个命名空间下保持唯一，使用动态代理之后要求和方法名保持一致
-       parameterType：参数的类型，使用动态代理之后和方法的参数类型一致
-     --&amp;gt;
-    &amp;lt;update id=&amp;quot;updateUser&amp;quot; parameterType=&amp;quot;cn.wishhust.mybatis.pojo.User&amp;quot;&amp;gt;
-        UPDATE tb_user
-        &amp;lt;trim prefix=&amp;quot;set&amp;quot; suffixOverrides=&amp;quot;,&amp;quot;&amp;gt;
-            &amp;lt;if test=&amp;quot;userName!=null&amp;quot;&amp;gt;user_name = #{userName},&amp;lt;/if&amp;gt;
-            &amp;lt;if test=&amp;quot;password!=null&amp;quot;&amp;gt;password = #{password},&amp;lt;/if&amp;gt;
-            &amp;lt;if test=&amp;quot;name!=null&amp;quot;&amp;gt;name = #{name},&amp;lt;/if&amp;gt;
-            &amp;lt;if test=&amp;quot;age!=null&amp;quot;&amp;gt;age = #{age},&amp;lt;/if&amp;gt;
-            &amp;lt;if test=&amp;quot;sex!=null&amp;quot;&amp;gt;sex = #{sex},&amp;lt;/if&amp;gt;
-            &amp;lt;if test=&amp;quot;birthday!=null&amp;quot;&amp;gt;birthday = #{birthday},&amp;lt;/if&amp;gt;
-            updated = now(),
-        &amp;lt;/trim&amp;gt;
-        WHERE
-        (id = #{id});
-    &amp;lt;/update&amp;gt;
-    &amp;lt;!--
-       删除的statement
-       id：唯一标识，随便写，在同一个命名空间下保持唯一，使用动态代理之后要求和方法名保持一致
-       parameterType：参数的类型，使用动态代理之后和方法的参数类型一致
-     --&amp;gt;
-    &amp;lt;delete id=&amp;quot;deleteUserById&amp;quot; parameterType=&amp;quot;java.lang.Integer&amp;quot;&amp;gt;
-        delete from tb_user where id=#{id}
-    &amp;lt;/delete&amp;gt;
-&amp;lt;/mapper&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;strong&gt;3.mybatis-config.xml&lt;/strong&gt;&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;&amp;lt;mappers&amp;gt;
-    &amp;lt;mapper resource=&amp;quot;mappers/UserMapper.xml&amp;quot; /&amp;gt;
-    &amp;lt;mapper resource=&amp;quot;mappers/UserDaoMapper.xml&amp;quot; /&amp;gt;
-    &amp;lt;mapper resource=&amp;quot;mappers/UserMapper2.xml&amp;quot; /&amp;gt;
-&amp;lt;/mappers&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;strong&gt;4.测试&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;a.映射文件的命名空间（namespace）必须是mapper接口的全路径&lt;/p&gt;
-
-&lt;p&gt;b.映射文件的statement的id必须和mapper接口的方法名保持一致&lt;/p&gt;
-
-&lt;p&gt;c.Statement的resultType必须和mapper接口方法的返回类型一致&lt;/p&gt;
-
-&lt;p&gt;d.statement的parameterType必须和mapper接口方法的参数类型一致（不一定）&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;public class UserMapperTest {
-
-    public UserMapper userMapper;
-
-    @Before
-    public void setUp() throws Exception {
-        // 指定配置文件
-        String resource = &amp;quot;mybatis-config.xml&amp;quot;;
-        // 读取配置文件
-        InputStream inputStream = Resources.getResourceAsStream(resource);
-        // 构建sqlSessionFactory
-        SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(inputStream);
-        // 获取sqlSession
-        SqlSession sqlSession = sqlSessionFactory.openSession(true);
-
-        // 1. 映射文件的命名空间（namespace）必须是mapper接口的全路径
-        // 2. 映射文件的statement的id必须和mapper接口的方法名保持一致
-        // 3. Statement的resultType必须和mapper接口方法的返回类型一致
-        // 4. statement的parameterType必须和mapper接口方法的参数类型一致（不一定）
-        this.userMapper = sqlSession.getMapper(UserMapper.class);
-
-    }
-
-    @Test
-    public void login() {
-        System.out.println(this.userMapper.login(&amp;quot;lk&amp;quot;, &amp;quot;123456&amp;quot;));
-    }
-
-    @Test
-    public void queryUserByTableName() {
-        List&amp;lt;User&amp;gt; userList = this.userMapper.queryUserByTableName(&amp;quot;tb_user&amp;quot;);
-        for (User user : userList) {
-            System.out.println(user);
-        }
-    }
-
-    @Test
-    public void queryUserById() {
-        System.out.println(this.userMapper.queryUserById(1));
-    }
-
-    @Test
-    public void queryUserAll() {
-        List&amp;lt;User&amp;gt; userList = this.userMapper.queryUserAll();
-        for (User user : userList) {
-            System.out.println(user);
-        }
-    }
-    @Test
-    public void insertUser() {
-        User user = new User();
-        user.setAge(20);
-        user.setBirthday(new Date());
-        user.setName(&amp;quot;大神&amp;quot;);
-        user.setPassword(&amp;quot;123456&amp;quot;);
-        user.setSex(2);
-        user.setUserName(&amp;quot;bigGod222&amp;quot;);
-        this.userMapper.insertUser(user);
-        System.out.println(user.getId());
-    }
-
-    @Test
-    public void updateUser() {
-        User user = new User();
-        user.setBirthday(new Date());
-        user.setName(&amp;quot;静静&amp;quot;);
-        user.setPassword(&amp;quot;123456&amp;quot;);
-        user.setSex(0);
-        user.setUserName(&amp;quot;Jinjin&amp;quot;);
-        user.setId(1);
-        this.userMapper.updateUser(user);
-    }
-
-    @Test
-    public void deleteUserById() {
-        this.userMapper.deleteUserById(1);
-    }
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h4 id=&#34;mapper-xml文件详解&#34;&gt;Mapper XML文件详解&lt;/h4&gt;
-
-&lt;p&gt;&lt;strong&gt;1.CRUD标签&lt;/strong&gt;
-* select&lt;/p&gt;
-
-&lt;p&gt;id属性：当前名称空间下的statement的唯一标识。必须。要求id和mapper接口中的方法的名字一致。
-resultType：将结果集映射为java的对象类型。必须（和 resultMap 二选一）
-parameterType：传入参数类型。可以省略&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;insert&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;id：唯一标识，随便写，在同一个命名空间下保持唯一，使用动态代理之后要求和方法名保持一致
-parameterType：参数的类型，使用动态代理之后和方法的参数类型一致
-useGeneratedKeys:开启主键回写
-keyColumn：指定数据库的主键
-keyProperty：主键对应的pojo属性名
-标签内部：具体的sql语句。&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;update&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;id属性：当前名称空间下的statement的唯一标识(必须属性)；
-parameterType：传入的参数类型，可以省略。
-标签内部：具体的sql语句。&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;delete&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;id属性：当前名称空间下的statement的唯一标识(必须属性)；
-parameterType：传入的参数类型，可以省略。
-标签内部：具体的sql语句。&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;2.#{}和${}&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;#{} 和 ${} 在预编译中的处理是不一样的。#{} 在预处理时，会把参数部分用一个占位符 ? 代替;而 ${} 则只是简单的字符串替换.&lt;strong&gt;优先使用 #{}, ${} 会导致 sql 注入的问题。&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;场景&lt;/strong&gt;：数据库有两个一模一样的表。历史表，当前表
-查询表中的信息，有时候从历史表中去查询数据，有时候需要去新的表去查询数据。
-希望使用1个方法来完成操作。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;&amp;lt;select id=&amp;quot;queryUserByTableName&amp;quot; resultType=&amp;quot;com.zpc.mybatis.pojo.User&amp;quot;&amp;gt;
-    select * from #{tableName}
-&amp;lt;/select&amp;gt;
-&amp;lt;-- 相当于select * from “tb_user”;  会报错 --&amp;gt;
-
-&amp;lt;-- 正确做法 --&amp;gt;
-&amp;lt;select id=&amp;quot;queryUserByTableName&amp;quot; resultType=&amp;quot;com.zpc.mybatis.pojo.User&amp;quot;&amp;gt;
-    select * from ${tableName}
-&amp;lt;/select&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;注意：
-使用${} 去取出参数值信息，需要使用${value}
-#{} 只是表示占位，与参数的名字无关，如果只有一个参数，会自动对应。多参数时，通常在方法的参数列表上加上一个注释@Param(“xxxx”) 显式指定参数的名字&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;3.sql片段&lt;/strong&gt;&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;&amp;lt;--定义--&amp;gt;
-&amp;lt;sql id=””&amp;gt;&amp;lt;/sql&amp;gt;
-&amp;lt;--使用--&amp;gt;
-&amp;lt;include refId=”” /&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h4 id=&#34;动态sql&#34;&gt;动态sql&lt;/h4&gt;
-
-&lt;p&gt;动态sql有
-1. if
-2. choose，when，otherwise
-3. where，set
-4. foreach&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;1.if&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;场景：查询用户，如果输入了姓名，则按姓名查询&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;// 接口
-List&amp;lt;User&amp;gt; queryUserListByName(@Param(&amp;quot;userName&amp;quot;) String userName);
-
-&amp;lt;--mapper--&amp;gt;
-&amp;lt;mapper namespace=&amp;quot;cn.wishhust.mybatis.dao.mappers.DynamicSqlMapper&amp;quot;&amp;gt;
-    &amp;lt;!--if的简单使用--&amp;gt;
-    &amp;lt;select id=&amp;quot;queryUserListByName&amp;quot;
-            resultType=&amp;quot;cn.wishhust.mybatis.pojo.User&amp;quot;&amp;gt;
-      select * from tb_user
-      &amp;lt;if test=&amp;quot;userName != null and userName.trim() != &#39;&#39;&amp;quot;&amp;gt;
-          where user_name like &#39;%${userName}%&#39;
-      &amp;lt;/if&amp;gt;
-    &amp;lt;/select&amp;gt;
-&amp;lt;/mapper&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;strong&gt;2.choose，when，otherwise&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;场景：查询用户，如果输入了姓名则按照姓名模糊查找，否则如果输入了年龄则按照年龄查找，否则查找姓名为“ls”的用户。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;// 接口
-List&amp;lt;User&amp;gt; queryUserListByNameOrAge(@Param(&amp;quot;userName&amp;quot;) String userName,
-                                    @Param(&amp;quot;age&amp;quot;) Integer age);
-                                        
-&amp;lt;--mapper--&amp;gt;
-&amp;lt;mapper namespace=&amp;quot;cn.wishhust.mybatis.dao.mappers.DynamicSqlMapper&amp;quot;&amp;gt;
-	&amp;lt;!--choose when otherwise的简单使用--&amp;gt;
-    &amp;lt;select id=&amp;quot;queryUserListByNameOrAge&amp;quot;
-            resultType=&amp;quot;cn.wishhust.mybatis.pojo.User&amp;quot;&amp;gt;
-        select * from tb_user WHERE
-        &amp;lt;!--
-        1.一旦有条件成立的when，后续的when则不会执行
-        2.当所有的when都不执行时,才会执行otherwise
-        --&amp;gt;
-        &amp;lt;choose&amp;gt;
-            &amp;lt;when test=&amp;quot;userName!=null and userName.trim()!=&#39;&#39;&amp;quot;&amp;gt;
-                user_name like &#39;%${userName}%&#39;
-            &amp;lt;/when&amp;gt;
-            &amp;lt;when test=&amp;quot;age!=null&amp;quot;&amp;gt;
-                age = #{age}
-            &amp;lt;/when&amp;gt;
-            &amp;lt;otherwise&amp;gt;
-                user_name = &#39;ls&#39;
-            &amp;lt;/otherwise&amp;gt;
-        &amp;lt;/choose&amp;gt;
-    &amp;lt;/select&amp;gt;
-&amp;lt;/mapper&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;strong&gt;3.where 和set&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;场景一&lt;/strong&gt;：查询所有用户，如果输入了姓名按照姓名进行模糊查询，如果输入年龄，按照年龄进行查询，如果两者都输入，两个条件都要成立。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;// 接口
-List&amp;lt;User&amp;gt; queryUserListByNameAndAge(@Param(&amp;quot;userName&amp;quot;) String userName,
-                                     @Param(&amp;quot;age&amp;quot;) Integer age);
-
-&amp;lt;--mapper--&amp;gt;
-&amp;lt;mapper namespace=&amp;quot;cn.wishhust.mybatis.dao.mappers.DynamicSqlMapper&amp;quot;&amp;gt;
-	&amp;lt;!--where 和set的简单使用--&amp;gt;
-    &amp;lt;select id=&amp;quot;queryUserListByNameAndAge&amp;quot; resultType=&amp;quot;cn.wishhust.mybatis.pojo.User&amp;quot;&amp;gt;
-        select * from tb_user
-        &amp;lt;!--如果多出一个and，会自动去除，如果缺少and或者多出多个and则会报错--&amp;gt;
-        &amp;lt;where&amp;gt;
-            &amp;lt;if test=&amp;quot;userName!=null and userName.trim()!=&#39;&#39;&amp;quot;&amp;gt;
-                and name like &#39;%${userName}%&#39;
-            &amp;lt;/if&amp;gt;
-            &amp;lt;if test=&amp;quot;age!=null&amp;quot;&amp;gt;
-                and age = #{age}
-            &amp;lt;/if&amp;gt;
-        &amp;lt;/where&amp;gt;
-    &amp;lt;/select&amp;gt;
-&amp;lt;/mapper&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;strong&gt;场景二&lt;/strong&gt;：修改用户信息，如果参数user中的某个属性为null，则不修改。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;// 接口
-void updateUser(User user);
-
-&amp;lt;--mapper--&amp;gt;
-&amp;lt;mapper namespace=&amp;quot;cn.wishhust.mybatis.dao.mappers.DynamicSqlMapper&amp;quot;&amp;gt;
-	&amp;lt;update id=&amp;quot;updateUser&amp;quot; parameterType=&amp;quot;cn.wishhust.mybatis.pojo.User&amp;quot;&amp;gt;
-        UPDATE tb_user
-        &amp;lt;trim prefix=&amp;quot;set&amp;quot; suffixOverrides=&amp;quot;,&amp;quot;&amp;gt;
-            &amp;lt;if test=&amp;quot;userName!=null&amp;quot;&amp;gt;user_name = #{userName},&amp;lt;/if&amp;gt;
-            &amp;lt;if test=&amp;quot;password!=null&amp;quot;&amp;gt;password = #{password},&amp;lt;/if&amp;gt;
-            &amp;lt;if test=&amp;quot;name!=null&amp;quot;&amp;gt;name = #{name},&amp;lt;/if&amp;gt;
-            &amp;lt;if test=&amp;quot;age!=null&amp;quot;&amp;gt;age = #{age},&amp;lt;/if&amp;gt;
-            &amp;lt;if test=&amp;quot;sex!=null&amp;quot;&amp;gt;sex = #{sex},&amp;lt;/if&amp;gt;
-            &amp;lt;if test=&amp;quot;birthday!=null&amp;quot;&amp;gt;birthday = #{birthday},&amp;lt;/if&amp;gt;
-            updated = now(),
-        &amp;lt;/trim&amp;gt;
-        WHERE
-        (id = #{id});
-    &amp;lt;/update&amp;gt;
-&amp;lt;/mapper&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;strong&gt;4.foreach&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;场景：按照多个id查询用户信息。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;// 接口
-List&amp;lt;User&amp;gt; queryUserListByIds(@Param(&amp;quot;ids&amp;quot;) int[] ids);
-
-&amp;lt;--mapper--&amp;gt;
-&amp;lt;mapper namespace=&amp;quot;cn.wishhust.mybatis.dao.mappers.DynamicSqlMapper&amp;quot;&amp;gt;
-	&amp;lt;!--foreach的简单使用--&amp;gt;
-    &amp;lt;select id=&amp;quot;queryUserListByIds&amp;quot; resultType=&amp;quot;cn.wishhust.mybatis.pojo.User&amp;quot;&amp;gt;
-        select * from tb_user where id in
-        &amp;lt;foreach collection=&amp;quot;ids&amp;quot; item=&amp;quot;id&amp;quot; open=&amp;quot;(&amp;quot; close=&amp;quot;)&amp;quot; separator=&amp;quot;,&amp;quot;&amp;gt;
-            #{id}
-        &amp;lt;/foreach&amp;gt;
-    &amp;lt;/select&amp;gt;
-&amp;lt;/mapper&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h4 id=&#34;高级查询&#34;&gt;高级查询&lt;/h4&gt;
-
-&lt;p&gt;&lt;strong&gt;一对一查询&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;需求：查询订单，并查询出下单人的信息。&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;Order.java&lt;/strong&gt;&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;public class Order {
-    private Integer id;
-    private Long userId;
-    private String orderNumber;
-    private Date createdTime;
-    private Date updatedTime;
-    private User user;
-    // get,set,toString
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;strong&gt;OrderMapper.java&lt;/strong&gt;&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;public interface OrderMapper {
-	Order queryOrderWithUserByOrderNumber(@Param(&amp;quot;number&amp;quot;) String number);
-
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;strong&gt;OrderMapper.xml&lt;/strong&gt;&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;&amp;lt;!-- mappers:根标签，namespace：命名空间，随便写，一般保证命名空间唯一 --&amp;gt;
-&amp;lt;mapper namespace=&amp;quot;cn.wishhust.mybatis.dao.mappers.OrderMapper&amp;quot;&amp;gt;
-    &amp;lt;resultMap id=&amp;quot;OrderUserResultMap&amp;quot;
-               type=&amp;quot;cn.wishhust.mybatis.pojo.Order&amp;quot;
-               autoMapping=&amp;quot;true&amp;quot;&amp;gt;
-        &amp;lt;!--
-            指定主键
-            column：数据库的列名
-            property：java实体类中的属性名
-        --&amp;gt;
-        &amp;lt;id column=&amp;quot;id&amp;quot; property=&amp;quot;id&amp;quot;/&amp;gt;
-        &amp;lt;!--association:完成子对象的映射--&amp;gt;
-        &amp;lt;!--property:子对象在父对象中的属性名--&amp;gt;
-        &amp;lt;!--javaType:子对象的java类型--&amp;gt;
-        &amp;lt;!--autoMapping:完成子对象的自动映射，若开启驼峰，则按驼峰匹配--&amp;gt;
-        &amp;lt;association property=&amp;quot;user&amp;quot;
-                     javaType=&amp;quot;cn.wishhust.mybatis.pojo.User&amp;quot;
-                     autoMapping=&amp;quot;true&amp;quot;&amp;gt;
-            &amp;lt;id column=&amp;quot;user_id&amp;quot; property=&amp;quot;id&amp;quot;/&amp;gt;
-        &amp;lt;/association&amp;gt;
-    &amp;lt;/resultMap&amp;gt;
-
-    &amp;lt;select id=&amp;quot;queryOrderWithUserByOrderNumber&amp;quot;
-            resultMap=&amp;quot;OrderUserResultMap&amp;quot;&amp;gt;
-      select * from tb_order o left join tb_user u
-        on o.user_id=u.id
-        where o.order_number = #{number}
-    &amp;lt;/select&amp;gt;
-&amp;lt;/mapper&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h4 id=&#34;缓存&#34;&gt;缓存&lt;/h4&gt;
-
-&lt;p&gt;&lt;strong&gt;一级缓存&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;Mybatis的一级缓存的&lt;strong&gt;作用域是session&lt;/strong&gt;，当openSession()后，如果执行相同的SQL（相同语句和参数），Mybatis不进行执行SQL，而是从缓存中命中返回。原理：Mybatis执行查询时首先去缓存区命中，如果命中直接返回，没有命中则执行SQL，从数据库中查询。&lt;/p&gt;
-
-&lt;p&gt;在mybatis中，一级缓存默认是开启的，并且一直无法关闭&lt;/p&gt;
-
-&lt;p&gt;一级缓存满足条件：
-1、同一个session中
-2、相同的SQL和参数&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;二级缓存&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;mybatis 的二级缓存的&lt;strong&gt;作用域是一个mapper的namespace&lt;/strong&gt; ，同一个namespace中查询sql可以从缓存中命中。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;&amp;lt;mapper namespace=&amp;quot;cn.wishhust.mybatis.dao.mappers.UserMapper&amp;quot;&amp;gt;
-    &amp;lt;cache/&amp;gt;
-    ...
-&amp;lt;/mapper&amp;gt;
-
-&amp;lt;settings&amp;gt;
-    &amp;lt;!--开启驼峰匹配--&amp;gt;
-    &amp;lt;setting name=&amp;quot;mapUnderscoreToCamelCase&amp;quot; value=&amp;quot;true&amp;quot;/&amp;gt;
-    &amp;lt;!--开启二级缓存,全局总开关，这里关闭，mapper中开启了也没用--&amp;gt;
-    &amp;lt;setting name=&amp;quot;cacheEnabled&amp;quot; value=&amp;quot;false&amp;quot;/&amp;gt;
-&amp;lt;/settings&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h4 id=&#34;sql语句中出现-的解决方案&#34;&gt;sql语句中出现’&amp;lt;’的解决方案&lt;/h4&gt;
-
-&lt;p&gt;&lt;strong&gt;方法一：&lt;/strong&gt;&lt;/p&gt;
-
-&lt;table&gt;
-&lt;thead&gt;
-&lt;tr&gt;
-&lt;th&gt;转义字符&lt;/th&gt;
-&lt;th&gt;字符&lt;/th&gt;
-&lt;th&gt;说明&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;
-
-&lt;tbody&gt;
-&lt;tr&gt;
-&lt;td&gt;&amp;amp;lt；&lt;/td&gt;
-&lt;td&gt;&amp;lt;&lt;/td&gt;
-&lt;td&gt;小于&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td&gt;&amp;amp;gt；&lt;/td&gt;
-&lt;td&gt;&amp;gt;&lt;/td&gt;
-&lt;td&gt;小于&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td&gt;&amp;amp;amp；&lt;/td&gt;
-&lt;td&gt;&amp;amp;&lt;/td&gt;
-&lt;td&gt;和&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td&gt;&amp;amp;apos；&lt;/td&gt;
-&lt;td&gt;&amp;lsquo;&lt;/td&gt;
-&lt;td&gt;省略号&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td&gt;&amp;amp;quot；&lt;/td&gt;
-&lt;td&gt;&amp;ldquo;&lt;/td&gt;
-&lt;td&gt;引号&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;
-
-&lt;p&gt;&lt;strong&gt;方法二：&lt;/strong&gt;&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;&amp;lt;![CDATA[ 符号 ]]&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;注：使用&amp;lt;![CDATA[ ]]&amp;gt;标记的sql语句中的&amp;lt;where&amp;gt; &amp;lt;if&amp;gt;等标签不会被解析。&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;p&gt;报错1：&lt;/p&gt;
-
-&lt;p&gt;org.apache.ibatis.binding.BindingException: Type interface cn.wishhust.mybatis.mappers.OrderMapper is not known to the MapperRegistry.&lt;/p&gt;
-
-&lt;p&gt;原因：
-xml文件的namespace的值对应的mapper接口写错了，没使用全名。&lt;/p&gt;
 </description>
     </item>
     

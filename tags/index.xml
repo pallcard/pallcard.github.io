@@ -7,7 +7,7 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
     <copyright>All rights reserved - 2019</copyright>
-    <lastBuildDate>Tue, 06 Aug 2019 22:10:05 +0800</lastBuildDate>
+    <lastBuildDate>Wed, 07 Aug 2019 23:22:27 +0800</lastBuildDate>
     
 	<atom:link href="https://pallcard.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
     
@@ -15,16 +15,25 @@
     <item>
       <title>Java</title>
       <link>https://pallcard.github.io/tags/java/</link>
-      <pubDate>Tue, 06 Aug 2019 22:10:05 +0800</pubDate>
+      <pubDate>Wed, 07 Aug 2019 23:22:27 +0800</pubDate>
       
       <guid>https://pallcard.github.io/tags/java/</guid>
       <description></description>
     </item>
     
     <item>
+      <title>并发</title>
+      <link>https://pallcard.github.io/tags/%E5%B9%B6%E5%8F%91/</link>
+      <pubDate>Wed, 07 Aug 2019 23:22:27 +0800</pubDate>
+      
+      <guid>https://pallcard.github.io/tags/%E5%B9%B6%E5%8F%91/</guid>
+      <description></description>
+    </item>
+    
+    <item>
       <title>总数</title>
       <link>https://pallcard.github.io/tags/%E6%80%BB%E6%95%B0/</link>
-      <pubDate>Tue, 06 Aug 2019 22:10:05 +0800</pubDate>
+      <pubDate>Wed, 07 Aug 2019 23:22:27 +0800</pubDate>
       
       <guid>https://pallcard.github.io/tags/%E6%80%BB%E6%95%B0/</guid>
       <description></description>

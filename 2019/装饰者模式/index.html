@@ -10,7 +10,7 @@
   <meta name="keywords" content="Java,博客">
   
   <link rel="prev" href="https://pallcard.github.io/2019/springboot%E6%B3%A8%E8%A7%A3/" />
-  
+  <link rel="next" href="https://pallcard.github.io/2019/volatile%E5%92%8Csynchronized/" />
   <link rel="canonical" href="https://pallcard.github.io/2019/%E8%A3%85%E9%A5%B0%E8%80%85%E6%A8%A1%E5%BC%8F/" />
   <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon" />
   <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
@@ -47,7 +47,7 @@
     "articleSection" : "posts",
     "name" : "装饰者模式",
     "headline" : "装饰者模式",
-    "description" : "装饰者模式 在不改变原类文件以及不使用继承的情况下，动态地将责任附加到对象上，从而实现动态拓展一个对象的功能。它是通过创建一个包装对象，也就是装饰来包裹真实的对象。\n举例说明 包含四个部分 1. 抽象组件 \x26mdash;-\x26gt; IDrink 2. 具体组件 \x26mdash;-\x26gt; Coffee 3. 抽象装饰 \x26mdash;-\x26gt; DrinkDecorator 4. 具体装饰 \x26mdash;-\x26gt; Milk, Ice\n抽象主键 IDrink public interface IDrink { double cost(); String describe(); }  具体组件 Coffee public class Coffee implements IDrink{ @Override public double cost() { return 10; } @Override public String describe() { return \x26quot;coffer\x26quot;; } }  抽象装饰 DrinkDecorator public abstract class DrinkDecorator implements IDrink { protected IDrink drink; }  抽象装饰 Milk public class Milk extends DrinkDecorator{ public Milk(IDrink drink) { this.",
+    "description" : "装饰者模式 在不改变原类文件以及不使用继承的情况下，动态地将责任附加到对象上，从而实现动态拓展一个对象的功能。它是通过创建一个包装对象，也就是装饰来包裹真实的对象。\n举例说明 包含四个部分\n 抽象组件 \x26mdash;-\x26gt; IDrink\n 具体组件 \x26mdash;-\x26gt; Coffee\n 抽象装饰 \x26mdash;-\x26gt; DrinkDecorator\n 具体装饰 \x26mdash;-\x26gt; Milk, Ice\n  抽象主键 IDrink public interface IDrink { double cost(); String describe(); }  具体组件 Coffee public class Coffee implements IDrink{ @Override public double cost() { return 10; } @Override public String describe() { return \x26quot;coffer\x26quot;; } }  抽象装饰 DrinkDecorator public abstract class DrinkDecorator implements IDrink { protected IDrink drink; }  抽象装饰 Milk public class Milk extends DrinkDecorator{ public Milk(IDrink drink) { this.",
     "inLanguage" : "zh-CN",
     "author" : "刘科",
     "creator" : "刘科",
@@ -58,7 +58,7 @@
     "datePublished": "2019-08-06 22:10:05 \x2b0800 CST",
     "dateModified" : "2019-08-06 22:10:05 \x2b0800 CST",
     "url" : "https:\/\/pallcard.github.io\/2019\/%E8%A3%85%E9%A5%B0%E8%80%85%E6%A8%A1%E5%BC%8F\/",
-    "wordCount" : "230",
+    "wordCount" : "226",
     "keywords" : [ "Java","设计模式","总数", "刘科个人博客"]
 }
 </script>
@@ -155,11 +155,17 @@
 
 <h2 id="举例说明">举例说明</h2>
 
-<p>包含四个部分
-1. 抽象组件 &mdash;-&gt; IDrink
-2. 具体组件 &mdash;-&gt; Coffee
-3. 抽象装饰 &mdash;-&gt; DrinkDecorator
-4. 具体装饰 &mdash;-&gt; Milk, Ice</p>
+<p>包含四个部分</p>
+
+<ol>
+<li><p>抽象组件 &mdash;-&gt; IDrink</p></li>
+
+<li><p>具体组件 &mdash;-&gt; Coffee</p></li>
+
+<li><p>抽象装饰 &mdash;-&gt; DrinkDecorator</p></li>
+
+<li><p>具体装饰 &mdash;-&gt; Milk, Ice</p></li>
+</ol>
 
 <h3 id="抽象主键-idrink">抽象主键 IDrink</h3>
 
@@ -326,6 +332,8 @@ public class CoffeeProxyFactory implements InvocationHandler {
         
         <a href="https://pallcard.github.io/2019/springboot%E6%B3%A8%E8%A7%A3/" class="prev" rel="prev" title="SpringBoot注解"><i class="iconfont icon-left"></i>&nbsp;SpringBoot注解</a>
          
+        
+        <a href="https://pallcard.github.io/2019/volatile%E5%92%8Csynchronized/" class="next" rel="next" title="Volatile和synchronized">Volatile和synchronized&nbsp;<i class="iconfont icon-right"></i></a>
         
     </div>
 

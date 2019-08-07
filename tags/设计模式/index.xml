@@ -19,8 +19,12 @@
       
       <guid>https://pallcard.github.io/2019/%E8%A3%85%E9%A5%B0%E8%80%85%E6%A8%A1%E5%BC%8F/</guid>
       <description>装饰者模式 在不改变原类文件以及不使用继承的情况下，动态地将责任附加到对象上，从而实现动态拓展一个对象的功能。它是通过创建一个包装对象，也就是装饰来包裹真实的对象。
-举例说明 包含四个部分 1. 抽象组件 &amp;mdash;-&amp;gt; IDrink 2. 具体组件 &amp;mdash;-&amp;gt; Coffee 3. 抽象装饰 &amp;mdash;-&amp;gt; DrinkDecorator 4. 具体装饰 &amp;mdash;-&amp;gt; Milk, Ice
-抽象主键 IDrink public interface IDrink { double cost(); String describe(); }  具体组件 Coffee public class Coffee implements IDrink{ @Override public double cost() { return 10; } @Override public String describe() { return &amp;quot;coffer&amp;quot;; } }  抽象装饰 DrinkDecorator public abstract class DrinkDecorator implements IDrink { protected IDrink drink; }  抽象装饰 Milk public class Milk extends DrinkDecorator{ public Milk(IDrink drink) { this.</description>
+举例说明 包含四个部分
+ 抽象组件 &amp;mdash;-&amp;gt; IDrink
+ 具体组件 &amp;mdash;-&amp;gt; Coffee
+ 抽象装饰 &amp;mdash;-&amp;gt; DrinkDecorator
+ 具体装饰 &amp;mdash;-&amp;gt; Milk, Ice
+  抽象主键 IDrink public interface IDrink { double cost(); String describe(); }  具体组件 Coffee public class Coffee implements IDrink{ @Override public double cost() { return 10; } @Override public String describe() { return &amp;quot;coffer&amp;quot;; } }  抽象装饰 DrinkDecorator public abstract class DrinkDecorator implements IDrink { protected IDrink drink; }  抽象装饰 Milk public class Milk extends DrinkDecorator{ public Milk(IDrink drink) { this.</description>
     </item>
     
     <item>

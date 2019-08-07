@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+  <meta http-equiv="content-type" content="text/html;charset=utf-8">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noodp"/>
+  <meta name="author" content="刘科">
+  <meta name="description" content="hust研一">
+  <meta name="keywords" content="Java,博客">
+  
+  <link rel="prev" href="https://pallcard.github.io/2019/volatile%E5%92%8Csynchronized/" />
+  
+  <link rel="canonical" href="https://pallcard.github.io/2019/java%E5%B9%B6%E5%8F%91%E5%B7%A5%E5%85%B7%E5%8C%85/" />
+  <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+  <meta name="msapplication-TileColor" content="#da532c">
+  <meta name="theme-color" content="#ffffff">
+  <title>
+       
+       
+           Java并发工具包 | 刘科个人博客
+       
+  </title>
+  <meta name="title" content="Java并发工具包 | 刘科个人博客">
+    
+  
+  <link rel="stylesheet" href="/font/iconfont.css">
+  <link rel="stylesheet" href="/css/main.min.css">
+
+
+  
+  
+ 
+
+<script type="application/ld+json">
+ "@context" : "http://schema.org",
+    "@type" : "BlogPosting",
+    "mainEntityOfPage": {
+         "@type": "WebPage",
+         "@id": "https:\/\/pallcard.github.io\/"
+    },
+    "articleSection" : "posts",
+    "name" : "Java并发工具包",
+    "headline" : "Java并发工具包",
+    "description" : "引言 JDK并发包中提供了CountDownLatch、CyclicBarrier、Semaphore工具类来实现并发流程的控制。 Exchanger提供了线程间交换数据的方法。\njoin()方法 需求：实现主程序要等待其他线程完成后，在继续执行。很容易想到使用join()方法来实现。\npublic class JoinCountDownLatchTest { public static void main(String[] args) throws InterruptedException { Thread thread1 = new Thread(() -\x26gt; { System.out.println(\x26quot;执行1\x26quot;); }); Thread thread2 = new Thread(() -\x26gt; { System.out.println(\x26quot;执行2\x26quot;); }); thread1.start(); thread2.start(); thread1.join(); thread2.join(); System.out.println(\x26quot;主线程\x26quot;); } } \/* 输出结果： 执行1 执行2 主线程 *\/  join()原理是不停的检查join线程是否存活，直到join线程都中止，线程才会this.notifyAll()。\nCountDownLatch类 public class CountDownLatchTest { public static void main(String[] args) throws InterruptedException { CountDownLatch countDownLatch = new CountDownLatch(2); Thread thread1 = new Thread(() -\x26gt; { System.",
+    "inLanguage" : "zh-CN",
+    "author" : "刘科",
+    "creator" : "刘科",
+    "publisher": "刘科",
+    "accountablePerson" : "刘科",
+    "copyrightHolder" : "刘科",
+    "copyrightYear" : "2019",
+    "datePublished": "2019-08-07 23:22:27 \x2b0800 CST",
+    "dateModified" : "2019-08-07 23:22:27 \x2b0800 CST",
+    "url" : "https:\/\/pallcard.github.io\/2019\/java%E5%B9%B6%E5%8F%91%E5%B7%A5%E5%85%B7%E5%8C%85\/",
+    "wordCount" : "536",
+    "keywords" : [ "Java","并发","总数", "刘科个人博客"]
+}
+</script>
+
+</head>
+
+  
+
+
+  <body class="">
+    <div class="wrapper">
+        <nav class="navbar">
+    <div class="container">
+        <div class="navbar-header header-logo">
+        	<a href="javascript:void(0);" class="theme-switch"><i class="iconfont icon-xihuan"></i></a>&nbsp;<a href="https://pallcard.github.io/">刘科个人博客</a>
+        </div>
+        <div class="menu navbar-right">
+                
+                
+                <a class="menu-item" href="/posts/" title="">博客</a>
+                
+                <a class="menu-item" href="/categories/" title="">分类</a>
+                
+                <a class="menu-item" href="/tags/" title="">标签</a>
+                
+                <a class="menu-item" href="/about/" title="">关于</a>
+                
+        </div>
+    </div>
+</nav>
+<nav class="navbar-mobile" id="nav-mobile" style="display: none">
+     <div class="container">
+        <div class="navbar-header">
+            <div>  <a href="javascript:void(0);" class="theme-switch"><i class="iconfont icon-xihuan"></i></a>&nbsp;<a href="https://pallcard.github.io/">刘科个人博客</a></div>
+            <div class="menu-toggle">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+     
+          <div class="menu" id="mobile-menu">
+                
+                
+                <a class="menu-item" href="/posts/" title="">博客</a>
+                
+                <a class="menu-item" href="/categories/" title="">分类</a>
+                
+                <a class="menu-item" href="/tags/" title="">标签</a>
+                
+                <a class="menu-item" href="/about/" title="">关于</a>
+                
+        </div>
+    </div>
+</nav>
+    	 <main class="main">
+          <div class="container">
+      		
+<article class="post-warp" itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">Java并发工具包</h1>
+        <div class="post-meta">
+                Written by <a itemprop="name" href="https://pallcard.github.io/" rel="author">刘科</a> with ♥ 
+                <span class="post-time">
+                on <time datetime=2019-08-07 itemprop="datePublished">August 7, 2019</time>
+                </span>
+                in
+                <i class="iconfont icon-folder"></i>
+                <span class="post-category">
+                        <a href="https://pallcard.github.io/categories/java/"> Java </a>
+                        
+                </span>
+        </div>
+    </header>
+    <div class="post-content">
+        
+
+        
+
+        
+        
+     
+          
+          
+          
+
+          
+          
+          
+
+          
+
+<h3 id="引言">引言</h3>
+
+<p>JDK并发包中提供了CountDownLatch、CyclicBarrier、Semaphore工具类来实现并发流程的控制。
+Exchanger提供了线程间交换数据的方法。</p>
+
+<h3 id="join-方法">join()方法</h3>
+
+<p>需求：实现主程序要等待其他线程完成后，在继续执行。很容易想到使用join()方法来实现。</p>
+
+<pre><code class="language-java">public class JoinCountDownLatchTest {
+    public static void main(String[] args) throws InterruptedException {
+        Thread thread1 = new Thread(() -&gt; {
+            System.out.println(&quot;执行1&quot;);
+        });
+        Thread thread2 = new Thread(() -&gt; {
+            System.out.println(&quot;执行2&quot;);
+        });
+
+        thread1.start();
+        thread2.start();
+
+        thread1.join();
+        thread2.join();
+        System.out.println(&quot;主线程&quot;);
+    }
+}
+
+/* 输出结果：
+执行1
+执行2
+主线程
+*/
+</code></pre>
+
+<p>join()原理是不停的检查join线程是否存活，直到join线程都中止，线程才会this.notifyAll()。</p>
+
+<h3 id="countdownlatch类">CountDownLatch类</h3>
+
+<pre><code class="language-java">public class CountDownLatchTest {
+
+    public static void main(String[] args) throws InterruptedException {
+
+        CountDownLatch countDownLatch = new CountDownLatch(2);
+        Thread thread1 = new Thread(() -&gt; {
+            System.out.println(&quot;执行1&quot;);
+            countDownLatch.countDown();
+        });
+
+        Thread thread2 = new Thread(() -&gt; {
+            System.out.println(&quot;执行2&quot;);
+            countDownLatch.countDown();  
+        });
+        thread1.start();
+        thread2.start();
+
+        countDownLatch.await(10, TimeUnit.MILLISECONDS);
+
+        System.out.println(&quot;主线程&quot;);
+    }
+}
+</code></pre>
+
+<p>说明：</p>
+
+<p>CountDownLatch类的构造函数需要传入数字N，表示你想等待N个点（N个线程或N个步骤）。上述代码中，
+传入的N为2，则表示主线程要等待两个点后，才会继续执行主程序，在此之前程序会一直阻塞在countDownLatch.await()方法这，
+（上述程序的await方法带一个指定时间，只会阻塞到指定时间）。其中调用countDown()函数时，N会减1，当N=0时，
+结束阻塞。</p>
+
+<p>若将上述类中的方法该成如下代码，则执行1，执行2会在主线程之前打印，但是等待i不一定会在主线程之前打印，
+想要实现，需要将构造中的N改为3，在for循环后面调用countDown()方法。</p>
+
+<pre><code class="language-java">    public static void main(String[] args) throws InterruptedException {
+        CountDownLatch countDownLatch = new CountDownLatch(2);
+        Thread thread1 = new Thread(() -&gt; {
+            System.out.println(&quot;执行1&quot;);
+            countDownLatch.countDown();
+        });
+
+        Thread thread2 = new Thread(() -&gt; {
+            System.out.println(&quot;执行2&quot;);
+            countDownLatch.countDown();
+            for(int i = 0; i &lt; 1000; i++) {
+                System.out.println(&quot;等待&quot;+ (i+1));
+            }
+//            countDownLatch.countDown();
+        });
+        thread1.start();
+        thread2.start();
+
+        countDownLatch.await();
+
+        System.out.println(&quot;主线程&quot;);
+    }
+</code></pre>
+
+<h3 id="cyclicbarrier类">CyclicBarrier类</h3>
+
+<pre><code class="language-java">public class CyclicBarrierTest {
+    public static void main(String[] args) throws InterruptedException {
+
+        CyclicBarrier cyclicBarrier = new CyclicBarrier(3);
+        // 若将3改为4，程序会一直等待，没有4个线程到达屏障
+//        CyclicBarrier cyclicBarrier = new CyclicBarrier(4);
+
+        // 若将3改为4，程序会一直等待，没有4个线程到达屏障, 优先执行当任务也不会执行
+        CyclicBarrier cyclicBarrier2 = new CyclicBarrier(3, new Runnable() {
+            @Override
+            public void run() {
+                System.out.println(&quot;优先执行&quot;);
+            }
+        });
+
+        Thread thread1 = new Thread(() -&gt; {
+            for (int i = 0; i &lt; 10; i++) {
+                System.out.println(&quot;到达屏障前&quot;);
+            }
+            try {
+                cyclicBarrier.await();
+                cyclicBarrier2.await();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            System.out.println(&quot;执行1&quot;);
+        });
+
+        Thread thread2 = new Thread(() -&gt; {
+            try {
+                cyclicBarrier.await();
+                cyclicBarrier2.await();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            System.out.println(&quot;执行2&quot;);
+        });
+
+        thread1.start();
+        thread2.start();
+
+        try {
+            cyclicBarrier.await();
+            cyclicBarrier2.await();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        Thread.sleep(1000);
+
+        System.out.println(&quot;主线程&quot;);
+    }
+}
+</code></pre>
+
+<p>CyclicBarrier让一组线程到达一个屏障时被阻塞，例如，上述代码若将屏障数设置为4，则只会打印到达屏障前，
+然后就会3个线程都会被阻塞。在CyclicBarrier的构造函数中也可以添加一个任务，到线程数达到屏障要求时，线程
+继续执行，并且构造函数中的会优先执行。</p>
+
+<h4 id="实例">实例</h4>
+
+<p>计算银行的账单流水，使用多个线程进行计算，然后进行汇总。</p>
+
+<pre><code class="language-java">public class BankWaterService implements Runnable{
+
+    // 4个屏障处理完成，执行当前类当run方法
+    private CyclicBarrier cyclicBarrier = new CyclicBarrier(4, this);
+
+    private Executor executor = Executors.newFixedThreadPool(4);
+
+    private ConcurrentHashMap&lt;String, Integer&gt; sheetBankWaterCount = new ConcurrentHashMap&lt;&gt;();
+
+    @Override
+    public void run() {
+        int result = 0;
+        for(Map.Entry&lt;String, Integer&gt; sheet : sheetBankWaterCount.entrySet()) {
+            result += sheet.getValue();
+        }
+
+        sheetBankWaterCount.put(&quot;result&quot;, result);
+        System.out.println(result);
+    }
+
+    private void count(){
+        for (int i = 0; i &lt; 4; i++) {
+            executor.execute(()-&gt;{
+                sheetBankWaterCount.put(Thread.currentThread().getName(), 1);
+                System.out.println(Thread.currentThread().getName() + 1);
+                try {
+                    cyclicBarrier.await();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                } catch (BrokenBarrierException e) {
+                    e.printStackTrace();
+                }
+            });
+        }
+
+    }
+
+    public static void main(String[] args) {
+        BankWaterService bankWaterService = new BankWaterService();
+        bankWaterService.count();
+    }
+}
+</code></pre>
+
+<p>说明：</p>
+
+<p>首先屏障设置为4，优先执行的任务传入this，表示当4个线程到达后会优先执行类中的run()方法。对于4个线程
+到计算完自己的流水后到达屏障阻塞，到4个线程都计算完毕后，会优先执行本类中的run()方法，从而完成了对于
+流水的统计。</p>
+
+<p><strong>注：</strong></p>
+
+<p>CyclicBarrier的计数器可以使用reset()方法重置，这正好解释了Cyclic循环的意思。</p>
+
+<h3 id="semaphore类">Semaphore类</h3>
+
+<pre><code class="language-java">public class SemaphoreTest {
+
+    private static final int THREAD_COUNT = 30;
+
+    private static ExecutorService threadPool = Executors.newFixedThreadPool(THREAD_COUNT);
+
+    private static Semaphore s = new Semaphore(10);
+
+    public static void main(String[] args) {
+        for (int i = 0; i &lt; THREAD_COUNT; i++) {
+            threadPool.execute(()-&gt;{
+                try {
+                    s.acquire();
+                    System.out.println(&quot;save data&quot;);
+                    s.release();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            });
+        }
+        threadPool.shutdown();
+    }
+}
+</code></pre>
+
+<p>Semaphore类可以控制同时访问特定资源的线程数量。例如上述代码有30个线程，但是只能有10个线程来访问数据库（打印save data）。</p>
+
+<h3 id="exchanger类">Exchanger类</h3>
+
+<pre><code class="language-java">public class ExchangerTest {
+
+    private static final Exchanger&lt;String&gt; exgr = new Exchanger&lt;&gt;();
+
+    private static ExecutorService threadPool = Executors.newFixedThreadPool(2);
+
+    public static void main(String[] args) {
+
+        threadPool.execute(()-&gt;{
+            String A = &quot;流水A&quot;;
+            try {
+                String B = exgr.exchange(A + Thread.currentThread().getName());
+                System.out.println(Thread.currentThread().getName()+A.equals(B)+ &quot; A: &quot; + A + &quot; B: &quot; + B);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        });
+
+        threadPool.execute(()-&gt;{
+            String B = &quot;流水B&quot;;
+            try {
+                String A = exgr.exchange(B+ Thread.currentThread().getName());
+                System.out.println(Thread.currentThread().getName()+A.equals(B)+ &quot; A: &quot; + A + &quot; B: &quot; + B);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        });
+
+        threadPool.shutdown();
+    }
+}
+</code></pre>
+
+<p>可以控制两个线程交换彼此数据。如果两个线程有一个exchange()方法没有执行，则会一直等待。exchange()方法里也可以设置最大等待时间。</p>
+
+<p>参考：java并发编程艺术</p>
+
+    </div>
+
+    <div class="post-copyright">
+             
+            <p class="copyright-item">
+                <span>Author:</span>
+                <span>刘科 </span>
+                </p>
+            
+           
+             
+            <p class="copyright-item">
+                    <span>Link:</span>
+                    <a href=https://pallcard.github.io/2019/java%E5%B9%B6%E5%8F%91%E5%B7%A5%E5%85%B7%E5%8C%85/>https://pallcard.github.io/2019/java%E5%B9%B6%E5%8F%91%E5%B7%A5%E5%85%B7%E5%8C%85/</span>
+            </p>
+            
+            
+    </div>
+
+  
+    <div class="post-tags">
+        
+            <section>
+            <i class="iconfont icon-tag"></i>Tag(s): 
+            
+            <span class="tag"><a href="https://pallcard.github.io/tags/java/">
+                    #Java</a></span>
+            
+            <span class="tag"><a href="https://pallcard.github.io/tags/%E5%B9%B6%E5%8F%91/">
+                    #并发</a></span>
+            
+            <span class="tag"><a href="https://pallcard.github.io/tags/%E6%80%BB%E6%95%B0/">
+                    #总数</a></span>
+            
+            </section>
+        
+        <section>
+                <a href="javascript:window.history.back();">back</a></span> · 
+                <span><a href="https://pallcard.github.io/">home</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav">
+        
+        <a href="https://pallcard.github.io/2019/volatile%E5%92%8Csynchronized/" class="prev" rel="prev" title="Volatile和synchronized"><i class="iconfont icon-left"></i>&nbsp;Volatile和synchronized</a>
+         
+        
+    </div>
+
+	<div class="post-comment">
+		
+		 
+  
+  <div id="vcomments"></div>
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src='//unpkg.com/valine/dist/Valine.min.js'></script>
+
+  <script type="text/javascript">
+    new Valine({
+        el: '#vcomments' ,
+        appId: 'ktil0uKcyLbDdCRFBVDz0eD9-gzGzoHsz',
+        appKey: 'KiYDkJXdqJW2VgrxmVshT2iA',
+        notify: 'false', 
+        verify: 'false', 
+        avatar:'mm', 
+        placeholder: '说点什么吧...',
+        visitor: 'true'
+    });
+  </script>
+	</div>
+</article>
+          </div>
+		   </main>
+      <footer class="footer">
+    <div class="copyright">
+        &copy;
+        
+        <span class="with-love">
+    	 <i class="iconfont icon-love"></i> 
+         </span>
+         
+            <span class="author" itemprop="copyrightHolder"><a href="https://pallcard.github.io/">刘科</a> | </span> 
+         
+
+         
+            <a href="http://www.miibeian.gov.cn/" target="_blank" rel="external nofollow">鄂ICP备19006996号-1 </a> |
+         
+		  <span>Powered by <a href="https://gohugo.io/" target="_blank" rel="external nofollow">Hugo</a> & <a href="https://github.com/liuzc/leaveit" target="_blank" rel="external nofollow">LeaveIt</a></span> 
+    </div>
+</footer>
+
+
+
+
+
+
+
+
+
+
+
+
+    
+    
+    <script src="/js/vendor_no_gallery.min.js" async=""></script>
+    
+  
+
+
+
+     </div>
+  </body>
+</html>
