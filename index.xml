@@ -6,8 +6,383 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
     <copyright>All rights reserved - 2019</copyright>
-    <lastBuildDate>Wed, 07 Aug 2019 23:22:27 +0800</lastBuildDate>
+    <lastBuildDate>Thu, 08 Aug 2019 21:58:38 +0800</lastBuildDate>
     <atom:link href="/" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>数据库事务</title>
+      <link>https://pallcard.github.io/2019/%E6%95%B0%E6%8D%AE%E5%BA%93%E4%BA%8B%E5%8A%A1/</link>
+      <pubDate>Thu, 08 Aug 2019 21:58:38 +0800</pubDate>
+      
+      <guid>https://pallcard.github.io/2019/%E6%95%B0%E6%8D%AE%E5%BA%93%E4%BA%8B%E5%8A%A1/</guid>
+      <description>
+
+&lt;h3 id=&#34;事务特性&#34;&gt;事务特性&lt;/h3&gt;
+
+&lt;p&gt;ACID：原子性、一致性、隔离性、持久性&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;原子性：一个事务要么全部成功，要么全部失败&lt;/li&gt;
+&lt;li&gt;一致性：事务提交前后，数据库保持一致性状态&lt;/li&gt;
+&lt;li&gt;隔离性：一个事务所做的修改，其他事务不可见&lt;/li&gt;
+&lt;li&gt;持久性：事务一旦提交，所做修改永久保存到数据库中&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;关系：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-aidl&#34;&gt;原子性 + 隔离性  ---&amp;gt; 一致性   ---&amp;gt; 结果正确
+
+                     持久性  ----&amp;gt; 应对数据库崩溃
+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;并发一致性&#34;&gt;并发一致性&lt;/h3&gt;
+
+&lt;p&gt;当多个事务并发执行时会导致事务不能保证一致性，导致结果出错。&lt;/p&gt;
+
+&lt;p&gt;丢失修改、读脏数据、不可重复读、幻读&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;丢失修改：对于同一数据，T1 修改数据后，T2 又修改数据，T1修改读数据被覆盖&lt;/li&gt;
+&lt;li&gt;读脏数据：T1修改数据后，T2读该数据，T1又回滚数据，T2读脏数据&lt;/li&gt;
+&lt;li&gt;不可重复读：T1读数据后，T2对该数据进行修改，T1再读该数据，读得的数据值不一致&lt;/li&gt;
+&lt;li&gt;幻读：T1读数据（例如count统计表中行数），T2插入一行数据，导致数据不一致&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&#34;三级封锁协议&#34;&gt;三级封锁协议&lt;/h3&gt;
+
+&lt;ol&gt;
+&lt;li&gt;一级封锁：当更新数据时，立即加X锁，直到事务结束。  ==&amp;gt; 解决了丢失修改&lt;/li&gt;
+&lt;li&gt;二级封锁：在1上，当读数据时，立即加S锁，读完立即释放锁。  ==&amp;gt; 解决了读脏数据&lt;/li&gt;
+&lt;li&gt;三级封锁：在2上，当读数据时，立即加S锁，直到事务结束。    ==&amp;gt; 解决了不可重复读&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h3 id=&#34;两段锁协议&#34;&gt;两段锁协议&lt;/h3&gt;
+
+&lt;p&gt;加锁和解锁分成两个阶段。一个阶段加锁，一个阶段解锁。保证可串行性化调度。&lt;/p&gt;
+
+&lt;h3 id=&#34;隔离级别&#34;&gt;隔离级别&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;未提交读：事务的修改未提交前，其他事务可见
+读：不加锁； 更新 ： 行级共享锁&lt;/li&gt;
+&lt;li&gt;提交读： 事务的修改在未提交前，其他事务不可见
+读：行级共享锁； 更新： 行级排他锁&lt;/li&gt;
+&lt;li&gt;可重复读： 一个事务中的多次读结果一致
+读：行级共享锁； 更新：行级排他锁&lt;/li&gt;
+&lt;li&gt;可串行化：事务串行执行
+读：表级共享锁； 更新：表级排他锁&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;解决的问题&lt;/p&gt;
+
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;隔离级别&lt;/th&gt;
+&lt;th&gt;脏读&lt;/th&gt;
+&lt;th&gt;不可重复读&lt;/th&gt;
+&lt;th&gt;幻读&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;未提交读&lt;/td&gt;
+&lt;td&gt;-&lt;/td&gt;
+&lt;td&gt;-&lt;/td&gt;
+&lt;td&gt;-&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;提交读&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;-&lt;/td&gt;
+&lt;td&gt;-&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;可重复读&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;-&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;可串行化&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;h3 id=&#34;mysql事务隔离级别的实现&#34;&gt;mysql事务隔离级别的实现&lt;/h3&gt;
+
+&lt;h4 id=&#34;mvcc-多版本并发控制&#34;&gt;MVCC（多版本并发控制）&lt;/h4&gt;
+
+&lt;ul&gt;
+&lt;li&gt;版本号&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;1.系统版本号&lt;/p&gt;
+
+&lt;p&gt;一个递增的数字，每开始一个新事务，系统版本号自动递增&lt;/p&gt;
+
+&lt;p&gt;2.事务版本号&lt;/p&gt;
+
+&lt;p&gt;事务开始的系统版本号&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;隐藏列&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;MVCC的每行记录后面都保存着两个隐藏的列&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;创建版本号，创建一个数据行的快照时的版本号&lt;/li&gt;
+&lt;li&gt;删除版本号，&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h4 id=&#34;mvcc具体实现&#34;&gt;MVCC具体实现&lt;/h4&gt;
+
+&lt;ol&gt;
+&lt;li&gt;select：满足以下两个条件innodb会返回该行数据：&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;（1）该行的创建版本号小于等于当前版本号，用于保证在select操作之前所有的操作已经执行落地。
+　　
+ （2）该行的删除版本号大于当前版本或者为空。删除版本号大于当前版本意味着有一个并发事务将该行删除了。
+　　
+2. insert：将新插入的行的创建版本号设置为当前系统的版本号。&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;delete：将要删除的行的删除版本号设置为当前系统的版本号。
+　　
+4.update：不执行原地update，而是转换成insert + delete。将旧行的删除版本号设置为当前版本号，并将新行insert同时设置创建版本号为当前版本号。&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h4 id=&#34;例子&#34;&gt;例子&lt;/h4&gt;
+
+&lt;p&gt;&lt;strong&gt;以下表格仅为示意图，方便理解&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;1). insert操作（事务版本为1）：事务1，插入两行数据&lt;/p&gt;
+
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;id&lt;/th&gt;
+&lt;th&gt;data&lt;/th&gt;
+&lt;th&gt;创建版本号&lt;/th&gt;
+&lt;th&gt;删除版本号&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;1&lt;/td&gt;
+&lt;td&gt;事务1.1&lt;/td&gt;
+&lt;td&gt;1&lt;/td&gt;
+&lt;td&gt;-&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;2&lt;/td&gt;
+&lt;td&gt;事务1.2&lt;/td&gt;
+&lt;td&gt;1&lt;/td&gt;
+&lt;td&gt;-&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;p&gt;2). delete操作（事务版本为2）：事务2，删除id为1数据&lt;/p&gt;
+
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;id&lt;/th&gt;
+&lt;th&gt;data&lt;/th&gt;
+&lt;th&gt;创建版本号&lt;/th&gt;
+&lt;th&gt;删除版本号&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;1&lt;/td&gt;
+&lt;td&gt;事务1.1&lt;/td&gt;
+&lt;td&gt;1&lt;/td&gt;
+&lt;td&gt;2&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;2&lt;/td&gt;
+&lt;td&gt;事务1.2&lt;/td&gt;
+&lt;td&gt;1&lt;/td&gt;
+&lt;td&gt;-&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;p&gt;3). update操作（事务版本为3）：事务3，更新id为2数据，=&amp;gt;(delete+insert)&lt;/p&gt;
+
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;id&lt;/th&gt;
+&lt;th&gt;data&lt;/th&gt;
+&lt;th&gt;创建版本号&lt;/th&gt;
+&lt;th&gt;删除版本号&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;1&lt;/td&gt;
+&lt;td&gt;事务1.1&lt;/td&gt;
+&lt;td&gt;1&lt;/td&gt;
+&lt;td&gt;2&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;2&lt;/td&gt;
+&lt;td&gt;事务1.2&lt;/td&gt;
+&lt;td&gt;1&lt;/td&gt;
+&lt;td&gt;3&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;2&lt;/td&gt;
+&lt;td&gt;事务3&lt;/td&gt;
+&lt;td&gt;3&lt;/td&gt;
+&lt;td&gt;-&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;p&gt;4). select操作（事务版本为4）：事务4，查询所有行，返回结果如下，&lt;/p&gt;
+
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;id&lt;/th&gt;
+&lt;th&gt;data&lt;/th&gt;
+&lt;th&gt;创建版本号&lt;/th&gt;
+&lt;th&gt;删除版本号&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;2&lt;/td&gt;
+&lt;td&gt;事务3&lt;/td&gt;
+&lt;td&gt;3&lt;/td&gt;
+&lt;td&gt;-&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;p&gt;5). 两个事务：事务5（查询id=2），事务6（更新id=2）&lt;/p&gt;
+
+&lt;p&gt;事务5未执行，事务6执行完，&lt;/p&gt;
+
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;id&lt;/th&gt;
+&lt;th&gt;data&lt;/th&gt;
+&lt;th&gt;创建版本号&lt;/th&gt;
+&lt;th&gt;删除版本号&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;1&lt;/td&gt;
+&lt;td&gt;事务1.1&lt;/td&gt;
+&lt;td&gt;1&lt;/td&gt;
+&lt;td&gt;2&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;2&lt;/td&gt;
+&lt;td&gt;事务1.2&lt;/td&gt;
+&lt;td&gt;1&lt;/td&gt;
+&lt;td&gt;3&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;2&lt;/td&gt;
+&lt;td&gt;事务3&lt;/td&gt;
+&lt;td&gt;3&lt;/td&gt;
+&lt;td&gt;6&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;2&lt;/td&gt;
+&lt;td&gt;事务6&lt;/td&gt;
+&lt;td&gt;6&lt;/td&gt;
+&lt;td&gt;-&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;p&gt;事务5执行完，第4行创建版本号6&amp;gt;事务版本号5，第3行创建版本号3&amp;lt;=事务版本号5&amp;lt;=删除版本号,故返回为&lt;/p&gt;
+
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;id&lt;/th&gt;
+&lt;th&gt;data&lt;/th&gt;
+&lt;th&gt;创建版本号&lt;/th&gt;
+&lt;th&gt;删除版本号&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;2&lt;/td&gt;
+&lt;td&gt;事务3&lt;/td&gt;
+&lt;td&gt;3&lt;/td&gt;
+&lt;td&gt;6&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;h5 id=&#34;快照读与当前读&#34;&gt;快照读与当前读&lt;/h5&gt;
+
+&lt;p&gt;通过MVCC机制，虽然让数据变得可重复读，但我们读到的数据可能是历史数据，不是数据库最新的数据。这种读取历史数据的方式，我们叫它快照读 (snapshot read)，而读取数据库最新版本数据的方式，叫当前读 (current read)。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;快照读&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;当执行select操作是innodb默认会执行快照读，会记录下这次select后的结果，之后select 的时候就会返回这次快照的数据，即使其他事务提交了不会影响当前select的数据，这就实现了可重复读了。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;当前读
+对于会对数据修改的操作(update、insert、delete)都是采用当前读的模式。在执行这几个操作时会读取最新的记录，即使是别的事务提交的数据也可以查询到。
+读取的是最新的数据，需要加锁。以下第一个语句需要加 S 锁，其它都需要加 X 锁。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-sql&#34;&gt;select * from table where ? lock in share mode; 
+select * from table where ? for update; 
+insert; 
+update; 
+delete;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h4 id=&#34;next-key-lock&#34;&gt;Next-Key Lock&lt;/h4&gt;
+
+&lt;p&gt;InnoDB有三种行锁的算法：
+1. Record Lock：单个行记录上的锁，&lt;strong&gt;锁定记录上的索引&lt;/strong&gt;。
+2. Gap Lock：间隙锁，&lt;strong&gt;锁定索引之间的间隙，但是不包含索引本身&lt;/strong&gt;。GAP锁的目的，是为了防止同一事务的两次当前读，出现幻读的情况。
+3. Next-Key Lock：1+2，锁定一个范围，并且锁定记录本身。对于行的查询，都是采用该方法，主要目的是解决幻读的问题。&lt;/p&gt;
+
+&lt;p&gt;参考：
+&lt;a href=&#34;https://juejin.im/post/5cd8283ae51d453a907b4b29&#34; rel=&#34;nofollow noreferrer&#34; target=&#34;_blank&#34;&gt;https://juejin.im/post/5cd8283ae51d453a907b4b29&lt;/a&gt;&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>Java并发工具包</title>
@@ -333,7 +708,7 @@ Exchanger提供了线程间交换数据的方法。&lt;/p&gt;
 
 &lt;p&gt;synchronized用到锁是存储在对象头里面的，对象头由 MarkWord、类型指针、数组长度（对象为数组时）。&lt;/p&gt;
 
-&lt;p&gt;初始&lt;/p&gt;
+&lt;p&gt;markword（&lt;strong&gt;表格中空白格子为向左合并&lt;/strong&gt;）&lt;/p&gt;
 
 &lt;table&gt;
 &lt;thead&gt;
@@ -2043,95 +2418,6 @@ f(n-1) = f(n-2) + f(n-3) + ,,, + f(0)
     public static int jumpFloor2(int target) {
         return (int) Math.pow(2, target-1);
     }
-}
-&lt;/code&gt;&lt;/pre&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>算法009</title>
-      <link>https://pallcard.github.io/2019/algorithm009/</link>
-      <pubDate>Thu, 04 Jul 2019 21:01:25 +0800</pubDate>
-      
-      <guid>https://pallcard.github.io/2019/algorithm009/</guid>
-      <description>
-
-&lt;h3 id=&#34;描述&#34;&gt;描述&lt;/h3&gt;
-
-&lt;p&gt;斐波那契数列，
-*  应用1：矩形覆盖,n个2*1小矩形覆盖2*n的大矩形，有多少种方法
-*  应用2：跳台阶,可以跳1列或者2列，跳n阶有多少种方法&lt;/p&gt;
-
-&lt;h3 id=&#34;例子&#34;&gt;例子&lt;/h3&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;Input:
-	
-Output:
-	
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h3 id=&#34;思路&#34;&gt;思路&lt;/h3&gt;
-
-&lt;pre&gt;&lt;code&gt;f(n) = n;  n = 0,1
-
-f(n) = f(n-1) + f(n-2); n &amp;gt; 1
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;方法一：递归实现&lt;/p&gt;
-
-&lt;p&gt;方法二：使用一个数组存放所用的数据&lt;/p&gt;
-
-&lt;p&gt;方法三：发现第n项只与相邻的前两项有关，故只用存储前两项数据即可。&lt;/p&gt;
-
-&lt;h5 id=&#34;代码&#34;&gt;代码&lt;/h5&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;public class Demo009 {
-
-    public static void main(String[] args) {
-        System.out.println(fibonacci(10));
-        System.out.println(fibonacci2(10));
-        System.out.println(fibonacci3(10));
-    }
-
-
-    public static int fibonacci(int n) {
-        if (n == 0) {
-            return 0;
-        } else if (n == 1) {
-            return 1;
-        } else
-            return  fibonacci(n-1) + fibonacci(n-2);
-    }
-
-//    0 1 2 3 4 5 6 7  8  9  10
-//    0 1 1 2 3 5 8 13 21 34 55
-    public static int fibonacci2(int n) {
-        if (n &amp;lt;= 1) {
-            return n;
-        }
-        int [] fib = new int[n+1];
-        fib[0] = 0;
-        fib[1] = 1;
-        for (int i = 2; i &amp;lt;= n; i++) {
-            fib[i] = fib[i-1] + fib[i-2];
-        }
-        return fib[n];
-    }
-
-    public static int fibonacci3(int n) {
-        if (n &amp;lt;= 1) {
-            return n;
-        }
-        int temp1 = 0, temp2 = 1;
-        int result = 0;
-        for (int i = 2; i &amp;lt;= n; i++) {
-            result = temp1 + temp2;
-            temp1 = temp2;
-            temp2 = result;
-        }
-        return result;
-    }
-
 }
 &lt;/code&gt;&lt;/pre&gt;
 </description>

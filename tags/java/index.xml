@@ -35,7 +35,7 @@ CountDownLatch类 public class CountDownLatchTest { public static void main(Stri
  Lock前缀指令会引起处理器缓存回写到内存。
  一个处理器到缓存回写到内存回导致其他处理器缓存失效。（处理器使用嗅探技术保证它到内部缓存、系统内存和其他处理器 缓存到数据在总线上保持一致）
   synchronized 介绍 synchronized用到锁是存储在对象头里面的，对象头由 MarkWord、类型指针、数组长度（对象为数组时）。
-初始
+markword（表格中空白格子为向左合并）
    锁状态 25bit 4bit 1bit 2bit     无锁 对象hashCode 对象分代年龄 0 01   轻量级锁 指向栈中指针   00   重量级锁 指向互斥量（重量级锁）指针   10   GC标记 空   11   偏向锁 线程ID(23bit) Epoch(2bit) 对象分代年龄 1 01    Monitor类型对象，重量级锁状态下，MarkWork里指针指向的对象。</description>
     </item>
     
