@@ -146,21 +146,20 @@
 
 &lt;h4 id=&#34;mvcc具体实现&#34;&gt;MVCC具体实现&lt;/h4&gt;
 
-&lt;ol&gt;
-&lt;li&gt;select：满足以下两个条件innodb会返回该行数据：&lt;/li&gt;
-&lt;/ol&gt;
+&lt;p&gt;1.select：满足以下两个条件innodb会返回该行数据：&lt;/p&gt;
 
 &lt;p&gt;（1）该行的创建版本号小于等于当前版本号，用于保证在select操作之前所有的操作已经执行落地。
-　　
- （2）该行的删除版本号大于当前版本或者为空。删除版本号大于当前版本意味着有一个并发事务将该行删除了。
-　　
-2. insert：将新插入的行的创建版本号设置为当前系统的版本号。&lt;/p&gt;
+　　&lt;/p&gt;
 
-&lt;ol&gt;
-&lt;li&gt;delete：将要删除的行的删除版本号设置为当前系统的版本号。
-　　
-4.update：不执行原地update，而是转换成insert + delete。将旧行的删除版本号设置为当前版本号，并将新行insert同时设置创建版本号为当前版本号。&lt;/li&gt;
-&lt;/ol&gt;
+&lt;p&gt;（2）该行的删除版本号大于当前版本或者为空。删除版本号大于当前版本意味着有一个并发事务将该行删除了。&lt;/p&gt;
+
+&lt;p&gt;　　
+2.insert：将新插入的行的创建版本号设置为当前系统的版本号。&lt;/p&gt;
+
+&lt;p&gt;3.delete：将要删除的行的删除版本号设置为当前系统的版本号。&lt;/p&gt;
+
+&lt;p&gt;　　
+4.update：不执行原地update，而是转换成insert + delete。将旧行的删除版本号设置为当前版本号，并将新行insert同时设置创建版本号为当前版本号。&lt;/p&gt;
 
 &lt;h4 id=&#34;例子&#34;&gt;例子&lt;/h4&gt;
 
@@ -284,7 +283,7 @@
 
 &lt;p&gt;5). 两个事务：事务5（查询id=2），事务6（更新id=2）&lt;/p&gt;
 
-&lt;p&gt;事务5未执行，事务6执行完，&lt;/p&gt;
+&lt;p&gt;事务5未执行，事务6执行完&lt;/p&gt;
 
 &lt;table&gt;
 &lt;thead&gt;
@@ -360,10 +359,11 @@
 &lt;p&gt;当执行select操作是innodb默认会执行快照读，会记录下这次select后的结果，之后select 的时候就会返回这次快照的数据，即使其他事务提交了不会影响当前select的数据，这就实现了可重复读了。&lt;/p&gt;
 
 &lt;ul&gt;
-&lt;li&gt;当前读
-对于会对数据修改的操作(update、insert、delete)都是采用当前读的模式。在执行这几个操作时会读取最新的记录，即使是别的事务提交的数据也可以查询到。
-读取的是最新的数据，需要加锁。以下第一个语句需要加 S 锁，其它都需要加 X 锁。&lt;/li&gt;
+&lt;li&gt;当前读&lt;/li&gt;
 &lt;/ul&gt;
+
+&lt;p&gt;对于会对数据修改的操作(update、insert、delete)都是采用当前读的模式。在执行这几个操作时会读取最新的记录，即使是别的事务提交的数据也可以查询到。
+读取的是最新的数据，需要加锁。以下第一个语句需要加 S 锁，其它都需要加 X 锁。&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-sql&#34;&gt;select * from table where ? lock in share mode; 
 select * from table where ? for update; 
@@ -374,10 +374,15 @@ delete;
 
 &lt;h4 id=&#34;next-key-lock&#34;&gt;Next-Key Lock&lt;/h4&gt;
 
-&lt;p&gt;InnoDB有三种行锁的算法：
-1. Record Lock：单个行记录上的锁，&lt;strong&gt;锁定记录上的索引&lt;/strong&gt;。
-2. Gap Lock：间隙锁，&lt;strong&gt;锁定索引之间的间隙，但是不包含索引本身&lt;/strong&gt;。GAP锁的目的，是为了防止同一事务的两次当前读，出现幻读的情况。
-3. Next-Key Lock：1+2，锁定一个范围，并且锁定记录本身。对于行的查询，都是采用该方法，主要目的是解决幻读的问题。&lt;/p&gt;
+&lt;p&gt;InnoDB有三种行锁的算法：&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;Record Lock：单个行记录上的锁，&lt;strong&gt;锁定记录上的索引&lt;/strong&gt;。&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;Gap Lock：间隙锁，&lt;strong&gt;锁定索引之间的间隙，但是不包含索引本身&lt;/strong&gt;。GAP锁的目的，是为了防止同一事务的两次当前读，出现幻读的情况。&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;Next-Key Lock：1+2，锁定一个范围，并且锁定记录本身。对于行的查询，都是采用该方法，主要目的是解决幻读的问题。&lt;/p&gt;&lt;/li&gt;
+&lt;/ol&gt;
 
 &lt;p&gt;参考：
 &lt;a href=&#34;https://juejin.im/post/5cd8283ae51d453a907b4b29&#34; rel=&#34;nofollow noreferrer&#34; target=&#34;_blank&#34;&gt;https://juejin.im/post/5cd8283ae51d453a907b4b29&lt;/a&gt;&lt;/p&gt;
