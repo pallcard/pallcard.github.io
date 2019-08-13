@@ -146,20 +146,21 @@
 
 &lt;h4 id=&#34;mvcc具体实现&#34;&gt;MVCC具体实现&lt;/h4&gt;
 
-&lt;p&gt;1.select：满足以下两个条件innodb会返回该行数据：&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;1&lt;/strong&gt;.select：满足以下两个条件innodb会返回该行数据：&lt;/p&gt;
 
 &lt;p&gt;（1）该行的创建版本号小于等于当前版本号，用于保证在select操作之前所有的操作已经执行落地。
 　　&lt;/p&gt;
 
 &lt;p&gt;（2）该行的删除版本号大于当前版本或者为空。删除版本号大于当前版本意味着有一个并发事务将该行删除了。&lt;/p&gt;
 
-&lt;p&gt;　　
-2.insert：将新插入的行的创建版本号设置为当前系统的版本号。&lt;/p&gt;
+&lt;p&gt;　　&lt;/p&gt;
 
-&lt;p&gt;3.delete：将要删除的行的删除版本号设置为当前系统的版本号。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;2&lt;/strong&gt;.insert：将新插入的行的创建版本号设置为当前系统的版本号。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;3&lt;/strong&gt;.delete：将要删除的行的删除版本号设置为当前系统的版本号。&lt;/p&gt;
 
 &lt;p&gt;　　
-4.update：不执行原地update，而是转换成insert + delete。将旧行的删除版本号设置为当前版本号，并将新行insert同时设置创建版本号为当前版本号。&lt;/p&gt;
+&lt;strong&gt;4&lt;/strong&gt;.update：不执行原地update，而是转换成insert + delete。将旧行的删除版本号设置为当前版本号，并将新行insert同时设置创建版本号为当前版本号。&lt;/p&gt;
 
 &lt;h4 id=&#34;例子&#34;&gt;例子&lt;/h4&gt;
 
@@ -1985,7 +1986,7 @@ Output:
 &lt;li&gt;{m,} 至少匹配 m 个字符&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;&lt;strong&gt;注：&lt;/strong&gt;和 + 都是贪婪型元字符，会匹配尽可能多的内容。在后面加 ? 可以转换为懒惰型元字符，例如 *?、+? 和 {m, n}?&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;注：&lt;/strong&gt; * 和 + 都是贪婪型元字符，会匹配尽可能多的内容。在后面加 ? 可以转换为懒惰型元字符，例如 *?、+? 和 {m, n}?&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;regexr:
 (1)    a.+c

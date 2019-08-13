@@ -58,7 +58,7 @@
     "datePublished": "2019-06-20 19:00:36 \x2b0800 CST",
     "dateModified" : "2019-06-20 19:00:36 \x2b0800 CST",
     "url" : "https:\/\/pallcard.github.io\/2019\/mybaits\/",
-    "wordCount" : "1748",
+    "wordCount" : "1747",
     "keywords" : [ "Mybaits","Java","development","总数", "刘科个人博客"]
 }
 </script>
@@ -235,7 +235,7 @@ Maven 项目默认编译项目为JDK 1.5，通过引入以下依赖来指定Mave
 
 <h4 id="mybaits整体架构">Mybaits整体架构</h4>
 
-<p><figure><img src="/images/ring.svg" data-sizes="auto" data-src="https://img-blog.csdnimg.cn/20190620231844983.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3N1cGVyZmljaWFsS25vd2xlZGdl,size_16,color_FFFFFF,t_70" alt="Mybaits整体架构" class="lazyload"><figcaption class="image-caption">Mybaits整体架构</figcaption></figure></p>
+<p>​​<figure><img src="/images/ring.svg" data-sizes="auto" data-src="/images/mybatis001.png" alt="Mybaits整体架构" class="lazyload"><figcaption class="image-caption">Mybaits整体架构</figcaption></figure></p>
 
 <h4 id="mybaits快速入门">Mybaits快速入门</h4>
 
@@ -684,8 +684,9 @@ log4j.appender.A1.layout.ConversionPattern=%-d{yyyy-MM-dd HH:mm:ss,SSS} [%t] [%c
 }
 </code></pre>
 
-<p><strong>2.UserMapper.xml</strong>
-<strong><em>mapper:根标签，namespace：命名空间，为了使用接口动态代理，这里必须是接口的全路径名</em></strong></p>
+<p><strong>2.UserMapper.xml</strong></p>
+
+<p><strong><em>mapper:根标签，namespace：命名空间，为了使用接口动态代理，这里必须是接口的全路径名</em></strong></p>
 
 <pre><code class="language-java">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; ?&gt;
 &lt;!DOCTYPE mapper
@@ -880,8 +881,11 @@ log4j.appender.A1.layout.ConversionPattern=%-d{yyyy-MM-dd HH:mm:ss,SSS} [%t] [%c
 
 <h4 id="mapper-xml文件详解">Mapper XML文件详解</h4>
 
-<p><strong>1.CRUD标签</strong>
-* select</p>
+<p><strong>1.CRUD标签</strong></p>
+
+<ul>
+<li>select</li>
+</ul>
 
 <p>id属性：当前名称空间下的statement的唯一标识。必须。要求id和mapper接口中的方法的名字一致。
 resultType：将结果集映射为java的对象类型。必须（和 resultMap 二选一）
@@ -933,9 +937,11 @@ parameterType：传入的参数类型，可以省略。
 &lt;/select&gt;
 </code></pre>
 
-<p>注意：
-使用${} 去取出参数值信息，需要使用${value}
-#{} 只是表示占位，与参数的名字无关，如果只有一个参数，会自动对应。多参数时，通常在方法的参数列表上加上一个注释@Param(“xxxx”) 显式指定参数的名字</p>
+<p><strong>注意</strong>：</p>
+
+<p>使用${} 去取出参数值信息，需要使用${value}</p>
+
+<p>#{} 只是表示占位，与参数的名字无关，如果只有一个参数，会自动对应。多参数时，通常在方法的参数列表上加上一个注释@Param(“xxxx”) 显式指定参数的名字</p>
 
 <p><strong>3.sql片段</strong></p>
 
