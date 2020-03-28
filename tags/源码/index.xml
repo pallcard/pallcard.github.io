@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>源码 on 刘科个人博客</title>
+    <link>https://pallcard.github.io/tags/%E6%BA%90%E7%A0%81/</link>
+    <description>Recent content in 源码 on 刘科个人博客</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-CN</language>
+    <copyright>All rights reserved - 2019</copyright>
+    <lastBuildDate>Sun, 01 Mar 2020 20:05:45 +0800</lastBuildDate>
+    
+	<atom:link href="https://pallcard.github.io/tags/%E6%BA%90%E7%A0%81/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>查看Jdk源码方式</title>
+      <link>https://pallcard.github.io/2020/%E6%9F%A5%E7%9C%8Bjdk%E6%BA%90%E7%A0%81%E6%96%B9%E5%BC%8F/</link>
+      <pubDate>Sun, 01 Mar 2020 20:05:45 +0800</pubDate>
+      
+      <guid>https://pallcard.github.io/2020/%E6%9F%A5%E7%9C%8Bjdk%E6%BA%90%E7%A0%81%E6%96%B9%E5%BC%8F/</guid>
+      <description> 查看JDK源码方法  到jdk的目录下找到src.zip进行解压  在项目中新建一个文件夹，如下我在resources目录下新建了一个jdk文件夹，然后将第二步解压的文件复制到这里。  到project struct中，在sdks下，修改sourcepath指向直接添加到项目中的jdk目录。  去掉下图中的对勾  完成以上步骤就可以编写test类，进行单步调试代码了。  </description>
+    </item>
+    
+  </channel>
+</rss>

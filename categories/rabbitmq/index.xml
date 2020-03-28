@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>RabbitMQ on 刘科个人博客</title>
+    <link>https://pallcard.github.io/categories/rabbitmq/</link>
+    <description>Recent content in RabbitMQ on 刘科个人博客</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-CN</language>
+    <copyright>All rights reserved - 2019</copyright>
+    <lastBuildDate>Sat, 17 Aug 2019 19:55:39 +0800</lastBuildDate>
+    
+	<atom:link href="https://pallcard.github.io/categories/rabbitmq/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>RabbitMQ初次使用</title>
+      <link>https://pallcard.github.io/2019/rabbitmq%E5%88%9D%E6%AC%A1%E4%BD%BF%E7%94%A8/</link>
+      <pubDate>Sat, 17 Aug 2019 19:55:39 +0800</pubDate>
+      
+      <guid>https://pallcard.github.io/2019/rabbitmq%E5%88%9D%E6%AC%A1%E4%BD%BF%E7%94%A8/</guid>
+      <description> 1.添加用户 访问http://localhost:15672后，选择右侧的user栏，在add user中，填好用户名，密码和tags，然后点击AddUser如下：
+​​2.添加Virtual Hosts （类似于创建数据库）选择右侧的Virtual Hosts栏，在add Virtual Hosts中，填好name，然后点击Add Virtual Hosts,添加后效果如下：
+​​点击红框中vhost，给user权限，如下所示：
+​​3.创建工程，添加依赖 使用IDEA创建一个Maven项目，pom添加依赖如下：
+&amp;lt;dependencies&amp;gt; &amp;lt;!--RabbitMQ--&amp;gt; &amp;lt;dependency&amp;gt; &amp;lt;groupId&amp;gt;com.rabbitmq&amp;lt;/groupId&amp;gt; &amp;lt;artifactId&amp;gt;amqp-client&amp;lt;/artifactId&amp;gt; &amp;lt;version&amp;gt;5.7.2&amp;lt;/version&amp;gt; &amp;lt;/dependency&amp;gt; &amp;lt;!--日志--&amp;gt; &amp;lt;dependency&amp;gt; &amp;lt;groupId&amp;gt;org.slf4j&amp;lt;/groupId&amp;gt; &amp;lt;artifactId&amp;gt;slf4j-api&amp;lt;/artifactId&amp;gt; &amp;lt;version&amp;gt;1.7.25&amp;lt;/version&amp;gt; &amp;lt;/dependency&amp;gt; &amp;lt;dependency&amp;gt; &amp;lt;groupId&amp;gt;ch.qos.logback&amp;lt;/groupId&amp;gt; &amp;lt;artifactId&amp;gt;logback-core&amp;lt;/artifactId&amp;gt; &amp;lt;version&amp;gt;1.2.3&amp;lt;/version&amp;gt; &amp;lt;/dependency&amp;gt; &amp;lt;dependency&amp;gt; &amp;lt;groupId&amp;gt;ch.qos.logback&amp;lt;/groupId&amp;gt; &amp;lt;artifactId&amp;gt;logback-classic&amp;lt;/artifactId&amp;gt; &amp;lt;version&amp;gt;1.2.3&amp;lt;/version&amp;gt; &amp;lt;/dependency&amp;gt; &amp;lt;!--junit4--&amp;gt; &amp;lt;dependency&amp;gt; &amp;lt;groupId&amp;gt;junit&amp;lt;/groupId&amp;gt; &amp;lt;artifactId&amp;gt;junit&amp;lt;/artifactId&amp;gt; &amp;lt;version&amp;gt;4.12&amp;lt;/version&amp;gt; &amp;lt;/dependency&amp;gt; &amp;lt;/dependencies&amp;gt;  </description>
+    </item>
+    
+    <item>
+      <title>RabbitMQ安装</title>
+      <link>https://pallcard.github.io/2019/rabbitmq%E5%AE%89%E8%A3%85/</link>
+      <pubDate>Sat, 17 Aug 2019 12:14:31 +0800</pubDate>
+      
+      <guid>https://pallcard.github.io/2019/rabbitmq%E5%AE%89%E8%A3%85/</guid>
+      <description>RabbitMQ安装 官网：https://www.rabbitmq.com
+windows上安装 1.在安装RabbitMQ之前，由于RabbitMQ使用Erlang语言编写，故需要按照Erlang.（按照时需要对照RabbitMQ版本，最好按照最新的）
+下载地址：https://www.erlang.org/downloads
+安装方法：下一步，下一步，&amp;hellip;即可（安装目录可自选）
+2.安装RabbitMQ
+下载地址：https://www.rabbitmq.com/download.html
+安装方法同上，但是第一次安装后，找到软件
+​​然后执行如下命令
+rabbitmq-plugins enable rabbitmq_management  打开浏览器访问http://localhost:15672，但是无法打开页面，需要删除C:UsersAdministratorAppDataRoamingRabbitMQdb目录下所有文件，然后在从新安装一般，并执行以上操作，然后才能访问到。
+默认用户名，密码都是：guest
+到此，完成了RabbitMQ在windows上的按照。
+Linux上安装（待完成，版本问题） 1.建立目录
+cd /usr/local mkdir rabbitmq  2.添加仓库地址CentOS 7
+vi /etc/yum.repos.d/rabbitmq-erlang.repo  # CentOS 7,其他版本可以在官网上找 [bintray-rabbitmq-server] name=bintray-rabbitmq-rpm baseurl=https://dl.bintray.com/rabbitmq/rpm/rabbitmq-server/v3.7.x/el/7/ gpgcheck=0 repo_gpgcheck=0 enabled=1  3.安装relang
+# 安装 sudo yum install erlang # 验证 erl  4.安装rabbitmq
+# 先下载rpm并上传到usr/local/rabbitmq目录下 rpm --import https://github.com/rabbitmq/signing-keys/releases/download/2.0/rabbitmq-release-signing-key.asc # this example assumes the CentOS 7 version of the package yum install rabbitmq-server-3.</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+  <meta http-equiv="content-type" content="text/html;charset=utf-8">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noodp"/>
+  <meta name="author" content="刘科">
+  <meta name="description" content="hust研一">
+  <meta name="keywords" content="Java,博客">
+  
+  <link rel="prev" href="https://pallcard.github.io/2019/%E6%95%B0%E6%8D%AE%E5%BA%93%E4%BA%8B%E5%8A%A1/" />
+  <link rel="next" href="https://pallcard.github.io/2019/rabbitmq%E5%88%9D%E6%AC%A1%E4%BD%BF%E7%94%A8/" />
+  <link rel="canonical" href="https://pallcard.github.io/2019/rabbitmq%E5%AE%89%E8%A3%85/" />
+  <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+  <meta name="msapplication-TileColor" content="#da532c">
+  <meta name="theme-color" content="#ffffff">
+  <title>
+       
+       
+           RabbitMQ安装 | 刘科个人博客
+       
+  </title>
+  <meta name="title" content="RabbitMQ安装 | 刘科个人博客">
+    
+  
+  <link rel="stylesheet" href="/font/iconfont.css">
+  <link rel="stylesheet" href="/css/main.min.css">
+
+
+  
+  
+ 
+
+<script type="application/ld+json">
+ "@context" : "http://schema.org",
+    "@type" : "BlogPosting",
+    "mainEntityOfPage": {
+         "@type": "WebPage",
+         "@id": "https:\/\/pallcard.github.io\/"
+    },
+    "articleSection" : "posts",
+    "name" : "RabbitMQ安装",
+    "headline" : "RabbitMQ安装",
+    "description" : "RabbitMQ安装 官网：https:\/\/www.rabbitmq.com\nwindows上安装 1.在安装RabbitMQ之前，由于RabbitMQ使用Erlang语言编写，故需要按照Erlang.（按照时需要对照RabbitMQ版本，最好按照最新的）\n下载地址：https:\/\/www.erlang.org\/downloads\n安装方法：下一步，下一步，\x26hellip;即可（安装目录可自选）\n2.安装RabbitMQ\n下载地址：https:\/\/www.rabbitmq.com\/download.html\n安装方法同上，但是第一次安装后，找到软件\n​​然后执行如下命令\nrabbitmq-plugins enable rabbitmq_management  打开浏览器访问http:\/\/localhost:15672，但是无法打开页面，需要删除C:UsersAdministratorAppDataRoamingRabbitMQdb目录下所有文件，然后在从新安装一般，并执行以上操作，然后才能访问到。\n默认用户名，密码都是：guest\n到此，完成了RabbitMQ在windows上的按照。\nLinux上安装（待完成，版本问题） 1.建立目录\ncd \/usr\/local mkdir rabbitmq  2.添加仓库地址CentOS 7\nvi \/etc\/yum.repos.d\/rabbitmq-erlang.repo  # CentOS 7,其他版本可以在官网上找 [bintray-rabbitmq-server] name=bintray-rabbitmq-rpm baseurl=https:\/\/dl.bintray.com\/rabbitmq\/rpm\/rabbitmq-server\/v3.7.x\/el\/7\/ gpgcheck=0 repo_gpgcheck=0 enabled=1  3.安装relang\n# 安装 sudo yum install erlang # 验证 erl  4.安装rabbitmq\n# 先下载rpm并上传到usr\/local\/rabbitmq目录下 rpm --import https:\/\/github.com\/rabbitmq\/signing-keys\/releases\/download\/2.0\/rabbitmq-release-signing-key.asc # this example assumes the CentOS 7 version of the package yum install rabbitmq-server-3.",
+    "inLanguage" : "zh-CN",
+    "author" : "刘科",
+    "creator" : "刘科",
+    "publisher": "刘科",
+    "accountablePerson" : "刘科",
+    "copyrightHolder" : "刘科",
+    "copyrightYear" : "2019",
+    "datePublished": "2019-08-17 12:14:31 \x2b0800 CST",
+    "dateModified" : "2019-08-17 12:14:31 \x2b0800 CST",
+    "url" : "https:\/\/pallcard.github.io\/2019\/rabbitmq%E5%AE%89%E8%A3%85\/",
+    "wordCount" : "65",
+    "keywords" : [ "RabbitMQ","中间件","总数", "刘科个人博客"]
+}
+</script>
+
+</head>
+
+  
+
+
+  <body class="">
+    <div class="wrapper">
+        <nav class="navbar">
+    <div class="container">
+        <div class="navbar-header header-logo">
+        	<a href="javascript:void(0);" class="theme-switch"><i class="iconfont icon-xihuan"></i></a>&nbsp;<a href="https://pallcard.github.io/">刘科个人博客</a>
+        </div>
+        <div class="menu navbar-right">
+                
+                
+                <a class="menu-item" href="/posts/" title="">博客</a>
+                
+                <a class="menu-item" href="/categories/" title="">分类</a>
+                
+                <a class="menu-item" href="/tags/" title="">标签</a>
+                
+                <a class="menu-item" href="/about/" title="">关于</a>
+                
+        </div>
+    </div>
+</nav>
+<nav class="navbar-mobile" id="nav-mobile" style="display: none">
+     <div class="container">
+        <div class="navbar-header">
+            <div>  <a href="javascript:void(0);" class="theme-switch"><i class="iconfont icon-xihuan"></i></a>&nbsp;<a href="https://pallcard.github.io/">刘科个人博客</a></div>
+            <div class="menu-toggle">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+     
+          <div class="menu" id="mobile-menu">
+                
+                
+                <a class="menu-item" href="/posts/" title="">博客</a>
+                
+                <a class="menu-item" href="/categories/" title="">分类</a>
+                
+                <a class="menu-item" href="/tags/" title="">标签</a>
+                
+                <a class="menu-item" href="/about/" title="">关于</a>
+                
+        </div>
+    </div>
+</nav>
+    	 <main class="main">
+          <div class="container">
+      		
+<article class="post-warp" itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">RabbitMQ安装</h1>
+        <div class="post-meta">
+                Written by <a itemprop="name" href="https://pallcard.github.io/" rel="author">刘科</a> with ♥ 
+                <span class="post-time">
+                on <time datetime=2019-08-17 itemprop="datePublished">August 17, 2019</time>
+                </span>
+                in
+                <i class="iconfont icon-folder"></i>
+                <span class="post-category">
+                        <a href="https://pallcard.github.io/categories/rabbitmq/"> RabbitMQ </a>
+                        
+                </span>
+        </div>
+    </header>
+    <div class="post-content">
+        
+
+        
+            
+        
+
+        
+        
+     
+          
+          
+          
+
+          
+          
+          
+
+          
+
+<h2 id="rabbitmq安装">RabbitMQ安装</h2>
+
+<p>官网：<a href="https://www.rabbitmq.com" rel="nofollow noreferrer" target="_blank">https://www.rabbitmq.com</a></p>
+
+<h3 id="windows上安装">windows上安装</h3>
+
+<p>1.在安装RabbitMQ之前，由于RabbitMQ使用Erlang语言编写，故需要按照Erlang.（按照时需要对照RabbitMQ版本，最好按照最新的）</p>
+
+<p>下载地址：<a href="https://www.erlang.org/downloads" rel="nofollow noreferrer" target="_blank">https://www.erlang.org/downloads</a></p>
+
+<p>安装方法：下一步，下一步，&hellip;即可（安装目录可自选）</p>
+
+<p>2.安装RabbitMQ</p>
+
+<p>下载地址：<a href="https://www.rabbitmq.com/download.html" rel="nofollow noreferrer" target="_blank">https://www.rabbitmq.com/download.html</a></p>
+
+<p>安装方法同上，但是第一次安装后，找到软件</p>
+
+<p>​​<figure><img src="/images/ring.svg" data-sizes="auto" data-src="/images/RabbitMQ001.png" alt="RabbitMQ001" class="lazyload"><figcaption class="image-caption">RabbitMQ001</figcaption></figure>
+然后执行如下命令</p>
+
+<pre><code>rabbitmq-plugins enable rabbitmq_management
+</code></pre>
+
+<p>打开浏览器访问<a href="http://localhost:15672，但是无法打开页面，需要删除C:UsersAdministratorAppDataRoamingRabbitMQdb目录下所有文件，然后在从新安装一般，并执行以上操作，然后才能访问到。" rel="nofollow noreferrer" target="_blank">http://localhost:15672，但是无法打开页面，需要删除C:UsersAdministratorAppDataRoamingRabbitMQdb目录下所有文件，然后在从新安装一般，并执行以上操作，然后才能访问到。</a></p>
+
+<p>默认用户名，密码都是：guest</p>
+
+<p>到此，完成了RabbitMQ在windows上的按照。</p>
+
+<h3 id="linux上安装-待完成-版本问题">Linux上安装（待完成，版本问题）</h3>
+
+<p>1.建立目录</p>
+
+<pre><code>cd /usr/local
+mkdir rabbitmq
+</code></pre>
+
+<p>2.添加仓库地址CentOS 7</p>
+
+<pre><code>vi /etc/yum.repos.d/rabbitmq-erlang.repo
+</code></pre>
+
+<pre><code># CentOS 7,其他版本可以在官网上找
+[bintray-rabbitmq-server]
+name=bintray-rabbitmq-rpm
+baseurl=https://dl.bintray.com/rabbitmq/rpm/rabbitmq-server/v3.7.x/el/7/
+gpgcheck=0
+repo_gpgcheck=0
+enabled=1
+</code></pre>
+
+<p>3.安装relang</p>
+
+<pre><code># 安装
+sudo yum install erlang
+# 验证
+erl
+</code></pre>
+
+<p>4.安装rabbitmq</p>
+
+<pre><code># 先下载rpm并上传到usr/local/rabbitmq目录下
+
+rpm --import https://github.com/rabbitmq/signing-keys/releases/download/2.0/rabbitmq-release-signing-key.asc
+
+# this example assumes the CentOS 7 version of the package
+
+yum install rabbitmq-server-3.7.17-1.el7.noarch.rpm
+</code></pre>
+
+    </div>
+
+    <div class="post-copyright">
+             
+            <p class="copyright-item">
+                <span>Author:</span>
+                <span>刘科 </span>
+                </p>
+            
+           
+             
+            <p class="copyright-item">
+                    <span>Link:</span>
+                    <a href=https://pallcard.github.io/2019/rabbitmq%E5%AE%89%E8%A3%85/>https://pallcard.github.io/2019/rabbitmq%E5%AE%89%E8%A3%85/</span>
+            </p>
+            
+            
+    </div>
+
+  
+    <div class="post-tags">
+        
+            <section>
+            <i class="iconfont icon-tag"></i>Tag(s): 
+            
+            <span class="tag"><a href="https://pallcard.github.io/tags/rabbitmq/">
+                    #RabbitMQ</a></span>
+            
+            <span class="tag"><a href="https://pallcard.github.io/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/">
+                    #中间件</a></span>
+            
+            <span class="tag"><a href="https://pallcard.github.io/tags/%E6%80%BB%E6%95%B0/">
+                    #总数</a></span>
+            
+            </section>
+        
+        <section>
+                <a href="javascript:window.history.back();">back</a></span> · 
+                <span><a href="https://pallcard.github.io/">home</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav">
+        
+        <a href="https://pallcard.github.io/2019/%E6%95%B0%E6%8D%AE%E5%BA%93%E4%BA%8B%E5%8A%A1/" class="prev" rel="prev" title="数据库事务"><i class="iconfont icon-left"></i>&nbsp;数据库事务</a>
+         
+        
+        <a href="https://pallcard.github.io/2019/rabbitmq%E5%88%9D%E6%AC%A1%E4%BD%BF%E7%94%A8/" class="next" rel="next" title="RabbitMQ初次使用">RabbitMQ初次使用&nbsp;<i class="iconfont icon-right"></i></a>
+        
+    </div>
+
+	<div class="post-comment">
+		
+		 
+  
+  <div id="vcomments"></div>
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src='//unpkg.com/valine/dist/Valine.min.js'></script>
+
+  <script type="text/javascript">
+    new Valine({
+        el: '#vcomments' ,
+        appId: 'ktil0uKcyLbDdCRFBVDz0eD9-gzGzoHsz',
+        appKey: 'KiYDkJXdqJW2VgrxmVshT2iA',
+        notify: 'false', 
+        verify: 'false', 
+        avatar:'mm', 
+        placeholder: '说点什么吧...',
+        visitor: 'true'
+    });
+  </script>
+	</div>
+</article>
+          </div>
+		   </main>
+      <footer class="footer">
+    <div class="copyright">
+        &copy;
+        
+        <span class="with-love">
+    	 <i class="iconfont icon-love"></i> 
+         </span>
+         
+            <span class="author" itemprop="copyrightHolder"><a href="https://pallcard.github.io/">刘科</a> | </span> 
+         
+
+         
+            <a href="http://www.miibeian.gov.cn/" target="_blank" rel="external nofollow">鄂ICP备19006996号-1 </a> |
+         
+		  <span>Powered by <a href="https://gohugo.io/" target="_blank" rel="external nofollow">Hugo</a> & <a href="https://github.com/liuzc/leaveit" target="_blank" rel="external nofollow">LeaveIt</a></span> 
+    </div>
+</footer>
+
+
+
+
+
+
+
+
+
+
+
+
+    
+     <link href="//lib.baomitu.com/lightgallery/1.6.11/css/lightgallery.min.css" rel="stylesheet">  
+      
+     <script src="/js/vendor_gallery.min.js" async="" ></script>
+    
+  
+
+
+
+     </div>
+  </body>
+</html>

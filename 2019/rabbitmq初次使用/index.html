@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+  <meta http-equiv="content-type" content="text/html;charset=utf-8">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noodp"/>
+  <meta name="author" content="刘科">
+  <meta name="description" content="hust研一">
+  <meta name="keywords" content="Java,博客">
+  
+  <link rel="prev" href="https://pallcard.github.io/2019/rabbitmq%E5%AE%89%E8%A3%85/" />
+  <link rel="next" href="https://pallcard.github.io/2020/mysql%E4%B9%8Bexplain/" />
+  <link rel="canonical" href="https://pallcard.github.io/2019/rabbitmq%E5%88%9D%E6%AC%A1%E4%BD%BF%E7%94%A8/" />
+  <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+  <meta name="msapplication-TileColor" content="#da532c">
+  <meta name="theme-color" content="#ffffff">
+  <title>
+       
+       
+           RabbitMQ初次使用 | 刘科个人博客
+       
+  </title>
+  <meta name="title" content="RabbitMQ初次使用 | 刘科个人博客">
+    
+  
+  <link rel="stylesheet" href="/font/iconfont.css">
+  <link rel="stylesheet" href="/css/main.min.css">
+
+
+  
+  
+ 
+
+<script type="application/ld+json">
+ "@context" : "http://schema.org",
+    "@type" : "BlogPosting",
+    "mainEntityOfPage": {
+         "@type": "WebPage",
+         "@id": "https:\/\/pallcard.github.io\/"
+    },
+    "articleSection" : "posts",
+    "name" : "RabbitMQ初次使用",
+    "headline" : "RabbitMQ初次使用",
+    "description" : " 1.添加用户 访问http:\/\/localhost:15672后，选择右侧的user栏，在add user中，填好用户名，密码和tags，然后点击AddUser如下：\n​​2.添加Virtual Hosts （类似于创建数据库）选择右侧的Virtual Hosts栏，在add Virtual Hosts中，填好name，然后点击Add Virtual Hosts,添加后效果如下：\n​​点击红框中vhost，给user权限，如下所示：\n​​3.创建工程，添加依赖 使用IDEA创建一个Maven项目，pom添加依赖如下：\n\x26lt;dependencies\x26gt; \x26lt;!--RabbitMQ--\x26gt; \x26lt;dependency\x26gt; \x26lt;groupId\x26gt;com.rabbitmq\x26lt;\/groupId\x26gt; \x26lt;artifactId\x26gt;amqp-client\x26lt;\/artifactId\x26gt; \x26lt;version\x26gt;5.7.2\x26lt;\/version\x26gt; \x26lt;\/dependency\x26gt; \x26lt;!--日志--\x26gt; \x26lt;dependency\x26gt; \x26lt;groupId\x26gt;org.slf4j\x26lt;\/groupId\x26gt; \x26lt;artifactId\x26gt;slf4j-api\x26lt;\/artifactId\x26gt; \x26lt;version\x26gt;1.7.25\x26lt;\/version\x26gt; \x26lt;\/dependency\x26gt; \x26lt;dependency\x26gt; \x26lt;groupId\x26gt;ch.qos.logback\x26lt;\/groupId\x26gt; \x26lt;artifactId\x26gt;logback-core\x26lt;\/artifactId\x26gt; \x26lt;version\x26gt;1.2.3\x26lt;\/version\x26gt; \x26lt;\/dependency\x26gt; \x26lt;dependency\x26gt; \x26lt;groupId\x26gt;ch.qos.logback\x26lt;\/groupId\x26gt; \x26lt;artifactId\x26gt;logback-classic\x26lt;\/artifactId\x26gt; \x26lt;version\x26gt;1.2.3\x26lt;\/version\x26gt; \x26lt;\/dependency\x26gt; \x26lt;!--junit4--\x26gt; \x26lt;dependency\x26gt; \x26lt;groupId\x26gt;junit\x26lt;\/groupId\x26gt; \x26lt;artifactId\x26gt;junit\x26lt;\/artifactId\x26gt; \x26lt;version\x26gt;4.12\x26lt;\/version\x26gt; \x26lt;\/dependency\x26gt; \x26lt;\/dependencies\x26gt;  ",
+    "inLanguage" : "zh-CN",
+    "author" : "刘科",
+    "creator" : "刘科",
+    "publisher": "刘科",
+    "accountablePerson" : "刘科",
+    "copyrightHolder" : "刘科",
+    "copyrightYear" : "2019",
+    "datePublished": "2019-08-17 19:55:39 \x2b0800 CST",
+    "dateModified" : "2019-08-17 19:55:39 \x2b0800 CST",
+    "url" : "https:\/\/pallcard.github.io\/2019\/rabbitmq%E5%88%9D%E6%AC%A1%E4%BD%BF%E7%94%A8\/",
+    "wordCount" : "44",
+    "keywords" : [ "RabbitMQ","中间件","总数", "刘科个人博客"]
+}
+</script>
+
+</head>
+
+  
+
+
+  <body class="">
+    <div class="wrapper">
+        <nav class="navbar">
+    <div class="container">
+        <div class="navbar-header header-logo">
+        	<a href="javascript:void(0);" class="theme-switch"><i class="iconfont icon-xihuan"></i></a>&nbsp;<a href="https://pallcard.github.io/">刘科个人博客</a>
+        </div>
+        <div class="menu navbar-right">
+                
+                
+                <a class="menu-item" href="/posts/" title="">博客</a>
+                
+                <a class="menu-item" href="/categories/" title="">分类</a>
+                
+                <a class="menu-item" href="/tags/" title="">标签</a>
+                
+                <a class="menu-item" href="/about/" title="">关于</a>
+                
+        </div>
+    </div>
+</nav>
+<nav class="navbar-mobile" id="nav-mobile" style="display: none">
+     <div class="container">
+        <div class="navbar-header">
+            <div>  <a href="javascript:void(0);" class="theme-switch"><i class="iconfont icon-xihuan"></i></a>&nbsp;<a href="https://pallcard.github.io/">刘科个人博客</a></div>
+            <div class="menu-toggle">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+     
+          <div class="menu" id="mobile-menu">
+                
+                
+                <a class="menu-item" href="/posts/" title="">博客</a>
+                
+                <a class="menu-item" href="/categories/" title="">分类</a>
+                
+                <a class="menu-item" href="/tags/" title="">标签</a>
+                
+                <a class="menu-item" href="/about/" title="">关于</a>
+                
+        </div>
+    </div>
+</nav>
+    	 <main class="main">
+          <div class="container">
+      		
+<article class="post-warp" itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">RabbitMQ初次使用</h1>
+        <div class="post-meta">
+                Written by <a itemprop="name" href="https://pallcard.github.io/" rel="author">刘科</a> with ♥ 
+                <span class="post-time">
+                on <time datetime=2019-08-17 itemprop="datePublished">August 17, 2019</time>
+                </span>
+                in
+                <i class="iconfont icon-folder"></i>
+                <span class="post-category">
+                        <a href="https://pallcard.github.io/categories/rabbitmq/"> RabbitMQ </a>
+                        
+                </span>
+        </div>
+    </header>
+    <div class="post-content">
+        
+
+        
+            
+        
+
+        
+        
+     
+          
+          
+          
+
+          
+          
+          
+
+          
+
+<h3 id="1-添加用户">1.添加用户</h3>
+
+<p>访问<a href="http://localhost:15672后，选择右侧的user栏，在add" rel="nofollow noreferrer" target="_blank">http://localhost:15672后，选择右侧的user栏，在add</a> user中，填好用户名，密码和tags，然后点击AddUser如下：</p>
+
+<p>​​<figure><img src="/images/ring.svg" data-sizes="auto" data-src="/images/RabbitMQ003.png" alt="RabbitMQ添加用户" class="lazyload"><figcaption class="image-caption">RabbitMQ添加用户</figcaption></figure></p>
+
+<h3 id="2-添加virtual-hosts">2.添加Virtual Hosts</h3>
+
+<p>（类似于创建数据库）选择右侧的Virtual Hosts栏，在add Virtual Hosts中，填好name，然后点击Add Virtual Hosts,添加后效果如下：</p>
+
+<p>​​<figure><img src="/images/ring.svg" data-sizes="auto" data-src="/images/RabbitMQ004.png" alt="RabbitMQ添加Virtual Hosts" class="lazyload"><figcaption class="image-caption">RabbitMQ添加Virtual Hosts</figcaption></figure></p>
+
+<p>点击红框中vhost，给user权限，如下所示：</p>
+
+<p>​​<figure><img src="/images/ring.svg" data-sizes="auto" data-src="/images/RabbitMQ005.png" alt="RabbitMQ权限" class="lazyload"><figcaption class="image-caption">RabbitMQ权限</figcaption></figure></p>
+
+<h3 id="3-创建工程-添加依赖">3.创建工程，添加依赖</h3>
+
+<p>使用IDEA创建一个Maven项目，pom添加依赖如下：</p>
+
+<pre><code class="language-xml">&lt;dependencies&gt;
+        &lt;!--RabbitMQ--&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;com.rabbitmq&lt;/groupId&gt;
+            &lt;artifactId&gt;amqp-client&lt;/artifactId&gt;
+            &lt;version&gt;5.7.2&lt;/version&gt;
+        &lt;/dependency&gt;
+
+        &lt;!--日志--&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;org.slf4j&lt;/groupId&gt;
+            &lt;artifactId&gt;slf4j-api&lt;/artifactId&gt;
+            &lt;version&gt;1.7.25&lt;/version&gt;
+        &lt;/dependency&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;ch.qos.logback&lt;/groupId&gt;
+            &lt;artifactId&gt;logback-core&lt;/artifactId&gt;
+            &lt;version&gt;1.2.3&lt;/version&gt;
+        &lt;/dependency&gt;
+
+        &lt;dependency&gt;
+            &lt;groupId&gt;ch.qos.logback&lt;/groupId&gt;
+            &lt;artifactId&gt;logback-classic&lt;/artifactId&gt;
+            &lt;version&gt;1.2.3&lt;/version&gt;
+        &lt;/dependency&gt;
+
+        &lt;!--junit4--&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;junit&lt;/groupId&gt;
+            &lt;artifactId&gt;junit&lt;/artifactId&gt;
+            &lt;version&gt;4.12&lt;/version&gt;
+        &lt;/dependency&gt;
+    &lt;/dependencies&gt;
+</code></pre>
+
+    </div>
+
+    <div class="post-copyright">
+             
+            <p class="copyright-item">
+                <span>Author:</span>
+                <span>刘科 </span>
+                </p>
+            
+           
+             
+            <p class="copyright-item">
+                    <span>Link:</span>
+                    <a href=https://pallcard.github.io/2019/rabbitmq%E5%88%9D%E6%AC%A1%E4%BD%BF%E7%94%A8/>https://pallcard.github.io/2019/rabbitmq%E5%88%9D%E6%AC%A1%E4%BD%BF%E7%94%A8/</span>
+            </p>
+            
+            
+    </div>
+
+  
+    <div class="post-tags">
+        
+            <section>
+            <i class="iconfont icon-tag"></i>Tag(s): 
+            
+            <span class="tag"><a href="https://pallcard.github.io/tags/rabbitmq/">
+                    #RabbitMQ</a></span>
+            
+            <span class="tag"><a href="https://pallcard.github.io/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/">
+                    #中间件</a></span>
+            
+            <span class="tag"><a href="https://pallcard.github.io/tags/%E6%80%BB%E6%95%B0/">
+                    #总数</a></span>
+            
+            </section>
+        
+        <section>
+                <a href="javascript:window.history.back();">back</a></span> · 
+                <span><a href="https://pallcard.github.io/">home</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav">
+        
+        <a href="https://pallcard.github.io/2019/rabbitmq%E5%AE%89%E8%A3%85/" class="prev" rel="prev" title="RabbitMQ安装"><i class="iconfont icon-left"></i>&nbsp;RabbitMQ安装</a>
+         
+        
+        <a href="https://pallcard.github.io/2020/mysql%E4%B9%8Bexplain/" class="next" rel="next" title="Mysql之explain">Mysql之explain&nbsp;<i class="iconfont icon-right"></i></a>
+        
+    </div>
+
+	<div class="post-comment">
+		
+		 
+  
+  <div id="vcomments"></div>
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src='//unpkg.com/valine/dist/Valine.min.js'></script>
+
+  <script type="text/javascript">
+    new Valine({
+        el: '#vcomments' ,
+        appId: 'ktil0uKcyLbDdCRFBVDz0eD9-gzGzoHsz',
+        appKey: 'KiYDkJXdqJW2VgrxmVshT2iA',
+        notify: 'false', 
+        verify: 'false', 
+        avatar:'mm', 
+        placeholder: '说点什么吧...',
+        visitor: 'true'
+    });
+  </script>
+	</div>
+</article>
+          </div>
+		   </main>
+      <footer class="footer">
+    <div class="copyright">
+        &copy;
+        
+        <span class="with-love">
+    	 <i class="iconfont icon-love"></i> 
+         </span>
+         
+            <span class="author" itemprop="copyrightHolder"><a href="https://pallcard.github.io/">刘科</a> | </span> 
+         
+
+         
+            <a href="http://www.miibeian.gov.cn/" target="_blank" rel="external nofollow">鄂ICP备19006996号-1 </a> |
+         
+		  <span>Powered by <a href="https://gohugo.io/" target="_blank" rel="external nofollow">Hugo</a> & <a href="https://github.com/liuzc/leaveit" target="_blank" rel="external nofollow">LeaveIt</a></span> 
+    </div>
+</footer>
+
+
+
+
+
+
+
+
+
+
+
+
+    
+     <link href="//lib.baomitu.com/lightgallery/1.6.11/css/lightgallery.min.css" rel="stylesheet">  
+      
+     <script src="/js/vendor_gallery.min.js" async="" ></script>
+    
+  
+
+
+
+     </div>
+  </body>
+</html>

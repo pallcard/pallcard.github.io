@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+  <meta http-equiv="content-type" content="text/html;charset=utf-8">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noodp"/>
+  <meta name="author" content="刘科">
+  <meta name="description" content="hust研一">
+  <meta name="keywords" content="Java,博客">
+  
+  <link rel="prev" href="https://pallcard.github.io/2020/mysql%E4%B9%8Bexplain/" />
+  <link rel="next" href="https://pallcard.github.io/2020/%E6%9F%A5%E7%9C%8Bjdk%E6%BA%90%E7%A0%81%E6%96%B9%E5%BC%8F/" />
+  <link rel="canonical" href="https://pallcard.github.io/2020/mysql%E5%A4%9A%E8%A1%A8%E6%9F%A5%E8%AF%A2/" />
+  <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+  <meta name="msapplication-TileColor" content="#da532c">
+  <meta name="theme-color" content="#ffffff">
+  <title>
+       
+       
+           Mysql多表查询 | 刘科个人博客
+       
+  </title>
+  <meta name="title" content="Mysql多表查询 | 刘科个人博客">
+    
+  
+  <link rel="stylesheet" href="/font/iconfont.css">
+  <link rel="stylesheet" href="/css/main.min.css">
+
+
+  
+  
+ 
+
+<script type="application/ld+json">
+ "@context" : "http://schema.org",
+    "@type" : "BlogPosting",
+    "mainEntityOfPage": {
+         "@type": "WebPage",
+         "@id": "https:\/\/pallcard.github.io\/"
+    },
+    "articleSection" : "posts",
+    "name" : "Mysql多表查询",
+    "headline" : "Mysql多表查询",
+    "description" : "Mysql多表查询 举例分析 说明:表格仅为举例说明 tb_user_age |id|age| |-|-| |1|10| |2|11| |3|12| |4|13| tb_user_name |id|age| |-|-| |2|zhang| |3|li| |4|zhou| |5|chen|\ncreate table tb_user_age ( id bigint auto_increment comment \x27ID\x27 primary key, age int null comment \x27年龄\x27 ) comment = \x27用户年龄\x27 engine = innodb charset utf8mb4; create table tb_user_name ( id bigint auto_increment comment \x27ID\x27 primary key, name varchar(30) null comment \x27姓名\x27 ) comment = \x27用户姓名\x27 engine = innodb charset utf8mb4; insert into tb_user_age (age) values (10),(11),(12),(13); insert into tb_user_name (id,name) values (2,\x27zhang\x27),(3,\x27li\x27),(4,\x27zhou\x27),(5,\x27chen\x27);  内连接 （join 或 inner join） select a.",
+    "inLanguage" : "zh-CN",
+    "author" : "刘科",
+    "creator" : "刘科",
+    "publisher": "刘科",
+    "accountablePerson" : "刘科",
+    "copyrightHolder" : "刘科",
+    "copyrightYear" : "2020",
+    "datePublished": "2020-02-29 21:03:40 \x2b0800 CST",
+    "dateModified" : "2020-02-29 21:03:40 \x2b0800 CST",
+    "url" : "https:\/\/pallcard.github.io\/2020\/mysql%E5%A4%9A%E8%A1%A8%E6%9F%A5%E8%AF%A2\/",
+    "wordCount" : "346",
+    "keywords" : [ "Mysql", "刘科个人博客"]
+}
+</script>
+
+</head>
+
+  
+
+
+  <body class="">
+    <div class="wrapper">
+        <nav class="navbar">
+    <div class="container">
+        <div class="navbar-header header-logo">
+        	<a href="javascript:void(0);" class="theme-switch"><i class="iconfont icon-xihuan"></i></a>&nbsp;<a href="https://pallcard.github.io/">刘科个人博客</a>
+        </div>
+        <div class="menu navbar-right">
+                
+                
+                <a class="menu-item" href="/posts/" title="">博客</a>
+                
+                <a class="menu-item" href="/categories/" title="">分类</a>
+                
+                <a class="menu-item" href="/tags/" title="">标签</a>
+                
+                <a class="menu-item" href="/about/" title="">关于</a>
+                
+        </div>
+    </div>
+</nav>
+<nav class="navbar-mobile" id="nav-mobile" style="display: none">
+     <div class="container">
+        <div class="navbar-header">
+            <div>  <a href="javascript:void(0);" class="theme-switch"><i class="iconfont icon-xihuan"></i></a>&nbsp;<a href="https://pallcard.github.io/">刘科个人博客</a></div>
+            <div class="menu-toggle">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+     
+          <div class="menu" id="mobile-menu">
+                
+                
+                <a class="menu-item" href="/posts/" title="">博客</a>
+                
+                <a class="menu-item" href="/categories/" title="">分类</a>
+                
+                <a class="menu-item" href="/tags/" title="">标签</a>
+                
+                <a class="menu-item" href="/about/" title="">关于</a>
+                
+        </div>
+    </div>
+</nav>
+    	 <main class="main">
+          <div class="container">
+      		
+<article class="post-warp" itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">Mysql多表查询</h1>
+        <div class="post-meta">
+                Written by <a itemprop="name" href="https://pallcard.github.io/" rel="author">刘科</a> with ♥ 
+                <span class="post-time">
+                on <time datetime=2020-02-29 itemprop="datePublished">February 29, 2020</time>
+                </span>
+                in
+                <i class="iconfont icon-folder"></i>
+                <span class="post-category">
+                        <a href="https://pallcard.github.io/categories/mysql/"> Mysql </a>
+                        
+                </span>
+        </div>
+    </header>
+    <div class="post-content">
+        
+
+        
+            
+        
+
+        
+        
+     
+          
+          
+          
+
+          
+          
+          
+
+          
+
+<h1 id="mysql多表查询">Mysql多表查询</h1>
+
+<h2 id="举例分析">举例分析</h2>
+
+<p>说明:表格仅为举例说明
+tb_user_age
+|id|age|
+|-|-|
+|1|10|
+|2|11|
+|3|12|
+|4|13|
+tb_user_name
+|id|age|
+|-|-|
+|2|zhang|
+|3|li|
+|4|zhou|
+|5|chen|</p>
+
+<pre><code class="language-sql">create table tb_user_age (
+    id bigint auto_increment comment 'ID' primary key,
+    age int null comment '年龄'
+)
+comment = '用户年龄' engine = innodb charset utf8mb4;
+
+create table tb_user_name (
+     id bigint auto_increment comment 'ID' primary key,
+     name varchar(30) null comment '姓名'
+)
+comment = '用户姓名' engine = innodb charset utf8mb4;
+
+
+insert into tb_user_age (age) values (10),(11),(12),(13);
+insert into tb_user_name (id,name) values (2,'zhang'),(3,'li'),(4,'zhou'),(5,'chen');
+</code></pre>
+
+<h3 id="内连接-join-或-inner-join">内连接 （join 或 inner join）</h3>
+
+<pre><code class="language-sql">select a.*, b.* from tb_user_age a 
+inner join tb_user_name b 
+on a.id = b.id
+
+# a.id  age    b.id     name
+# 2	11	2	zhang
+# 3	12	3	li
+# 4	13	4	zhou
+</code></pre>
+
+<p><figure><img src="/images/ring.svg" data-sizes="auto" data-src="https://raw.githubusercontent.com/pallcard/noteImg/master/noteImg/2020/03/14/Popo%E6%88%AA%E5%9B%BE202031411598-1584158370889.png?token=AHBYBJ6WNC2N4SVHY2JSQPS6NRLOC" alt="title" class="lazyload"><figcaption class="image-caption">title</figcaption></figure>
+这种场景下得到的是满足某一条件的A，B内部的数据；正因为得到的是内部共有数据，所以连接方式称为内连接。</p>
+
+<h3 id="外连接">外连接</h3>
+
+<h4 id="左连接-left-join-或left-outer-join">左连接 （left join 或left outer join)</h4>
+
+<ul>
+<li><p>右连接 （right join 或right outer join)与左连接类似</p>
+
+<pre><code class="language-sql">select a.*, b.* from tb_user_age a 
+left join tb_user_name b 
+on a.id = b.id
+# a.id  age    b.id     name
+# 2	11	2	zhang
+# 3	12	3	li
+# 4	13	4	zhou
+# 1	10	&lt;null&gt;	&lt;null&gt;
+</code></pre>
+
+<p><figure><img src="/images/ring.svg" data-sizes="auto" data-src="https://raw.githubusercontent.com/pallcard/noteImg/master/noteImg/2020/03/14/Popo%E6%88%AA%E5%9B%BE202031412329-1584158631279.png?token=AHBYBJZEBIELUYE5H4BOQLK6NRL6K" alt="title" class="lazyload"><figcaption class="image-caption">title</figcaption></figure>
+这种场景下得到的是A的所有数据，和满足某一条件的B的数据;</p>
+
+<h4 id="全连接-mysql不支持-左连接-union-右连接">全连接 （mysql不支持，左连接 union 右连接）</h4>
+
+<pre><code class="language-sql">select a.*, b.* from tb_user_age a 
+left join tb_user_name b on a.id = b.id
+union
+select a.*, b.* from tb_user_age a 
+right join tb_user_name b on a.id = b.id
+
+# a.id  age    b.id     name
+# 2	11	2	zhang
+# 3	12	3	li
+# 4	13	4	zhou
+# 1	10	&lt;null&gt;	&lt;null&gt;
+# &lt;null&gt;&lt;null&gt;  5        chen
+</code></pre></li>
+</ul>
+
+<h4 id="交叉连接-cross-join">交叉连接（cross join）</h4>
+
+<p>表格表做笛卡儿积</p>
+
+<pre><code class="language-sql">select a.*, b.* from tb_user_age a 
+cross join tb_user_name b
+
+# a.id  age    b.id     name
+# 1	10	2	zhang
+# 2	11	2	zhang
+# 3	12	2	zhang
+# 4	13	2	zhang
+# 1	10	3	li
+# 2	11	3	li
+# 3	12	3	li
+# 4	13	3	li
+# 1	10	4	zhou
+# 2	11	4	zhou
+# 3	12	4	zhou
+# 4	13	4	zhou
+# 1	10	5	chen
+# 2	11	5	chen
+# 3	12	5	chen
+# 4	13	5	chen
+</code></pre>
+
+<ul>
+<li>cross 连接， 后面可以使用on或where，当使用on a.id = b.id 时，则和内连接是一样的结果。</li>
+</ul>
+
+<h2 id="总结">总结</h2>
+
+<ul>
+<li>一般cross join后面加上where条件，但是用cross join+on也是被解释为cross join+where；</li>
+<li>如果连接表格使用的是逗号，会被解释为交叉连接，但后面条件只能使用where；</li>
+<li>其他连接只能使用on</li>
+</ul>
+
+    </div>
+
+    <div class="post-copyright">
+             
+            <p class="copyright-item">
+                <span>Author:</span>
+                <span>刘科 </span>
+                </p>
+            
+           
+             
+            <p class="copyright-item">
+                    <span>Link:</span>
+                    <a href=https://pallcard.github.io/2020/mysql%E5%A4%9A%E8%A1%A8%E6%9F%A5%E8%AF%A2/>https://pallcard.github.io/2020/mysql%E5%A4%9A%E8%A1%A8%E6%9F%A5%E8%AF%A2/</span>
+            </p>
+            
+            
+    </div>
+
+  
+    <div class="post-tags">
+        
+            <section>
+            <i class="iconfont icon-tag"></i>Tag(s): 
+            
+            <span class="tag"><a href="https://pallcard.github.io/tags/mysql/">
+                    #Mysql</a></span>
+            
+            </section>
+        
+        <section>
+                <a href="javascript:window.history.back();">back</a></span> · 
+                <span><a href="https://pallcard.github.io/">home</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav">
+        
+        <a href="https://pallcard.github.io/2020/mysql%E4%B9%8Bexplain/" class="prev" rel="prev" title="Mysql之explain"><i class="iconfont icon-left"></i>&nbsp;Mysql之explain</a>
+         
+        
+        <a href="https://pallcard.github.io/2020/%E6%9F%A5%E7%9C%8Bjdk%E6%BA%90%E7%A0%81%E6%96%B9%E5%BC%8F/" class="next" rel="next" title="查看Jdk源码方式">查看Jdk源码方式&nbsp;<i class="iconfont icon-right"></i></a>
+        
+    </div>
+
+	<div class="post-comment">
+		
+		 
+  
+  <div id="vcomments"></div>
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src='//unpkg.com/valine/dist/Valine.min.js'></script>
+
+  <script type="text/javascript">
+    new Valine({
+        el: '#vcomments' ,
+        appId: 'ktil0uKcyLbDdCRFBVDz0eD9-gzGzoHsz',
+        appKey: 'KiYDkJXdqJW2VgrxmVshT2iA',
+        notify: 'false', 
+        verify: 'false', 
+        avatar:'mm', 
+        placeholder: '说点什么吧...',
+        visitor: 'true'
+    });
+  </script>
+	</div>
+</article>
+          </div>
+		   </main>
+      <footer class="footer">
+    <div class="copyright">
+        &copy;
+        
+        <span class="with-love">
+    	 <i class="iconfont icon-love"></i> 
+         </span>
+         
+            <span class="author" itemprop="copyrightHolder"><a href="https://pallcard.github.io/">刘科</a> | </span> 
+         
+
+         
+            <a href="http://www.miibeian.gov.cn/" target="_blank" rel="external nofollow">鄂ICP备19006996号-1 </a> |
+         
+		  <span>Powered by <a href="https://gohugo.io/" target="_blank" rel="external nofollow">Hugo</a> & <a href="https://github.com/liuzc/leaveit" target="_blank" rel="external nofollow">LeaveIt</a></span> 
+    </div>
+</footer>
+
+
+
+
+
+
+
+
+
+
+
+
+    
+     <link href="//lib.baomitu.com/lightgallery/1.6.11/css/lightgallery.min.css" rel="stylesheet">  
+      
+     <script src="/js/vendor_gallery.min.js" async="" ></script>
+    
+  
+
+
+
+     </div>
+  </body>
+</html>

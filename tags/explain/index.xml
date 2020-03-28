@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>explain on 刘科个人博客</title>
+    <link>https://pallcard.github.io/tags/explain/</link>
+    <description>Recent content in explain on 刘科个人博客</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-CN</language>
+    <copyright>All rights reserved - 2019</copyright>
+    <lastBuildDate>Fri, 28 Feb 2020 22:01:03 +0800</lastBuildDate>
+    
+	<atom:link href="https://pallcard.github.io/tags/explain/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Mysql之explain</title>
+      <link>https://pallcard.github.io/2020/mysql%E4%B9%8Bexplain/</link>
+      <pubDate>Fri, 28 Feb 2020 22:01:03 +0800</pubDate>
+      
+      <guid>https://pallcard.github.io/2020/mysql%E4%B9%8Bexplain/</guid>
+      <description>Mysql之explain 用法 # explain sql语句 explain select * from TB_ORDER  结果： |id|select_type|table|partitions|type|posssible_keys|key|key_len|ref|rows|filtered|Extra| |-|-|-|-|-|-|-|-|-|-|-|-| |1|SIMPLE|TB_ORDER||ALL|||||1794|100|
+字段说明 id SQL执行的顺序的标识,SQL从大到小的执行 * id相同时，执行顺序由上至下 * 如果是子查询，id的序号会递增，id值越大优先级越高，越先被执行 * id如果相同，可以认为是一组，从上往下顺序执行；在所有组中，id值越大，优先级越高，越先执行
+select_type 查询中每个select子句的类型
+ SIMPLE(简单SELECT,不使用UNION或子查询等) PRIMARY(查询中若包含任何复杂的子部分,最外层的select被标记为PRIMARY) UNION(UNION中的第二个或后面的SELECT语句) DEPENDENT UNION(UNION中的第二个或后面的SELECT语句，取决于外面的查询) UNION RESULT(UNION的结果) SUBQUERY(子查询中的第一个SELECT) DEPENDENT SUBQUERY(子查询中的第一个SELECT，取决于外面的查询) DERIVED(派生表的SELECT, FROM子句的子查询) UNCACHEABLE SUBQUERY(一个子查询的结果不能被缓存，必须重新评估外链接的第一行)  table 显示这一行的数据是关于哪张表的，有时不是真实的表名字,看到的是derivedx(x是个数字,我的理解是第几步执行的结果)
+type 表示MySQL在表中找到所需行的方式，又称“访问类型”。常用的类型有： ALL, index, range, ref, eq_ref, const, system, NULL（从左到右，性能从差到好）
+ ALL：Full Table Scan， MySQL将遍历全表以找到匹配的行
+ index: Full Index Scan，index与ALL区别为index类型只遍历索引树
+ range:只检索给定范围的行，使用一个索引来选择行
+ ref: 表示上述表的连接匹配条件，即哪些列或常量被用于查找索引列上的值</description>
+    </item>
+    
+  </channel>
+</rss>
