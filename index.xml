@@ -6,8 +6,376 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
     <copyright>All rights reserved - 2019</copyright>
-    <lastBuildDate>Sun, 01 Mar 2020 20:05:45 +0800</lastBuildDate>
+    <lastBuildDate>Fri, 06 Mar 2020 19:15:26 +0800</lastBuildDate>
     <atom:link href="/" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>ReentrantLock</title>
+      <link>https://pallcard.github.io/2020/reentrantlock/</link>
+      <pubDate>Fri, 06 Mar 2020 19:15:26 +0800</pubDate>
+      
+      <guid>https://pallcard.github.io/2020/reentrantlock/</guid>
+      <description>
+
+&lt;h1 id=&#34;reentrantlock&#34;&gt;ReentrantLock&lt;/h1&gt;
+
+&lt;h2 id=&#34;reentrantlock流程&#34;&gt;ReentrantLock流程&lt;/h2&gt;
+
+&lt;h3 id=&#34;测试代码&#34;&gt;测试代码&lt;/h3&gt;
+
+&lt;p&gt;main方法中通过&lt;code&gt;new ReentrantLock();&lt;/code&gt;创建了一个可重入锁，然后通过线程池创建了5个线程，在各个线程中通过&lt;code&gt;rlock.lock();&lt;/code&gt;进行加锁，然后执行逻辑，最后通过&lt;code&gt;rlock.unlock();&lt;/code&gt;进行解锁。代码如下：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.locks.ReentrantLock;
+
+public class ReentrantLockTest {
+
+  public static volatile int count = 0;
+
+  public static void main(String[] args) throws InterruptedException {
+    // ReentrantLock rlock = new ReentrantLock(true);
+    ReentrantLock rlock = new ReentrantLock();
+    ExecutorService executorService = Executors.newFixedThreadPool(5);
+    for (int i = 0; i &amp;lt; 5; i++) {
+      executorService.execute(()-&amp;gt;{
+        rlock.lock();
+        System.out.println(Thread.currentThread().getName()+ &amp;quot; start&amp;quot;);
+        for (int j = 0; j &amp;lt; 10; j++) {
+          System.out.println(Thread.currentThread().getName()+ &amp;quot; &amp;quot; +count++);
+        }
+        System.out.println(Thread.currentThread().getName()+ &amp;quot; end&amp;quot;);
+        rlock.unlock();
+      });
+    }
+
+    Thread.sleep(5000);
+    System.out.println(count);
+
+  }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;上锁流程&#34;&gt;上锁流程&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/pallcard/noteImg/master/noteImg/2020/04/04/1585988828882-1585988828890.png&#34; alt=&#34;title&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;说明：ReentrantLock 调用lock时，若为非公平锁先直接通过cas设置state的状态，若设置失败，在调用acquire，acquire会先调用tryAcquire(AQS子类实现)，线程会尝试通过cas设置状态，若失败，将thread封装成Node加入到队列（CLH队列）中，然后调用acquireQueued，acquireQueued中会自旋，判断前一个结点是否为head，若为则通过tryAcquire获取锁，若失败去修改前一个结点的waitstatus，挂起当前线程。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/pallcard/noteImg/master/noteImg/2020/04/04/1585988196704-1585988196707.png&#34; alt=&#34;title&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;说明：ReentrantLock 调用unlock时，然后调用release，而release通过tryRelease来设置state状态，并设置线程为null，最后unpark后面的结点。&lt;/p&gt;
+
+&lt;h3 id=&#34;代码说明&#34;&gt;代码说明&lt;/h3&gt;
+
+&lt;h4 id=&#34;上锁相关代码&#34;&gt;上锁相关代码&lt;/h4&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;
+// ReentrantLock
+    public void lock() {
+        sync.lock();
+    }
+
+// ReentrantLock#NonfairSync
+        final void lock() {
+            if (compareAndSetState(0, 1))//若通过CAS设置变量State（同步状态）成功，也就是获取锁成功，则将当前线程设置为独占线程
+                setExclusiveOwnerThread(Thread.currentThread());
+            else
+                acquire(1);// 存在某种排队等候机制，线程继续等待，仍然保留获取锁的可能，获取锁流程仍在继续
+        }
+
+// ReentrantLock#FairSync
+        final void lock() {
+            acquire(1);
+        }
+
+
+    // AbstractQueuedSynchronizer
+    public final void acquire(int arg) {
+        //去尝试获取锁，获取成功则设置锁状态并返回true，否则返回false。tryAcquire尝试获取锁，子类实现
+        if (!tryAcquire(arg) &amp;amp;&amp;amp; 
+            //如果tryAcquire返回FALSE（获取同步状态失败），则调用该方法将当前线程加入到CLH同步队列尾部。
+            acquireQueued(addWaiter(Node.EXCLUSIVE), arg)) 
+            //acquireQueued：当前线程会根据公平性原则来进行阻塞等待（自旋）,直到获取锁为止；并且返回当前线程在等待过程中有没有中断过。
+            selfInterrupt(); 
+    }
+
+    // ReentrantLock#FairSync
+    protected final boolean tryAcquire(int acquires) {
+        final Thread current = Thread.currentThread();
+        int c = getState();
+        if (c == 0) {
+	    // 若队列中无有效结点才进行cas操作拿锁，非公平锁无需判断hasQueuedPredecessors
+            if (!hasQueuedPredecessors() &amp;amp;&amp;amp;
+                compareAndSetState(0, acquires)) {
+                setExclusiveOwnerThread(current);
+                return true;
+            }
+        }
+        else if (current == getExclusiveOwnerThread()) {
+            int nextc = c + acquires;
+            if (nextc &amp;lt; 0)
+                throw new Error(&amp;quot;Maximum lock count exceeded&amp;quot;);
+            setState(nextc);
+            return true;
+        }
+        return false;
+    }
+
+// 是公平锁加锁时判断等待队列中是否存在有效节点的方法。如果返回False，说明当前线程可以争取共享资源；如果返回True，说明队列中存在有效节点，当前线程必须加入到等待队列中。
+    public final boolean hasQueuedPredecessors() {
+        Node t = tail; 
+        Node h = head;
+        Node s;
+        // 双向链表中，第一个节点为虚节点，其实并不存储任何信息，只是占位。真正的第一个有数据的节点，是在第二个节点开始的。
+	// 当h != t时： 如果(s = h.next) == null，等待队列正在有线程进行初始化，但只是进行到了Tail指向Head，没有将Head指向Tail，此时队列中有元素，需要返回True。 
+	// 如果(s = h.next) != null，说明此时队列中至少有一个有效节点。如果此时s.thread == Thread.currentThread()，说明等待队列的第一个有效节点中的线程与当前线程相同，那么当前线程是可以获取资源的；
+	// 如果s.thread != Thread.currentThread()，说明等待队列的第一个有效节点线程与当前线程不同，当前线程必须加入进等待队列。
+        return h != t &amp;amp;&amp;amp;
+            ((s = h.next) == null || s.thread != Thread.currentThread());
+
+    }
+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h4 id=&#34;解锁相关代码&#34;&gt;解锁相关代码&lt;/h4&gt;
+
+&lt;pre&gt;&lt;code&gt;    // ReentrantLock
+    public void unlock() {
+        sync.release(1);
+    }
+
+    // AbstractQueuedSynchronizer
+    public final boolean release(int arg) {
+        // 释放锁成功后则执行后面的唤醒后续节点的逻辑了
+        if (tryRelease(arg)) { 
+            Node h = head;
+            // addWaiter 方法默认的节点状态为 0，此时节点还没有进入就绪状态
+            if (h != null &amp;amp;&amp;amp; h.waitStatus != 0) 
+                unparkSuccessor(h);
+            return true;
+        }
+        return false;
+    }
+
+    // ReentrantLock#Sync
+    protected final boolean tryRelease(int releases) {
+            int c = getState() - releases;
+            if (Thread.currentThread() != getExclusiveOwnerThread())
+                throw new IllegalMonitorStateException();
+            boolean free = false;
+            if (c == 0) {
+                free = true;
+                setExclusiveOwnerThread(null);
+            }
+            setState(c);
+            return free;
+        }
+
+    private void unparkSuccessor(Node node) {
+        /*
+         * If status is negative (i.e., possibly needing signal) try
+         * to clear in anticipation of signalling.  It is OK if this
+         * fails or if status is changed by waiting thread.
+         */
+        int ws = node.waitStatus;
+        // 将头节点的状态设置为0, 尝试清除头节点的状态，改为初始状态
+        if (ws &amp;lt; 0)
+            compareAndSetWaitStatus(node, ws, 0);
+
+        /*
+         * Thread to unpark is held in successor, which is normally
+         * just the next node.  But if cancelled or apparently null,
+         * traverse backwards from tail to find the actual
+         * non-cancelled successor.
+         */
+        // 后继节点
+        Node s = node.next; 
+        // 如果后继节点为null，或者已经被取消了
+        if (s == null || s.waitStatus &amp;gt; 0) {
+            s = null;
+            // for循环从队列尾部一直往前找可以唤醒的节点
+            for (Node t = tail; t != null &amp;amp;&amp;amp; t != node; t = t.prev)
+                if (t.waitStatus &amp;lt;= 0)
+                    s = t;
+        }
+        if (s != null)
+	    // 唤醒后继节点
+            LockSupport.unpark(s.thread); 
+    }
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;例子说明&#34;&gt;例子说明&lt;/h3&gt;
+
+&lt;p&gt;开头例子启动了5个线程(t1,&amp;hellip;t5)，启动后他们会去争抢锁，假设t1最先lock，他通过cas操作拿到了锁（假设长时间占用），然后t2(可能是其他线程)在取lock时会失败，然后调用acquire，会再次去获取锁，又失败了，就会将t2封装成一个Node对象，将其加入到队列中，然后在调用acquireQueued，此时t2为第一个结点，会再次去获取锁，若失败，修改前一个结点（head）的waitstatus=-1，自旋再次调用一遍，此时前一个结点的waitstaus=-1，故阻塞改线程。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/pallcard/noteImg/master/noteImg/2020/04/04/1585997115494-1585997115496.png&#34; alt=&#34;title&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/pallcard/noteImg/master/noteImg/2020/04/04/1585997180105-1585997180109.png&#34; alt=&#34;title&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/pallcard/noteImg/master/noteImg/2020/04/04/1585997141559-1585997141562.png&#34; alt=&#34;title&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;参考：&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://mp.weixin.qq.com/s/jCBrHSVK647bdVIPvJHxOg&#34; rel=&#34;nofollow noreferrer&#34; target=&#34;_blank&#34;&gt;https://mp.weixin.qq.com/s/jCBrHSVK647bdVIPvJHxOg&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://tech.meituan.com/2019/12/05/aqs-theory-and-apply.html&#34; rel=&#34;nofollow noreferrer&#34; target=&#34;_blank&#34;&gt;https://tech.meituan.com/2019/12/05/aqs-theory-and-apply.html&lt;/a&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>AQS</title>
+      <link>https://pallcard.github.io/2020/aqs/</link>
+      <pubDate>Wed, 04 Mar 2020 19:14:41 +0800</pubDate>
+      
+      <guid>https://pallcard.github.io/2020/aqs/</guid>
+      <description>
+
+&lt;h1 id=&#34;aqs&#34;&gt;AQS&lt;/h1&gt;
+
+&lt;p&gt;AbstractQueuedSynchronizer（AQS）是同步器实现框架，它是构建锁或者其他同步组件的基础框架（如ReentrantLock、ReentrantReadWriteLock、Semaphore等），JUC并发包的作者（Doug Lea）期望它能够成为实现大部分同步需求的基础。&lt;/p&gt;
+
+&lt;p&gt;AQS的主要使用方式是继承，子类通过继承同步器并实现它的抽象方法来管理同步状态。&lt;/p&gt;
+
+&lt;h2 id=&#34;源码&#34;&gt;源码&lt;/h2&gt;
+
+&lt;h3 id=&#34;定义&#34;&gt;定义&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code&gt;public abstract class AbstractQueuedSynchronizer
+    extends AbstractOwnableSynchronizer
+    implements java.io.Serializable {
+
+    private transient volatile Node head;  // 头结点
+    private transient volatile Node tail;  // 尾结点
+    private volatile int state; //state 字段为同步状态，其中 state &amp;gt; 0 为有锁状态，每次加锁就在原有 state 基础上加 1，即代表当前持有锁的线程加了 state 次锁，反之解锁时每次减一，当 statte = 0 为无锁状态；
+
+
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h4 id=&#34;node&#34;&gt;Node&lt;/h4&gt;
+
+&lt;pre&gt;&lt;code&gt; static final class Node {
+        // 共享模式，表示线程要获取的是共享锁，即一个锁可以被不同的线程拥有
+        static final Node SHARED = new Node();  
+        // 独占模式，表示线程要获取的独占锁，即一个锁只能被一个线程拥有
+        static final Node EXCLUSIVE = null;  
+
+        //表示当前节点的线程因为超时或中断被取消了
+        static final int CANCELLED =  1;  
+        // 表示当前节点的后续节点中的线程通过 park 被阻塞了，需要通过unpark解除它的阻塞
+        static final int SIGNAL    = -1; 
+        // 表示当前节点在 condition 队列中
+        static final int CONDITION = -2;  
+        // 共享模式的头结点可能处于此状态，表示无条件往下传播,引入此状态是为了优化锁竞争，使队列中线程有序地一个一个唤醒
+        static final int PROPAGATE = -3;
+
+        volatile int waitStatus;
+        volatile Node prev;
+        volatile Node next;
+        volatile Thread thread;
+        Node nextWaiter;
+
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;重要方法&#34;&gt;重要方法&lt;/h3&gt;
+
+&lt;h4 id=&#34;acquire&#34;&gt;acquire&lt;/h4&gt;
+
+&lt;pre&gt;&lt;code&gt;    public final void acquire(int arg) {
+	//去尝试获取锁，获取成功则设置锁状态并返回true，否则返回false。
+        if (!tryAcquire(arg) &amp;amp;&amp;amp;
+            acquireQueued(addWaiter(Node.EXCLUSIVE), arg))
+            selfInterrupt();
+    }
+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h4 id=&#34;addwaiter&#34;&gt;addWaiter&lt;/h4&gt;
+
+&lt;pre&gt;&lt;code&gt;private Node addWaiter(Node mode) {
+        Node node = new Node(Thread.currentThread(), mode);
+        // Try the fast path of enq; backup to full enq on failure
+        Node pred = tail;
+        if (pred != null) {  // 尝试快速将该节点加入到队列的尾部
+            node.prev = pred;
+            if (compareAndSetTail(pred, node)) { // 当tail=pred时，更新tail为node
+                pred.next = node;
+                return node;
+            }
+        }
+        enq(node);
+        return node;
+    }
+
+    private Node enq(final Node node) {
+        for (;;) {   // 自旋直至成功
+            Node t = tail;
+            if (t == null) { // Must initialize   等待队列为空
+                if (compareAndSetHead(new Node()))
+                    tail = head;
+            } else {
+                node.prev = t;
+                if (compareAndSetTail(t, node)) {
+                    t.next = node;
+                    return t;
+                }
+            }
+        }
+    }
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/pallcard/noteImg/master/noteImg/2020/04/02/1585839797495-1585839797498.png&#34; alt=&#34;title&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;说明：初始CLH队列为空，当调用&lt;code&gt;addWaiter()&lt;/code&gt;时，&lt;code&gt;pred=tail&lt;/code&gt;此时为空，直接调用&lt;code&gt;enq(node)&lt;/code&gt;,在enq方法中，&lt;code&gt;t=tail&lt;/code&gt;此时为空，故通过cas设置head为new Node();设置成功令&lt;code&gt;tail=head&lt;/code&gt;,否则自旋；此时&lt;code&gt;t=tail&lt;/code&gt;不空，设置node的prev指针，cas设置tail，设置t的next指针，然后返回t，addWaiter返回node。
+当再次调用&lt;code&gt;addWaiter()&lt;/code&gt;时，&lt;code&gt;pred=tail&lt;/code&gt;此时不为空，将node加入尾部，若失败，则使用&lt;code&gt;enq(node)&lt;/code&gt;添加。&lt;/p&gt;
+
+&lt;h4 id=&#34;acquirequeued&#34;&gt;acquireQueued&lt;/h4&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;    // 当前线程会根据公平性原则来进行阻塞等待（自旋）,直到获取锁为止；并且返回当前线程在等待过程中有没有中断过。
+    final boolean acquireQueued(final Node node, int arg) {
+        boolean failed = true;
+        try {
+            //中断标志
+            boolean interrupted = false; 
+            // 自旋
+            for (;;) { 
+		// 获取当前节点的 pred 节点
+                final Node p = node.predecessor();  
+ 		//当前线程的前驱节点是头结点，且同步状态成功，head 节点代表当前持有锁的线程，那么如果当前节点的 pred 节点是 head 节点，说明当前节点在真实数据队列的首部，就尝试获取锁（头结点是虚节点）
+                if (p == head &amp;amp;&amp;amp; tryAcquire(arg)) {
+		    // 获取锁成功，头指针移动到当前node
+                    setHead(node); 
+                    p.next = null; // help GC
+                    failed = false;
+		    // 不需要挂起，返回 false
+                    return interrupted; 
+                } 
+		// 说明p为头节点且当前没有获取到锁（可能是非公平锁被抢占了）或者是p不为头结点，这个时候就要判断当前node是否要被阻塞（被阻塞条件：前驱节点的waitStatus为-1），防止无限循环浪费资源。具体两个方法下面细细分析
+                if (shouldParkAfterFailedAcquire(p, node) &amp;amp;&amp;amp;  // 获取锁失败，则进入挂起逻辑
+                    parkAndCheckInterrupt()) //挂起当前线程，阻塞调用栈，返回当前线程的中断状态。
+                    interrupted = true;
+            }
+        } finally {
+            if (failed)
+                cancelAcquire(node);
+        }
+    }
+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;参考&#34;&gt;参考&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://juejin.im/entry/5ae02a7c6fb9a07ac76e7b70&#34; rel=&#34;nofollow noreferrer&#34; target=&#34;_blank&#34;&gt;https://juejin.im/entry/5ae02a7c6fb9a07ac76e7b70&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://www.jianshu.com/p/c806dd7f60bc&#34; rel=&#34;nofollow noreferrer&#34; target=&#34;_blank&#34;&gt;https://www.jianshu.com/p/c806dd7f60bc&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://objcoding.com/2019/05/05/aqs-exclusive-lock/#aqs-%E7%BB%93%E6%9E%84%E5%89%96%E6%9E%90&#34; rel=&#34;nofollow noreferrer&#34; target=&#34;_blank&#34;&gt;http://objcoding.com/2019/05/05/aqs-exclusive-lock/#aqs-%E7%BB%93%E6%9E%84%E5%89%96%E6%9E%90&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://tech.meituan.com/2019/12/05/aqs-theory-and-apply.html&#34; rel=&#34;nofollow noreferrer&#34; target=&#34;_blank&#34;&gt;https://tech.meituan.com/2019/12/05/aqs-theory-and-apply.html&lt;/a&gt;&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>查看Jdk源码方式</title>
@@ -2134,161 +2502,6 @@ ab*ac*a  a.a
             result = false;
         }
         System.out.println(result);
-    }
-}
-
-&lt;/code&gt;&lt;/pre&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>算法015</title>
-      <link>https://pallcard.github.io/2019/algorithm015/</link>
-      <pubDate>Sat, 06 Jul 2019 17:32:45 +0800</pubDate>
-      
-      <guid>https://pallcard.github.io/2019/algorithm015/</guid>
-      <description>
-
-&lt;h3 id=&#34;描述&#34;&gt;描述&lt;/h3&gt;
-
-&lt;p&gt;二进制中1的个数&lt;/p&gt;
-
-&lt;p&gt;输入一个整数，输出该数二进制表示中1的个数&lt;/p&gt;
-
-&lt;h3 id=&#34;例子&#34;&gt;例子&lt;/h3&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;Input:
-	
-Output:
-	
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h3 id=&#34;思路&#34;&gt;思路&lt;/h3&gt;
-
-&lt;p&gt;n&amp;amp;(n-1)会去除掉n的位级表示中的最低的一位&lt;/p&gt;
-
-&lt;h3 id=&#34;代码&#34;&gt;代码&lt;/h3&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;public class Demo015 {
-
-    public static int numberOf1(int n) {
-        int count = 0;
-
-        if (n == 0) {
-            return 0;
-        }
-
-        while (n != 0) {
-            count++;
-            n &amp;amp;= (n-1);
-        }
-        return count;
-    }
-
-    public static void main(String[] args) {
-        System.out.println(numberOf1(10));
-        System.out.println(Integer.bitCount(10));
-    }
-}
-&lt;/code&gt;&lt;/pre&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>算法014</title>
-      <link>https://pallcard.github.io/2019/algorithm014/</link>
-      <pubDate>Sat, 06 Jul 2019 17:24:14 +0800</pubDate>
-      
-      <guid>https://pallcard.github.io/2019/algorithm014/</guid>
-      <description>
-
-&lt;h5 id=&#34;描述&#34;&gt;描述&lt;/h5&gt;
-
-&lt;p&gt;剪绳子&lt;/p&gt;
-
-&lt;p&gt;把一根绳子剪成多段（&amp;gt;1），并使得所得到每段绳子的长度之积最大。&lt;/p&gt;
-
-&lt;h5 id=&#34;例子&#34;&gt;例子&lt;/h5&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;Input:
-	n(绳长)
-Output:
-	
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h4 id=&#34;思路&#34;&gt;思路&lt;/h4&gt;
-
-&lt;p&gt;方法一：
-&lt;strong&gt;贪婪算法&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;使得所得到的绳子中&lt;strong&gt;3&lt;/strong&gt;的数量最多，1的数量最少（没有）&lt;/p&gt;
-
-&lt;p&gt;方法二：
-&lt;strong&gt;动态规划&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;定义 f(n) : 最大乘积，f(n) = max{f(i)*f(n-i)}&lt;/p&gt;
-
-&lt;h5 id=&#34;代码&#34;&gt;代码&lt;/h5&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;public class Demo014 {
-
-    // 贪婪算法
-    public static int maxLength(int n) {
-        if (n &amp;lt; 2) {
-            return 0;
-        } else if (n == 2) {
-            return 1;
-        } else if (n == 3) {
-            return 2;
-        } else {
-            if (n%3==1){
-                return (int) Math.pow(3, n/3-1)*4;
-            } else if(n%3==0) {
-                return (int) Math.pow(3, n/3);
-            } else {
-                return (int) Math.pow(3, n/3)*2;
-            }
-        }
-    }
-
-    // 动态规划
-    // 定义 f(n) : 最大乘积
-    // f(n) = max{f(i)*f(n-i)}
-    public static int dp(int n) {
-        if (n &amp;lt; 2) {
-            return 0;
-        } else if (n == 2) {
-            return 1;
-        } else if (n == 3) {
-            return 2;
-        } else {
-            int [] dp = new int [n+1];
-            // 分割绳子长度1，2，3，具体动态规划从4开始计算
-            // dp[i]数组,绳子长度为i时，乘积最大值
-            dp[1] = 1;
-            dp[2] = 2;
-            dp[3] = 3;
-            int max = 0;
-            // 存放中间值
-            int temp = 0;
-            for (int i = 4; i &amp;lt;= n; i++) {
-                max = 0;
-                // i/2 对于绳子i的切分，j*(i-j) 与 (i-j)*j结果一样
-                for (int j = 1; j &amp;lt;= i / 2; j++) {
-                    temp = dp[j] * dp[i-j];
-                    if (temp &amp;gt; max) {
-                        max = temp;
-                    }
-                }
-                dp[i] = max;
-            }
-            return dp[n];
-        }
-    }
-
-    public static void main(String[] args) {
-        System.out.println(maxLength(11));
-        System.out.println(dp(11));
     }
 }
 

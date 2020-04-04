@@ -7,10 +7,20 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
     <copyright>All rights reserved - 2019</copyright>
-    <lastBuildDate>Wed, 07 Aug 2019 23:22:27 +0800</lastBuildDate>
+    <lastBuildDate>Fri, 06 Mar 2020 19:15:26 +0800</lastBuildDate>
     
 	<atom:link href="https://pallcard.github.io/tags/%E5%B9%B6%E5%8F%91/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>ReentrantLock</title>
+      <link>https://pallcard.github.io/2020/reentrantlock/</link>
+      <pubDate>Fri, 06 Mar 2020 19:15:26 +0800</pubDate>
+      
+      <guid>https://pallcard.github.io/2020/reentrantlock/</guid>
+      <description>ReentrantLock ReentrantLock流程 测试代码 main方法中通过new ReentrantLock();创建了一个可重入锁，然后通过线程池创建了5个线程，在各个线程中通过rlock.lock();进行加锁，然后执行逻辑，最后通过rlock.unlock();进行解锁。代码如下：
+import java.util.concurrent.ExecutorService; import java.util.concurrent.Executors; import java.util.concurrent.locks.ReentrantLock; public class ReentrantLockTest { public static volatile int count = 0; public static void main(String[] args) throws InterruptedException { // ReentrantLock rlock = new ReentrantLock(true); ReentrantLock rlock = new ReentrantLock(); ExecutorService executorService = Executors.newFixedThreadPool(5); for (int i = 0; i &amp;lt; 5; i++) { executorService.execute(()-&amp;gt;{ rlock.lock(); System.out.println(Thread.currentThread().getName()+ &amp;quot; start&amp;quot;); for (int j = 0; j &amp;lt; 10; j++) { System.</description>
+    </item>
     
     <item>
       <title>Java并发工具包</title>

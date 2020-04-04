@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+  <meta http-equiv="content-type" content="text/html;charset=utf-8">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noodp"/>
+  <meta name="author" content="刘科">
+  <meta name="description" content="hust研一">
+  <meta name="keywords" content="Java,博客">
+  
+  <link rel="prev" href="https://pallcard.github.io/2020/%E6%9F%A5%E7%9C%8Bjdk%E6%BA%90%E7%A0%81%E6%96%B9%E5%BC%8F/" />
+  <link rel="next" href="https://pallcard.github.io/2020/reentrantlock/" />
+  <link rel="canonical" href="https://pallcard.github.io/2020/aqs/" />
+  <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+  <meta name="msapplication-TileColor" content="#da532c">
+  <meta name="theme-color" content="#ffffff">
+  <title>
+       
+       
+           AQS | 刘科个人博客
+       
+  </title>
+  <meta name="title" content="AQS | 刘科个人博客">
+    
+  
+  <link rel="stylesheet" href="/font/iconfont.css">
+  <link rel="stylesheet" href="/css/main.min.css">
+
+
+  
+  
+ 
+
+<script type="application/ld+json">
+ "@context" : "http://schema.org",
+    "@type" : "BlogPosting",
+    "mainEntityOfPage": {
+         "@type": "WebPage",
+         "@id": "https:\/\/pallcard.github.io\/"
+    },
+    "articleSection" : "posts",
+    "name" : "AQS",
+    "headline" : "AQS",
+    "description" : "AQS AbstractQueuedSynchronizer（AQS）是同步器实现框架，它是构建锁或者其他同步组件的基础框架（如ReentrantLock、ReentrantReadWriteLock、Semaphore等），JUC并发包的作者（Doug Lea）期望它能够成为实现大部分同步需求的基础。\nAQS的主要使用方式是继承，子类通过继承同步器并实现它的抽象方法来管理同步状态。\n源码 定义 public abstract class AbstractQueuedSynchronizer extends AbstractOwnableSynchronizer implements java.io.Serializable { private transient volatile Node head; \/\/ 头结点 private transient volatile Node tail; \/\/ 尾结点 private volatile int state; \/\/state 字段为同步状态，其中 state \x26gt; 0 为有锁状态，每次加锁就在原有 state 基础上加 1，即代表当前持有锁的线程加了 state 次锁，反之解锁时每次减一，当 statte = 0 为无锁状态； }  Node  static final class Node { \/\/ 共享模式，表示线程要获取的是共享锁，即一个锁可以被不同的线程拥有 static final Node SHARED = new Node(); \/\/ 独占模式，表示线程要获取的独占锁，即一个锁只能被一个线程拥有 static final Node EXCLUSIVE = null; \/\/表示当前节点的线程因为超时或中断被取消了 static final int CANCELLED = 1; \/\/ 表示当前节点的后续节点中的线程通过 park 被阻塞了，需要通过unpark解除它的阻塞 static final int SIGNAL = -1; \/\/ 表示当前节点在 condition 队列中 static final int CONDITION = -2; \/\/ 共享模式的头结点可能处于此状态，表示无条件往下传播,引入此状态是为了优化锁竞争，使队列中线程有序地一个一个唤醒 static final int PROPAGATE = -3; volatile int waitStatus; volatile Node prev; volatile Node next; volatile Thread thread; Node nextWaiter; }  重要方法 acquire  public final void acquire(int arg) { \/\/去尝试获取锁，获取成功则设置锁状态并返回true，否则返回false。 if (!",
+    "inLanguage" : "zh-CN",
+    "author" : "刘科",
+    "creator" : "刘科",
+    "publisher": "刘科",
+    "accountablePerson" : "刘科",
+    "copyrightHolder" : "刘科",
+    "copyrightYear" : "2020",
+    "datePublished": "2020-03-04 19:14:41 \x2b0800 CST",
+    "dateModified" : "2020-03-04 19:14:41 \x2b0800 CST",
+    "url" : "https:\/\/pallcard.github.io\/2020\/aqs\/",
+    "wordCount" : "340",
+    "keywords" : [ "Java","事务","总数", "刘科个人博客"]
+}
+</script>
+
+</head>
+
+  
+
+
+  <body class="">
+    <div class="wrapper">
+        <nav class="navbar">
+    <div class="container">
+        <div class="navbar-header header-logo">
+        	<a href="javascript:void(0);" class="theme-switch"><i class="iconfont icon-xihuan"></i></a>&nbsp;<a href="https://pallcard.github.io/">刘科个人博客</a>
+        </div>
+        <div class="menu navbar-right">
+                
+                
+                <a class="menu-item" href="/posts/" title="">博客</a>
+                
+                <a class="menu-item" href="/categories/" title="">分类</a>
+                
+                <a class="menu-item" href="/tags/" title="">标签</a>
+                
+                <a class="menu-item" href="/about/" title="">关于</a>
+                
+        </div>
+    </div>
+</nav>
+<nav class="navbar-mobile" id="nav-mobile" style="display: none">
+     <div class="container">
+        <div class="navbar-header">
+            <div>  <a href="javascript:void(0);" class="theme-switch"><i class="iconfont icon-xihuan"></i></a>&nbsp;<a href="https://pallcard.github.io/">刘科个人博客</a></div>
+            <div class="menu-toggle">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+     
+          <div class="menu" id="mobile-menu">
+                
+                
+                <a class="menu-item" href="/posts/" title="">博客</a>
+                
+                <a class="menu-item" href="/categories/" title="">分类</a>
+                
+                <a class="menu-item" href="/tags/" title="">标签</a>
+                
+                <a class="menu-item" href="/about/" title="">关于</a>
+                
+        </div>
+    </div>
+</nav>
+    	 <main class="main">
+          <div class="container">
+      		
+<article class="post-warp" itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">AQS</h1>
+        <div class="post-meta">
+                Written by <a itemprop="name" href="https://pallcard.github.io/" rel="author">刘科</a> with ♥ 
+                <span class="post-time">
+                on <time datetime=2020-03-04 itemprop="datePublished">March 4, 2020</time>
+                </span>
+                in
+                <i class="iconfont icon-folder"></i>
+                <span class="post-category">
+                        <a href="https://pallcard.github.io/categories/java/"> Java </a>
+                        
+                </span>
+        </div>
+    </header>
+    <div class="post-content">
+        
+
+        
+            
+        
+
+        
+        
+     
+          
+          
+          
+
+          
+          
+          
+
+          
+
+<h1 id="aqs">AQS</h1>
+
+<p>AbstractQueuedSynchronizer（AQS）是同步器实现框架，它是构建锁或者其他同步组件的基础框架（如ReentrantLock、ReentrantReadWriteLock、Semaphore等），JUC并发包的作者（Doug Lea）期望它能够成为实现大部分同步需求的基础。</p>
+
+<p>AQS的主要使用方式是继承，子类通过继承同步器并实现它的抽象方法来管理同步状态。</p>
+
+<h2 id="源码">源码</h2>
+
+<h3 id="定义">定义</h3>
+
+<pre><code>public abstract class AbstractQueuedSynchronizer
+    extends AbstractOwnableSynchronizer
+    implements java.io.Serializable {
+
+    private transient volatile Node head;  // 头结点
+    private transient volatile Node tail;  // 尾结点
+    private volatile int state; //state 字段为同步状态，其中 state &gt; 0 为有锁状态，每次加锁就在原有 state 基础上加 1，即代表当前持有锁的线程加了 state 次锁，反之解锁时每次减一，当 statte = 0 为无锁状态；
+
+
+}
+</code></pre>
+
+<h4 id="node">Node</h4>
+
+<pre><code> static final class Node {
+        // 共享模式，表示线程要获取的是共享锁，即一个锁可以被不同的线程拥有
+        static final Node SHARED = new Node();  
+        // 独占模式，表示线程要获取的独占锁，即一个锁只能被一个线程拥有
+        static final Node EXCLUSIVE = null;  
+
+        //表示当前节点的线程因为超时或中断被取消了
+        static final int CANCELLED =  1;  
+        // 表示当前节点的后续节点中的线程通过 park 被阻塞了，需要通过unpark解除它的阻塞
+        static final int SIGNAL    = -1; 
+        // 表示当前节点在 condition 队列中
+        static final int CONDITION = -2;  
+        // 共享模式的头结点可能处于此状态，表示无条件往下传播,引入此状态是为了优化锁竞争，使队列中线程有序地一个一个唤醒
+        static final int PROPAGATE = -3;
+
+        volatile int waitStatus;
+        volatile Node prev;
+        volatile Node next;
+        volatile Thread thread;
+        Node nextWaiter;
+
+}
+</code></pre>
+
+<h3 id="重要方法">重要方法</h3>
+
+<h4 id="acquire">acquire</h4>
+
+<pre><code>    public final void acquire(int arg) {
+	//去尝试获取锁，获取成功则设置锁状态并返回true，否则返回false。
+        if (!tryAcquire(arg) &amp;&amp;
+            acquireQueued(addWaiter(Node.EXCLUSIVE), arg))
+            selfInterrupt();
+    }
+
+</code></pre>
+
+<h4 id="addwaiter">addWaiter</h4>
+
+<pre><code>private Node addWaiter(Node mode) {
+        Node node = new Node(Thread.currentThread(), mode);
+        // Try the fast path of enq; backup to full enq on failure
+        Node pred = tail;
+        if (pred != null) {  // 尝试快速将该节点加入到队列的尾部
+            node.prev = pred;
+            if (compareAndSetTail(pred, node)) { // 当tail=pred时，更新tail为node
+                pred.next = node;
+                return node;
+            }
+        }
+        enq(node);
+        return node;
+    }
+
+    private Node enq(final Node node) {
+        for (;;) {   // 自旋直至成功
+            Node t = tail;
+            if (t == null) { // Must initialize   等待队列为空
+                if (compareAndSetHead(new Node()))
+                    tail = head;
+            } else {
+                node.prev = t;
+                if (compareAndSetTail(t, node)) {
+                    t.next = node;
+                    return t;
+                }
+            }
+        }
+    }
+</code></pre>
+
+<p><figure><img src="/images/ring.svg" data-sizes="auto" data-src="https://raw.githubusercontent.com/pallcard/noteImg/master/noteImg/2020/04/02/1585839797495-1585839797498.png" alt="title" class="lazyload"><figcaption class="image-caption">title</figcaption></figure></p>
+
+<p>说明：初始CLH队列为空，当调用<code>addWaiter()</code>时，<code>pred=tail</code>此时为空，直接调用<code>enq(node)</code>,在enq方法中，<code>t=tail</code>此时为空，故通过cas设置head为new Node();设置成功令<code>tail=head</code>,否则自旋；此时<code>t=tail</code>不空，设置node的prev指针，cas设置tail，设置t的next指针，然后返回t，addWaiter返回node。
+当再次调用<code>addWaiter()</code>时，<code>pred=tail</code>此时不为空，将node加入尾部，若失败，则使用<code>enq(node)</code>添加。</p>
+
+<h4 id="acquirequeued">acquireQueued</h4>
+
+<pre><code class="language-java">    // 当前线程会根据公平性原则来进行阻塞等待（自旋）,直到获取锁为止；并且返回当前线程在等待过程中有没有中断过。
+    final boolean acquireQueued(final Node node, int arg) {
+        boolean failed = true;
+        try {
+            //中断标志
+            boolean interrupted = false; 
+            // 自旋
+            for (;;) { 
+		// 获取当前节点的 pred 节点
+                final Node p = node.predecessor();  
+ 		//当前线程的前驱节点是头结点，且同步状态成功，head 节点代表当前持有锁的线程，那么如果当前节点的 pred 节点是 head 节点，说明当前节点在真实数据队列的首部，就尝试获取锁（头结点是虚节点）
+                if (p == head &amp;&amp; tryAcquire(arg)) {
+		    // 获取锁成功，头指针移动到当前node
+                    setHead(node); 
+                    p.next = null; // help GC
+                    failed = false;
+		    // 不需要挂起，返回 false
+                    return interrupted; 
+                } 
+		// 说明p为头节点且当前没有获取到锁（可能是非公平锁被抢占了）或者是p不为头结点，这个时候就要判断当前node是否要被阻塞（被阻塞条件：前驱节点的waitStatus为-1），防止无限循环浪费资源。具体两个方法下面细细分析
+                if (shouldParkAfterFailedAcquire(p, node) &amp;&amp;  // 获取锁失败，则进入挂起逻辑
+                    parkAndCheckInterrupt()) //挂起当前线程，阻塞调用栈，返回当前线程的中断状态。
+                    interrupted = true;
+            }
+        } finally {
+            if (failed)
+                cancelAcquire(node);
+        }
+    }
+
+</code></pre>
+
+<h2 id="参考">参考</h2>
+
+<p><a href="https://juejin.im/entry/5ae02a7c6fb9a07ac76e7b70" rel="nofollow noreferrer" target="_blank">https://juejin.im/entry/5ae02a7c6fb9a07ac76e7b70</a></p>
+
+<p><a href="https://www.jianshu.com/p/c806dd7f60bc" rel="nofollow noreferrer" target="_blank">https://www.jianshu.com/p/c806dd7f60bc</a></p>
+
+<p><a href="http://objcoding.com/2019/05/05/aqs-exclusive-lock/#aqs-%E7%BB%93%E6%9E%84%E5%89%96%E6%9E%90" rel="nofollow noreferrer" target="_blank">http://objcoding.com/2019/05/05/aqs-exclusive-lock/#aqs-%E7%BB%93%E6%9E%84%E5%89%96%E6%9E%90</a></p>
+
+<p><a href="https://tech.meituan.com/2019/12/05/aqs-theory-and-apply.html" rel="nofollow noreferrer" target="_blank">https://tech.meituan.com/2019/12/05/aqs-theory-and-apply.html</a></p>
+
+    </div>
+
+    <div class="post-copyright">
+             
+            <p class="copyright-item">
+                <span>Author:</span>
+                <span>刘科 </span>
+                </p>
+            
+           
+             
+            <p class="copyright-item">
+                    <span>Link:</span>
+                    <a href=https://pallcard.github.io/2020/aqs/>https://pallcard.github.io/2020/aqs/</span>
+            </p>
+            
+            
+    </div>
+
+  
+    <div class="post-tags">
+        
+            <section>
+            <i class="iconfont icon-tag"></i>Tag(s): 
+            
+            <span class="tag"><a href="https://pallcard.github.io/tags/java/">
+                    #Java</a></span>
+            
+            <span class="tag"><a href="https://pallcard.github.io/tags/%E4%BA%8B%E5%8A%A1/">
+                    #事务</a></span>
+            
+            <span class="tag"><a href="https://pallcard.github.io/tags/%E6%80%BB%E6%95%B0/">
+                    #总数</a></span>
+            
+            </section>
+        
+        <section>
+                <a href="javascript:window.history.back();">back</a></span> · 
+                <span><a href="https://pallcard.github.io/">home</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav">
+        
+        <a href="https://pallcard.github.io/2020/%E6%9F%A5%E7%9C%8Bjdk%E6%BA%90%E7%A0%81%E6%96%B9%E5%BC%8F/" class="prev" rel="prev" title="查看Jdk源码方式"><i class="iconfont icon-left"></i>&nbsp;查看Jdk源码方式</a>
+         
+        
+        <a href="https://pallcard.github.io/2020/reentrantlock/" class="next" rel="next" title="ReentrantLock">ReentrantLock&nbsp;<i class="iconfont icon-right"></i></a>
+        
+    </div>
+
+	<div class="post-comment">
+		
+		 
+  
+  <div id="vcomments"></div>
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src='//unpkg.com/valine/dist/Valine.min.js'></script>
+
+  <script type="text/javascript">
+    new Valine({
+        el: '#vcomments' ,
+        appId: 'ktil0uKcyLbDdCRFBVDz0eD9-gzGzoHsz',
+        appKey: 'KiYDkJXdqJW2VgrxmVshT2iA',
+        notify: 'false', 
+        verify: 'false', 
+        avatar:'mm', 
+        placeholder: '说点什么吧...',
+        visitor: 'true'
+    });
+  </script>
+	</div>
+</article>
+          </div>
+		   </main>
+      <footer class="footer">
+    <div class="copyright">
+        &copy;
+        
+        <span class="with-love">
+    	 <i class="iconfont icon-love"></i> 
+         </span>
+         
+            <span class="author" itemprop="copyrightHolder"><a href="https://pallcard.github.io/">刘科</a> | </span> 
+         
+
+         
+            <a href="http://www.miibeian.gov.cn/" target="_blank" rel="external nofollow">鄂ICP备19006996号-1 </a> |
+         
+		  <span>Powered by <a href="https://gohugo.io/" target="_blank" rel="external nofollow">Hugo</a> & <a href="https://github.com/liuzc/leaveit" target="_blank" rel="external nofollow">LeaveIt</a></span> 
+    </div>
+</footer>
+
+
+
+
+
+
+
+
+
+
+
+
+    
+     <link href="//lib.baomitu.com/lightgallery/1.6.11/css/lightgallery.min.css" rel="stylesheet">  
+      
+     <script src="/js/vendor_gallery.min.js" async="" ></script>
+    
+  
+
+
+
+     </div>
+  </body>
+</html>
