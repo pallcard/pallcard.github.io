@@ -25,7 +25,7 @@
 
 &lt;p&gt;main方法中通过&lt;code&gt;new ReentrantLock();&lt;/code&gt;创建了一个可重入锁，然后通过线程池创建了5个线程，在各个线程中通过&lt;code&gt;rlock.lock();&lt;/code&gt;进行加锁，然后执行逻辑，最后通过&lt;code&gt;rlock.unlock();&lt;/code&gt;进行解锁。代码如下：&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;import java.util.concurrent.ExecutorService;
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -138,9 +138,83 @@ public class ReentrantLockTest {
 
 &lt;/code&gt;&lt;/pre&gt;
 
+&lt;h4 id=&#34;关于fairsync和nonfairsync中tryacquire&#34;&gt;关于FairSync和NonfairSync中tryAcquire&lt;/h4&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;        // FairSync
+        protected final boolean tryAcquire(int acquires) {
+            return nonfairTryAcquire(acquires);
+        }
+	// Sync
+        final boolean nonfairTryAcquire(int acquires) {
+            final Thread current = Thread.currentThread();
+            int c = getState();
+            if (c == 0) {
+                if (compareAndSetState(0, acquires)) {
+                    setExclusiveOwnerThread(current);
+                    return true;
+                }
+            }
+            else if (current == getExclusiveOwnerThread()) {
+                int nextc = c + acquires;
+                if (nextc &amp;lt; 0) // overflow
+                    throw new Error(&amp;quot;Maximum lock count exceeded&amp;quot;);
+                setState(nextc);
+                return true;
+            }
+            return false;
+        }
+
+    // FairSync
+    protected final boolean tryAcquire(int acquires) {
+            final Thread current = Thread.currentThread();
+            int c = getState();
+            if (c == 0) {
+                if (!hasQueuedPredecessors() &amp;amp;&amp;amp; // 若队列中无有效结点才进行cas操作拿锁
+                    compareAndSetState(0, acquires)) {
+                    setExclusiveOwnerThread(current);
+                    return true;
+                }
+            }
+            else if (current == getExclusiveOwnerThread()) {  // 可重入锁
+                int nextc = c + acquires;
+                if (nextc &amp;lt; 0)
+                    throw new Error(&amp;quot;Maximum lock count exceeded&amp;quot;);
+                setState(nextc);
+                return true;
+            }
+            return false;
+        }
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;看以上代码可以发现FairSync和NonfairSync中tryAcquire实际上只有一行代码是不同的，公平锁多了一个队列中是否存在有效结点的判断&lt;code&gt;!hasQueuedPredecessors()&lt;/code&gt;，可以考虑到模板方法把可变的这一行提出来或者直接判断带对象是否是非公平锁。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;    // Sync
+    protected final boolean tryAcquire(int acquires) {
+        final Thread current = Thread.currentThread();
+        int c = getState();
+        if (c == 0) {
+            // 是非公平锁或无有效结点 才进行cas操作拿锁
+            if ((this instanceof NonFairSync || !hasQueuedPredecessors()) &amp;amp;&amp;amp; 
+                compareAndSetState(0, acquires)) {
+                    setExclusiveOwnerThread(current);
+                    return true;
+            }
+        }
+        else if (current == getExclusiveOwnerThread()) {  // 可重入锁
+            int nextc = c + acquires;
+            if (nextc &amp;lt; 0)
+                throw new Error(&amp;quot;Maximum lock count exceeded&amp;quot;);
+            setState(nextc);
+            return true;
+        }
+        return false;
+    }
+
+&lt;/code&gt;&lt;/pre&gt;
+
 &lt;h4 id=&#34;解锁相关代码&#34;&gt;解锁相关代码&lt;/h4&gt;
 
-&lt;pre&gt;&lt;code&gt;    // ReentrantLock
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;    // ReentrantLock
     public void unlock() {
         sync.release(1);
     }
@@ -241,7 +315,7 @@ public class ReentrantLockTest {
 
 &lt;h3 id=&#34;定义&#34;&gt;定义&lt;/h3&gt;
 
-&lt;pre&gt;&lt;code&gt;public abstract class AbstractQueuedSynchronizer
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;public abstract class AbstractQueuedSynchronizer
     extends AbstractOwnableSynchronizer
     implements java.io.Serializable {
 
@@ -255,7 +329,7 @@ public class ReentrantLockTest {
 
 &lt;h4 id=&#34;node&#34;&gt;Node&lt;/h4&gt;
 
-&lt;pre&gt;&lt;code&gt; static final class Node {
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt; static final class Node {
         // 共享模式，表示线程要获取的是共享锁，即一个锁可以被不同的线程拥有
         static final Node SHARED = new Node();  
         // 独占模式，表示线程要获取的独占锁，即一个锁只能被一个线程拥有
@@ -283,7 +357,7 @@ public class ReentrantLockTest {
 
 &lt;h4 id=&#34;acquire&#34;&gt;acquire&lt;/h4&gt;
 
-&lt;pre&gt;&lt;code&gt;    public final void acquire(int arg) {
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;    public final void acquire(int arg) {
 	//去尝试获取锁，获取成功则设置锁状态并返回true，否则返回false。
         if (!tryAcquire(arg) &amp;amp;&amp;amp;
             acquireQueued(addWaiter(Node.EXCLUSIVE), arg))
@@ -294,7 +368,7 @@ public class ReentrantLockTest {
 
 &lt;h4 id=&#34;addwaiter&#34;&gt;addWaiter&lt;/h4&gt;
 
-&lt;pre&gt;&lt;code&gt;private Node addWaiter(Node mode) {
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;private Node addWaiter(Node mode) {
         Node node = new Node(Thread.currentThread(), mode);
         // Try the fast path of enq; backup to full enq on failure
         Node pred = tail;
